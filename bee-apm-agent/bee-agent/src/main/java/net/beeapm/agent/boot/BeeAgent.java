@@ -2,6 +2,7 @@ package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.plugin.MethodSpendPlugin;
+import net.beeapm.agent.transmit.TransmitterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
@@ -20,9 +21,10 @@ public class BeeAgent {
     public static void premain(String arguments, Instrumentation inst) {
         System.out.println("\n---------------------------------this is an bytebuddy sample ---------------------------------------");
 
-        final MethodSpendPlugin methodSpendPlugin = new MethodSpendPlugin();
+        BeeAgentJarUtils.getAgentJarDirPath();
+        TransmitterFactory.init();
 
-        BeeAgentJarUtils.getAgentJarFile();
+        final MethodSpendPlugin methodSpendPlugin = new MethodSpendPlugin();
 
         AgentBuilder.Transformer transformer =  new AgentBuilder.Transformer()  {
             @Override

@@ -4,7 +4,6 @@ import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -13,28 +12,55 @@ import java.net.URL;
 public class BeeAgentJarUtils {
     private static final LogImpl logger = LogManager.getLog(BeeAgentJarUtils.class);
 
-    private static File agentJarFile;
+    private static String agentJarPath;
+    private static String agentJarDirPath;
 
-    public static File getAgentJarFile() {
-        if (agentJarFile == null) {
-            agentJarFile = findPath();
+    public static String getAgentJarPath() {
+        try {
+            if (agentJarPath == null) {
+                agentJarPath = findPath();
+            }
+            return agentJarPath;
+        }catch (Exception e){
+            logger.error("",e);
         }
-        return agentJarFile;
+        return null;
+    }
+
+    public static String getAgentJarDirPath() {
+        try {
+            if (agentJarDirPath == null) {
+                File jarFile = new File(getAgentJarPath());
+                if (jarFile.exists()) {
+                    agentJarDirPath = jarFile.getParentFile().getCanonicalPath();
+                }
+            }
+        }catch (Exception e){
+            logger.error("",e);
+        }
+        logger.debug("agent jar dir path = {}",agentJarDirPath);
+        return agentJarDirPath;
     }
 
 
-    private static File findPath() {
+    private static String findPath() throws Exception{
         String classPath = BeeAgentJarUtils.class.getName().replaceAll("\\.", "/") + ".class";
-
         URL resource = BeeAgentJarUtils.class.getClassLoader().getSystemClassLoader().getResource(classPath);
         if (resource != null) {
-            String urlString = resource.toString();
-            int insidePathIndex = urlString.indexOf('!');
-            boolean isInJar = insidePathIndex > -1;
-            System.out.println(urlString);
+            String path = resource.toString();
+            int jarIndex = path.indexOf('!');
+            if(jarIndex > 0){
+                path = path.substring(path.indexOf("file:")+5, jarIndex);
+            }else{
+                return null;
+            }
+            File f = new File(path);
+            if(f.exists()){
+                path = f.getCanonicalPath();
+            }
+            logger.debug("agent jar path = {}",path);
+            return path;
         }
-
-        logger.error("Can not locate agent jar file.");
         return null;
     }
 }
