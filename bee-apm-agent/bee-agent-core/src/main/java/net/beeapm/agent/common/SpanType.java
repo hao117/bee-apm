@@ -7,4 +7,5 @@ public class SpanType {
     public final static String METHOD = "method";
     public final static String SQL = "sql";
     public final static String PARAM = "param";
+    public final static String REQUEST = "request";
 }

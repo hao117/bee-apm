@@ -7,7 +7,7 @@ import net.beeapm.agent.model.Span;
  * Created by yuan on 2018/8/5.
  */
 public class ConsoleTransmitter extends AbstractTransmitter {
-    public static String name = "console";
+    public String name = "console";
     @Override
     public int transmit(Span span) {
         System.out.println(JSON.toJSONString(span));

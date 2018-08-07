@@ -12,7 +12,8 @@ import net.bytebuddy.matcher.ElementMatchers;
 public class MethodSpendPlugin implements IPlugin {
     @Override
     public ElementMatcher<TypeDescription> buildTypesMatcher() {
-        return ElementMatchers.nameStartsWith("net.beeapm.demo");
+        return ElementMatchers.nameStartsWith("net.beeapm.demo")
+                .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))));
     }
 
     @Override

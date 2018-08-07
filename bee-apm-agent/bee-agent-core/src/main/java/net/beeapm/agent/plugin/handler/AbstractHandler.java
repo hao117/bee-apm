@@ -31,4 +31,10 @@ public abstract class AbstractHandler implements IHandler {
         log.trace("[end]{}.{} start={}", getClassName(m), getMethodName(m), span.getTime());
     }
 
+    public void calculateSpend(Span span){
+        if(span != null){
+            span.setSpend(System.currentTimeMillis() - span.getTime().getTime());
+        }
+    }
+
 }

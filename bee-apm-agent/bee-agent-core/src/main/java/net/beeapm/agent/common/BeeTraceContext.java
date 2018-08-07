@@ -7,11 +7,14 @@ public class BeeTraceContext {
     private static final ThreadLocal<String> localCurrentId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localGId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localPId = new ThreadLocal<String>();
+    private static final ThreadLocal<String> localCTag = new ThreadLocal<String>();
+    private static final ThreadLocal<Boolean> localIsRequestEnter  = new ThreadLocal<Boolean>();
 
     public static void clearAll(){
         localCurrentId.remove();
         localGId.remove();
         localPId.remove();
+        localCTag.remove();
     }
 
     public static String getCurrentId(){
@@ -43,8 +46,26 @@ public class BeeTraceContext {
         localGId.set(gId);
     }
 
+    public static String getCTag(){
+        return localCTag.get();
+    }
+
+    public static void setCTag(String ctag){
+        localCTag.set(ctag);
+    }
 
 
+    public static boolean isRequestEnter(){
+        Boolean flag = localIsRequestEnter.get();
+        if(flag == null){
+            return true;
+        }
+        return flag;
+    }
+
+    public static void setIsRequestEnter(boolean isCollect){
+        localIsRequestEnter.set(isCollect);
+    }
 
 
 }
