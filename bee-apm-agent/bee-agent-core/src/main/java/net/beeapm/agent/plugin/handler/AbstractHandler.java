@@ -25,10 +25,10 @@ public abstract class AbstractHandler implements IHandler {
     }
 
     public void logBeginTrace(Method m, Span span, LogImpl log){
-        log.trace("[begin]{}.{} start={}", getClassName(m), getMethodName(m), span.getTime());
+        log.trace("[begin]{}.{} tc={}", getClassName(m), getMethodName(m), span.getType());
     }
     public void logEndTrace(Method m, Span span,LogImpl log){
-        log.trace("[end]{}.{} start={}", getClassName(m), getMethodName(m), span.getTime());
+        log.trace("[end]{}.{} tc={}", getClassName(m), getMethodName(m), span.getType());
     }
 
     public void calculateSpend(Span span){

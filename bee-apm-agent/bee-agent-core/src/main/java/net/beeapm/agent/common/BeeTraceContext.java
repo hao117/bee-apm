@@ -1,29 +1,22 @@
 package net.beeapm.agent.common;
 
+
 /**
  * Created by yuan on 2018/8/4.
  */
 public class BeeTraceContext {
-    private static final ThreadLocal<String> localCurrentId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localGId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localPId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localCTag = new ThreadLocal<String>();
-    private static final ThreadLocal<Boolean> localIsRequestEnter  = new ThreadLocal<Boolean>();
+    private static final ThreadLocal<Integer> localRequestEntryCounter = new ThreadLocal<Integer>();
 
     public static void clearAll(){
-        localCurrentId.remove();
         localGId.remove();
         localPId.remove();
         localCTag.remove();
+        localRequestEntryCounter.remove();
     }
 
-    public static String getCurrentId(){
-        return localCurrentId.get();
-    }
-
-    public static void setCurrentId(String currentId){
-        localCurrentId.set(currentId);
-    }
 
     public static String getPId(){
         return localPId.get();
@@ -54,18 +47,27 @@ public class BeeTraceContext {
         localCTag.set(ctag);
     }
 
-
-    public static boolean isRequestEnter(){
-        Boolean flag = localIsRequestEnter.get();
-        if(flag == null){
-            return true;
+    public static int getAndIncrRequestEntryCounter(){
+        Integer num = localRequestEntryCounter.get();
+        if(num == null){
+            num = new Integer(0);
         }
-        return flag;
+        int ret = num.intValue();
+        localRequestEntryCounter.set(num+1);
+        return ret;
     }
 
-    public static void setIsRequestEnter(boolean isCollect){
-        localIsRequestEnter.set(isCollect);
+    public static int decrAndGetRequestEntryCounter(){
+        Integer num = localRequestEntryCounter.get();
+        if(num == null){
+            num = new Integer(0);
+        }
+        Integer ret = num - 1;
+        localRequestEntryCounter.set(ret);
+        return ret;
     }
+
+
 
 
 }

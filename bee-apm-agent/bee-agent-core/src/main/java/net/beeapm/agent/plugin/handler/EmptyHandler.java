@@ -20,8 +20,8 @@ public class EmptyHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(Span span, Method method, Object[] allArguments, Object result, Throwable t) {
-        logEndTrace(method,span,log);
+    public Object after(Method method, Object[] allArguments, Object result, Throwable t) {
+        //logEndTrace(method,span,log);
         return result;
     }
 

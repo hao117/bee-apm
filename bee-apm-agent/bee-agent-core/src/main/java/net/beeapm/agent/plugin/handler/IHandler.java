@@ -17,5 +17,5 @@ public interface IHandler {
      * 方法执行完处理
      * @return
      */
-     Object after(Span span, Method method, Object[] allArguments, Object result,Throwable t);
+     Object after(Method method, Object[] allArguments, Object result,Throwable t);
 }

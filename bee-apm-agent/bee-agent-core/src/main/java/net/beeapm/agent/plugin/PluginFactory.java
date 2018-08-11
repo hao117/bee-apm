@@ -6,6 +6,7 @@ package net.beeapm.agent.plugin;
 public class PluginFactory {
     public static IPlugin[] getPlugins(){
         return new IPlugin[]{
+                new ProcessPlugin(),
         };
     }
 }

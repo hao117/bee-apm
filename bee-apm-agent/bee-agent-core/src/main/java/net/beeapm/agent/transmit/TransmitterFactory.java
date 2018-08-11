@@ -13,6 +13,9 @@ public class TransmitterFactory {
     }
 
     public static void transmit(Span span){
+        if(transmitter == null){
+            init();
+        }
         transmitter.transmit(span);
     }
 }

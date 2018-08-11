@@ -1,7 +1,10 @@
 package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.BeeAgentJarUtils;
-import net.beeapm.agent.plugin.MethodSpendPlugin;
+import net.beeapm.agent.plugin.IPlugin;
+import net.beeapm.agent.plugin.InterceptPoint;
+import net.beeapm.agent.plugin.ProcessPlugin;
+import net.beeapm.agent.plugin.ServletPlugin;
 import net.beeapm.agent.transmit.TransmitterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
@@ -22,31 +25,37 @@ public class BeeAgent {
         BeeAgentJarUtils.getAgentJarDirPath();
         TransmitterFactory.init();
 
-        final MethodSpendPlugin methodSpendPlugin = new MethodSpendPlugin();
-
-        AgentBuilder.Transformer transformer =  new AgentBuilder.Transformer()  {
-            @Override
-            public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
-                                                    TypeDescription typeDescription,
-                                                    ClassLoader classLoader, JavaModule javaModule) {
-                String className = typeDescription.getCanonicalName();
-                System.out.println("++++++++ class name = " + className);
-                //...
-//                builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
-//                                 .intercept(Advice.to(methodSpendPlugin.interceptorAdviceClass()));
-                builder = builder.visit(Advice.to(methodSpendPlugin.interceptorAdviceClass()).on(methodSpendPlugin.buildMethodsMatcher()));
-
-                return builder;
-            }
+        IPlugin[] plugins = new IPlugin[] {
+            new ProcessPlugin(),new ServletPlugin()
         };
 
-        AgentBuilder agentBuilder = new AgentBuilder.Default();
-        agentBuilder = agentBuilder.ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."))
-                .type(methodSpendPlugin.buildTypesMatcher())
-                .transform(transformer);
+        AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
+
+        for(int i = 0; i < plugins.length; i++) {
+            final IPlugin plugin = plugins[i];
+            InterceptPoint[] interceptPoints = plugin.buildInterceptPoint();
+            for (int j = 0; j < interceptPoints.length; j++) {
+                final InterceptPoint interceptPoint = interceptPoints[j];
+                AgentBuilder.Transformer transformer = new AgentBuilder.Transformer() {
+                    @Override
+                    public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
+                                                            TypeDescription typeDescription,
+                                                            ClassLoader classLoader, JavaModule javaModule) {
+                        String className = typeDescription.getCanonicalName();
+                        System.out.println("++++++++ class name = " + className);
+                        //...
+//                  builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
+//                                 .intercept(Advice.to(methodSpendPlugin.interceptorAdviceClass()));
+                        builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
+                        return builder;
+                    }
+                };
+                agentBuilder = agentBuilder.type(interceptPoint.buildTypesMatcher()).transform(transformer);
+            }
+        }
+
 
         AgentBuilder.Listener listener = new AgentBuilder.Listener() {
-
             @Override
             public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
 
@@ -75,4 +84,6 @@ public class BeeAgent {
 
         agentBuilder.with(listener).installOn(inst);
     }
+
+
 }

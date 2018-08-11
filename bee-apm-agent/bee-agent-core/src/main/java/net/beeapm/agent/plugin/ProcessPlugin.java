@@ -1,6 +1,6 @@
 package net.beeapm.agent.plugin;
 
-import net.beeapm.agent.plugin.interceptor.MethodSpendAdvice;
+import net.beeapm.agent.plugin.interceptor.ProcessAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -9,11 +9,11 @@ import net.bytebuddy.matcher.ElementMatchers;
 /**
  * Created by yuan on 2018/7/31.
  */
-public class MethodSpendPlugin implements IPlugin {
+public class ProcessPlugin implements IPlugin {
 
     @Override
     public String getName() {
-        return "method";
+        return "process";
     }
 
     public InterceptPoint[] buildInterceptPoint(){
@@ -35,7 +35,7 @@ public class MethodSpendPlugin implements IPlugin {
 
     @Override
     public Class interceptorAdviceClass() {
-        return MethodSpendAdvice.class;
+        return ProcessAdvice.class;
     }
 
 }

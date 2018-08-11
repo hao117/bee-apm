@@ -1,100 +1,100 @@
 package net.beeapm.agent.model;
 
 import java.util.Date;
-import java.util.HashMap;
 
+public class Span{
+    private Tags tags = new Tags();
+    private String type;
+    private Date time;
+    private String server;
+    private String group;
+    private String pid;
+    private String gid;
+    private String id;
+    private Long spend;
 
-public class Span extends HashMap<String,Object> {
-    public Span(String tc){
-        put("tc",tc);
+    public Span(String spanType){
+        setType(spanType);
         setTime(new Date());
     }
-    public String getId() {
-        return (String) get("id");
+
+    public Tags getTags() {
+        return tags;
     }
-    public Span setId(String id) {
-        put("id",id);
+
+    public Span addTag(String key,Object val) {
+        this.tags.put(key,val);
         return this;
     }
 
-    public String getPid() {
-        return (String) get("pid");
+    public String getType() {
+        return type;
     }
 
-    public Span setPid(String pid) {
-        put("pid",pid);
+    public Span setType(String type) {
+        this.type = type;
         return this;
     }
 
-    public String getGid() {
-        return (String) get("gid");
+    public Date getTime() {
+        return time;
     }
 
-    public Span setGid(String gid) {
-        put("gid",gid);
-        return this;
-    }
-
-    public Long getSpend() {
-        return (Long) get("spend");
-    }
-
-    public Span setSpend(Long spend) {
-        put("spend",spend);
-        return this;
-    }
-
-    public String getIp() {
-        return (String) get("ip");
-    }
-
-    public Span setIp(String ip) {
-        put("ip",ip);
+    public Span setTime(Date time) {
+        this.time = time;
         return this;
     }
 
     public String getServer() {
-        return (String) get("server");
+        return server;
     }
 
     public Span setServer(String server) {
-        put("server",server);
-        return this;
-    }
-
-    public String getc() {
-        return (String) get("tc");
-    }
-
-    /**
-     * type code
-     * @param tc
-     * @return
-     */
-    public Span setTc(String tc) {
-        put("tc",tc);
-        return this;
-    }
-    public Date getTime() {
-        return (Date) get("time");
-    }
-
-    public Span setTime(Date time) {
-        put("time",time);
+        this.server = server;
         return this;
     }
 
     public String getGroup() {
-        return (String) get("group");
+        return group;
     }
 
     public Span setGroup(String group) {
-        put("group",group);
+        this.group = group;
         return this;
     }
 
-    public Span setValue(String key,Object val){
-        put(key,val);
+    public String getPid() {
+        return pid;
+    }
+
+    public Span setPid(String pid) {
+        this.pid = pid;
         return this;
+    }
+
+    public String getGid() {
+        return gid;
+    }
+
+    public Span setGid(String gid) {
+        this.gid = gid;
+        return this;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Span setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public Long getSpend() {
+        return spend;
+    }
+
+    public void setSpend(Long spend) {
+        this.spend = spend;
     }
 }

@@ -1,27 +1,94 @@
 package net.beeapm.agent.common;
 
 
-import net.beeapm.agent.plugin.handler.MethodSpendHandler;
+import net.beeapm.agent.plugin.handler.ProcessHandler;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Created by yuan on 2018/4/11.
  */
 public class BeeClassLoader extends URLClassLoader{
     private static BeeClassLoader DEFAULT_LOADER;
-    private static final LogImpl log = LogManager.getLog(MethodSpendHandler.class.getSimpleName());
-
-    public BeeClassLoader(URL[] urls, ClassLoader parent) {
-        super(urls, parent);
-    }
+    private static final LogImpl log = LogManager.getLog(ProcessHandler.class.getSimpleName());
+    private JarFile agentJar;
+    private ClassLoader parent;
 
     public BeeClassLoader(ClassLoader parent) {
-        this(new URL[]{BeeClassLoader.class.getClassLoader().getResource("")}, parent);
+//        super(new URL[]{BeeClassLoader.class.getClassLoader().getResource("")},parent);
+//        this.parent = parent;
+        super(new URL[]{url()},parent);
+        loadAgentJar();
     }
+//
+//    public BeeClassLoader(ClassLoader parent) {
+//        this(parent);
+//    }
+
+    private static URL url(){
+        try{
+            return new URL("file:"+BeeAgentJarUtils.getAgentJarPath());
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
+    private void loadAgentJar(){
+        try {
+            agentJar = new JarFile(new File(BeeAgentJarUtils.getAgentJarPath()));
+        }catch (Exception e){
+
+        }
+    }
+
+//    @Override
+//    public URL findResource(String name) {
+//        JarEntry entry = agentJar.getJarEntry(name);
+//        if (entry != null) {
+//            try {
+//                return new URL("jar:file:" + BeeAgentJarUtils.getAgentJarPath() + "!/" + name);
+//            } catch (MalformedURLException e) {
+//            }
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    public Enumeration<URL> findResources(String name) throws IOException {
+//        List<URL> allResources = new LinkedList<URL>();
+//        JarEntry entry = agentJar.getJarEntry(name);
+//        if (entry != null) {
+//            allResources.add(new URL("jar:file:" + BeeAgentJarUtils.getAgentJarPath() + "!/" + name));
+//        }
+//        final Iterator<URL> iterator = allResources.iterator();
+//        return new Enumeration<URL>() {
+//            @Override
+//            public boolean hasMoreElements() {
+//                return iterator.hasNext();
+//            }
+//
+//            @Override
+//            public URL nextElement() {
+//                return iterator.next();
+//            }
+//        };
+//    }
+
 
     protected synchronized Class loadClass(String name,boolean resolve) throws ClassNotFoundException{
 
@@ -36,13 +103,17 @@ public class BeeClassLoader extends URLClassLoader{
         Class c = findLoadedClass(name);
         if(c == null){
             try {
-                return findClass(name);
+                c = findClass(name);
             }catch (Throwable t){
-                //第一次加载会报java.lang.NullPointerException at sun.net.util.URLUtil.urlNoFragString
-                //其它会是ClassNotFoundException
-                return super.loadClass(name,resolve);
+                try {
+                    c = super.loadClass(name,resolve);
+                }catch (Exception e){
+
+                }
             }
         }
         return c;
     }
+
+
 }
