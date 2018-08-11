@@ -6,4 +6,4 @@ target/
 .classpath
 .project
 .settings/
-packages/
+*.jar

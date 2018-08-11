@@ -1,7 +1,36 @@
 {
   "plugin":{
     "method":{
-      "typeMatch"
+      "typesMatch":{
+        "and":[
+          {"named":""},
+          {"nameStartsWith":[]},
+          {"nameEndsWith":[]},
+          {"nameContains":[]},
+          {"nameMatches":[]}
+        ],
+        "or":[
+          {"named":""},
+          {"nameStartsWith":[]},
+          {"nameEndsWith":[]},
+          {"nameContains":[]},
+          {"nameMatches":[]}
+        ],
+        "andNot":[
+          {"named":""},
+          {"nameStartsWith":[]},
+          {"nameEndsWith":[]},
+          {"nameContains":[]},
+          {"nameMatches":[]}
+        ],
+        "orNot":[
+          {"named":""},
+          {"nameStartsWith":[]},
+          {"nameEndsWith":[]},
+          {"nameContains":[]},
+          {"nameMatches":[]}
+        ]
+      }
     }
   }
 

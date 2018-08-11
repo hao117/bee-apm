@@ -10,19 +10,31 @@ import net.bytebuddy.matcher.ElementMatchers;
  * Created by yuan on 2018/7/31.
  */
 public class MethodSpendPlugin implements IPlugin {
+
     @Override
-    public ElementMatcher<TypeDescription> buildTypesMatcher() {
-        return ElementMatchers.nameStartsWith("net.beeapm.demo")
-                .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))));
+    public String getName() {
+        return "method";
+    }
+
+    public InterceptPoint[] buildInterceptPoint(){
+        return new InterceptPoint[]{
+              new InterceptPoint() {
+                  @Override
+                  public ElementMatcher<TypeDescription> buildTypesMatcher() {
+                      return ElementMatchers.nameStartsWith("net.beeapm.demo")
+                              .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))));
+                  }
+
+                  @Override
+                  public ElementMatcher<MethodDescription> buildMethodsMatcher() {
+                      return ElementMatchers.isMethod();
+                  }
+              },
+        };
     }
 
     @Override
-    public ElementMatcher<MethodDescription> buildMethodsMatcher() {
-        return ElementMatchers.isMethod();
-    }
-
-    @Override
-    public Class adviceClass() {
+    public Class interceptorAdviceClass() {
         return MethodSpendAdvice.class;
     }
 

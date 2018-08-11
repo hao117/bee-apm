@@ -5,10 +5,8 @@ import net.beeapm.agent.plugin.MethodSpendPlugin;
 import net.beeapm.agent.transmit.TransmitterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
-import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.implementation.SuperMethodCall;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 
@@ -35,8 +33,8 @@ public class BeeAgent {
                 System.out.println("++++++++ class name = " + className);
                 //...
 //                builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
-//                                 .intercept(Advice.to(methodSpendPlugin.adviceClass()));
-                builder = builder.visit(Advice.to(methodSpendPlugin.adviceClass()).on(methodSpendPlugin.buildMethodsMatcher()));
+//                                 .intercept(Advice.to(methodSpendPlugin.interceptorAdviceClass()));
+                builder = builder.visit(Advice.to(methodSpendPlugin.interceptorAdviceClass()).on(methodSpendPlugin.buildMethodsMatcher()));
 
                 return builder;
             }
