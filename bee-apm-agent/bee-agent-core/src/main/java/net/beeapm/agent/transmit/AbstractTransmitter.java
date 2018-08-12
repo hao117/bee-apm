@@ -8,8 +8,6 @@ import net.beeapm.agent.model.Span;
  */
 public abstract class AbstractTransmitter {
     private String name;
-    abstract int transmit(Span span);
-    abstract int init();
-
-
+    public abstract int transmit(Span span);
+    public abstract int init();
 }

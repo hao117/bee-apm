@@ -30,10 +30,12 @@ public class AgentClassLoader extends ClassLoader {
     private List<File> jarPathDir;
     private List<File> jarFiles;
 
-    public AgentClassLoader(ClassLoader parent){
+    public AgentClassLoader(ClassLoader parent,String[] jarFolder){
         super(parent);
         jarPathDir = new ArrayList<File>();
-        jarPathDir.add(new File(BeeAgentJarUtils.getAgentJarDirPath() + "/plugins"));
+        for(int i = 0; i < jarFolder.length; i++) {
+            jarPathDir.add(new File(BeeAgentJarUtils.getAgentJarDirPath() + "/"+jarFolder[i]));
+        }
         jarFiles = getJarFiles();
 
     }

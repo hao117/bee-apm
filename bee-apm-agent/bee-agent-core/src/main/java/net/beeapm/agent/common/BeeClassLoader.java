@@ -46,40 +46,6 @@ public class BeeClassLoader extends URLClassLoader{
         }
     }
 
-//    @Override
-//    public URL findResource(String name) {
-//        JarEntry entry = agentJar.getJarEntry(name);
-//        if (entry != null) {
-//            try {
-//                return new URL("jar:file:" + BeeAgentJarUtils.getAgentJarPath() + "!/" + name);
-//            } catch (MalformedURLException e) {
-//            }
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public Enumeration<URL> findResources(String name) throws IOException {
-//        List<URL> allResources = new LinkedList<URL>();
-//        JarEntry entry = agentJar.getJarEntry(name);
-//        if (entry != null) {
-//            allResources.add(new URL("jar:file:" + BeeAgentJarUtils.getAgentJarPath() + "!/" + name));
-//        }
-//        final Iterator<URL> iterator = allResources.iterator();
-//        return new Enumeration<URL>() {
-//            @Override
-//            public boolean hasMoreElements() {
-//                return iterator.hasNext();
-//            }
-//
-//            @Override
-//            public URL nextElement() {
-//                return iterator.next();
-//            }
-//        };
-//    }
-
-
     protected synchronized Class loadClass(String name,boolean resolve) throws ClassNotFoundException{
 
         if(name.startsWith("net.beeapm.")){

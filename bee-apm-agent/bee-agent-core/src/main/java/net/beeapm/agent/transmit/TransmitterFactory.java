@@ -2,13 +2,21 @@ package net.beeapm.agent.transmit;
 
 import net.beeapm.agent.model.Span;
 
+import java.util.Map;
+
 /**
  * Created by yuan on 2018/6/28.
  */
 public class TransmitterFactory {
     public static AbstractTransmitter transmitter;
-    public static int init(){
-        transmitter = new ConsoleTransmitter();
+    public static Map<String,AbstractTransmitter> transmitterMap;
+    public synchronized static int init(){
+        System.out.println("===========================>TransmitterFactory::init");
+        if(transmitterMap == null) {
+            transmitterMap = TransmitterLoder.loadTransmitters();
+            transmitter = transmitterMap.get("console");
+            transmitter.init();
+        }
         return 0;
     }
 

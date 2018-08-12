@@ -9,19 +9,16 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-agent-plugin</artifactId>
+    <artifactId>bee-agent-transmitter</artifactId>
     <packaging>pom</packaging>
     <properties>
         <agent.package.dir>${project.build.directory}/../../../../packages</agent.package.dir>
-        <plugin.dir>${agent.package.dir}/plugins</plugin.dir>
+        <plugin.dir>${agent.package.dir}/transmit</plugin.dir>
         <shade.package>net.beeapm.agent.deps</shade.package>
-        <shade.net.bytebuddy.source>net.bytebuddy</shade.net.bytebuddy.source>
-        <shade.net.bytebuddy.target>${shade.package}.${shade.net.bytebuddy.source}</shade.net.bytebuddy.target>
     </properties>
     <modules>
-        <module>base-process-plugin</module>
-        <module>servlet-plugin</module>
-        <module>jdbc-plugin</module>
+        <module>console-transmitter</module>
+        <module>elasticsearch-transmitter</module>
     </modules>
     <dependencies>
         <dependency>
@@ -32,7 +29,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>bee-agent-plugin</finalName>
+        <finalName>bee-agent-transmitter</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,8 +48,8 @@
                             <shadeSourcesContent>true</shadeSourcesContent>
                             <relocations>
                                 <relocation>
-                                    <pattern>${shade.net.bytebuddy.source}</pattern>
-                                    <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
+                                    <pattern>net.bytebuddy</pattern>
+                                    <shadedPattern>${shade.package}.net.bytebuddy</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.alibaba.fastjson</pattern>

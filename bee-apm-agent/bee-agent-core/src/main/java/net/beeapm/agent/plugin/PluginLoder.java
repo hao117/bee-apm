@@ -16,7 +16,7 @@ public class PluginLoder {
     public static List<IPlugin> loadPlugins() {
         List<IPlugin> pluginList = new ArrayList<>(16);
         List<PluginDefine> pluginDefList = new ArrayList<>(16);
-        AgentClassLoader classLoader = new AgentClassLoader(PluginLoder.class.getClassLoader());
+        AgentClassLoader classLoader = new AgentClassLoader(PluginLoder.class.getClassLoader(),new String[]{"plugins"});
         List<URL> resources = getResources(classLoader);
         for (URL url : resources) {
             try {
