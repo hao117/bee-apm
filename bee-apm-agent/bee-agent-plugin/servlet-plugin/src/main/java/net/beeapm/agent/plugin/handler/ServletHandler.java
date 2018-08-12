@@ -9,7 +9,6 @@ import net.beeapm.agent.transmit.TransmitterFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 /**
  * Created by yuan on 2018/8/5.
@@ -17,7 +16,7 @@ import java.lang.reflect.Method;
 public class ServletHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ServletHandler.class.getSimpleName());
     @Override
-    public Span before(Method m, Object[] allArguments) {
+    public Span before(String className,String methodName, Object[] allArguments) {
         if(BeeTraceContext.getAndIncrRequestEntryCounter() != 0){
             return null;
         }
@@ -29,7 +28,7 @@ public class ServletHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(Method method, Object[] allArguments, Object result, Throwable t) {
+    public Object after(String className,String methodName, Object[] allArguments, Object result, Throwable t) {
         if(BeeTraceContext.decrAndGetRequestEntryCounter() > 0){
             return null;
         }
@@ -42,8 +41,8 @@ public class ServletHandler extends AbstractHandler {
         HttpServletResponse response  = (HttpServletResponse)allArguments[1];
         span.addTag("url",request.getRequestURL());
         span.addTag("remote",request.getRemoteAddr());
-        span.addTag("method",getMethodName(method));
-        span.addTag("clazz",getClassName(method));
+        span.addTag("method",methodName);
+        span.addTag("clazz",className);
         response.setHeader(HeaderKey.GID,span.getGid());   //返回gid，用于跟踪
         response.setHeader(HeaderKey.ID,span.getId());     //返回id，用于跟踪
         calculateSpend(span);

@@ -2,13 +2,10 @@ package net.beeapm.agent.plugin.interceptor;
 
 import net.beeapm.agent.plugin.handler.HandlerLoader;
 import net.beeapm.agent.plugin.handler.HandlerUtils;
-import net.beeapm.agent.plugin.handler.IHandler;
 import net.beeapm.agent.plugin.handler.ProcessHandler;
-import net.beeapm.agent.model.Span;
 import net.bytebuddy.asm.Advice;
 
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 
 /**
  * Created by yuan on 2018/7/29.
@@ -20,10 +17,11 @@ import java.net.URLClassLoader;
 public class ProcessAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Local("handler") Object handler,
-                             @Advice.Origin Method method,
+                             @Advice.Origin("#t") String className,
+                             @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] allParams){
-        handler = HandlerLoader.load(ProcessHandler.class.getName(),method.getDeclaringClass().getClassLoader());
-        HandlerUtils.doBefore(handler,method,allParams);
+        handler = HandlerLoader.load(ProcessHandler.class.getName());
+        HandlerUtils.doBefore(handler,className,methodName,allParams);
     }
 
     /**
@@ -31,10 +29,11 @@ public class ProcessAdvice {
      */
     @Advice.OnMethodExit(onThrowable = Throwable.class)
     public static void exit(@Advice.Local("handler") Object handler,
-                            @Advice.Origin Method method,
+                            @Advice.Origin("#t") String className,
+                            @Advice.Origin("#m") String methodName,
                             @Advice.AllArguments Object[] allParams,
                             @Advice.Thrown Throwable t){
-        HandlerUtils.doAfter(handler,method,allParams, null,t);
+        HandlerUtils.doAfter(handler,className,methodName,allParams, null,t);
     }
 
 }

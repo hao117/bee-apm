@@ -9,13 +9,15 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-jdbc-plugin</artifactId>
+    <artifactId>base-process-plugin</artifactId>
     <packaging>jar</packaging>
 
     <properties>
     </properties>
+    <dependencies>
+    </dependencies>
     <build>
-        <finalName>bee-jdbc-plugin</finalName>
+        <finalName>base-process-plugin</finalName>
     </build>
 
 </project>

@@ -9,11 +9,11 @@ import java.lang.reflect.Method;
  * Created by yuan on 2018/7/30.
  * 注意：实例方法使用@Advice.This注解，静态方法使用@Advice.Origin 两者不能混用
  */
-public abstract class BeeStaticAdvice{
+public class BeeDemoInstanceAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin Method method,
-                             @Advice.Origin Class<?> clazz,
+                             @Advice.This Object instance,
                              @Advice.AllArguments Object[] allArguments){
         //TODO This is a demo !
     }
@@ -24,7 +24,7 @@ public abstract class BeeStaticAdvice{
     @Advice.OnMethodExit(onThrowable = Throwable.class)
     public static void exit(@Advice.Local("handler") IHandler handler,
                             @Advice.Origin Method method,
-                            @Advice.Origin Class<?> clazz,
+                            @Advice.This Object instance,
                             @Advice.AllArguments Object[] allArguments,
                             @Advice.Thrown Throwable t){
         //TODO This is a demo !

@@ -1,6 +1,5 @@
 package net.beeapm.agent.plugin.interceptor;
 
-import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.handler.*;
 import net.bytebuddy.asm.Advice;
 
@@ -16,10 +15,11 @@ import java.lang.reflect.Method;
 public class ServletAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Local("handler") Object handler,
-                             @Advice.Origin Method method,
-                             @Advice.AllArguments Object[] allParams){
-        handler = HandlerLoader.load(ServletHandler.class.getName(),method.getDeclaringClass().getClassLoader());
-        HandlerUtils.doBefore(handler,method,allParams);
+                             @Advice.Origin("#t") String className,
+                             @Advice.Origin("#m") String methodName,
+                             @Advice.AllArguments Object[] args){
+        handler = HandlerLoader.load(ServletHandler.class.getName());
+        HandlerUtils.doBefore(handler,className,methodName,args);
     }
 
     /**
@@ -27,10 +27,11 @@ public class ServletAdvice {
      */
     @Advice.OnMethodExit(onThrowable = Throwable.class)
     public static void exit(@Advice.Local("handler") Object handler,
-                            @Advice.Origin Method method,
-                            @Advice.AllArguments Object[] allParams,
+                            @Advice.Origin("#t") String className,
+                            @Advice.Origin("#m") String methodName,
+                            @Advice.AllArguments Object[] args,
                             @Advice.Thrown Throwable t){
-        HandlerUtils.doAfter(handler,method,allParams, null,t);
+        HandlerUtils.doAfter(handler,className,methodName,args, null,t);
     }
 
 }

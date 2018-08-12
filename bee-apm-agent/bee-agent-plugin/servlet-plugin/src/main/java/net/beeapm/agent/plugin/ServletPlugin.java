@@ -22,14 +22,18 @@ public class ServletPlugin implements IPlugin {
                 new InterceptPoint() {
                     @Override
                     public ElementMatcher<TypeDescription> buildTypesMatcher() {
-                        return ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"));
+                        return ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))
+                                .and(ElementMatchers.not(ElementMatchers.<TypeDescription>isAbstract()));
+
                     }
 
                     @Override
                     public ElementMatcher<MethodDescription> buildMethodsMatcher() {
                         return ElementMatchers.isMethod()
+                                .and(ElementMatchers.takesArguments(2))
                                 .and(ElementMatchers.takesArgument(0, ElementMatchers.named("javax.servlet.http.HttpServletRequest")))
-                                .and(ElementMatchers.takesArgument(1,ElementMatchers.named("javax.servlet.http.HttpServletResponse")));
+                                .and(ElementMatchers.takesArgument(1,ElementMatchers.named("javax.servlet.http.HttpServletResponse")))
+                                .and(ElementMatchers.<MethodDescription>nameStartsWith("do"));
                     }
                 }
         };

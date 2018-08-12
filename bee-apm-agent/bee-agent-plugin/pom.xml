@@ -16,8 +16,9 @@
         <plugin.dir>${agent.package.dir}/plugins</plugin.dir>
     </properties>
     <modules>
-        <module>bee-servlet-plugin</module>
-        <module>bee-jdbc-plugin</module>
+        <module>base-process-plugin</module>
+        <module>servlet-plugin</module>
+        <module>jdbc-plugin</module>
     </modules>
     <dependencies>
         <dependency>

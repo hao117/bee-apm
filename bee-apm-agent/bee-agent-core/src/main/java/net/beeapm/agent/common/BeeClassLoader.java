@@ -1,22 +1,12 @@
 package net.beeapm.agent.common;
 
 
-import net.beeapm.agent.plugin.handler.ProcessHandler;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
@@ -24,7 +14,7 @@ import java.util.jar.JarFile;
  */
 public class BeeClassLoader extends URLClassLoader{
     private static BeeClassLoader DEFAULT_LOADER;
-    private static final LogImpl log = LogManager.getLog(ProcessHandler.class.getSimpleName());
+    private static final LogImpl log = LogManager.getLog(BeeClassLoader.class.getSimpleName());
     private JarFile agentJar;
     private ClassLoader parent;
 

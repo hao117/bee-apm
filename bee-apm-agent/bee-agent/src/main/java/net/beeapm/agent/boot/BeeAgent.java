@@ -9,6 +9,7 @@ import net.beeapm.agent.transmit.TransmitterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
@@ -47,6 +48,7 @@ public class BeeAgent {
 //                  builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
 //                                 .intercept(Advice.to(methodSpendPlugin.interceptorAdviceClass()));
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
+                        //builder = builder.visit(Advice.to(plugin.interceptorAdviceClass(),ClassFileLocator.ForClassLoader.of(classLoader)).on(interceptPoint.buildMethodsMatcher()));
                         return builder;
                     }
                 };

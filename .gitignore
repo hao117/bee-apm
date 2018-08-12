@@ -7,3 +7,5 @@ target/
 .project
 .settings/
 *.jar
+weaving-class/
+plugins/

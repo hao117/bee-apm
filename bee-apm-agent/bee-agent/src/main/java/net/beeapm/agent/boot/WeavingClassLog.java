@@ -1,5 +1,6 @@
 package net.beeapm.agent.boot;
 
+import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 
@@ -14,7 +15,7 @@ public enum WeavingClassLog {
             try {
                 if (weavingClassLogPath == null) {
                     try {
-                        weavingClassLogPath = new File("H:/workspace/java/packages/weaving-class");
+                        weavingClassLogPath = new File(BeeAgentJarUtils.getAgentJarDirPath()+"/weaving-class");
                         if (!weavingClassLogPath.exists()) {
                             weavingClassLogPath.mkdir();
                         }
