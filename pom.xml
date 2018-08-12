@@ -15,7 +15,6 @@
         <module>bee-apm-agent</module>
         <module>bee-apm-server</module>
         <module>bee-apm-web</module>
-        <module>bee-apm-demo-web</module>
     </modules>
 
     <properties>
@@ -23,27 +22,6 @@
         <compiler.version>1.6</compiler.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.45</version>
-        </dependency>
-    </dependencies>
-    <repositories>
-        <repository>
-            <id>maven-ali</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-        </repository>
-    </repositories>
     <build>
         <finalName>beeapm</finalName>
     </build>

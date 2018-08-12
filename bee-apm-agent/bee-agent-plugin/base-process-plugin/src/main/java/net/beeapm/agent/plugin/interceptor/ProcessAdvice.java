@@ -2,10 +2,7 @@ package net.beeapm.agent.plugin.interceptor;
 
 import net.beeapm.agent.plugin.handler.HandlerLoader;
 import net.beeapm.agent.plugin.handler.HandlerUtils;
-import net.beeapm.agent.plugin.handler.ProcessHandler;
 import net.bytebuddy.asm.Advice;
-
-import java.lang.reflect.Method;
 
 /**
  * Created by yuan on 2018/7/29.
@@ -20,7 +17,7 @@ public class ProcessAdvice {
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] allParams){
-        handler = HandlerLoader.load(ProcessHandler.class.getName());
+        handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ProcessHandler");
         HandlerUtils.doBefore(handler,className,methodName,allParams);
     }
 

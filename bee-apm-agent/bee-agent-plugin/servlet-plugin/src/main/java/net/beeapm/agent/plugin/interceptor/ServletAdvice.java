@@ -1,9 +1,8 @@
 package net.beeapm.agent.plugin.interceptor;
 
-import net.beeapm.agent.plugin.handler.*;
+import net.beeapm.agent.plugin.handler.HandlerLoader;
+import net.beeapm.agent.plugin.handler.HandlerUtils;
 import net.bytebuddy.asm.Advice;
-
-import java.lang.reflect.Method;
 
 /**
  * Created by yuan on 2018/8/5.
@@ -18,7 +17,7 @@ public class ServletAdvice {
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] args){
-        handler = HandlerLoader.load(ServletHandler.class.getName());
+        handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
         HandlerUtils.doBefore(handler,className,methodName,args);
     }
 

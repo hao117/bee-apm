@@ -1,5 +1,6 @@
 package net.beeapm.agent.plugin.handler;
 
+import net.beeapm.agent.common.AgentClassLoader;
 import net.beeapm.agent.common.BeeClassLoader;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -17,13 +18,13 @@ public class HandlerLoader {
     private static final LogImpl log = LogManager.getLog(HandlerLoader.class.getSimpleName());
     private static ConcurrentHashMap<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
     private static ReentrantLock INSTANCE_LOAD_LOCK = new ReentrantLock();
-    private static BeeClassLoader beeClassLoader;
+    private static AgentClassLoader beeClassLoader;
 
-    private static BeeClassLoader getBeeClassLoader(ClassLoader parentClassLoader){
+    private static AgentClassLoader getBeeClassLoader(ClassLoader parentClassLoader){
         if(beeClassLoader == null){
             synchronized (HandlerLoader.class){
                 if(beeClassLoader == null){
-                    beeClassLoader = new BeeClassLoader(parentClassLoader);
+                    beeClassLoader = new AgentClassLoader(parentClassLoader);
                 }
             }
         }
@@ -64,7 +65,7 @@ public class HandlerLoader {
     public static Object load(String className){
         try {
             ClassLoader contextClassLoader =  Thread.currentThread().getContextClassLoader();
-            BeeClassLoader classLoader = getBeeClassLoader(contextClassLoader);
+            ClassLoader classLoader = getBeeClassLoader(contextClassLoader);
             String instanceKey = className + "_OF_" + classLoader.getClass().getName() + "@" + Integer.toHexString(classLoader.hashCode());
             Object inst = handlerMap.get(instanceKey);
             if (inst == null) {

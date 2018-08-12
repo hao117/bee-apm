@@ -33,8 +33,9 @@ public class AgentClassLoader extends ClassLoader {
     public AgentClassLoader(ClassLoader parent){
         super(parent);
         jarPathDir = new ArrayList<File>();
-        jarFiles = getJarFiles();
         jarPathDir.add(new File(BeeAgentJarUtils.getAgentJarDirPath() + "/plugins"));
+        jarFiles = getJarFiles();
+
     }
 
     private byte[] readClassFile(String jarPath,String className) throws Exception{

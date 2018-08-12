@@ -3,18 +3,17 @@ package net.beeapm.agent.boot;
 import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.plugin.IPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
-import net.beeapm.agent.plugin.ProcessPlugin;
-import net.beeapm.agent.plugin.ServletPlugin;
+import net.beeapm.agent.plugin.PluginLoder;
 import net.beeapm.agent.transmit.TransmitterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 
 import java.lang.instrument.Instrumentation;
+import java.util.List;
 
 /**
  * Created by yuan
@@ -26,14 +25,12 @@ public class BeeAgent {
         BeeAgentJarUtils.getAgentJarDirPath();
         TransmitterFactory.init();
 
-        IPlugin[] plugins = new IPlugin[] {
-            new ProcessPlugin(),new ServletPlugin()
-        };
+        List<IPlugin> plugins = PluginLoder.loadPlugins();
 
         AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
 
-        for(int i = 0; i < plugins.length; i++) {
-            final IPlugin plugin = plugins[i];
+        for(int i = 0; i < plugins.size(); i++) {
+            final IPlugin plugin = plugins.get(i);
             InterceptPoint[] interceptPoints = plugin.buildInterceptPoint();
             for (int j = 0; j < interceptPoints.length; j++) {
                 final InterceptPoint interceptPoint = interceptPoints[j];
@@ -45,7 +42,7 @@ public class BeeAgent {
                         String className = typeDescription.getCanonicalName();
                         System.out.println("++++++++ class name = " + className);
                         //...
-//                  builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
+//                      builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
 //                                 .intercept(Advice.to(methodSpendPlugin.interceptorAdviceClass()));
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
                         //builder = builder.visit(Advice.to(plugin.interceptorAdviceClass(),ClassFileLocator.ForClassLoader.of(classLoader)).on(interceptPoint.buildMethodsMatcher()));

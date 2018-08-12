@@ -28,16 +28,6 @@
             <artifactId>bee-agent-core</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>net.beeapm</groupId>
-            <artifactId>base-process-plugin</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.beeapm</groupId>
-            <artifactId>servlet-plugin</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <!--
         <dependency>
             <groupId>net.beeapm</groupId>
