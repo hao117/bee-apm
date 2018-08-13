@@ -36,7 +36,7 @@
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
-            <artifactId>sample003</artifactId>
+            <artifactId>plugin</artifactId>
             <version>1.0.0</version>
         </dependency>
         -->
