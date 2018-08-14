@@ -1,6 +1,8 @@
 package net.beeapm.agent.common;
 
 
+import net.beeapm.agent.model.Span;
+
 /**
  * Created by yuan on 2018/8/4.
  */
@@ -67,6 +69,13 @@ public class BeeTraceContext {
         return ret;
     }
 
+    public static String getCurrentId(){
+        Span span = SpanManager.getCurrentSpan();
+        if(span == null){
+            return "nvl";
+        }
+        return span.getId();
+    }
 
 
 
