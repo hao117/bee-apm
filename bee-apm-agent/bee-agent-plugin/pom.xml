@@ -22,6 +22,7 @@
         <module>base-process-plugin</module>
         <module>servlet-plugin</module>
         <module>jdbc-plugin</module>
+        <module>httpclient4x-plugin</module>
     </modules>
     <dependencies>
         <dependency>
