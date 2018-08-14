@@ -12,7 +12,7 @@ import java.util.*;
 public class TransmitterLoder {
     public static Map<String,AbstractTransmitter> loadTransmitters() {
         Map<String,AbstractTransmitter> transmitterList = new HashMap<String,AbstractTransmitter>();
-        List<TransmitterDefine> transmitterDefList = new ArrayList<>();
+        List<TransmitterDefine> transmitterDefList = new ArrayList<TransmitterDefine>();
         AgentClassLoader classLoader = new AgentClassLoader(TransmitterLoder.class.getClassLoader(),new String[]{"transmit"});
         List<URL> resources = getResources(classLoader);
         for (URL url : resources) {

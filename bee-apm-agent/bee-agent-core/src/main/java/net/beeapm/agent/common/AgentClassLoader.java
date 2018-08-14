@@ -132,7 +132,7 @@ public class AgentClassLoader extends ClassLoader {
     }
 
     private List<File> getJarFiles() {
-        jarFiles = new ArrayList<>(16);
+        jarFiles = new ArrayList<File>(16);
         for (File dir : jarPathDir) {
             if (dir.exists() && dir.isDirectory()) {
                 String[] jarFileNames = dir.list(new FilenameFilter() {
