@@ -10,13 +10,11 @@ public class BeeTraceContext {
     private static final ThreadLocal<String> localGId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localPId = new ThreadLocal<String>();
     private static final ThreadLocal<String> localCTag = new ThreadLocal<String>();
-    private static final ThreadLocal<Integer> localRequestEntryCounter = new ThreadLocal<Integer>();
 
     public static void clearAll(){
         localGId.remove();
         localPId.remove();
         localCTag.remove();
-        localRequestEntryCounter.remove();
     }
 
 
@@ -49,25 +47,6 @@ public class BeeTraceContext {
         localCTag.set(ctag);
     }
 
-    public static int getAndIncrRequestEntryCounter(){
-        Integer num = localRequestEntryCounter.get();
-        if(num == null){
-            num = new Integer(0);
-        }
-        int ret = num.intValue();
-        localRequestEntryCounter.set(num+1);
-        return ret;
-    }
-
-    public static int decrAndGetRequestEntryCounter(){
-        Integer num = localRequestEntryCounter.get();
-        if(num == null){
-            num = new Integer(0);
-        }
-        Integer ret = num - 1;
-        localRequestEntryCounter.set(ret);
-        return ret;
-    }
 
     public static String getCurrentId(){
         Span span = SpanManager.getCurrentSpan();
