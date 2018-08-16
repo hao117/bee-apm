@@ -17,36 +17,34 @@ public class ServletHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ServletHandler.class.getSimpleName());
     @Override
     public Span before(String className,String methodName, Object[] allArguments) {
-        if(BeeTraceContext.getAndIncrRequestEntryCounter() != 0){
-            return null;
+        Span currSpan = SpanManager.getCurrentSpan();
+        if(currSpan == null || !currSpan.getType().equals(SpanType.REQUEST)){
+            HttpServletRequest request = (HttpServletRequest)allArguments[0];
+            BeeTraceContext.setGId(request.getHeader(HeaderKey.GID));
+            BeeTraceContext.setPId(request.getHeader(HeaderKey.PID));
+            Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
+            return span;
         }
-        HttpServletRequest request = (HttpServletRequest)allArguments[0];
-        BeeTraceContext.setGId(request.getHeader(HeaderKey.GID));
-        BeeTraceContext.setPId(request.getHeader(HeaderKey.PID));
-        Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
-        return span;
+        return null;
     }
 
     @Override
-    public Object after(String className,String methodName, Object[] allArguments, Object result, Throwable t) {
-        if(BeeTraceContext.decrAndGetRequestEntryCounter() > 0){
-            return null;
-        }
-
-        Span span = SpanManager.getExitSpan();
-        if(span == null){
+    public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t) {
+        Span currSpan = SpanManager.getCurrentSpan();
+        if(currSpan!=null && currSpan.getType().equals(SpanType.REQUEST)) {
+            Span span = SpanManager.getExitSpan();
+            HttpServletRequest request = (HttpServletRequest) allArguments[0];
+            HttpServletResponse response = (HttpServletResponse) allArguments[1];
+            span.addTag("url", request.getRequestURL());
+            span.addTag("remote", request.getRemoteAddr());
+            span.addTag("method", methodName);
+            span.addTag("clazz", className);
+            response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
+            response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
+            calculateSpend(span);
+            TransmitterFactory.transmit(span);
             return result;
         }
-        HttpServletRequest request = (HttpServletRequest)allArguments[0];
-        HttpServletResponse response  = (HttpServletResponse)allArguments[1];
-        span.addTag("url",request.getRequestURL());
-        span.addTag("remote",request.getRemoteAddr());
-        span.addTag("method",methodName);
-        span.addTag("clazz",className);
-        response.setHeader(HeaderKey.GID,span.getGid());   //返回gid，用于跟踪
-        response.setHeader(HeaderKey.ID,span.getId());     //返回id，用于跟踪
-        calculateSpend(span);
-        TransmitterFactory.transmit(span);
-        return result;
+        return null;
     }
 }
