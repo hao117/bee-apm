@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.interceptor;
 
 import net.beeapm.agent.plugin.handler.HandlerLoader;
 import net.beeapm.agent.plugin.handler.HandlerUtils;
+import net.beeapm.agent.plugin.handler.IHandler;
 import net.bytebuddy.asm.Advice;
 
 /**
@@ -13,12 +14,12 @@ import net.bytebuddy.asm.Advice;
  */
 public class HttpClient4xAdvice {
     @Advice.OnMethodEnter()
-    public static void enter(@Advice.Local("handler") Object handler,
+    public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] args){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.HttpClient4xHandler");
-        HandlerUtils.doBefore(handler,className,methodName,args);
+        handler.before(className,methodName,args);
     }
 
     /**

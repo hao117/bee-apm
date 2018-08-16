@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class HandlerLoader {
     private static final LogImpl log = LogManager.getLog(HandlerLoader.class.getSimpleName());
-    private static ConcurrentHashMap<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
+    private static ConcurrentHashMap<String, IHandler> handlerMap = new ConcurrentHashMap<String, IHandler>();
     private static ReentrantLock INSTANCE_LOAD_LOCK = new ReentrantLock();
     private static AgentClassLoader beeClassLoader;
 
@@ -27,16 +27,16 @@ public class HandlerLoader {
         return beeClassLoader;
     }
 
-    public static Object load(String className){
+    public static IHandler load(String className){
         try {
             ClassLoader contextClassLoader =  Thread.currentThread().getContextClassLoader();
             ClassLoader classLoader = getBeeClassLoader(contextClassLoader);
             String instanceKey = className + "_OF_" + classLoader.getClass().getName() + "@" + Integer.toHexString(classLoader.hashCode());
-            Object inst = handlerMap.get(instanceKey);
+            IHandler inst = handlerMap.get(instanceKey);
             if (inst == null) {
                 INSTANCE_LOAD_LOCK.lock();
                 try {
-                    inst = Class.forName(className, true, classLoader).newInstance();
+                    inst = (IHandler)Class.forName(className, true, classLoader).newInstance();
                 } finally {
                     INSTANCE_LOAD_LOCK.unlock();
                 }
