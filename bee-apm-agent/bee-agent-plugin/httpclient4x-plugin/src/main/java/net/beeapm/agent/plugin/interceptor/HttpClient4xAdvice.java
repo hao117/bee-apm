@@ -1,7 +1,6 @@
 package net.beeapm.agent.plugin.interceptor;
 
 import net.beeapm.agent.plugin.handler.HandlerLoader;
-import net.beeapm.agent.plugin.handler.HandlerUtils;
 import net.beeapm.agent.plugin.handler.IHandler;
 import net.bytebuddy.asm.Advice;
 
