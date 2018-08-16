@@ -27,6 +27,11 @@ public class Span{
         return this;
     }
 
+    public Span removeTag(String key){
+        this.tags.remove(key);
+        return this;
+    }
+
     public String getType() {
         return type;
     }
