@@ -23,6 +23,7 @@
         <module>servlet-plugin</module>
         <module>jdbc-plugin</module>
         <module>httpclient4x-plugin</module>
+        <module>httpclient3x-plugin</module>
     </modules>
     <dependencies>
         <dependency>
