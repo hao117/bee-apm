@@ -13,7 +13,7 @@ public class HttpClient3xPlugin implements IPlugin {
 
     @Override
     public String getName() {
-        return "servlet";
+        return "httpclient3x";
     }
 
     @Override

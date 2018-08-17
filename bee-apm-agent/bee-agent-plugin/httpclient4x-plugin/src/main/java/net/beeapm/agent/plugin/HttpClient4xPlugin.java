@@ -14,7 +14,7 @@ public class HttpClient4xPlugin implements IPlugin {
 
     @Override
     public String getName() {
-        return "servlet";
+        return "httpclient4x";
     }
 
     @Override
