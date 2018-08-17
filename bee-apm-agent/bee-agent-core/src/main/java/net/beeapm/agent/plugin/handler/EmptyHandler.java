@@ -13,14 +13,14 @@ public class EmptyHandler extends AbstractHandler {
 
     private static final LogImpl log = LogManager.getLog(EmptyHandler.class.getSimpleName());
     @Override
-    public Span before(String className,String methodName, Object[] allArguments) {
+    public Span before(String className,String methodName, Object[] allArguments,Object[] extVal) {
         Span span = new Span("empty");
         logBeginTrace(className,methodName,span,log);
         return span;
     }
 
     @Override
-    public Object after(String className,String methodName, Object[] allArguments, Object result, Throwable t) {
+    public Object after(String className,String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
         logEndTrace(className,methodName,new Span("empty"),log);
         return result;
     }
