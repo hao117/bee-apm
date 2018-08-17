@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ServletHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ServletHandler.class.getSimpleName());
     @Override
-    public Span before(String className,String methodName, Object[] allArguments) {
+    public Span before(String className,String methodName, Object[] allArguments,Object[] extVal) {
         Span currSpan = SpanManager.getCurrentSpan();
         if(currSpan == null || !currSpan.getType().equals(SpanType.REQUEST)){
             HttpServletRequest request = (HttpServletRequest)allArguments[0];
@@ -29,7 +29,7 @@ public class ServletHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t) {
+    public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t,Object[] extVal) {
         Span currSpan = SpanManager.getCurrentSpan();
         if(currSpan!=null && currSpan.getType().equals(SpanType.REQUEST)) {
             Span span = SpanManager.getExitSpan();

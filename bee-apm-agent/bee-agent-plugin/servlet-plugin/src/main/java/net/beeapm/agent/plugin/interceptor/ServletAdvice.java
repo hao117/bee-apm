@@ -18,7 +18,7 @@ public class ServletAdvice {
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] args){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
-        handler.before(className,methodName,args);
+        handler.before(className,methodName,args,null);
     }
 
     /**
@@ -30,7 +30,7 @@ public class ServletAdvice {
                             @Advice.Origin("#m") String methodName,
                             @Advice.AllArguments Object[] args,
                             @Advice.Thrown Throwable t){
-        handler.after(className,methodName,args, null,t);
+        handler.after(className,methodName,args, null,t,null);
     }
 
 }

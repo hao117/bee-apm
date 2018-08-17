@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 public class PreparedStatementHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
     @Override
-    public Span before(String className, String methodName, Object[] allArguments) {
+    public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         Span span = JdbcContext.getJdbcSpan();
         // 参数处理
         if(span != null && methodName.startsWith("set") && allArguments.length > 1) {
@@ -48,7 +48,7 @@ public class PreparedStatementHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t) {
+    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
         Span span = JdbcContext.getJdbcSpan();
         if(t != null || methodName.startsWith("execute")){
             JdbcContext.remove();

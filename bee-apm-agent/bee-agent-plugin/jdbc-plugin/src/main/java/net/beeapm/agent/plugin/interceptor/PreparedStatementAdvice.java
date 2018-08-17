@@ -11,7 +11,7 @@ public class PreparedStatementAdvice {
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] allParams){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.PreparedStatementHandler");
-        handler.before(className,methodName,allParams);
+        handler.before(className,methodName,allParams,null);
     }
 
     /**
@@ -23,6 +23,6 @@ public class PreparedStatementAdvice {
                             @Advice.Origin("#m") String methodName,
                             @Advice.AllArguments Object[] allParams,
                             @Advice.Thrown Throwable t){
-        handler.after(className,methodName,allParams, null,t);
+        handler.after(className,methodName,allParams, null,t,null);
     }
 }

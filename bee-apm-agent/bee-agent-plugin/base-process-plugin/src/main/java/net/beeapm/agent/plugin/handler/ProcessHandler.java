@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 public class ProcessHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ProcessHandler.class.getSimpleName());
     @Override
-    public Span before(String className,String methodName, Object[] allArgs) {
+    public Span before(String className,String methodName, Object[] allArgs,Object[] extVal) {
         Span span = SpanManager.createEntrySpan(SpanType.PROCESS);
         logBeginTrace(className,methodName,span,log);
         span.addTag("method",methodName).addTag("clazz",className);
@@ -23,7 +23,7 @@ public class ProcessHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(String className,String methodName, Object[] allArgs, Object result, Throwable t) {
+    public Object after(String className,String methodName, Object[] allArgs, Object result, Throwable t,Object[] extVal) {
         Span span = SpanManager.getExitSpan();
         if(span == null){
             return result;

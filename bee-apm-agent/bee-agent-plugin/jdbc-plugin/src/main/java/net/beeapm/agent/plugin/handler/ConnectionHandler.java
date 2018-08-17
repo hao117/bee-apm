@@ -11,7 +11,7 @@ import net.beeapm.agent.plugin.common.JdbcContext;
 public class ConnectionHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
     @Override
-    public Span before(String className, String methodName, Object[] allArguments) {
+    public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         Span span = JdbcContext.getJdbcSpan();
         String gid = BeeTraceContext.getGId();
         //如果gid相等，那么调用过名称相同参数签名不一样的方法，属于二次调用,不需要再采集了
@@ -24,7 +24,7 @@ public class ConnectionHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t) {
+    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
         if(t != null){
             JdbcContext.remove();
         }

@@ -18,7 +18,7 @@ public class HttpClient3xAdvice {
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] args){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.HttpClient3xHandler");
-        handler.before(className,methodName,args);
+        handler.before(className,methodName,args,null);
     }
 
     /**

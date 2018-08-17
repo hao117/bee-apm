@@ -13,7 +13,7 @@ import org.apache.commons.httpclient.HttpMethod;
 public class HttpClient3xHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(HttpClient3xHandler.class.getSimpleName());
     @Override
-    public Span before(String className,String methodName, Object[] allArguments) {
+    public Span before(String className,String methodName, Object[] allArguments,Object[] extVal) {
         try {
             for (int i = 0; i < allArguments.length; i++) {
                 if (allArguments[i] instanceof HttpMethod) {
@@ -32,7 +32,7 @@ public class HttpClient3xHandler extends AbstractHandler {
     }
 
     @Override
-    public Object after(String className,String methodName, Object[] allArguments, Object result, Throwable t) {
+    public Object after(String className,String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
         return result;
     }
 }
