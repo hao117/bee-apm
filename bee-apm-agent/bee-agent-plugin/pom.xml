@@ -25,6 +25,7 @@
         <module>httpclient4x-plugin</module>
         <module>httpclient3x-plugin</module>
         <module>okhttp3x-plugin</module>
+        <module>logger-plugin</module>
     </modules>
     <dependencies>
         <dependency>
