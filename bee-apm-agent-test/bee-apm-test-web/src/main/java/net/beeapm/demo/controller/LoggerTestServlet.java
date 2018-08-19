@@ -46,33 +46,37 @@ public class LoggerTestServlet extends HttpServlet{
         BasicConfigurator.configure();
         Logger logger = LogManager.getLogger(LoggerTestServlet.class);
         logger.setLevel(Level.ALL);
+        Throwable t1 = new Exception("test1----------------Exception");
+        Throwable t2 = new Exception("test2----------------Exception");
         logger.trace("Log4j==================>trace");
         logger.debug("Log4j==================>debug");
         logger.info("Log4j==================>info");
         logger.warn("Log4j==================>warn");
-        logger.error("Log4j==================>error");
-        logger.fatal("Log4j==================>fatal");
+        logger.error("Log4j==================>error",t1);
+        logger.fatal("Log4j==================>fatal",t2);
     }
 
     private void testLog4j2(){
-        System.setProperty("log4j2.debug","debug");
         org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger(LoggerTestServlet.class);
+        Throwable t1 = new Exception("test1----------------Exception");
+        Throwable t2 = new Exception("test2----------------Exception");
         logger.trace("Log4j2==================>trace");
         logger.debug("Log4j2==================>debug");
         logger.info("Log4j2==================>info");
         logger.warn("Log4j2==================>warn");
-        logger.error("Log4j2==================>error");
-        logger.fatal("Log4j2==================>fatal");
+        logger.error("Log4j2==================>error",t1);
+        logger.fatal("Log4j2==================>fatal",t2);
     }
 
     private void testLogback(){
         LoggerContext loggerFactory = (LoggerContext)StaticLoggerBinder.getSingleton().getLoggerFactory();
         ch.qos.logback.classic.Logger logger = loggerFactory.getLogger(LoggerTestServlet.class);
+        Throwable t = new Exception("test----------------Exception");
         logger.setLevel(ch.qos.logback.classic.Level.ALL);
         logger.trace("Logback==================>trace");
         logger.debug("Logback==================>debug");
         logger.info("Logback==================>info");
         logger.warn("Logback==================>warn");
-        logger.error("Logback==================>error");
+        logger.error("Logback==================>error",t);
     }
 }
