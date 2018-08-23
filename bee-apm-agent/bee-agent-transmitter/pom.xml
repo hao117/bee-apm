@@ -19,6 +19,7 @@
     <modules>
         <module>console-transmitter</module>
         <module>elasticsearch-transmitter</module>
+        <module>okhttp-transmitter</module>
     </modules>
     <dependencies>
         <dependency>

@@ -1,1 +1,1 @@
-console=net.beeapm.agent.transmit.console.ConsoleTransmitter
+console=net.beeapm.agent.transmit.okhttp.ConsoleTransmitter
