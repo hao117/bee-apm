@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>bee-apm-server</artifactId>
+        <groupId>net.beeapm</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>bee-apm-server-web</artifactId>
+    <packaging>jar</packaging>
+    <name>bee-apm-server-web</name>
+    <url>http://www.beeapm.net</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <compiler.version>1.8</compiler.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-servlet-stream</artifactId>
+            <version>${bee-server-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-elasticsearch-store</artifactId>
+            <version>${bee-server-version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>bee-apm-server-web</finalName>
+    </build>
+</project>

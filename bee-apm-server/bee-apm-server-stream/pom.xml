@@ -5,31 +5,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>beeapm</artifactId>
+        <artifactId>bee-apm-server</artifactId>
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <version>1.0.0</version>
-    <artifactId>bee-apm-server</artifactId>
+    <artifactId>bee-apm-server-stream</artifactId>
     <packaging>pom</packaging>
-    <name>bee-apm-server</name>
+    <name>bee-apm-server-stream</name>
     <url>http://www.beeapm.net</url>
+
+    <modules>
+        <module>bee-servlet-stream</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <compiler.version>1.8</compiler.version>
-        <bee-server-version>1.0.0</bee-server-version>
     </properties>
 
-    <modules>
-        <module>bee-apm-server-core</module>
-        <module>bee-apm-server-store</module>
-        <module>bee-apm-server-stream</module>
-        <module>bee-apm-server-web</module>
-    </modules>
+    <dependencies>
 
-
+    </dependencies>
     <build>
-        <finalName>bee-apm-server</finalName>
+        <finalName>bee-apm-server-stream</finalName>
     </build>
 </project>

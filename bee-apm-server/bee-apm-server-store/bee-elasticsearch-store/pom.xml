@@ -5,31 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>beeapm</artifactId>
+        <artifactId>bee-apm-server-store</artifactId>
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <version>1.0.0</version>
-    <artifactId>bee-apm-server</artifactId>
-    <packaging>pom</packaging>
-    <name>bee-apm-server</name>
+    <artifactId>bee-elasticsearch-store</artifactId>
+    <packaging>jar</packaging>
+    <name>bee-elasticsearch-store</name>
     <url>http://www.beeapm.net</url>
+
+    <modules>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <compiler.version>1.8</compiler.version>
-        <bee-server-version>1.0.0</bee-server-version>
     </properties>
 
-    <modules>
-        <module>bee-apm-server-core</module>
-        <module>bee-apm-server-store</module>
-        <module>bee-apm-server-stream</module>
-        <module>bee-apm-server-web</module>
-    </modules>
-
-
+    <dependencies>
+    </dependencies>
     <build>
-        <finalName>bee-apm-server</finalName>
+        <finalName>bee-elasticsearch-store-${version}</finalName>
     </build>
 </project>

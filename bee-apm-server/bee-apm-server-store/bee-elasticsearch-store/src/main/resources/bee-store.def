@@ -1,0 +1,1 @@
+elasticsearch=net.beeapm.server.store.ElasticSearchStore
