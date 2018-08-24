@@ -1,0 +1,5 @@
+server:
+  port: 9000
+logging:
+  config:
+    classpath: log4j2.xml

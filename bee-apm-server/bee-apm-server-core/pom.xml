@@ -25,6 +25,28 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.0.1.RELEASE</version>
+            <exclusions>
+                <!-- tomcat
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+                -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>1.5.6.RELEASE</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>bee-apm-server-core-${version}</finalName>

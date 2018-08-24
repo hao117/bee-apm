@@ -7,6 +7,8 @@ target/
 .project
 .settings/
 *.jar
+*.log
+dependency-reduced-pom.xml
 weaving-class/
 plugins/
 transmit/

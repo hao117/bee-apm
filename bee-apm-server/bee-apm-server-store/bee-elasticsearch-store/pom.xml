@@ -23,8 +23,13 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-apm-server-core</artifactId>
+            <version>${bee-server-version}</version>
+        </dependency>
     </dependencies>
     <build>
-        <finalName>bee-elasticsearch-store-${version}</finalName>
+        <finalName>bee-elasticsearch-store-${bee-server-version}</finalName>
     </build>
 </project>
