@@ -13,7 +13,7 @@ public class TransmitterFactory {
     public synchronized static int init(){
         System.out.println("===========================>TransmitterFactory::init");
         if(transmitterMap == null) {
-            transmitterMap = TransmitterLoder.loadTransmitters();
+            transmitterMap = TransmitterLoader.loadTransmitters();
             transmitter = transmitterMap.get("console");
             transmitter.init();
         }
