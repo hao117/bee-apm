@@ -9,7 +9,7 @@ bee:
   store:
     name: elasticsearch
     elasticsearch:
-      url: http://192.168.1.58:9200
+      url: http://192.168.1.24:9200
 #      username: xx
 #      password: xx
 #      connTimeout: 6000

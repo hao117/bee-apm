@@ -37,10 +37,10 @@ public class JestUtils {
 
     private static void initJestClient(){
         String prefix = "bee.store.elasticsearch.";
-        String[] urls = ConfigHolder.getProperty(prefix,"url").split(",");
+        String[] urls = ConfigHolder.getProperty(prefix+"url").split(",");
         HttpClientConfig.Builder builder = new  HttpClientConfig.Builder(Arrays.asList(urls));
-        String userName = ConfigHolder.getProperty(prefix,"username");
-        String password = ConfigHolder.getProperty(prefix,"password");
+        String userName = ConfigHolder.getProperty(prefix+"username");
+        String password = ConfigHolder.getProperty(prefix+"password");
         if(StringUtils.isNotBlank(userName)){
             builder = builder.defaultCredentials(userName,password);
         }
@@ -68,7 +68,8 @@ public class JestUtils {
                 JSONObject data = (JSONObject)item;
                 String index = getIndexName(data);
                 String id = data.getString("id");
-                BulkableAction action = new Index.Builder(data).index(index).id(id).build();
+                String type = data.getString("type");
+                BulkableAction action = new Index.Builder(data).index(index).type(type).id(id).build();
                 bulkList.add(action);
             }
             Bulk bulk = new Bulk.Builder()

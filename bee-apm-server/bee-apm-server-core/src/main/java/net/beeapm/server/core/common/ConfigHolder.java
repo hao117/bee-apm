@@ -4,8 +4,8 @@ import org.springframework.core.env.Environment;
 
 public class ConfigHolder {
     static Environment env;
-    public static void  setEnv(Environment env){
-        env = env;
+    public static void  setEnv(Environment environment){
+        env = environment;
     }
 
     public static Environment getEnv(){
