@@ -15,11 +15,18 @@
             </Policies>
         </RollingFile>
     </appenders>
+
+
     <loggers>
-        <root level="debug">
+        <Logger name="org.springframework" level="info"></Logger>
+        <Logger name="org.springframework.jndi" level="error"></Logger>
+        <Logger name="org.springframework.beans" level="error"></Logger>
+        <Logger name="org.hibernate.validator" level="error"></Logger>
+        <Logger name="net.beeapm" level="debug"></Logger>
+        <Root level="debug">
             <appender-ref ref="Console"/>
             <appender-ref ref="RollingFile"/>
-        </root>
+        </Root>
 
     </loggers>
 </configuration>

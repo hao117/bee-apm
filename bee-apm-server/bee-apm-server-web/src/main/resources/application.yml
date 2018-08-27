@@ -3,3 +3,30 @@ server:
 logging:
   config:
     classpath: log4j2.xml
+
+bee:
+  provider: servlet
+  store:
+    name: elasticsearch
+    elasticsearch:
+      url: http://192.168.1.58:9200
+#      username: xx
+#      password: xx
+#      connTimeout: 6000
+#      readTimeout: 6000
+#      defaultMaxTotalConnectionPerRoute: 2
+      indices:
+        def: bee-comm-def
+        process: bee-comm-process
+        request: bee-comm-request
+        sql: bee-comm-sql
+        log: bee-comm-log
+        param: bee-comm-param
+  handlers:
+    flow: empty>json>queue>store
+    queue:
+      queueSize: 5000 #队列大小，默认5000
+      threadNum: 2 #默认cpu核数
+      sleep: 100
+      batchSize: 100
+      maxLoopTimes: 3

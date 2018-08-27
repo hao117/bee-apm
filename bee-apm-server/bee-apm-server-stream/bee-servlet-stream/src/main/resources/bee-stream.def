@@ -1,1 +1,1 @@
-servlet=net.beeapm.server.stream.ServletStream
+servlet=net.beeapm.server.stream.ServletStreamProvider
