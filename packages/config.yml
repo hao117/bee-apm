@@ -1,0 +1,30 @@
+plugins:
+    process:
+        spend: 1
+        name: tom
+        typesMatch:
+            include:
+                nameEquals:
+                nameStartsWith:
+                nameEndsWith:
+                nameContains:
+                nameMatches:
+            exclude:
+                nameEquals:
+                nameStartsWith:
+                nameEndsWith:
+                nameContains:
+                nameMatches:
+        methodMatch:
+            include:
+                nameEquals:
+                nameStartsWith:
+                nameEndsWith:
+                nameContains:
+                nameMatches:
+            exclude:
+                nameEquals:
+                nameStartsWith:
+                nameEndsWith:
+                nameContains:
+                nameMatches:
