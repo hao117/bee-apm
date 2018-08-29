@@ -1,6 +1,7 @@
 package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.BeeAgentJarUtils;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.plugin.IPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.PluginLoder;
@@ -23,6 +24,7 @@ public class BeeAgent {
         System.out.println("\n---------------------------------this is an bytebuddy sample ---------------------------------------");
 
         BeeAgentJarUtils.getAgentJarDirPath();
+        BeeConfig.initConfig();
         TransmitterFactory.init();
 
         List<IPlugin> plugins = PluginLoder.loadPlugins();

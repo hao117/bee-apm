@@ -1,7 +1,8 @@
+logger:
+    level: debug
 plugins:
     process:
         spend: 1
-        name: tom
         typesMatch:
             include:
                 nameEquals:
