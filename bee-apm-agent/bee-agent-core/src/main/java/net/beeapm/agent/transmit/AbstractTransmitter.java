@@ -11,6 +11,6 @@ import java.util.List;
 public abstract class AbstractTransmitter {
     private String name;
     public abstract int transmit(Span span);
-    public abstract int transmit(List<Span> span);
+    public abstract int transmit(List<Span> list);
     public abstract int init();
 }
