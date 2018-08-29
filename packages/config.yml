@@ -1,8 +1,17 @@
 logger:
-    level: debug
+    level: debug   #日志输出级别，默认error
+transmitter:
+    queueSize: 200 #缓冲队列大小，默认1000
+    threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
+    idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
+    batchSize: 20  #每次从队列中批量获取数据数量，默认100
+    name: console   #使用哪种transmitter
+    okhttp:        #name对应的transmitter的配置参数
+        url: http://127.0.0.1:9001
 plugins:
     process:
         spend: 1
+        rate: 1/1000
         typesMatch:
             include:
                 nameEquals:
