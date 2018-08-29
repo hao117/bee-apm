@@ -34,7 +34,7 @@ public class BeeConfig {
     }
 
     private void init(){
-        String path = System.getProperty("bee.config");
+        String path = System.getProperty("beeConfig");
         if(StringUtils.isBlank(path)){
             path = BeeAgentJarUtils.getAgentJarDirPath() + "/config.yml";
         }
