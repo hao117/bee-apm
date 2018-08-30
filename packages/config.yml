@@ -5,9 +5,15 @@ transmitter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: console   #使用哪种transmitter
+    name: okhttp   #使用哪种transmitter
     okhttp:        #name对应的transmitter的配置参数
-        url: http://127.0.0.1:9001
+        connectTimeout: 30
+        writeTimeout: 10
+        readTimeout: 10
+        url:
+            - http://127.0.0.1:7001/stream
+            - http://127.0.0.1:7001/stream
+
 plugins:
     process:
         spend: 1
