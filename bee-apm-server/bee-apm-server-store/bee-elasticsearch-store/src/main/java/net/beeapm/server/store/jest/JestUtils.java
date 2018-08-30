@@ -11,6 +11,7 @@ import io.searchbox.core.Index;
 import net.beeapm.server.core.common.ConfigHolder;
 import net.beeapm.server.core.store.StoreFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +87,8 @@ public class JestUtils {
 
     private String getIndexName(JSONObject data){
         String type = data.getString("type");
-        return ConfigHolder.getProperty(indexKeyPrefix+type,DEFAULT_INDEX_NAME);
+        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
+        return ConfigHolder.getProperty(indexKeyPrefix+type,DEFAULT_INDEX_NAME) + "-" + date;
     }
 
 
