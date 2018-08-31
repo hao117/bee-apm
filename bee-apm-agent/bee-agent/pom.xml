@@ -94,6 +94,10 @@
                                     <pattern>org.yaml</pattern>
                                     <shadedPattern>${shade.package}.org.yaml</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.lmax.disruptor</pattern>
+                                    <shadedPattern>${shade.package}.com.lmax.disruptor</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
