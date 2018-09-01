@@ -22,7 +22,7 @@ public class LogWriter implements EventHandler<LogMessage> {
     private static final char[] lock = new char[1];
     private static LogWriter logWriter;
     private Disruptor<LogMessage> disruptor;
-    private RingBuffer<LogMessage> buffer;
+    private RingBuffer<LogMessage> ringBuffer;
     private FileOutputStream fileOutputStream;
     private static List<String> logFileList;
     private volatile long fileSize;
@@ -68,7 +68,7 @@ public class LogWriter implements EventHandler<LogMessage> {
             }
         }, 1024, LogThreadFactory.INSTANCE);
         disruptor.handleEventsWith(this);
-        buffer = disruptor.getRingBuffer();
+        ringBuffer = disruptor.getRingBuffer();
         lineNum = 0;
         disruptor.start();
     }
@@ -146,12 +146,12 @@ public class LogWriter implements EventHandler<LogMessage> {
     }
 
     public void writeLog(String message) {
-        long next = buffer.next();
+        long next = ringBuffer.next();
         try {
-            LogMessage logMessage = buffer.get(next);
+            LogMessage logMessage = ringBuffer.get(next);
             logMessage.setMessage(message);
         } finally {
-            buffer.publish(next);
+            ringBuffer.publish(next);
         }
     }
 }
