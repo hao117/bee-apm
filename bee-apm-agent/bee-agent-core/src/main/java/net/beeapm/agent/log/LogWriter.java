@@ -107,6 +107,7 @@ public class LogWriter implements EventHandler<LogMessage> {
             if(logFile.exists()){
                 String newName = "bee-" + DateFormatUtils.format(new Date(),"yyyyMMddHHmmss")+".log";
                 logFile.renameTo(new File(logDir,newName));
+                lineNum = 0;
                 logFileList.add(newName);
                 deleteFile();
             }
