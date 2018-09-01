@@ -1,8 +1,5 @@
 package net.beeapm.agent.common;
 
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
-
 import java.io.File;
 import java.net.URL;
 
@@ -10,7 +7,6 @@ import java.net.URL;
  * Created by yuan on 2018/8/6.
  */
 public class BeeAgentJarUtils {
-    private static final LogImpl logger = LogManager.getLog(BeeAgentJarUtils.class);
 
     private static String agentJarPath;
     private static String agentJarDirPath;
@@ -22,7 +18,8 @@ public class BeeAgentJarUtils {
             }
             return agentJarPath;
         }catch (Exception e){
-            logger.error("",e);
+            e.printStackTrace();
+            //logger.error("",e);
         }
         return null;
     }
@@ -36,9 +33,8 @@ public class BeeAgentJarUtils {
                 }
             }
         }catch (Exception e){
-            logger.error("",e);
+            e.printStackTrace();
         }
-        logger.debug("agent jar dir path = {}",agentJarDirPath);
         return agentJarDirPath;
     }
 
@@ -58,7 +54,7 @@ public class BeeAgentJarUtils {
             if(f.exists()){
                 path = f.getCanonicalPath();
             }
-            logger.debug("agent jar path = {}",path);
+            System.out.println("agent jar path = " + path);
             return path;
         }
         return null;

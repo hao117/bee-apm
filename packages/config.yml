@@ -1,5 +1,8 @@
 logger:
+    console: false #日志输出到控制台，默认false
     level: debug   #日志输出级别，默认error
+    fileSize: 10485760 #日志文件大小，单位字节,默认10M
+    fileNum: 3     #日志文件保留数量，默认5个文件
 transmitter:
     queueSize: 200 #缓冲队列大小，默认1000
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
@@ -13,7 +16,6 @@ transmitter:
         url:
             - http://127.0.0.1:7001/stream
             - http://127.0.0.1:7001/stream
-
 plugins:
     process:
         spend: 1

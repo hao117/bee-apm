@@ -64,7 +64,11 @@ public class ConfigUtils {
     }
 
     public Long getLong(String key){
-        return (Long) JSONPath.eval(config,"$."+key);
+        Object val = getVal(key);
+        if(val != null){
+            return  Long.parseLong(val.toString());
+        }
+        return null;
     }
 
     public String getStr(String key, String def){
@@ -91,6 +95,18 @@ public class ConfigUtils {
         return val;
     }
 
+    public Boolean getBoolean(String key){
+        Boolean b = (Boolean) JSONPath.eval(config,"$."+key);
+        return b;
+    }
+
+    public Boolean getBoolean(String key,Boolean def){
+        Boolean b = getBoolean(key);
+        if(b == null){
+            return def;
+        }
+        return b;
+    }
 
 
     public List<String> getList(String key){

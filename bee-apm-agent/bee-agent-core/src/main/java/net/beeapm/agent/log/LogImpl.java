@@ -1,6 +1,7 @@
 package net.beeapm.agent.log;
 
 import net.beeapm.agent.common.BeeConst;
+import net.beeapm.agent.config.BeeConfig;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -19,8 +20,11 @@ public class LogImpl {
         this.targetName = targetName;
     }
     protected void logger(LogLevel level, String message, Throwable e) {
-        //WriterFactory.getLogWriter().write(format(level, message, e));
-        System.out.println(format(level, message, e));
+        String msg = format(level, message, e);
+        if(BeeConfig.isLogConsole()){
+            System.out.println("---------->"+msg);
+        }
+        LogWriter.me().writeLog(msg);
     }
     private String replaceParam(String message, Object... parameters) {
         int startSize = 0;
@@ -38,7 +42,7 @@ public class LogImpl {
     }
 
     String format(LogLevel level, String message, Throwable t) {
-        return StringUtils.join("==========>[", level.name(),"] ",
+        return StringUtils.join("[", level.name(),"] ",
                 dateFormat.format(new Date()),
                 " ",
                 targetName,
