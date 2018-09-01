@@ -1,5 +1,5 @@
 logger:
-    console: false #日志输出到控制台，默认false
+    console: true  #日志输出到控制台，默认false
     level: debug   #日志输出级别，默认error
     fileSize: 10485760 #日志文件大小，单位字节,默认10M
     fileNum: 3     #日志文件保留数量，默认5个文件
@@ -8,7 +8,7 @@ transmitter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: okhttp   #使用哪种transmitter
+    name: console  #使用哪种transmitter
     okhttp:        #name对应的transmitter的配置参数
         connectTimeout: 30
         writeTimeout: 10
@@ -20,29 +20,52 @@ plugins:
     process:
         spend: 1
         rate: 1/1000
-        typesMatch:
-            include:
-                nameEquals:
-                nameStartsWith:
-                nameEndsWith:
-                nameContains:
-                nameMatches:
-            exclude:
-                nameEquals:
-                nameStartsWith:
-                nameEndsWith:
-                nameContains:
-                nameMatches:
-        methodMatch:
-            include:
-                nameEquals:
-                nameStartsWith:
-                nameEndsWith:
-                nameContains:
-                nameMatches:
-            exclude:
-                nameEquals:
-                nameStartsWith:
-                nameEndsWith:
-                nameContains:
-                nameMatches:
+        enableParam: true
+        excludeParamTypes:
+            - javax.servlet.http.HttpServletRequest
+        excludeParamTypePrefix:
+            - org.apache.velocity.
+            - javax.
+            - org.w3c
+            - org.springframework
+            - org.apache
+            - org.jdom
+            - com.fasterxml
+            - org.mybatis
+            - com.fasterxml
+            - net.sf.json
+            - org.codehaus
+            - java.lang.reflect
+            - java.lang.Object
+            - java.io
+            - java.nio
+            - sun.nio
+            - org.aspectj
+        interceptPoints:
+            -
+                typesMatch:
+                    include:
+                        nameEquals:
+                        nameStartsWith:
+                        nameEndsWith:
+                        nameContains:
+                        nameMatches:
+                    exclude:
+                        nameEquals:
+                        nameStartsWith:
+                        nameEndsWith:
+                        nameContains:
+                        nameMatches:
+                methodMatch:
+                    include:
+                        nameEquals:
+                        nameStartsWith:
+                        nameEndsWith:
+                        nameContains:
+                        nameMatches:
+                    exclude:
+                        nameEquals:
+                        nameStartsWith:
+                        nameEndsWith:
+                        nameContains:
+                        nameMatches:
