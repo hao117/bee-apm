@@ -58,6 +58,7 @@ public class LogWriter implements EventHandler<LogMessage> {
                 }
             }
             Collections.sort(logFileList);
+            deleteFile();
         }
 
         disruptor = new Disruptor<LogMessage>(new EventFactory<LogMessage>() {
@@ -107,18 +108,22 @@ public class LogWriter implements EventHandler<LogMessage> {
                 String newName = "bee-" + DateFormatUtils.format(new Date(),"yyyyMMddHHmmss")+".log";
                 logFile.renameTo(new File(logDir,newName));
                 logFileList.add(newName);
-                int listSize = logFileList.size();
-                if(listSize > MAX_FILE_NUM){
-                    for(int i = 0; i < listSize - MAX_FILE_NUM; i++){
-                        File delFile = new File(logDir,logFileList.get(0));
-                        if(delFile.exists()) {
-                            delFile.delete();
-                        }
-                        logFileList.remove(0);
-                    }
-                }
+                deleteFile();
             }
             fileOutputStream = null;
+        }
+    }
+
+    private void deleteFile(){
+        int listSize = logFileList.size();
+        if(listSize > MAX_FILE_NUM){
+            for(int i = 0; i < listSize - MAX_FILE_NUM; i++){
+                File delFile = new File(logDir,logFileList.get(0));
+                if(delFile.exists()) {
+                    delFile.delete();
+                }
+                logFileList.remove(0);
+            }
         }
     }
 
