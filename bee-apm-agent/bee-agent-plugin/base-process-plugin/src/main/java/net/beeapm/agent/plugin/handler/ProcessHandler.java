@@ -30,9 +30,12 @@ public class ProcessHandler extends AbstractHandler {
             return result;
         }
         calculateSpend(span);
-        logEndTrace(className,methodName,span,log);
-        TransmitterFactory.transmit(span);
-        collectParams(allArgs,span.getId());
+        logEndTrace(className, methodName, span, log);
+        //耗时阀值限制
+        if(span.getSpend() > BeeConfig.getSpend()) {
+            TransmitterFactory.transmit(span);
+            collectParams(allArgs, span.getId());
+        }
         return result;
     }
 
