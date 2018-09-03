@@ -21,7 +21,7 @@ public class LogImpl {
     }
     protected void logger(LogLevel level, String message, Throwable e) {
         String msg = format(level, message, e);
-        if(BeeConfig.isLogConsole()){
+        if(BeeConfig.me().isLogConsole()){
             System.out.println("---------->"+msg);
         }
         LogWriter.me().writeLog(msg);
@@ -95,23 +95,23 @@ public class LogImpl {
     }
 
     public boolean isDebugEnable() {
-        return LogLevel.DEBUG.ordinal() >= BeeConst.LOG_LEVEL.ordinal();
+        return LogLevel.DEBUG.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 
     public static boolean isInfoEnable() {
-        return LogLevel.INFO.ordinal() >= BeeConst.LOG_LEVEL.ordinal();
+        return LogLevel.INFO.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 
     public boolean isWarnEnable() {
-        return LogLevel.WARN.ordinal() >= BeeConst.LOG_LEVEL.ordinal();
+        return LogLevel.WARN.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 
     public boolean isErrorEnable() {
-        return LogLevel.ERROR.ordinal() >= BeeConst.LOG_LEVEL.ordinal();
+        return LogLevel.ERROR.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 
     public boolean isTraceEnable() {
-        return LogLevel.TRACE.ordinal() >= BeeConst.LOG_LEVEL.ordinal();
+        return LogLevel.TRACE.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 
     public void debug(String format) {

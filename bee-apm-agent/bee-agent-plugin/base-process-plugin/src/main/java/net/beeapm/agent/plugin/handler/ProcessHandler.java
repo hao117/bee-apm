@@ -1,11 +1,11 @@
 package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.plugin.ProcessConfig;
 import net.beeapm.agent.transmit.TransmitterFactory;
 import java.lang.ref.SoftReference;
 
@@ -32,7 +32,7 @@ public class ProcessHandler extends AbstractHandler {
         calculateSpend(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
-        if(span.getSpend() > BeeConfig.getSpend()) {
+        if(span.getSpend() > ProcessConfig.me().getSpend()) {
             TransmitterFactory.transmit(span);
             collectParams(allArgs, span.getId());
         }
@@ -40,13 +40,13 @@ public class ProcessHandler extends AbstractHandler {
     }
 
     private void collectParams(Object[] allArgs,String id){
-        if(BeeConfig.isEnableParam() && allArgs != null && allArgs.length > 0) {
+        if(ProcessConfig.me().isEnableParam() && allArgs != null && allArgs.length > 0) {
             Span paramSpan = new Span(SpanType.PARAM);
             paramSpan.setId(id);
             paramSpan.setTime(null);
             Object[] params = new Object[allArgs.length];
             for(int i = 0; i < allArgs.length; i++){
-                if(allArgs[i] != null && BeeConfig.isExcludeParamType(allArgs[i].getClass())){
+                if(allArgs[i] != null && ProcessConfig.me().isExcludeParamType(allArgs[i].getClass())){
                     params[i] = "--";
                 }else {
                     params[i] = new SoftReference(allArgs[i]);
