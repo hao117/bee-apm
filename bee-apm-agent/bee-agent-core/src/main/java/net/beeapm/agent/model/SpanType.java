@@ -6,6 +6,7 @@ package net.beeapm.agent.model;
 public class SpanType {
     public final static String PROCESS = "process";
     public final static String SQL = "sql";
+    public final static String SQL_PARAM = "sqlp";
     public final static String PARAM = "param";
     public final static String REQUEST = "request";
     public final static String LOGGER = "log";
