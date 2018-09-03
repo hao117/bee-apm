@@ -24,7 +24,7 @@ public class BeeAgent {
         System.out.println("\n---------------------------------this is an bytebuddy sample ---------------------------------------");
 
         BeeAgentJarUtils.getAgentJarDirPath();
-        BeeConfig.initConfig();
+
         TransmitterFactory.init();
 
         List<IPlugin> plugins = PluginLoder.loadPlugins();

@@ -20,8 +20,8 @@ collect:
     rate: 1 #采样率，万分几，默认全采集
 plugins:
     process:
-        spend: 1
-        enableParam: true
+        spend: 1 #耗时阀值
+        enableParam: true  #参数采集开关
         excludeParamTypes:
             - javax.servlet.http.HttpServletRequest
         excludeParamTypePrefix:
@@ -70,3 +70,6 @@ plugins:
                         nameEndsWith:
                         nameContains:
                         nameMatches:
+    jdbc:
+        spend: 1 #耗时阀值
+        enableParam: true  #参数采集开关

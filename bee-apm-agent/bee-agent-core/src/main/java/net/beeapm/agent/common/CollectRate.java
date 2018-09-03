@@ -33,7 +33,7 @@ public class CollectRate {
         }else {
             long tmpTotal = incrTotal();
             long tmpCurrNum = getCurrNum() + 1;
-            if(tmpCurrNum*10000/tmpTotal > BeeConfig.getRate()){
+            if(tmpCurrNum*10000/tmpTotal > BeeConfig.me().getRate()){
                 BeeTraceContext.setCTag("N");
                 return false;
             }
