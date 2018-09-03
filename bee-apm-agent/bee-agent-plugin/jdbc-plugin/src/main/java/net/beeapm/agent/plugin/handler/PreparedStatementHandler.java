@@ -53,13 +53,15 @@ public class PreparedStatementHandler extends AbstractHandler {
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
         Span span = JdbcContext.getJdbcSpan();
-        if(methodName.startsWith("execute")){
+        //发生异常或者执行完sql，清除线程变量
+        if(t != null && methodName.startsWith("execute")){
             JdbcContext.remove();
         }
-        if(t != null){
-            span.addTag("status","1");
-        }
+
         if(methodName.startsWith("execute") && span != null) {
+            if(t != null){
+                span.addTag("status","1");
+            }
             calculateSpend(span);
             if(span.getSpend() > JdbcConfig.me().getSpend()) {
                 Map<String,Object> params = (Map<String,Object>)span.getTags().get("params");
