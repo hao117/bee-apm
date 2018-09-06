@@ -21,6 +21,9 @@ public class PreparedStatementHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
+        if(!JdbcConfig.me().isEnable()){
+            return null;
+        }
         Span span = JdbcContext.getJdbcSpan();
         // 参数处理
         if(span != null && methodName.startsWith("set") && allArguments.length > 1 && JdbcConfig.me().isEnableParam()) {
@@ -56,6 +59,9 @@ public class PreparedStatementHandler extends AbstractHandler {
         //发生异常或者执行完sql，清除线程变量
         if(t != null && methodName.startsWith("execute")){
             JdbcContext.remove();
+        }
+        if(!JdbcConfig.me().isEnable()){
+            return null;
         }
 
         if(methodName.startsWith("execute") && span != null) {

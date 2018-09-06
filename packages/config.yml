@@ -71,5 +71,6 @@ plugins:
                         nameContains:
                         nameMatches:
     jdbc:
+        enable: true
         spend: 1 #耗时阀值
         enableParam: true  #参数采集开关

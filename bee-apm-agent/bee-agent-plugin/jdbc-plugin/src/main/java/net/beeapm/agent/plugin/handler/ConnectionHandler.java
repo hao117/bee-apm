@@ -6,12 +6,16 @@ import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.plugin.JdbcConfig;
 import net.beeapm.agent.plugin.common.JdbcContext;
 
 public class ConnectionHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
+        if(!JdbcConfig.me().isEnable()){
+            return null;
+        }
         Span span = JdbcContext.getJdbcSpan();
         String gid = BeeTraceContext.getGId();
         //如果gid相等，那么调用过名称相同参数签名不一样的方法，属于二次调用,不需要再采集了
