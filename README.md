@@ -14,8 +14,9 @@ Application Performance Management
 - jdbc采集，包含采集sql，参数，执行耗时
 - logger采集（支持log4j，log4j2，logback）
 - spring事务采集
-- session采集（待开发）
 - 采样控制（开发中）
+- session采集（待开发）
+- 异常信息采集（待开发）
 
 #### 2、传输能力
 - 输出到控制台
