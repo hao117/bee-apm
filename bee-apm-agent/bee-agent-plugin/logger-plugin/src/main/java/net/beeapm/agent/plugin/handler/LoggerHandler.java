@@ -7,6 +7,7 @@ import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.plugin.LoggerConfig;
 import net.beeapm.agent.transmit.TransmitterFactory;
 
 import java.io.PrintWriter;
@@ -19,6 +20,9 @@ public class LoggerHandler extends AbstractHandler {
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         String point = (String) extVal[0];
+        if(!LoggerConfig.me().isEnable() || !LoggerConfig.me().checkLevel(point,methodName)){
+            return null;
+        }
         if("org.apache.logging.log4j.status.StatusLogger".equals(point)){//重复打印，排除掉
             return null;
         }

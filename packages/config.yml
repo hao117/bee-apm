@@ -22,9 +22,9 @@ plugins:
     process:
         spend: 1 #耗时阀值
         enableParam: true  #参数采集开关
-        excludeParamTypes:
+        excludeParamTypes: #排除的参数类型，参数不被系列化
             - javax.servlet.http.HttpServletRequest
-        excludeParamTypePrefix:
+        excludeParamTypePrefix: #排除的参数类型，参数不被系列化
             - org.apache.velocity.
             - javax.
             - org.w3c
@@ -71,6 +71,18 @@ plugins:
                         nameContains:
                         nameMatches:
     jdbc:
-        enable: true
-        spend: 1 #耗时阀值
+        enable: true       #开关，是否采集
+        spend: 1           #耗时阀值
         enableParam: true  #参数采集开关
+    logger:
+        enable: true    #开关，是否采集,默认true
+        defLevel: debug #默认级别，默认值为debug
+        points:
+        #日志采集点配置，规则为包名和日志级别，如a.b.c|debug，日志级别可不配置，为默认defLevel级别
+            - com.asiaifo|error
+            - com.asiainfo.crm|debug
+            - net.beeapm.demo|info
+
+
+
+
