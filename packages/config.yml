@@ -44,32 +44,16 @@ plugins:
             - org.aspectj
         interceptPoints:
             -
-                typesMatch:
+                typeMatch:
+                    include: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
+                        named:
+                    exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
+                        named:
+                methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                     include:
-                        nameEquals:
-                        nameStartsWith:
-                        nameEndsWith:
-                        nameContains:
-                        nameMatches:
-                    exclude:
-                        nameEquals:
-                        nameStartsWith:
-                        nameEndsWith:
-                        nameContains:
-                        nameMatches:
-                methodMatch:
-                    include:
-                        nameEquals:
-                        nameStartsWith:
-                        nameEndsWith:
-                        nameContains:
-                        nameMatches:
-                    exclude:
-                        nameEquals:
-                        nameStartsWith:
-                        nameEndsWith:
-                        nameContains:
-                        nameMatches:
+                        named:
+                    exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
+                        named:
     jdbc:
         enable: true       #开关，是否采集
         spend: 1           #耗时阀值
