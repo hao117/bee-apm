@@ -20,7 +20,8 @@ collect:
     rate: 1 #采样率，万分几，默认全采集
 plugins:
     process:
-        spend: 1 #耗时阀值
+        enable: true  #采集开关
+        spend: -1 #耗时阀值
         enableParam: true  #参数采集开关
         excludeParamTypes: #排除的参数类型，参数不被系列化
             - javax.servlet.http.HttpServletRequest
@@ -46,14 +47,25 @@ plugins:
             -
                 typeMatch:
                     include: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
-                        named:
+                        nameStartsWith: net.beeapm.demo.service.test.FooA,net.beeapm.demo.service.test.FooB
                     exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
-                        named:
+                        nameStartsWith:
                 methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                     include:
                         named:
                     exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                         named:
+            -
+              typeMatch:
+                include: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
+                  nameStartsWith: net.beeapm.demo.service.test.FooC,net.beeapm.demo.service.test.FooD
+                exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
+                  nameStartsWith: net.beeapm.demo.service.test.FooDddA
+              methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
+                include:
+                    named:
+                exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
+                    named:
     jdbc:
         enable: true       #开关，是否采集
         spend: 1           #耗时阀值
@@ -66,7 +78,9 @@ plugins:
             - com.asiaifo|error
             - com.asiainfo.crm|debug
             - net.beeapm.demo|info
-
+    servlet:
+        enable: true       #开关，是否采集
+        spend: 1           #耗时阀值，小于等于process.spend
 
 
 

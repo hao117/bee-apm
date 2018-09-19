@@ -17,6 +17,9 @@ public class ProcessHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ProcessHandler.class.getSimpleName());
     @Override
     public Span before(String className,String methodName, Object[] allArgs,Object[] extVal) {
+        if(!ProcessConfig.me().isEnable()){
+            return null;
+        }
         Span span = SpanManager.createEntrySpan(SpanType.PROCESS);
         logBeginTrace(className,methodName,span,log);
         span.addTag("method",methodName).addTag("clazz",className);
@@ -29,6 +32,11 @@ public class ProcessHandler extends AbstractHandler {
         if(span == null){
             return result;
         }
+
+        if(!ProcessConfig.me().isEnable()){
+            return null;
+        }
+
         calculateSpend(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
