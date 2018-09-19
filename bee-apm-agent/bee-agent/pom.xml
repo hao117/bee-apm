@@ -75,6 +75,9 @@
                             <artifactSet>
                                 <excludes>
                                     <exclude>commons-logging:*</exclude>
+                                    <exclude>jline:*</exclude>
+                                    <exclude>io.netty:*</exclude>
+                                    <exclude>log4j:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <relocations>
@@ -97,6 +100,26 @@
                                 <relocation>
                                     <pattern>com.lmax.disruptor</pattern>
                                     <shadedPattern>${shade.package}.com.lmax.disruptor</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.curator</pattern>
+                                    <shadedPattern>${shade.package}.org.apache.curator</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.zookeeper</pattern>
+                                    <shadedPattern>${shade.package}.org.apache.zookeeper</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>${shade.package}.org.slf4j</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google</pattern>
+                                    <shadedPattern>${shade.package}.com.google</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.jute</pattern>
+                                    <shadedPattern>${shade.package}.org.apache.jute</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

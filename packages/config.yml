@@ -18,6 +18,13 @@ transmitter:
             - http://127.0.0.1:7001/stream
 collect:
     rate: 1 #采样率，万分几，默认全采集
+id:
+    zk:
+        url: 127.0.0.1:2181
+        timeout: 5000
+        retryTimes: 3
+        retrySleep: 5000
+    start: 3000
 plugins:
     process:
         enable: true  #采集开关
@@ -47,25 +54,15 @@ plugins:
             -
                 typeMatch:
                     include: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
-                        nameStartsWith: net.beeapm.demo.service.test.FooA,net.beeapm.demo.service.test.FooB
+                        nameStartsWith: net.beeapm.demo
                     exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
                         nameStartsWith:
                 methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                     include:
-                        named:
+                        named: tell,talk
                     exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                         named:
-            -
-              typeMatch:
-                include: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
-                  nameStartsWith: net.beeapm.demo.service.test.FooC,net.beeapm.demo.service.test.FooD
-                exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
-                  nameStartsWith: net.beeapm.demo.service.test.FooDddA
-              methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
-                include:
-                    named:
-                exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
-                    named:
+
     jdbc:
         enable: true       #开关，是否采集
         spend: 1           #耗时阀值
