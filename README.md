@@ -8,7 +8,7 @@ Application Performance Management
 - 方法调用链，包含采集方法参数，执行耗时
 - http servlet调用链（请求报文，返回报文待开发）
   - 支持httpclient3
-  - 支持httpclent4
+  - 支持httpclient4
   - 支持okhttp3
   - 支持基于servlet的容器（tomcat，weblogic，jetty等）
 - jdbc采集，包含采集sql，参数，执行耗时
