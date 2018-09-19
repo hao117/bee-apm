@@ -91,7 +91,10 @@ public class MatchKit {
                     includeMatcher = includeMatcher.or(ElementMatchers.hasAnnotation(ElementMatchers.annotationType(ElementMatchers.<TypeDescription>named(arr[i]))));
                 }
             }
-            matcher.and(includeMatcher);
+            if(includeMatcher!=null){
+                matcher = matcher.and(includeMatcher);
+            }
+
         }
         if(excludeMap != null && !excludeMap.isEmpty()) {
             String namedVal = excludeMap.get("named");
@@ -216,6 +219,9 @@ public class MatchKit {
                     }
                     includeMatcher = includeMatcher.or(ElementMatchers.<MethodDescription>isAnnotatedWith(ElementMatchers.<TypeDescription>named(arr[i])));
                 }
+            }
+            if(includeMatcher != null){
+                matcher = matcher.and(includeMatcher);
             }
         }
 
