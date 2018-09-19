@@ -56,7 +56,11 @@ public class ConfigUtils {
     }
 
     public String getStr(String key){
-        return (String) JSONPath.eval(config,"$."+key);
+        Object obj = JSONPath.eval(config,"$."+key);
+        if(obj != null){
+            return obj.toString();
+        }
+        return null;
     }
 
     public Integer getInt(String key){
