@@ -59,7 +59,7 @@ plugins:
                         nameStartsWith:
                 methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                     include:
-                        named: tell,talk
+                        named:
                     exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                         named:
 
@@ -78,6 +78,9 @@ plugins:
     servlet:
         enable: true       #开关，是否采集
         spend: 1           #耗时阀值，小于等于process.spend
+    springTx:
+        enable: true       #开关，是否采集
+        spend: 0           #耗时阀值
 
 
 

@@ -1,1 +1,2 @@
-tx=net.beeapm.agent.plugin.TxPlugin
+springTxBegin=net.beeapm.agent.plugin.SpringTxBeginPlugin
+springTxEnd=net.beeapm.agent.plugin.SpringTxEndPlugin

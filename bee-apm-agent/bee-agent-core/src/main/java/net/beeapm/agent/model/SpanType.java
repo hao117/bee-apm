@@ -10,4 +10,5 @@ public class SpanType {
     public final static String PARAM = "param";
     public final static String REQUEST = "request";
     public final static String LOGGER = "log";
+    public final static String SPRING_TX = "tx";
 }
