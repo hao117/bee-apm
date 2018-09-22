@@ -1,2 +1,3 @@
 springTxBegin=net.beeapm.agent.plugin.SpringTxBeginPlugin
 springTxEnd=net.beeapm.agent.plugin.SpringTxEndPlugin
+#springTxSqlCount=net.beeapm.agent.plugin.SqlExecuteCountPlugin

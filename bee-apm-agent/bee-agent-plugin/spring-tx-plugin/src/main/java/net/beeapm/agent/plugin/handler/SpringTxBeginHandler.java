@@ -5,7 +5,7 @@ import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
-import net.beeapm.agent.plugin.SpringTxConfig;
+import net.beeapm.agent.plugin.common.SpringTxConfig;
 import net.beeapm.agent.plugin.common.SpringTxContext;
 
 public class SpringTxBeginHandler extends AbstractHandler {
@@ -17,7 +17,7 @@ public class SpringTxBeginHandler extends AbstractHandler {
 
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal){
-        if(t == null || !SpringTxConfig.me().isEnable()){
+        if(t != null || !SpringTxConfig.me().isEnable()){
             return result;
         }
         Span span = SpanManager.createLocalSpan(SpanType.SPRING_TX);

@@ -3,7 +3,7 @@ package net.beeapm.agent.plugin.handler;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.plugin.SpringTxConfig;
+import net.beeapm.agent.plugin.common.SpringTxConfig;
 import net.beeapm.agent.plugin.common.SpringTxContext;
 import net.beeapm.agent.transmit.TransmitterFactory;
 
