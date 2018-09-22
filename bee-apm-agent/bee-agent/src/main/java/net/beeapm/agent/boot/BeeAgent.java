@@ -1,7 +1,9 @@
 package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.BeeAgentJarUtils;
-import net.beeapm.agent.config.BeeConfig;
+import net.beeapm.agent.common.IdHepler;
+import net.beeapm.agent.log.LogImpl;
+import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.plugin.IPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.PluginLoder;
@@ -21,10 +23,10 @@ import java.util.List;
  */
 public class BeeAgent {
     public static void premain(String arguments, Instrumentation inst) {
-        System.out.println("\n---------------------------------this is an bytebuddy sample ---------------------------------------");
+        System.out.println("\n---------------------------------Welcome BeeAPM ---------------------------------------");
 
         BeeAgentJarUtils.getAgentJarDirPath();
-
+        IdHepler.init();
         TransmitterFactory.init();
 
         List<IPlugin> plugins = PluginLoder.loadPlugins();
@@ -43,20 +45,17 @@ public class BeeAgent {
                                                             ClassLoader classLoader, JavaModule javaModule) {
                         String className = typeDescription.getCanonicalName();
                         System.out.println("++++++++ class name = " + className);
-                        //...
-//                      builder = builder.method(methodSpendPlugin.buildMethodsMatcher())//匹配任意方法
-//                                 .intercept(Advice.to(methodSpendPlugin.interceptorAdviceClass()));
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
-                        //builder = builder.visit(Advice.to(plugin.interceptorAdviceClass(),ClassFileLocator.ForClassLoader.of(classLoader)).on(interceptPoint.buildMethodsMatcher()));
                         return builder;
                     }
                 };
-                agentBuilder = agentBuilder.type(interceptPoint.buildTypesMatcher()).transform(transformer);
+                agentBuilder = agentBuilder.type(interceptPoint.buildTypesMatcher()).transform(transformer).asDecorator();
             }
         }
 
 
         AgentBuilder.Listener listener = new AgentBuilder.Listener() {
+            private final LogImpl log = LogManager.getLog("TransformError");
             @Override
             public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
 
@@ -69,12 +68,11 @@ public class BeeAgent {
 
             @Override
             public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule, boolean b) {
-
             }
 
             @Override
             public void onError(String s, ClassLoader classLoader, JavaModule javaModule, boolean b, Throwable throwable) {
-
+                log.error("",throwable);
             }
 
             @Override
@@ -82,8 +80,8 @@ public class BeeAgent {
 
             }
         };
-
         agentBuilder.with(listener).installOn(inst);
+        //agentBuilder.with(listener).with(AgentBuilder.Listener.StreamWriting.toSystemError()).installOn(inst);
     }
 
 
