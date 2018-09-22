@@ -30,6 +30,7 @@ public class DbServiceImpl{
     public void queryAll() {
         Connection conn = getConnction();
         String sql = "select * from people t where t.id in (?,?)";
+        String sql2  = "update people t set t.name=? where t.id > ?";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
@@ -37,14 +38,27 @@ public class DbServiceImpl{
             pstmt.setLong(2,3L);
             ResultSet rs = pstmt.executeQuery();
             int col = rs.getMetaData().getColumnCount();
+            System.out.println("rows="+rs.getRow());
             while (rs.next()) {
+                System.out.println("================>rows="+rs.getRow());
                 StringBuilder sb = new StringBuilder();
                 for (int i = 1; i <= col; i++) {
                     sb.append(rs.getObject(i).toString()).append("  ");
                 }
-                System.out.println("=================>"+sb.toString());
+                System.out.println("=====result============>"+sb.toString());
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try{
+            conn.setAutoCommit(true);
+            pstmt = conn.prepareStatement(sql2);
+            pstmt.setString(1,"tom");
+            pstmt.setLong(2,3L);
+            pstmt.executeUpdate();
+            System.out.println("===================>updateCount="+pstmt.getUpdateCount());
+            System.out.println();
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
