@@ -1,6 +1,6 @@
 logger:
     console: true  #日志输出到控制台，默认false
-    level: debug   #日志输出级别，默认error
+    level: trace   #日志输出级别，默认error
     fileSize: 10485760 #日志文件大小，单位字节,默认10M
     fileNum: 3     #日志文件保留数量，默认5个文件
 transmitter:
@@ -24,7 +24,7 @@ id:
         timeout: 5000
         retryTimes: 3
         retrySleep: 5000
-    start: 3000
+    start: 5000
 plugins:
     process:
         enable: true  #采集开关
@@ -65,7 +65,7 @@ plugins:
 
     jdbc:
         enable: true       #开关，是否采集
-        spend: 1           #耗时阀值
+        spend: -1           #耗时阀值
         enableParam: true  #参数采集开关
     logger:
         enable: true    #开关，是否采集,默认true
