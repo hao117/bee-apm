@@ -46,13 +46,13 @@ public class HandlerLoader {
             }
             return inst;
         }catch (IllegalAccessException e){
-            log.warn("",e);
+            log.error("",e);
         }catch (InstantiationException e){
-            log.warn("",e);
+            log.error("",e);
         }catch (ClassNotFoundException e){
-            log.warn("",e);
+            log.error("",e);
         }catch (Throwable t){
-            log.warn("",t);
+            log.error("",t);
         }
         return new EmptyHandler();
     }
