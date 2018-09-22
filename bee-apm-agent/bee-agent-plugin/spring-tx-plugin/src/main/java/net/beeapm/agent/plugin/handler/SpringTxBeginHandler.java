@@ -22,7 +22,7 @@ public class SpringTxBeginHandler extends AbstractHandler {
         }
         Span span = SpanManager.createLocalSpan(SpanType.SPRING_TX);
         SpringTxContext.setTxSpan(span);
-        logEndTrace(className,methodName,null,log);
+        logEndTrace(className,methodName,span,log);
         return result;
     }
 }
