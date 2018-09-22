@@ -39,12 +39,13 @@ public class BeeAgent {
             for (int j = 0; j < interceptPoints.length; j++) {
                 final InterceptPoint interceptPoint = interceptPoints[j];
                 AgentBuilder.Transformer transformer = new AgentBuilder.Transformer() {
+                    private final LogImpl log = LogManager.getLog("Transform");
                     @Override
                     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
                                                             TypeDescription typeDescription,
                                                             ClassLoader classLoader, JavaModule javaModule) {
                         String className = typeDescription.getCanonicalName();
-                        System.out.println("++++++++ class name = " + className);
+                        log.error("class name : " + className);
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
                         return builder;
                     }
@@ -55,7 +56,7 @@ public class BeeAgent {
 
 
         AgentBuilder.Listener listener = new AgentBuilder.Listener() {
-            private final LogImpl log = LogManager.getLog("TransformError");
+            private final LogImpl log = LogManager.getLog("TransformListener");
             @Override
             public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
 
