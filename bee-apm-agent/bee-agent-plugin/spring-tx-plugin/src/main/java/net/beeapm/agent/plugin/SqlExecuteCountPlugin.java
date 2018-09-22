@@ -30,7 +30,10 @@ public class SqlExecuteCountPlugin implements IPlugin {
 
                     @Override
                     public ElementMatcher<MethodDescription> buildMethodsMatcher() {
-                        return ElementMatchers.isMethod().and(ElementMatchers.<MethodDescription>nameStartsWith("execute11"));
+                        return ElementMatchers.isMethod()
+                                .and(ElementMatchers.<MethodDescription>nameStartsWith("execute"))
+                                .and(ElementMatchers.<MethodDescription>isPublic())
+                                .and(ElementMatchers.not(ElementMatchers.<MethodDescription>named("executeInternal")));
                     }
                 }
         };
