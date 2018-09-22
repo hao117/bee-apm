@@ -1,4 +1,4 @@
-package net.beeapm.agent.plugin.common;
+package net.beeapm.agent.plugin.jdbc.common;
 
 import net.beeapm.agent.model.Span;
 

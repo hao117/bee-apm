@@ -1,16 +1,16 @@
-package net.beeapm.agent.plugin.interceptor;
+package net.beeapm.agent.plugin.jdbc.interceptor;
 
 import net.beeapm.agent.plugin.handler.HandlerLoader;
 import net.beeapm.agent.plugin.handler.IHandler;
 import net.bytebuddy.asm.Advice;
 
-public class ConnectionAdvice {
+public class PreparedStatementParamAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] allParams){
-        handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ConnectionHandler");
+        handler = HandlerLoader.load("net.beeapm.agent.plugin.jdbc.handler.PreparedStatementParamHandler");
         handler.before(className,methodName,allParams,null);
     }
 

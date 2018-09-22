@@ -1,15 +1,19 @@
-package net.beeapm.agent.plugin;
+package net.beeapm.agent.plugin.jdbc;
 
-import net.beeapm.agent.plugin.interceptor.ConnectionAdvice;
+import net.beeapm.agent.plugin.IPlugin;
+import net.beeapm.agent.plugin.InterceptPoint;
+import net.beeapm.agent.plugin.jdbc.interceptor.PreparedStatementParamAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
-public class ConnectionPlugin implements IPlugin {
+import java.sql.PreparedStatement;
+
+public class PreparedStatementParamPlugin implements IPlugin {
     @Override
     public String getName() {
-        return "jdbc-connection";
+        return "jdbc-statement-param";
     }
 
     @Override
@@ -18,7 +22,7 @@ public class ConnectionPlugin implements IPlugin {
                 new InterceptPoint() {
                     @Override
                     public ElementMatcher<TypeDescription> buildTypesMatcher() {
-                        return ElementMatchers.isSubTypeOf (java.sql.Connection.class)
+                        return ElementMatchers.isSubTypeOf(PreparedStatement.class)
                                 .and(ElementMatchers.not(ElementMatchers.isInterface()))
                                 .and(ElementMatchers.not(ElementMatchers.<TypeDescription>isAbstract()));
                     }
@@ -26,9 +30,10 @@ public class ConnectionPlugin implements IPlugin {
                     @Override
                     public ElementMatcher<MethodDescription> buildMethodsMatcher() {
                         return ElementMatchers.isMethod()
-                                .and(ElementMatchers.<MethodDescription>named("prepareStatement")
-                                        .or(ElementMatchers.<MethodDescription>named("prepareCall"))
-                        );
+                                .and(ElementMatchers.<MethodDescription>nameStartsWith("set"))
+                                .and(ElementMatchers.takesArgument(0,int.class))
+                                .and(ElementMatchers.not(ElementMatchers.<MethodDescription>named("setInternal")));
+
                     }
                 }
         };
@@ -36,6 +41,6 @@ public class ConnectionPlugin implements IPlugin {
 
     @Override
     public Class interceptorAdviceClass() {
-        return ConnectionAdvice.class;
+        return PreparedStatementParamAdvice.class;
     }
 }

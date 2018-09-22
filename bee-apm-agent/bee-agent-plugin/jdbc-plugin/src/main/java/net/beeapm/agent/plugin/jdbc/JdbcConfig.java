@@ -1,4 +1,4 @@
-package net.beeapm.agent.plugin;
+package net.beeapm.agent.plugin.jdbc;
 
 import net.beeapm.agent.config.AbstractBeeConfig;
 import net.beeapm.agent.config.BeeConfigFactory;

@@ -1,2 +1,3 @@
-jdbc-connection=net.beeapm.agent.plugin.ConnectionPlugin
-jdbc-statement=net.beeapm.agent.plugin.PreparedStatementPlugin
+jdbc-connection=net.beeapm.agent.plugin.jdbc.ConnectionPlugin
+jdbc-statement-execute=net.beeapm.agent.plugin.jdbc.PreparedStatementExecutePlugin
+jdbc-statement-param=net.beeapm.agent.plugin.jdbc.PreparedStatementParamPlugin
