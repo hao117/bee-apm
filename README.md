@@ -37,6 +37,6 @@ Application Performance Management
 - oracle（待开发）
 - h2（待开发）
 
-## APM WEB端
+## APM UI端
 调用链展示，数据查询，报表等（待开发）
 
