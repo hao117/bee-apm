@@ -12,3 +12,4 @@ dependency-reduced-pom.xml
 weaving-class/
 plugins/
 transmit/
+node_modules/

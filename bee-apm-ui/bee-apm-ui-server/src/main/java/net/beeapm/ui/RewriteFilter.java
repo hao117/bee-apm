@@ -1,4 +1,4 @@
-package net.beeapm;
+package net.beeapm.ui;
 
 import org.apache.commons.lang3.StringUtils;
 

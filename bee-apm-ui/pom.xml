@@ -8,12 +8,15 @@
 		<groupId>net.beeapm</groupId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>bee-apm-web</artifactId>
+	<artifactId>bee-apm-ui</artifactId>
 	<packaging>pom</packaging>
 
-	<name>bee-apm-web</name>
+	<name>bee-apm-ui</name>
+	<modules>
+		<module>bee-apm-ui-server</module>
+	</modules>
 
 	<build>
-		<finalName>bee-apm-web</finalName>
+		<finalName>bee-apm-ui</finalName>
 	</build>
 </project>
