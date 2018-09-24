@@ -1,0 +1,76 @@
+.grid-content {
+    display: flex;
+    align-items: center;
+    height: 125px;
+}
+
+.grid-cont-right {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+.grid-num {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.grid-con-icon {
+    font-size: 50px;
+    width: 125px;
+    height: 125px;
+    text-align: center;
+    line-height: 125px;
+    color: #fff;
+}
+
+.grid-con-error .grid-con-icon {
+    background: rgb(240, 10, 24);
+}
+
+.grid-con-error .grid-num {
+    color: rgb(240, 10, 24);
+}
+
+.grid-con-visit .grid-con-icon {
+    background: rgb(45, 140, 240);
+}
+
+.grid-con-visit .grid-num {
+    color: rgb(45, 140, 240);
+}
+
+.grid-con-log .grid-con-icon {
+    background: rgb(81, 204, 18);
+}
+
+.grid-con-log .grid-num {
+    color: rgb(81, 204, 18);
+}
+
+.grid-con-inst .grid-con-icon {
+    background: rgb(255, 163, 15);
+}
+
+.grid-con-inst .grid-num {
+    color: rgb(255, 163, 15);
+}
+
+.user-info-cont div:first-child {
+    font-size: 30px;
+    color: #222;
+}
+
+.user-info-list span {
+    margin-left: 70px;
+}
+
+.mgb20 {
+    margin-bottom: 20px;
+}
+
+.schart {
+    width: 100%;
+    height: 300px;
+}
