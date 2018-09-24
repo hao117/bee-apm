@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar">
+    <div class="sidebar icon_lists clear">
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in items">
@@ -44,17 +44,17 @@
                         title: '仪表盘'
                     },
                     {
-                        icon: 'el-icon-lx-cascades',
+                        icon: 'el-icon-lx-people',
                         index: 'table',
-                        title: '请求查询'
+                        title: '访问查询'
                     },
                     {
-                        icon: 'el-icon-lx-copy',
+                        icon: 'el-icon-lx-searchlist',
                         index: 'tabs',
                         title: '方法查询'
                     },
                     {
-                        icon: 'el-icon-lx-calendar',
+                        icon: 'icon beeicon bee-qiandao_o',
                         index: '3',
                         title: '数据库',
                         subs: [
@@ -69,17 +69,17 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-lx-emoji',
+                        icon: 'el-icon-lx-info',
                         index: 'icon',
                         title: 'Logger查询'
                     },
                     {
-                        icon: 'el-icon-lx-favor',
+                        icon: 'el-icon-lx-apps',
                         index: 'charts',
                         title: '实例信息'
                     },
                     {
-                        icon: 'el-icon-lx-warn',
+                        icon: 'icon beeicon bee-caidan',
                         index: '6',
                         title: '更多',
                         subs: [

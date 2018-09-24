@@ -96,7 +96,7 @@
                     },
                     {
                         name: '2018/09/09',
-                        value: 228
+                        value: 328
                     },
                     {
                         name: '2018/09/10',
@@ -150,7 +150,7 @@
         methods: {
             changeDate(){
                 const now = new Date().getTime();
-                this.data.forEach((item, index) => {
+                this.chartData.forEach((item, index) => {
                     const date = new Date(now - (6 - index) * 86400000);
                     item.name = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
                 })
