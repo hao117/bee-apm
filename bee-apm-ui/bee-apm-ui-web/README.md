@@ -1,30 +1,43 @@
-# bee-apm-web
+# BeeAPM
 
-> 日志web端
 
-## Build Setup
+## 安装步骤 ##
 
-``` bash
-# install dependencies
-npm install
+	cd bee-apm-ui-web   // 进入目录
+	npm install         // 安装项目依赖，等待安装完成之后
 
-# serve with hot reload at localhost:8080
-npm run dev
+## 本地开发 ##
 
-# build for production with minification
-npm run build
+	// 开启服务器，浏览器访问 http://localhost:8080
+	npm run dev
 
-# build for production and view the bundle analyzer report
-npm run build --report
+## 构建生产 ##
 
-# run unit tests
-npm run unit
+	// 执行构建命令，生成的dist文件夹放在服务器下即可访问
+	npm run build
 
-# run e2e tests
-npm run e2e
 
-# run all tests
-npm test
+### 增加菜单
+
+举个栗子
+
+第一步：增加路由，在目录 src/router/index.js 中，引入该菜单的路由
+
+```JavaScript
+{
+    // 富文本编辑器组件
+    path: '/editor',
+    component: resolve => require(['../components/page/VueEditor.vue'], resolve)
+},
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+第二步：引入该菜单的文件。在目录 src/components/page/ 增加 VueEditor.vue 文件。
+
+第三步：增加该页面的入口。在目录 src/components/common/Sidebar.vue 中，添加下面这段代码。
+
+```js
+{
+	index: 'editor',
+	title: '富文本编辑器'
+},
+```
