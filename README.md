@@ -11,7 +11,7 @@ Application Performance Management
   - 支持httpclient4
   - 支持okhttp3
   - 支持基于servlet的容器（tomcat，weblogic，jetty等）
-- jdbc采集，包含采集sql语句，参数，执行耗时
+- jdbc采集，包含采集sql语句，参数，执行耗时，结果集大小
 - logger采集（支持log4j，log4j2，logback）
 - spring事务采集,包含事务持有时间，执行sql次数
 - 采样控制（开发中）
