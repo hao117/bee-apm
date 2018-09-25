@@ -8,8 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css';    // 默认主题
 import '../static/css/icon.css';
 import './assets/icon/iconfont.css';
 import "babel-polyfill";
+import VCharts from 'v-charts'
 
-
+Vue.use(VCharts);
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;
 
