@@ -58,7 +58,7 @@
             </el-col>
             <el-col :span="16">
                 <el-card>
-                    <ve-line :data="errorLineData" :title="errorLineTitle" :extend="chartExtend" :settings="errorLineSettings"></ve-line>
+                    <ve-line :data="errorLineData" :title="errorLineTitle" :extend="chartLineExtend" :settings="errorLineSettings"></ve-line>
                 </el-card>
             </el-col>
         </el-row>
@@ -84,8 +84,9 @@
     export default {
         name: 'dashboard',
         data() {
-            this.chartExtend = {
-                'xAxis.0.axisLabel.rotate': 60
+            this.chartLineExtend = {
+                'xAxis.0.axisLabel.rotate': 60,
+                'xAxis.0.boundaryGap':false
             }
             this.errorPieSettings = {
                 limitShowNum: 8
@@ -144,36 +145,36 @@
                 },
                 errorPieData: {
                     title:'异常占比',
-                    columns: ['日期', '访问用户'],
+                    columns: ['name', 'value'],
                     rows: [
-                        { '日期': 'crm-cust-dev-1', '访问用户': 1393 },
-                        { '日期': 'crm-cust-dev-2', '访问用户': 3530 },
-                        { '日期': 'crm-cust-dev-3', '访问用户': 2923 },
-                        { '日期': 'crm-cust-dev-4', '访问用户': 1723 },
-                        { '日期': 'crm-cust-dev-5', '访问用户': 3792 },
-                        { '日期': 'crm-cust-dev-6', '访问用户': 4593 },
-                        { '日期': 'crm-cust-dev-7', '访问用户': 493 },
-                        { '日期': 'crm-cust-dev-8', '访问用户': 593 },
-                        { '日期': 'crm-cust-dev-9', '访问用户': 1593 },
-                        { '日期': 'crm-cust-dev-10', '访问用户': 3593 },
-                        { '日期': 'crm-cust-dev-11', '访问用户': 993 },
-                        { '日期': 'crm-cust-dev-12', '访问用户': 593 },
+                        { 'name': 'crm-cust-dev-1', 'value': 1393 },
+                        { 'name': 'crm-cust-dev-2', 'value': 3530 },
+                        { 'name': 'crm-cust-dev-3', 'value': 2923 },
+                        { 'name': 'crm-cust-dev-4', 'value': 1723 },
+                        { 'name': 'crm-cust-dev-5', 'value': 3792 },
+                        { 'name': 'crm-cust-dev-6', 'value': 4593 },
+                        { 'name': 'crm-cust-dev-7', 'value': 493 },
+                        { 'name': 'crm-cust-dev-8', 'value': 593 },
+                        { 'name': 'crm-cust-dev-9', 'value': 1593 },
+                        { 'name': 'crm-cust-dev-10', 'value': 3593 },
+                        { 'name': 'crm-cust-dev-11', 'value': 1993 },
+                        { 'name': 'crm-cust-dev-12', 'value': 593 },
 
                     ]
                 },
                 errorLineData: {
-                    columns: ['日期', 'app1', 'app2', 'app3'],
+                    columns: ['time', 'app1', 'app2', 'app3'],
                     rows: [
-                        { '日期': '1/1', 'app1': 1393, 'app2': 1093, 'app3': 123 },
-                        { '日期': '1/2', 'app1': 3530, 'app2': 3230, 'app3': 3345 },
-                        { '日期': '1/3', 'app1': 2923, 'app2': 2623, 'app3': 345 },
-                        { '日期': '1/4', 'app1': 1723, 'app2': 1423, 'app3': 2344 },
-                        { '日期': '1/5', 'app1': 3792, 'app2': 3492, 'app3': 1234 },
-                        { '日期': '1/6', 'app1': 4593, 'app2': 4293, 'app3': 543 },
-                        { '日期': '1/7', 'app1': 3792, 'app2': 3492, 'app3': 1234 },
-                        { '日期': '1/8', 'app1': 3342, 'app2': 312, 'app3': 2234 },
-                        { '日期': '1/9', 'app1': 3562, 'app2': 6492, 'app3': 1434 },
-                        { '日期': '1/10', 'app1': 3592, 'app2': 3002, 'app3': 734 }
+                        { 'time': '1/1', 'app1': 1393, 'app2': 1093, 'app3': 123 },
+                        { 'time': '1/2', 'app1': 3530, 'app2': 3230, 'app3': 3345 },
+                        { 'time': '1/3', 'app1': 2923, 'app2': 2623, 'app3': 345 },
+                        { 'time': '1/4', 'app1': 1723, 'app2': 1423, 'app3': 2344 },
+                        { 'time': '1/5', 'app1': 3792, 'app2': 3492, 'app3': 1234 },
+                        { 'time': '1/6', 'app1': 4593, 'app2': 4293, 'app3': 543 },
+                        { 'time': '1/7', 'app1': 3792, 'app2': 3492, 'app3': 1234 },
+                        { 'time': '1/8', 'app1': 3342, 'app2': 312, 'app3': 2234 },
+                        { 'time': '1/9', 'app1': 3562, 'app2': 6492, 'app3': 1434 },
+                        { 'time': '1/10', 'app1': 3592, 'app2': 3002, 'app3': 734 }
 
 
                     ]
@@ -206,6 +207,8 @@
         },
         created(){
             this.getStatData();
+            this.getErrorPieData();
+            this.getErrorLineData();
             this.handleListener();
             this.changeDate();
         },
@@ -245,6 +248,27 @@
                 }).then((res) => {
                     console.log(res.data);
                     this.statData = res.data;
+                })
+            },
+            getErrorPieData(){
+                const url = "/api/dashboard/getErrorPieData";
+                this.$axios.post(url, {
+                    beginTime: "2018-09-24 17:12",
+                    endTime:"2018-09-24 17:13"
+                }).then((res) => {
+                    console.log(res.data);
+                    this.errorPieData.rows = res.data.list;
+                })
+            },
+            getErrorLineData(){
+                const url = "/api/dashboard/getErrorLineData";
+                this.$axios.post(url, {
+                    beginTime: "2018-09-24 17:12",
+                    endTime:"2018-09-24 17:13"
+                }).then((res) => {
+                    console.log(res.data);
+                    this.errorLineData.rows = res.data.rows;
+                    this.errorLineData.columns = res.data.columns;
                 })
             }
         }
