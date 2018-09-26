@@ -11,4 +11,5 @@ public class SpanType {
     public final static String REQUEST = "request";
     public final static String LOGGER = "log";
     public final static String SPRING_TX = "tx";
+    public final static String ERROR = "err";
 }
