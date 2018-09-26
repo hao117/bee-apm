@@ -22,7 +22,7 @@ public class ProcessHandler extends AbstractHandler {
     private static final String KEY_BEE_CHILD_ID = "_BEE_CHILD_ID";
     @Override
     public Span before(String className,String methodName, Object[] allArgs,Object[] extVal) {
-        if(!ProcessConfig.me().isEnable() || CollectRatio.NO()){
+        if(!ProcessConfig.me().isEnable()){
             return null;
         }
         Span span = SpanManager.createEntrySpan(SpanType.PROCESS);
@@ -43,14 +43,14 @@ public class ProcessHandler extends AbstractHandler {
         String childId = (String)span.getTags().get(KEY_BEE_CHILD_ID);
         span.removeTag(KEY_BEE_CHILD_ID);
 
-        if(!ProcessConfig.me().isEnable() || CollectRatio.NO()){
+        if(!ProcessConfig.me().isEnable()){
             return null;
         }
 
         calculateSpend(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
-        if(span.getSpend() > ProcessConfig.me().getSpend()) {
+        if(span.getSpend() > ProcessConfig.me().getSpend() && CollectRatio.YES()) {
             TransmitterFactory.transmit(span);
             collectParams(allArgs, span.getId());
         }

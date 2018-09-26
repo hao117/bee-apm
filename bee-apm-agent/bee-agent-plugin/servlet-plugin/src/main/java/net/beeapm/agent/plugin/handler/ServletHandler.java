@@ -18,7 +18,7 @@ public class ServletHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ServletHandler.class.getSimpleName());
     @Override
     public Span before(String className,String methodName, Object[] allArguments,Object[] extVal) {
-        if(!ServletConfig.me().isEnable() || CollectRatio.NO()){
+        if(!ServletConfig.me().isEnable()){
             return null;
         }
         Span currSpan = SpanManager.getCurrentSpan();
@@ -47,7 +47,7 @@ public class ServletHandler extends AbstractHandler {
             span.addTag("method", methodName);
             span.addTag("clazz", className);
             calculateSpend(span);
-            if(span.getSpend() > ServletConfig.me().getSpend()) {
+            if(span.getSpend() > ServletConfig.me().getSpend() && CollectRatio.YES()) {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
                 TransmitterFactory.transmit(span);
