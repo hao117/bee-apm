@@ -18,7 +18,7 @@ public class ServletHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ServletHandler.class.getSimpleName());
     @Override
     public Span before(String className,String methodName, Object[] allArguments,Object[] extVal) {
-        if(!ServletConfig.me().isEnable()){
+        if(!ServletConfig.me().isEnable() || CollectRatio.NO()){
             return null;
         }
         Span currSpan = SpanManager.getCurrentSpan();
@@ -35,7 +35,7 @@ public class ServletHandler extends AbstractHandler {
     @Override
     public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t,Object[] extVal) {
         Span currSpan = SpanManager.getCurrentSpan();
-        if(!ServletConfig.me().isEnable()){
+        if(!ServletConfig.me().isEnable() || CollectRatio.NO()){
             return null;
         }
         if(currSpan!=null && currSpan.getType().equals(SpanType.REQUEST)) {

@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.BeeTraceContext;
+import net.beeapm.agent.common.CollectRatio;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -20,7 +21,15 @@ public class LoggerHandler extends AbstractHandler {
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         String point = (String) extVal[0];
-        if(!LoggerConfig.me().isEnable() || !LoggerConfig.me().checkLevel(point,methodName)){
+        boolean isCollect = true;
+        if(LoggerConfig.me().level(methodName) >= LoggerConfig.LEVEL_ERROR){
+            if(LoggerConfig.me().errorRatio()){// 是否error采样
+                isCollect = CollectRatio.YES();
+            }else {                            //error不采样，全采集
+                isCollect = true;
+            }
+        }
+        if(!LoggerConfig.me().isEnable() || !LoggerConfig.me().checkLevel(point,methodName) || !isCollect){
             return null;
         }
         if("org.apache.logging.log4j.status.StatusLogger".equals(point)){//重复打印，排除掉
@@ -48,6 +57,8 @@ public class LoggerHandler extends AbstractHandler {
         TransmitterFactory.transmit(span);
         return null;
     }
+
+
 
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {

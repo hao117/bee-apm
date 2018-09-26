@@ -24,7 +24,12 @@ public class OkHttp3xService {
             RequestBody body = RequestBody.create(MediaType.parse("ext/plain; charset=utf-8"), "Hello Tom!");
             String url = "http://127.0.0.1:8080/okhttp3x?method=send";
             okhttp3.Request.Builder builder = new Request.Builder().post(body).url(url);
-            Response response = client.newCall(builder.build()).execute();
+           // builder.addHeader("","");
+            //builder.method()
+            okhttp3.Headers.Builder hbuilder = null;
+
+            Request request = builder.build();
+            Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 System.out.println("===============sendRequest=====response=>"+response.body().string());
             } else {

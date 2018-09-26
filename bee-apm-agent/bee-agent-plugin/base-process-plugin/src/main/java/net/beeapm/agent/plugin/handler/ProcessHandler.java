@@ -1,5 +1,6 @@
 package net.beeapm.agent.plugin.handler;
 
+import net.beeapm.agent.common.CollectRatio;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -17,7 +18,7 @@ public class ProcessHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ProcessHandler.class.getSimpleName());
     @Override
     public Span before(String className,String methodName, Object[] allArgs,Object[] extVal) {
-        if(!ProcessConfig.me().isEnable()){
+        if(!ProcessConfig.me().isEnable() || CollectRatio.NO()){
             return null;
         }
         Span span = SpanManager.createEntrySpan(SpanType.PROCESS);
@@ -33,7 +34,7 @@ public class ProcessHandler extends AbstractHandler {
             return result;
         }
 
-        if(!ProcessConfig.me().isEnable()){
+        if(!ProcessConfig.me().isEnable() || CollectRatio.NO()){
             return null;
         }
 

@@ -1,6 +1,7 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
 import net.beeapm.agent.common.BeeTraceContext;
+import net.beeapm.agent.common.CollectRatio;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -14,7 +15,7 @@ public class ConnectionHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
-        if(!JdbcConfig.me().isEnable()){
+        if(!JdbcConfig.me().isEnable() || CollectRatio.NO()){
             return null;
         }
         Span span = JdbcContext.getJdbcSpan();

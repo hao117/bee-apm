@@ -44,7 +44,7 @@ public class BeeConfig extends AbstractBeeConfig {
         }
         isLogConsole = ConfigUtils.me().getBoolean("logger.console",false);
 
-        rate = ConfigUtils.me().getInt("collect.rate",10000);
+        rate = ConfigUtils.me().getInt("collect.ratio",10000);
 
     }
 

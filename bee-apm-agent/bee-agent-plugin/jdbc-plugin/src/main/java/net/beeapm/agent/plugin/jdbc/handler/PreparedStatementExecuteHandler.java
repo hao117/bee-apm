@@ -1,6 +1,7 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.common.CollectRatio;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -21,7 +22,7 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
-        if(!JdbcConfig.me().isEnable()){
+        if(!JdbcConfig.me().isEnable() || CollectRatio.NO()){
             return null;
         }
         Span span = JdbcContext.getJdbcSpan();
@@ -38,7 +39,7 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
         Span span = JdbcContext.getJdbcSpan();
         JdbcContext.remove();
-        if(!JdbcConfig.me().isEnable() || span == null){
+        if(!JdbcConfig.me().isEnable() || span == null || CollectRatio.NO()){
             return null;
         }
         if(t != null){
