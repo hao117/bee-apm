@@ -43,7 +43,7 @@ Application Performance Monitoring
 - 从kafka拉取数据（待开发）
 
 #### 2、数据存储
-- ElasticSearcch
+- ElasticSearch
 - mysql（待开发）
 - oracle（待开发）
 - h2（待开发）
