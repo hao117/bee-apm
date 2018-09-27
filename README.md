@@ -1,22 +1,33 @@
 # BeeAPM
-Application Performance Monitor
+Application Performance Monitoring
 基于电信系统一天二三十亿条调用链数据采集经验
 
 ## 采集端（agent）
 采集数据发送到`APM Server`端或者消息中间件或存储器等
 #### 1、采集功能
-- 方法调用链，包含采集方法参数，执行耗时
-- http servlet调用链（请求报文，返回报文待开发）
+所有的采集功能均有单独开关配置
+- 分布式调用链
+- 采样控制
+- 方法采集
+    - 调用链路
+    - 参数采集
+    - 执行耗时
+    - 返回值采集 （待确定）
+- http链路
   - 支持httpclient3
   - 支持httpclient4
   - 支持okhttp3
-  - 支持基于servlet的容器（tomcat，weblogic，jetty等）
+- 支持servlet采集（tomcat，weblogic，jetty等）
+    - 链路支持
+    - request body采集（待开发）
+    - request url parameter采集（待开发）
+    - request header采集（待开发）
+    - response body采集（待开发）
+    - session采集（待开发）
 - jdbc采集，包含采集sql语句，参数，执行耗时，结果集大小
-- logger采集（支持log4j，log4j2，logback）
+- logger采集（支持log4j，log4j2，logback），采集点可配置，支持error以上级别是否采样开关
 - spring事务采集,包含事务持有时间，执行sql次数
-- 采样控制（开发中）
-- session采集（待开发）
-- 异常信息采集（待开发）
+- 异常信息采集,支持采集点黑白名单配置
 
 #### 2、传输能力
 - 输出到控制台
@@ -38,5 +49,6 @@ Application Performance Monitor
 - h2（待开发）
 
 ## APM UI端
-调用链展示，数据查询，报表等（待开发）
+开发中。。。
+支持调用链展示，采集数据查询，报表等
 
