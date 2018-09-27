@@ -50,6 +50,12 @@ plugins:
             - java.nio
             - sun.nio
             - org.aspectj
+        error:
+            enable: true
+            //白名单配置，不在白名单的不采集，该前缀是在interceptPoint的前提下，多个前缀用英文逗号分开，支持到方法级别(fullClassName.methodName)
+            includeErrorPointPrefix:
+            //黑名单配置，优先级别最高，该前缀是在interceptPoint的前提下，多个前缀用英文逗号分开，支持到方法级别(fullClassName.methodName)
+            excludeErrorPointPrefix:
         interceptPoints:
             -
                 typeMatch:

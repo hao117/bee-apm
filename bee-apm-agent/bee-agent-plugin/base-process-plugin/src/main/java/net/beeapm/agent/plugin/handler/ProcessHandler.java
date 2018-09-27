@@ -14,12 +14,15 @@ import java.lang.ref.SoftReference;
 
 
 /**
+ * 关闭process采集，异常也将不采集
+ * 如果想仅采集异常而不采集process，可以把采样率调成0，不影响异常采集
  * Created by yuan on 2018/7/31.
  */
 public class ProcessHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ProcessHandler.class.getSimpleName());
     private static final String KEY_ERROR_THROWABLE = "_ERROR_THROWABLE";
     private static final String KEY_BEE_CHILD_ID = "_BEE_CHILD_ID";
+    private static final String KEY_ERROR_POINT = "_ERROR_POINT";
     @Override
     public Span before(String className,String methodName, Object[] allArgs,Object[] extVal) {
         if(!ProcessConfig.me().isEnable()){
@@ -39,9 +42,12 @@ public class ProcessHandler extends AbstractHandler {
         }
 
         Throwable childThrowable = (Throwable)span.getTags().get(KEY_ERROR_THROWABLE);
-        span.removeTag(KEY_ERROR_THROWABLE);
         String childId = (String)span.getTags().get(KEY_BEE_CHILD_ID);
+        String childErrorPoint = (String)span.getTags().get(KEY_ERROR_POINT);
+        String errorPoint = className + "." + methodName;
+        span.removeTag(KEY_ERROR_THROWABLE);
         span.removeTag(KEY_BEE_CHILD_ID);
+        span.removeTag(KEY_ERROR_POINT);
 
         if(!ProcessConfig.me().isEnable()){
             return null;
@@ -55,50 +61,53 @@ public class ProcessHandler extends AbstractHandler {
             collectParams(allArgs, span.getId());
         }
         //异常处理
-        handleError(span.getId(),t,childId,childThrowable);
+        handleError(span.getId(),errorPoint,t,childId,childErrorPoint,childThrowable);
         return result;
     }
 
-    public void handleError(String id,Throwable t,String childId,Throwable childThrowable){
+    public void handleError(String id,String errorPoint,Throwable t,String childId,String childErrorPoint,Throwable childThrowable){
         if(t == null && childThrowable == null){
             return;
         }
         Span parentSpan = SpanManager.getCurrentSpan();
         if(parentSpan == null){      //栈顶
             if(t == null && childThrowable != null){
-                sendError(childId,childThrowable);
+                sendError(childId,childErrorPoint,childThrowable);
             }else if(t != null && childThrowable == null){
-                sendError(id,t);
+                sendError(id,errorPoint,t);
             }else{
                 if(t == childThrowable || t.getCause() == childThrowable){
-                    sendError(id,t);
+                    sendError(id,errorPoint,t);
                 }else {
-                    sendError(id, t);
-                    sendError(childId, childThrowable);
+                    sendError(id,errorPoint,t);
+                    sendError(childId,childErrorPoint,childThrowable);
                 }
             }
         }else{
             if (childThrowable == null && t != null) {
                 parentSpan.addTag(KEY_ERROR_THROWABLE, t);
                 parentSpan.addTag(KEY_BEE_CHILD_ID, id);
+                parentSpan.addTag(KEY_ERROR_POINT,errorPoint);
                 return;
             }else if(childThrowable != null && t == null){
-                sendError(childId,childThrowable);
+                sendError(childId,childErrorPoint,childThrowable);
             }else{
                 parentSpan.addTag(KEY_ERROR_THROWABLE, t);
                 parentSpan.addTag(KEY_BEE_CHILD_ID, id);
                 if(t != childThrowable && t.getCause() != childThrowable){
-                    sendError(childId,childThrowable);
+                    sendError(childId,childErrorPoint,childThrowable);
                 }
             }
         }
     }
 
-    public void sendError(String id,Throwable t){
-        Span err = new Span(SpanType.ERROR);
-        err.setId(id);
-        err.setGid(BeeTraceContext.getGId());
-        err.addTag("desc",formatThrowable(t));
+    public void sendError(String id,String errorPoint,Throwable t){
+        if(ProcessConfig.me().checkErrorPoint(errorPoint)){
+            Span err = new Span(SpanType.ERROR);
+            err.setId(id);
+            err.setGid(BeeTraceContext.getGId());
+            err.addTag("desc",formatThrowable(t));
+        }
     }
 
 
