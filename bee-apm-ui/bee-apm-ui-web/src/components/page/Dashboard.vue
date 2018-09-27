@@ -194,7 +194,8 @@
                     bgColor: '#F5F8FD',
                     bottomPadding: 30,
                     topPadding: 30
-                }
+                },
+                pickerDate:[]
             }
         },
         components: {
@@ -206,11 +207,13 @@
             }
         },
         created(){
+            this.getPickerDate();
             this.getStatData();
             this.getErrorPieData();
             this.getErrorLineData();
             this.handleListener();
             this.changeDate();
+
         },
         activated(){
             this.handleListener();
@@ -270,6 +273,15 @@
                     this.errorLineData.rows = res.data.rows;
                     this.errorLineData.columns = res.data.columns;
                 })
+            },
+            getPickerDate(){
+                console.log("====>sendGetPickerDateEvent");
+                const self = this;
+                bus.$on("pickerDateEvent",function (val) {
+                    self.pickerDate = val;
+                    console.log("====>rec:%o",self.pickerDate);
+                });
+                bus.$emit("getPickerDateEvent");
             }
         }
     }
