@@ -31,7 +31,7 @@
                                 <i class="el-icon-lx-people grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">{{statData.req}}</div>
-                                    <div>访问量</div>
+                                    <div>请求量</div>
                                 </div>
                             </div>
                         </el-card>
@@ -51,26 +51,26 @@
             </el-col>
         </el-row>
         <el-row :gutter="20" class="mgb20">
-            <el-col :span="8">
+            <el-col :span="9">
                 <el-card>
                     <ve-pie :data="errorPieData" :title="errorPieTitle" :settings="errorPieSettings"></ve-pie>
                 </el-card>
             </el-col>
-            <el-col :span="16">
+            <el-col :span="15">
                 <el-card>
                     <ve-line :data="errorLineData" :title="errorLineTitle" :extend="chartLineExtend" :settings="errorLineSettings"></ve-line>
                 </el-card>
             </el-col>
         </el-row>
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="9">
                 <el-card shadow="hover">
-                    <schart ref="bar" class="schart" canvasId="bar" :data="chartData" type="bar" :options="options"></schart>
+                    <ve-bar :data="requestBarData" :legend-visible='false' :title="requestBarTitle" :settings="requestBarSettings"></ve-bar>
                 </el-card>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="15">
                 <el-card shadow="hover">
-                    <schart ref="line" class="schart" canvasId="line" :data="chartData" type="line" :options="options2"></schart>
+                    <ve-line :data="requestLineData" :title="requestLineTitle" :extend="requestLineExtend" :settings="requestLineSettings"></ve-line>
                 </el-card>
             </el-col>
         </el-row>
@@ -78,7 +78,6 @@
 </template>
 <style src="../css/dashboard.css"></style>
 <script>
-    import Schart from 'vue-schart';
     import bus from '../common/bus';
 
     export default {
@@ -104,39 +103,30 @@
                 bottom:"10",
                 left: 'middle'
             }
+            this.requestBarSettings = {
+            }
+            this.requestBarTitle = {
+                text:'请求耗时区间统计',
+                bottom:"10",
+                left: 'middle'
+            }
+            this.requestLineSettings = {
+            }
+            this.requestLineExtend = {
+                series: {
+                    smooth: false
+                },
+                'xAxis.0.axisLabel.rotate': 60,
+                'xAxis.0.boundaryGap':false
+            },
+            this.requestLineTitle = {
+                text:"请求量趋势图（耗时区间）",
+                bottom:"10",
+                left: 'middle'
+            }
             return {
-                errorTitle:"ttttt",
+                pickerDate:[],
                 name: localStorage.getItem('ms_username'),
-                chartData:[
-                    {
-                        name: '2018/09/04',
-                        value: 1083
-                    },
-                    {
-                        name: '2018/09/05',
-                        value: 941
-                    },
-                    {
-                        name: '2018/09/06',
-                        value: 1139
-                    },
-                    {
-                        name: '2018/09/07',
-                        value: 816
-                    },
-                    {
-                        name: '2018/09/08',
-                        value: 1500
-                    },
-                    {
-                        name: '2018/09/09',
-                        value: 328
-                    },
-                    {
-                        name: '2018/09/10',
-                        value: 1065
-                    }
-                ],
                 statData:{
                     req: 0,
                     log: 0,
@@ -146,60 +136,39 @@
                 errorPieData: {
                     title:'异常占比',
                     columns: ['name', 'value'],
-                    rows: [
-                        { 'name': 'crm-cust-dev-1', 'value': 1393 },
-                        { 'name': 'crm-cust-dev-2', 'value': 3530 },
-                        { 'name': 'crm-cust-dev-3', 'value': 2923 },
-                        { 'name': 'crm-cust-dev-4', 'value': 1723 },
-                        { 'name': 'crm-cust-dev-5', 'value': 3792 },
-                        { 'name': 'crm-cust-dev-6', 'value': 4593 },
-                        { 'name': 'crm-cust-dev-7', 'value': 493 },
-                        { 'name': 'crm-cust-dev-8', 'value': 593 },
-                        { 'name': 'crm-cust-dev-9', 'value': 1593 },
-                        { 'name': 'crm-cust-dev-10', 'value': 3593 },
-                        { 'name': 'crm-cust-dev-11', 'value': 1993 },
-                        { 'name': 'crm-cust-dev-12', 'value': 593 },
-
-                    ]
+                    rows: []
                 },
                 errorLineData: {
-                    columns: ['time', 'app1', 'app2', 'app3'],
+                    columns: [],
+                    rows: []
+                },
+                requestBarData:{
+                    columns: ['区间', '请求数量'],
                     rows: [
-                        { 'time': '1/1', 'app1': 1393, 'app2': 1093, 'app3': 123 },
-                        { 'time': '1/2', 'app1': 3530, 'app2': 3230, 'app3': 3345 },
-                        { 'time': '1/3', 'app1': 2923, 'app2': 2623, 'app3': 345 },
-                        { 'time': '1/4', 'app1': 1723, 'app2': 1423, 'app3': 2344 },
-                        { 'time': '1/5', 'app1': 3792, 'app2': 3492, 'app3': 1234 },
-                        { 'time': '1/6', 'app1': 4593, 'app2': 4293, 'app3': 543 },
-                        { 'time': '1/7', 'app1': 3792, 'app2': 3492, 'app3': 1234 },
-                        { 'time': '1/8', 'app1': 3342, 'app2': 312, 'app3': 2234 },
-                        { 'time': '1/9', 'app1': 3562, 'app2': 6492, 'app3': 1434 },
-                        { 'time': '1/10', 'app1': 3592, 'app2': 3002, 'app3': 734 }
-
-
+                        { '区间': '3000', '请求数量': 1393},
+                        { '区间': '1500', '请求数量': 1393},
+                        { '区间': '1000', '请求数量': 3530},
+                        { '区间': '800', '请求数量': 2923},
+                        { '区间': '500', '请求数量': 1723 },
+                        { '区间': '300', '请求数量': 3792},
+                        { '区间': '200', '请求数量': 4593 }
                     ]
                 },
-                options: {
-                    title: '最近七天每天的用户访问量',
-                    showValue: false,
-                    fillColor: 'rgb(45, 140, 240)',
-                    bottomPadding: 30,
-                    topPadding: 30
-                },
-                options2: {
-                    title: '最近七天用户访问趋势',
-                    fillColor: '#FC6FA1',
-                    axisColor: '#008ACD',
-                    contentColor: '#EEEEEE',
-                    bgColor: '#F5F8FD',
-                    bottomPadding: 30,
-                    topPadding: 30
-                },
-                pickerDate:[]
+                requestLineData: {
+                    columns: ['time', '0~200',"200~500","500~1000","1000~2000","2000~3000","3000~*"],
+                    rows: [
+                        { 'time': '1月1日', '0~200': 123 ,"200~500":183,"500~1000":583,"1000~2000":783,"2000~3000":383,"3000~*":203},
+                        { 'time': '1月2日', '0~200': 89 ,"200~500":200,"500~1000":300,"1000~2000":600,"2000~3000":500,"3000~*":103},
+                        { 'time': '1月3日', '0~200': 200 ,"200~500":383,"500~1000":183,"1000~2000":900,"2000~3000":300,"3000~*":183},
+                        { 'time': '1月4日', '0~200': 123 ,"200~500":345,"500~1000":583,"1000~2000":383,"2000~3000":283,"3000~*":233},
+                        { 'time': '1月5日', '0~200': 134 ,"200~500":183,"500~1000":555,"1000~2000":183,"2000~3000":513,"3000~*":333},
+                        { 'time': '1月6日', '0~200': 59 ,"200~500":422,"500~1000":432,"1000~2000":742,"2000~3000":183,"3000~*":643}
+                    ]
+                }
+
             }
         },
         components: {
-            Schart
         },
         computed: {
             role() {

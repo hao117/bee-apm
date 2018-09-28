@@ -20,8 +20,11 @@ bee:
         process: bee-comm-process
         request: bee-comm-request
         sql: bee-comm-sql
-        log: bee-comm-log
+        sqlp: bee-comm-sql-param
+        tx: bee-comm-tx
+        log: bee-comm-logger
         param: bee-comm-param
+        err : bee-comm-error
   handlers:
     flow: empty>json>queue>store
     queue:
