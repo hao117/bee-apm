@@ -127,6 +127,7 @@
             }
             return {
                 pickerDate:[],
+                activeTagTitle:'系统首页',
                 name: localStorage.getItem('ms_username'),
                 statData:{
                     req: 0,
@@ -162,13 +163,13 @@
             }
         },
         created(){
+            this.onTagTitle();
             this.getPickerDate();
             this.getStatData();
             this.getErrorPieData();
             this.getErrorLineData();
             this.getRequestBarData();
             this.getRequestLineData();
-
         },
         activated(){
         },
@@ -213,6 +214,13 @@
                     console.log("====>rec:%o",self.pickerDate);
                 });
                 bus.$emit("getPickerDateEvent");
+            },
+            onTagTitle(){
+                let self = this;
+                bus.$on("tagTitle",function (val) {
+                    self.activeTagTitle = val;
+                    console.log("====>系统首页----activeTagTitle="+self.activeTagTitle);
+                });
             },
             getRequestBarData(){
                 const url = "/api/dashboard/getRequestBarData";

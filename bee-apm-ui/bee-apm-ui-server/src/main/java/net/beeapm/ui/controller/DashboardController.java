@@ -147,13 +147,13 @@ public class DashboardController {
     @RequestMapping("/getRequestBarData")
     @ResponseBody
     public Map<String,Object> getRequestBarData(@RequestBody Map<String,String> params){
-        logger.debug("requsetBody={}",params);
+        logger.debug("RequestBody={}",params);
         return dashboardService.getRequestBarData(params);
     }
     @RequestMapping("/getRequestLineData")
     @ResponseBody
-    public Map<String, Object> getRequestLineData(Map<String, String> params){
-        logger.debug("requsetBody={}",params);
+    public Map<String, Object> getRequestLineData(@RequestBody Map<String, String> params){
+        logger.debug("RequestBody={}",params);
         return dashboardService.getRequestLineData(params);
     }
 }
