@@ -8,7 +8,6 @@ target/
 .settings/
 *.jar
 *.log
-package-lock.json
 dependency-reduced-pom.xml
 weaving-class/
 plugins/
