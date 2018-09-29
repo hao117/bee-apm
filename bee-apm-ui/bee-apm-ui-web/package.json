@@ -13,6 +13,7 @@
     "babel-polyfill": "^6.23.0",
     "echarts": "^4.2.0-rc.1",
     "element-ui": "^2.4.5",
+    "moment": "^2.22.2",
     "v-charts": "^1.17.10",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
