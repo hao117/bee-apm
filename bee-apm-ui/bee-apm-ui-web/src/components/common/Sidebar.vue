@@ -46,7 +46,7 @@
                     {
                         icon: 'el-icon-lx-people',
                         index: 'table',
-                        title: '访问查询'
+                        title: '请求查询'
                     },
                     {
                         icon: 'el-icon-lx-searchlist',

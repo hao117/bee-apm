@@ -2,7 +2,11 @@ package net.beeapm.ui.controller;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.ui.model.KeyValue;
+import net.beeapm.ui.service.IDashboardService;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,11 @@ import java.util.*;
 @Controller
 @RequestMapping("api/dashboard")
 public class DashboardController {
+
+    @Autowired
+    private IDashboardService dashboardService;
+    private Logger logger = LoggerFactory.getLogger(DashboardController.class);
+
     @RequestMapping("/stat")
     @ResponseBody
     public Map stat(){
@@ -133,5 +142,18 @@ public class DashboardController {
         res.put("code",0);
         System.out.println("getErrorLineData Result : "+JSON.toJSONString(res));
         return res;
+    }
+
+    @RequestMapping("/getRequestBarData")
+    @ResponseBody
+    public Map<String,Object> getRequestBarData(@RequestBody Map<String,String> params){
+        logger.debug("requsetBody={}",params);
+        return dashboardService.getRequestBarData(params);
+    }
+    @RequestMapping("/getRequestLineData")
+    @ResponseBody
+    public Map<String, Object> getRequestLineData(Map<String, String> params){
+        logger.debug("requsetBody={}",params);
+        return dashboardService.getRequestLineData(params);
     }
 }

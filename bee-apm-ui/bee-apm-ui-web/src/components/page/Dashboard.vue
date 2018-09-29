@@ -79,6 +79,7 @@
 <style src="../css/dashboard.css"></style>
 <script>
     import bus from '../common/bus';
+    let moment = require("moment");
 
     export default {
         name: 'dashboard',
@@ -144,26 +145,11 @@
                 },
                 requestBarData:{
                     columns: ['区间', '请求数量'],
-                    rows: [
-                        { '区间': '3000', '请求数量': 1393},
-                        { '区间': '1500', '请求数量': 1393},
-                        { '区间': '1000', '请求数量': 3530},
-                        { '区间': '800', '请求数量': 2923},
-                        { '区间': '500', '请求数量': 1723 },
-                        { '区间': '300', '请求数量': 3792},
-                        { '区间': '200', '请求数量': 4593 }
-                    ]
+                    rows: []
                 },
                 requestLineData: {
                     columns: ['time', '0~200',"200~500","500~1000","1000~2000","2000~3000","3000~*"],
-                    rows: [
-                        { 'time': '1月1日', '0~200': 123 ,"200~500":183,"500~1000":583,"1000~2000":783,"2000~3000":383,"3000~*":203},
-                        { 'time': '1月2日', '0~200': 89 ,"200~500":200,"500~1000":300,"1000~2000":600,"2000~3000":500,"3000~*":103},
-                        { 'time': '1月3日', '0~200': 200 ,"200~500":383,"500~1000":183,"1000~2000":900,"2000~3000":300,"3000~*":183},
-                        { 'time': '1月4日', '0~200': 123 ,"200~500":345,"500~1000":583,"1000~2000":383,"2000~3000":283,"3000~*":233},
-                        { 'time': '1月5日', '0~200': 134 ,"200~500":183,"500~1000":555,"1000~2000":183,"2000~3000":513,"3000~*":333},
-                        { 'time': '1月6日', '0~200': 59 ,"200~500":422,"500~1000":432,"1000~2000":742,"2000~3000":183,"3000~*":643}
-                    ]
+                    rows: []
                 }
 
             }
@@ -180,39 +166,15 @@
             this.getStatData();
             this.getErrorPieData();
             this.getErrorLineData();
-            this.handleListener();
-            this.changeDate();
+            this.getRequestBarData();
+            this.getRequestLineData();
 
         },
         activated(){
-            this.handleListener();
         },
         deactivated(){
-            window.removeEventListener('resize', this.renderChart);
-            bus.$off('collapse', this.handleBus);
         },
         methods: {
-            changeDate(){
-                const now = new Date().getTime();
-                this.chartData.forEach((item, index) => {
-                    const date = new Date(now - (6 - index) * 86400000);
-                    item.name = `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
-                })
-            },
-            handleListener(){
-                bus.$on('collapse', this.handleBus);
-                // 调用renderChart方法对图表进行重新渲染
-                window.addEventListener('resize', this.renderChart)
-            },
-            handleBus(msg){
-                setTimeout(() => {
-                    this.renderChart()
-                }, 300);
-            },
-            renderChart(){
-                this.$refs.bar.renderChart();
-                this.$refs.line.renderChart();
-            },
             getStatData(){
                 const url = "/api/dashboard/stat";
                 this.$axios.post(url, {
@@ -251,7 +213,28 @@
                     console.log("====>rec:%o",self.pickerDate);
                 });
                 bus.$emit("getPickerDateEvent");
+            },
+            getRequestBarData(){
+                const url = "/api/dashboard/getRequestBarData";
+                this.$axios.post(url, {
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH-mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH-mm'),
+                }).then((res) => {
+                    console.log("==>getRequestBarData:%o",res);
+                    this.requestBarData.rows = res.data.rows;
+                })
+            },
+            getRequestLineData(){
+                const url = "/api/dashboard/getRequestLineData";
+                this.$axios.post(url, {
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH-mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH-mm'),
+                }).then((res) => {
+                    console.log("==>getRequestLineData:%o",res);
+                    this.requestLineData.rows = res.data.rows;
+                })
             }
+
         }
     }
 </script>
