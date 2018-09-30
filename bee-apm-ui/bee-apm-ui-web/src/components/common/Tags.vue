@@ -14,6 +14,7 @@
                     标签选项<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu size="small" slot="dropdown">
+                    <el-dropdown-item command="refresh">刷新当前</el-dropdown-item>
                     <el-dropdown-item command="other">关闭其他</el-dropdown-item>
                     <el-dropdown-item command="all">关闭所有</el-dropdown-item>
                 </el-dropdown-menu>
@@ -60,9 +61,15 @@
                 })
                 this.tagsList = curItem;
             },
+            refreshCurTag(){
+                const curItem = this.tagsList.filter(item => {
+                    if(item.path === this.$route.fullPath){
+                        bus.$emit("refreshTag",this.$route.matched[1].components.default.name);
+                    }
+                })
+            },
             // 设置标签
             setTags(route){
-                bus.$emit('tagTitle', route.meta.title);
                 const isExist = this.tagsList.some(item => {
                     return item.path === route.fullPath;
                 })
@@ -79,7 +86,13 @@
                 bus.$emit('tags', this.tagsList);
             },
             handleTags(command){
-                command === 'other' ? this.closeOther() : this.closeAll();
+                if(command === 'other'){
+                    this.closeOther()
+                }else if(command === 'all'){
+                    this.closeAll();
+                }else if(command === 'refresh'){
+                    this.refreshCurTag();
+                }
             }
         },
         computed: {

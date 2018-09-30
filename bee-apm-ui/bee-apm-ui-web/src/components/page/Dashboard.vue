@@ -163,8 +163,8 @@
             }
         },
         created(){
-            this.onTagTitle();
             this.getPickerDate();
+            this.onRefresh();
             this.getStatData();
             this.getErrorPieData();
             this.getErrorLineData();
@@ -176,6 +176,20 @@
         deactivated(){
         },
         methods: {
+            onRefresh(){
+                let self = this;
+                bus.$on("refreshTag",function (val) {
+                    if(val === 'dashboard'){
+                        console.log("dashboard refresh.................")
+                        self.getStatData();
+                        self.getErrorPieData();
+                        self.getErrorLineData();
+                        self.getRequestBarData();
+                        self.getRequestLineData();
+                    }
+                });
+
+            },
             getStatData(){
                 const url = "/api/dashboard/stat";
                 this.$axios.post(url, {
@@ -207,20 +221,11 @@
                 })
             },
             getPickerDate(){
-                console.log("====>sendGetPickerDateEvent");
                 const self = this;
                 bus.$on("pickerDateEvent",function (val) {
                     self.pickerDate = val;
-                    console.log("====>rec:%o",self.pickerDate);
                 });
                 bus.$emit("getPickerDateEvent");
-            },
-            onTagTitle(){
-                let self = this;
-                bus.$on("tagTitle",function (val) {
-                    self.activeTagTitle = val;
-                    console.log("====>系统首页----activeTagTitle="+self.activeTagTitle);
-                });
             },
             getRequestBarData(){
                 const url = "/api/dashboard/getRequestBarData";

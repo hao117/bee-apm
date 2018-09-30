@@ -3,6 +3,7 @@ package net.beeapm.ui.controller;
 import com.alibaba.fastjson.JSON;
 import net.beeapm.ui.model.KeyValue;
 import net.beeapm.ui.service.IDashboardService;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +26,11 @@ public class DashboardController {
     @RequestMapping("/stat")
     @ResponseBody
     public Map stat(){
-        Map<String,String> data = new HashMap<>();
-        data.put("log","2345");
-        data.put("req","1234");
-        data.put("inst","23");
-        data.put("error","56");
+        Map<String,Object> data = new HashMap<>();
+        data.put("log", RandomUtils.nextInt(1001,5000));
+        data.put("req",RandomUtils.nextInt(300,500));
+        data.put("inst",RandomUtils.nextInt(55,150));
+        data.put("error",RandomUtils.nextInt(200,500));
         System.out.println("=============dashboard>>>" + DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
         return data;
     }
