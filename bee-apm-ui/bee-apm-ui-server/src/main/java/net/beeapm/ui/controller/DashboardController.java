@@ -2,6 +2,7 @@ package net.beeapm.ui.controller;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.ui.model.KeyValue;
+import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.service.IDashboardService;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -153,7 +154,7 @@ public class DashboardController {
     }
     @RequestMapping("/getRequestLineData")
     @ResponseBody
-    public Map<String, Object> getRequestLineData(@RequestBody Map<String, String> params){
+    public ChartVo getRequestLineData(@RequestBody Map<String, String> params){
         logger.debug("RequestBody={}",params);
         return dashboardService.getRequestLineData(params);
     }

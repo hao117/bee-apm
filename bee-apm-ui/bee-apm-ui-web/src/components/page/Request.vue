@@ -23,7 +23,7 @@
                     </el-col>
                     <el-col :span="7">
                         <el-form-item label="排序">
-                            <el-select v-model="form.server" placeholder="请选择">
+                            <el-select v-model="form.sort" placeholder="请选择">
                                 <el-option key="bbk" label="步步高" value="bbk"></el-option>
                                 <el-option key="xtc" label="小天才" value="xtc"></el-option>
                                 <el-option key="imoo" label="imoo" value="imoo"></el-option>
@@ -31,7 +31,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="3" align="right">
-                        <el-button type="primary">查  询</el-button>
+                        <el-button @click="queryRequestList(1)" type="primary">查&nbsp;&nbsp;询</el-button>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
@@ -56,26 +56,30 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="data" border class="table" ref="multipleTable" @selection-change="handleSelectionChange">
-                        <el-table-column prop="date" label="ID" width="150">
+                    <el-table :data="requestTableData.rows" border class="table">
+                        <el-table-column prop="id" label="ID" width="150">
                         </el-table-column>
-                        <el-table-column prop="date" label="GID" width="150">
+                        <el-table-column prop="gId" label="GID" width="150">
                         </el-table-column>
-                        <el-table-column prop="name" label="IP" width="120">
+                        <el-table-column prop="ip" label="IP" width="120">
                         </el-table-column>
-                        <el-table-column prop="name" label="应用分组" width="120">
+                        <el-table-column prop="group" label="应用分组" width="120">
                         </el-table-column>
-                        <el-table-column prop="name" label="应用实例" width="120">
+                        <el-table-column prop="server" label="应用实例" width="120">
                         </el-table-column>
-                        <el-table-column prop="address" label="URL" :formatter="formatter">
+                        <el-table-column prop="url" label="URL" >
                         </el-table-column>
                         <el-table-column label="操作" width="180" align="center">
                             <template slot-scope="scope">
-                                <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                                <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                                <el-button type="text">参数</el-button>
+                                <el-button type="text">调用链</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
+                    <div class="pagination">
+                        <el-pagination background  @current-change="handleCurrentChange" layout="prev, pager, next" :total="requestTableData.pageTotal" :current-page="requestTableData.currPageNum">
+                        </el-pagination>
+                    </div>
                 </el-col>
             </el-row>
         </el-card>
@@ -83,6 +87,9 @@
 </template>
 
 <script>
+    import bus from '../common/bus';
+    let moment = require("moment");
+
     export default {
         name: 'request',
         data: function(){
@@ -104,74 +111,52 @@
                         {'time': '1/7', '请求量': 113},
                         {'time': '1/8', '请求量': 993}]
                 },
-                options:[
-                    {
-                        value: 'guangdong',
-                        label: '广东省',
-                        children: [
-                            {
-                                value: 'guangzhou',
-                                label: '广州市',
-                                children: [
-                                    {
-                                        value: 'tianhe',
-                                        label: '天河区'
-                                    },
-                                    {
-                                        value: 'haizhu',
-                                        label: '海珠区'
-                                    }
-                                ]
-                            },
-                            {
-                                value: 'dongguan',
-                                label: '东莞市',
-                                children: [
-                                    {
-                                        value: 'changan',
-                                        label: '长安镇'
-                                    },
-                                    {
-                                        value: 'humen',
-                                        label: '虎门镇'
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        value: 'hunan',
-                        label: '湖南省',
-                        children: [
-                            {
-                                value: 'changsha',
-                                label: '长沙市',
-                                children: [
-                                    {
-                                        value: 'yuelu',
-                                        label: '岳麓区'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: true,
-                    type: ['步步高'],
-                    resource: '小天才',
-                    desc: '',
-                    options: []
+                requestTableData: {
+                    currPageNum:1,
+                    pageTotal: 150,
+                    rows: []
+                },
+                form:{
+                    gId:'',
+                    server:'',
+                    group:'',
+                    ip:'',
+                    sort:''
                 }
             }
         },
+        created(){
+            this.getPickerDate();
+            this.queryRequestList(1);
+        },
         methods: {
+            getPickerDate(){
+                const self = this;
+                bus.$on("pickerDateEvent",function (val) {
+                    self.pickerDate = val;
+                });
+                bus.$emit("getPickerDateEvent");
+            },
             onSubmit() {
                 this.$message.success('提交成功！');
+            },
+            // 分页导航
+            handleCurrentChange(val) {
+                this.queryRequestList(val);
+            },
+            // 表格数据
+            queryRequestList(pageNum) {
+                const url = "/api/request/list";
+                this.$axios.post(url, {
+                    pageNum: pageNum,
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm')
+                }).then((res) => {
+                    console.log("==>queryRequestList=%o",res);
+                    this.requestTableData.rows = res.data.rows;
+                    this.requestTableData.currPageNum = res.data.pageNum;
+                    this.requestTableData.pageTotal = res.data.pageTotal;
+                })
             }
         }
     }

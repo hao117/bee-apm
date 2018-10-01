@@ -11,7 +11,7 @@
                     <el-date-picker v-model="datePicker.values" type="datetimerange" :picker-options="datePicker.options"
                         range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         :clearable="datePicker.clearable" :editable="datePicker.editable"
-                        @change="sendPickerDate"
+                        @change="sendPickerDate" format="yyyy-MM-dd HH:mm"
                         align="right">
                     </el-date-picker>
                 </div>
