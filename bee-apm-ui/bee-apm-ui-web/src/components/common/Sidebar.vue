@@ -45,7 +45,7 @@
                     },
                     {
                         icon: 'el-icon-lx-people',
-                        index: 'table',
+                        index: 'request',
                         title: '请求查询'
                     },
                     {

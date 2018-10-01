@@ -35,9 +35,9 @@ export default new Router({
                     meta: { title: 'tab选项卡' }
                 },
                 {
-                    path: '/form',
-                    component: resolve => require(['../components/page/BaseForm.vue'], resolve),
-                    meta: { title: '基本表单' }
+                    path: '/request',
+                    component: resolve => require(['../components/page/Request.vue'], resolve),
+                    meta: { title: '请求查询' }
                 },
                 {
                     // vue-schart组件
