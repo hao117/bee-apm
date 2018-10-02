@@ -2,6 +2,10 @@ package net.beeapm.agent.common;
 
 import java.io.Closeable;
 import java.io.Flushable;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 public class BeeUtils {
     public static void close(Closeable closeable){
@@ -20,6 +24,14 @@ public class BeeUtils {
             } catch (Exception e) {
             }
         }
+    }
+
+    public static String getLocalIp(){
+        try{
+            return InetAddress.getLocalHost().getHostAddress();
+        }catch (Exception e){
+        }
+        return null;
     }
 
 }

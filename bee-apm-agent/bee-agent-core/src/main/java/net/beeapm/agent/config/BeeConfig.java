@@ -1,6 +1,12 @@
 package net.beeapm.agent.config;
 
+import net.beeapm.agent.common.BeeUtils;
+import net.beeapm.agent.common.SysPropKey;
 import net.beeapm.agent.log.LogLevel;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.xml.soap.SAAJResult;
+
 /**
  * 以后增加配置动态加载
  */
@@ -9,6 +15,10 @@ public class BeeConfig extends AbstractBeeConfig {
     private Boolean  isLogConsole;
     private int rate;
     private static BeeConfig config;
+    private String server;
+    private String group;
+    private String ip;
+    private String port;
 
     public static BeeConfig me(){
         if(config == null){
@@ -45,7 +55,13 @@ public class BeeConfig extends AbstractBeeConfig {
         isLogConsole = ConfigUtils.me().getBoolean("logger.console",false);
 
         rate = ConfigUtils.me().getInt("collect.ratio",10000);
-
+        server = System.getProperty(SysPropKey.BEE_SERVER,"unknown");
+        group = System.getProperty(SysPropKey.BEE_GROUP,"unknown");
+        port = System.getProperty(SysPropKey.BEE_PORT,"-9999");
+        ip = System.getProperty(SysPropKey.BEE_IP);
+        if(ip==null){
+            ip = BeeUtils.getLocalIp();
+        }
     }
 
     public LogLevel getLogLevel(){
@@ -58,5 +74,21 @@ public class BeeConfig extends AbstractBeeConfig {
 
     public int getRate() {
         return rate;
+    }
+
+    public String getServer(){
+        return server;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getPort() {
+        return port;
     }
 }

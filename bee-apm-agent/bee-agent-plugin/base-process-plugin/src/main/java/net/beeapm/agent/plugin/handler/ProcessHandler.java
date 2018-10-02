@@ -127,6 +127,10 @@ public class ProcessHandler extends AbstractHandler {
             Span paramSpan = new Span(SpanType.PARAM);
             paramSpan.setId(id);
             paramSpan.setTime(null);
+            paramSpan.setPort(null);
+            paramSpan.setGroup(null);
+            paramSpan.setIp(null);
+            paramSpan.setServer(null);
             Object[] params = new Object[allArgs.length];
             for(int i = 0; i < allArgs.length; i++){
                 if(allArgs[i] != null && ProcessConfig.me().isExcludeParamType(allArgs[i].getClass())){

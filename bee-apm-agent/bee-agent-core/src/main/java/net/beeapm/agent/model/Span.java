@@ -1,5 +1,7 @@
 package net.beeapm.agent.model;
 
+import net.beeapm.agent.config.BeeConfig;
+
 import java.util.Date;
 
 public class Span{
@@ -12,10 +14,18 @@ public class Span{
     private String gid;
     private String id;
     private Long spend;
+    private String port;
+    private String ip;
+
+
 
     public Span(String spanType){
         setType(spanType);
         setTime(new Date());
+        setIp(BeeConfig.me().getIp());
+        setPort(BeeConfig.me().getPort());
+        setServer(BeeConfig.me().getServer());
+        setGroup(BeeConfig.me().getGroup());
     }
 
     public Tags getTags() {
@@ -101,5 +111,21 @@ public class Span{
 
     public void setSpend(Long spend) {
         this.spend = spend;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }
