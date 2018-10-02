@@ -6,7 +6,7 @@
                     <el-col :span="6">
                         <el-card shadow="hover" :body-style="{padding: '0px'}">
                             <div class="grid-content grid-con-error">
-                                <i class="el-icon-lx-warn grid-con-icon"></i>
+                                <i class="el-icon-lx-notice grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">{{statData.error}}</div>
                                     <div>异常量</div>
@@ -42,7 +42,7 @@
                                 <i class="el-icon-lx-rank grid-con-icon"></i>
                                 <div class="grid-cont-right">
                                     <div class="grid-num">{{statData.log}}</div>
-                                    <div>日志量</div>
+                                    <div>采集量</div>
                                 </div>
                             </div>
                         </el-card>
