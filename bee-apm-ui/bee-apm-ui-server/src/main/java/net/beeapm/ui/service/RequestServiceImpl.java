@@ -1,13 +1,14 @@
 package net.beeapm.ui.service;
 
+import net.beeapm.ui.model.KeyValue;
+import net.beeapm.ui.model.TwoKeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.TableVo;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class RequestServiceImpl implements IRequestService {
@@ -34,6 +35,14 @@ public class RequestServiceImpl implements IRequestService {
 
     @Override
     public ChartVo chart(Map<String, Object> params) {
-        return null;
+        ChartVo res = new ChartVo();
+        List<Object> rows = new ArrayList<>();
+        long time = new Date().getTime();
+        for(int i = 0; i < 20; i++){
+            rows.add(new TwoKeyValue("time", DateFormatUtils.format(new Date(time+(i*60)),"yyyy-MM-dd HH:mm"),"请求量", RandomUtils.nextInt(500,3000)));
+        }
+        res.setRows(rows);
+        res.setCode("0");
+        return res;
     }
 }

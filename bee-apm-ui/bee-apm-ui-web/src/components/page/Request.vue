@@ -6,19 +6,18 @@
                     <el-col :span="7">
                         <el-form-item label="应用分组">
                             <el-select v-model="form.group" placeholder="请选择">
-                                <el-option key="bbk" label="步步高" value="bbk"></el-option>
-                                <el-option key="xtc" label="小天才" value="xtc"></el-option>
-                                <el-option key="imoo" label="imoo" value="imoo"></el-option>
+                                <el-option
+                                    v-for="item in groupOptions"
+                                    :key="item.value"
+                                    :label="item.name"
+                                    :value="item.value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
                         <el-form-item label="应用实例">
-                            <el-select v-model="form.server" placeholder="请选择">
-                                <el-option key="bbk" label="步步高" value="bbk"></el-option>
-                                <el-option key="xtc" label="小天才" value="xtc"></el-option>
-                                <el-option key="imoo" label="imoo" value="imoo"></el-option>
-                            </el-select>
+                            <el-input v-model="form.server"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
@@ -101,15 +100,7 @@
             return {
                 requestChartData: {
                     columns: ['time', '请求量'],
-                    rows: [{'time': '1/1', '请求量': 1393},
-                        {'time': '1/1', '请求量': 993},
-                        {'time': '1/2', '请求量': 893},
-                        {'time': '1/3', '请求量': 2393},
-                        {'time': '1/4', '请求量': 1893},
-                        {'time': '1/5', '请求量': 1293},
-                        {'time': '1/6', '请求量': 1593},
-                        {'time': '1/7', '请求量': 113},
-                        {'time': '1/8', '请求量': 993}]
+                    rows: []
                 },
                 requestTableData: {
                     currPageNum:1,
@@ -122,11 +113,13 @@
                     group:'',
                     ip:'',
                     sort:''
-                }
+                },
+                groupOptions:[]
             }
         },
         created(){
             this.getPickerDate();
+            this.queryGroupList();
             this.queryRequestList(1);
         },
         methods: {
@@ -137,8 +130,15 @@
                 });
                 bus.$emit("getPickerDateEvent");
             },
-            onSubmit() {
-                this.$message.success('提交成功！');
+            queryGroupList() {
+                const url = "/api/common/getGroupList";
+                this.$axios.post(url, {
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm')
+                }).then((res) => {
+                    console.log("==>queryGroupList=%o",res);
+                    this.groupOptions = res.data.result;
+                })
             },
             // 分页导航
             handleCurrentChange(val) {
@@ -146,8 +146,12 @@
             },
             // 表格数据
             queryRequestList(pageNum) {
+                if(pageNum == 1){
+                    this.getRequestChartData();
+                }
                 const url = "/api/request/list";
                 this.$axios.post(url, {
+                    form:this.form,
                     pageNum: pageNum,
                     beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
                     endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm')
@@ -156,6 +160,18 @@
                     this.requestTableData.rows = res.data.rows;
                     this.requestTableData.currPageNum = res.data.pageNum;
                     this.requestTableData.pageTotal = res.data.pageTotal;
+                })
+            },
+            // 柱状图数据
+            getRequestChartData(){
+                const url = "/api/request/chart";
+                this.$axios.post(url, {
+                    form:this.form,
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm')
+                }).then((res) => {
+                    console.log("==>getRequestChartData=%o",res);
+                    this.requestChartData.rows = res.data.rows;
                 })
             }
         }

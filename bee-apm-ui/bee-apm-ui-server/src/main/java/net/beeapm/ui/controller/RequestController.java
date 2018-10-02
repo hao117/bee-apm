@@ -26,5 +26,10 @@ public class RequestController {
         return requestService.list(params);
     }
 
-
+    @RequestMapping("/chart")
+    @ResponseBody
+    public Object chart(@RequestBody Map<String,Object> params){
+        logger.debug("RequestBody={}",params);
+        return requestService.chart(params);
+    }
 }
