@@ -128,7 +128,7 @@ public class ProcessHandler extends AbstractHandler {
             paramSpan.setId(id);
             paramSpan.setTime(null);
             paramSpan.setPort(null);
-            paramSpan.setGroup(null);
+            paramSpan.setCluster(null);
             paramSpan.setIp(null);
             paramSpan.setServer(null);
             Object[] params = new Object[allArgs.length];

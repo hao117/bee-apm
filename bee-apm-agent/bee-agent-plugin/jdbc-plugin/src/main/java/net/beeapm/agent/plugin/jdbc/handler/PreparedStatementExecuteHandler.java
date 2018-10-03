@@ -53,7 +53,7 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
                 Span paramSpan = new Span(SpanType.SQL_PARAM);
                 paramSpan.setTime(null);
                 paramSpan.setPort(null);
-                paramSpan.setGroup(null);
+                paramSpan.setCluster(null);
                 paramSpan.setIp(null);
                 paramSpan.setServer(null);
                 paramSpan.setId(span.getId());

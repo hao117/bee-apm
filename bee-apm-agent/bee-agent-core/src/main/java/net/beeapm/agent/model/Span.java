@@ -9,7 +9,7 @@ public class Span{
     private String type;
     private Date time;
     private String server;
-    private String group;
+    private String cluster;
     private String pid;
     private String gid;
     private String id;
@@ -25,7 +25,7 @@ public class Span{
         setIp(BeeConfig.me().getIp());
         setPort(BeeConfig.me().getPort());
         setServer(BeeConfig.me().getServer());
-        setGroup(BeeConfig.me().getGroup());
+        setCluster(BeeConfig.me().getGroup());
     }
 
     public Tags getTags() {
@@ -69,12 +69,12 @@ public class Span{
         return this;
     }
 
-    public String getGroup() {
-        return group;
+    public String getCluster() {
+        return cluster;
     }
 
-    public Span setGroup(String group) {
-        this.group = group;
+    public Span setCluster(String cluster) {
+        this.cluster = cluster;
         return this;
     }
 
