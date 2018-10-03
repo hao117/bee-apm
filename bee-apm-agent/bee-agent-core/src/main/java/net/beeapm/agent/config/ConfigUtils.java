@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.BeeUtils;
+import net.beeapm.agent.common.SysPropKey;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,7 @@ public class ConfigUtils {
     }
 
     private void init(){
-        String path = System.getProperty("bee.config");
+        String path = System.getProperty(SysPropKey.BEE_CONFIG);
         if(StringUtils.isBlank(path)){
             path = BeeAgentJarUtils.getAgentJarDirPath() + "/config.yml";
         }
