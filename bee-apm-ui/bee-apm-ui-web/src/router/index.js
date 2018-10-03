@@ -20,6 +20,11 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/topology',
+                    component: resolve => require(['../components/page/Topology.vue'], resolve),
+                    meta: { title: '拓扑图' }
+                },
+                {
                     path: '/icon',
                     component: resolve => require(['../components/page/Icon.vue'], resolve),
                     meta: { title: '自定义图标' }

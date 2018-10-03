@@ -49,6 +49,11 @@
                         title: '请求查询'
                     },
                     {
+                        icon: 'icon beeicon bee-gongzuoliu',
+                        index: 'topology',
+                        title: '拓扑图'
+                    },
+                    {
                         icon: 'el-icon-lx-searchlist',
                         index: 'tabs',
                         title: '方法查询'
