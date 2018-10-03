@@ -3,9 +3,6 @@ package net.beeapm.agent.config;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
 import net.beeapm.agent.log.LogLevel;
-import org.apache.commons.lang3.StringUtils;
-
-import javax.xml.soap.SAAJResult;
 
 /**
  * 以后增加配置动态加载
@@ -16,7 +13,7 @@ public class BeeConfig extends AbstractBeeConfig {
     private int rate;
     private static BeeConfig config;
     private String server;
-    private String group;
+    private String cluster;
     private String ip;
     private String port;
 
@@ -56,7 +53,7 @@ public class BeeConfig extends AbstractBeeConfig {
 
         rate = ConfigUtils.me().getInt("collect.ratio",10000);
         server = System.getProperty(SysPropKey.BEE_SERVER,"unknown");
-        group = System.getProperty(SysPropKey.BEE_GROUP,"unknown");
+        cluster = System.getProperty(SysPropKey.BEE_CLUSTER,"unknown");
         port = System.getProperty(SysPropKey.BEE_PORT,"-9999");
         ip = System.getProperty(SysPropKey.BEE_IP);
         if(ip==null){
@@ -80,8 +77,8 @@ public class BeeConfig extends AbstractBeeConfig {
         return server;
     }
 
-    public String getGroup() {
-        return group;
+    public String getCluster() {
+        return cluster;
     }
 
     public String getIp() {

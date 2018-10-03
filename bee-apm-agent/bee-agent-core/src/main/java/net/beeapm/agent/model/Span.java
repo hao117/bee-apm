@@ -25,7 +25,7 @@ public class Span{
         setIp(BeeConfig.me().getIp());
         setPort(BeeConfig.me().getPort());
         setServer(BeeConfig.me().getServer());
-        setCluster(BeeConfig.me().getGroup());
+        setCluster(BeeConfig.me().getCluster());
     }
 
     public Tags getTags() {
