@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.HeaderKey;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
@@ -22,6 +23,8 @@ public class HttpClient4xHandler extends AbstractHandler {
                         req.setHeader(HeaderKey.GID, BeeTraceContext.getGId());
                         req.setHeader(HeaderKey.PID,BeeTraceContext.getCurrentId());
                         req.setHeader(HeaderKey.CTAG,BeeTraceContext.getCTag());
+                        req.setHeader(HeaderKey.SRC_CLUSTER, BeeConfig.me().getCluster());
+                        req.setHeader(HeaderKey.SRC_SERVER, BeeConfig.me().getServer());
                     }
                 }
             }

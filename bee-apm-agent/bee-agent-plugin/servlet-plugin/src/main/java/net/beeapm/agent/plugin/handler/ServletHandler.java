@@ -26,7 +26,10 @@ public class ServletHandler extends AbstractHandler {
             HttpServletRequest request = (HttpServletRequest)allArguments[0];
             BeeTraceContext.setGId(request.getHeader(HeaderKey.GID));
             BeeTraceContext.setPId(request.getHeader(HeaderKey.PID));
+            BeeTraceContext.setCTag(request.getHeader(HeaderKey.CTAG));
             Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
+            span.addTag("sc",request.getHeader(HeaderKey.SRC_CLUSTER));
+            span.addTag("ss",request.getHeader(HeaderKey.SRC_SERVER));
             return span;
         }
         return null;

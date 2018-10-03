@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.HeaderKey;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
@@ -18,6 +19,8 @@ public class OkHttp3xHandler extends AbstractHandler {
                 okhttp3.Request.Builder builder = (okhttp3.Request.Builder)allArguments[0];
                 builder.header(HeaderKey.GID, BeeTraceContext.getGId());
                 builder.header(HeaderKey.PID,BeeTraceContext.getCurrentId());
+                builder.header(HeaderKey.SRC_CLUSTER, BeeConfig.me().getCluster());
+                builder.header(HeaderKey.SRC_SERVER, BeeConfig.me().getServer());
                 if(BeeTraceContext.getCTag() != null) {
                     builder.header(HeaderKey.CTAG, BeeTraceContext.getCTag());
                 }
