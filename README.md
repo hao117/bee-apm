@@ -20,7 +20,7 @@ Application Performance Monitoring
 - 支持servlet采集（tomcat，weblogic，jetty等）
     - 链路支持
     - request body采集（待开发）
-    - request url parameter采集（待开发）
+    - request parameter
     - request header采集（待开发）
     - response body采集（待开发）
     - session采集（待开发）
