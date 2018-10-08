@@ -1,6 +1,8 @@
 package net.beeapm.agent.plugin.handler;
 
+import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
@@ -10,6 +12,8 @@ import net.beeapm.agent.transmit.TransmitterFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by yuan on 2018/8/5.
@@ -54,9 +58,20 @@ public class ServletHandler extends AbstractHandler {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
                 TransmitterFactory.transmit(span);
+                if(ServletConfig.me().isEnableParam()){
+                    Span paramSpan = new Span(SpanType.REQUEST_PARAM);
+                    paramSpan.setId(span.getId());
+                    paramSpan.setIp(null);
+                    paramSpan.setPort(null);
+                    paramSpan.setServer(null);
+                    paramSpan.setCluster(null);
+                    paramSpan.addTag("param", JSON.toJSONString(request.getParameterMap()));
+                    TransmitterFactory.transmit(paramSpan);
+                }
             }
             return result;
         }
         return null;
     }
+
 }
