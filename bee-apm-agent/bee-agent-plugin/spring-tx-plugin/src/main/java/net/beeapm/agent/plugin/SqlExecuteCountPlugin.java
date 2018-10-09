@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 /**
  * 事务中，sql执行次数
  */
-public class SqlExecuteCountPlugin implements IPlugin {
+public class SqlExecuteCountPlugin extends AbstractPlugin {
     @Override
     public String getName() {
         return "springTxSqlCount";

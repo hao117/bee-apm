@@ -7,7 +7,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
-public class SpringTxEndPlugin implements IPlugin {
+public class SpringTxEndPlugin extends AbstractPlugin {
     @Override
     public String getName() {
         return "springTxEnd";

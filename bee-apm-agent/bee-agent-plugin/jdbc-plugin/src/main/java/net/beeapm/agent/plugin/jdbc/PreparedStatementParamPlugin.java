@@ -1,5 +1,6 @@
 package net.beeapm.agent.plugin.jdbc;
 
+import net.beeapm.agent.plugin.AbstractPlugin;
 import net.beeapm.agent.plugin.IPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.jdbc.interceptor.PreparedStatementParamAdvice;
@@ -10,7 +11,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 import java.sql.PreparedStatement;
 
-public class PreparedStatementParamPlugin implements IPlugin {
+public class PreparedStatementParamPlugin extends AbstractPlugin {
     @Override
     public String getName() {
         return "jdbc-statement-param";

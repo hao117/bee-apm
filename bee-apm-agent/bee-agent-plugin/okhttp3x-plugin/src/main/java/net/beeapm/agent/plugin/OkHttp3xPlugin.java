@@ -9,7 +9,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 /**
  * Created by yuan on 2018/8/14.
  */
-public class OkHttp3xPlugin implements IPlugin {
+public class OkHttp3xPlugin extends AbstractPlugin {
 
     @Override
     public String getName() {

@@ -10,7 +10,7 @@ import org.apache.http.client.HttpClient;
 /**
  * Created by yuan on 2018/8/14.
  */
-public class HttpClient4xPlugin implements IPlugin {
+public class HttpClient4xPlugin extends AbstractPlugin {
 
     @Override
     public String getName() {

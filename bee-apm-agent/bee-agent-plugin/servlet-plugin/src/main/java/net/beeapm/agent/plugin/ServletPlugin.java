@@ -9,7 +9,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 /**
  * Created by yuan on 2018/8/5.
  */
-public class ServletPlugin implements IPlugin {
+public class ServletPlugin extends AbstractPlugin {
 
     @Override
     public String getName() {

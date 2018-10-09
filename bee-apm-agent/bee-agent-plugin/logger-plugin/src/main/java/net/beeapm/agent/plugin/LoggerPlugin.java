@@ -6,7 +6,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
-public class LoggerPlugin implements IPlugin {
+public class LoggerPlugin extends AbstractPlugin {
     @Override
     public String getName() {
         return "logger";

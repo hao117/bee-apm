@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by yuan on 2018/7/31.
  */
-public class ProcessPlugin implements IPlugin {
+public class ProcessPlugin extends AbstractPlugin {
 
     @Override
     public String getName() {
