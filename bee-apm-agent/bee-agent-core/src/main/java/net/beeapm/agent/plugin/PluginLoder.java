@@ -13,10 +13,10 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class PluginLoder {
-    public static List<IPlugin> loadPlugins() {
-        List<IPlugin> pluginList = new ArrayList<IPlugin>(16);
+    public static List<AbstractPlugin> loadPlugins() {
+        List<AbstractPlugin> pluginList = new ArrayList<AbstractPlugin>(16);
         List<PluginDefine> pluginDefList = new ArrayList<PluginDefine>(16);
-        AgentClassLoader classLoader = new AgentClassLoader(PluginLoder.class.getClassLoader(),new String[]{"plugins"});
+        AgentClassLoader classLoader = new AgentClassLoader(PluginLoder.class.getClassLoader(),new String[]{"plugins","ext-lib"});
         List<URL> resources = getResources(classLoader);
         for (URL url : resources) {
             try {
@@ -28,7 +28,7 @@ public class PluginLoder {
 
         for (PluginDefine pluginDefine : pluginDefList) {
             try {
-                IPlugin plugin = (IPlugin)Class.forName(pluginDefine.clazz,true,classLoader).newInstance();
+                AbstractPlugin plugin = (AbstractPlugin)Class.forName(pluginDefine.clazz,true,classLoader).newInstance();
                 pluginList.add(plugin);
             } catch (Throwable t) {
                 t.printStackTrace();
