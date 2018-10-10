@@ -43,9 +43,7 @@ Application Performance Monitoring
   - 使用okhttp发送
 - 输出到kafka（待开发）
 - 输出到ElasticSearcch（待开发）
-~~~
-备注：servlet-plugin插件需复制servlet-api.jar到“/{bee-agent.jar目录}/ext-lib”目录里
-~~~
+
 ## APM Server端
 数据收集和存储。从采集端接受数据或者从消息中间件中拉取数据，并进行存储
 #### 1、数据收集
