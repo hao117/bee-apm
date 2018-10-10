@@ -20,6 +20,7 @@ Application Performance Monitoring
   - 支持httpclient3
   - 支持httpclient4
   - 支持okhttp3
+  - jdk-http（待开发）
 - 支持servlet采集（tomcat，weblogic，jetty等）
     - 链路支持
     - 基本请求信息
