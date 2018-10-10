@@ -4,7 +4,8 @@ import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.IdHepler;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
-import net.beeapm.agent.plugin.IPlugin;
+import net.beeapm.agent.model.FieldDefine;
+import net.beeapm.agent.plugin.AbstractPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.PluginLoder;
 import net.beeapm.agent.transmit.TransmitterFactory;
@@ -29,12 +30,12 @@ public class BeeAgent {
         IdHepler.init();
         TransmitterFactory.init();
 
-        List<IPlugin> plugins = PluginLoder.loadPlugins();
+        List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
 
         AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
 
         for(int i = 0; i < plugins.size(); i++) {
-            final IPlugin plugin = plugins.get(i);
+            final AbstractPlugin plugin = plugins.get(i);
             InterceptPoint[] interceptPoints = plugin.buildInterceptPoint();
             for (int j = 0; j < interceptPoints.length; j++) {
                 final InterceptPoint interceptPoint = interceptPoints[j];
@@ -47,6 +48,12 @@ public class BeeAgent {
                         String className = typeDescription.getCanonicalName();
                         log.error("class name : " + className);
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
+                        FieldDefine[] fields = plugin.buildFieldDefine();
+                        if(fields != null && fields.length > 0){
+                            for(int x = 0; x < fields.length; x++){
+                                builder = builder.defineField(fields[x].name,fields[x].type,fields[x].modifiers);
+                            }
+                        }
                         return builder;
                     }
                 };
