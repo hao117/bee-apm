@@ -6,28 +6,36 @@ Application Performance Monitoring
 采集数据发送到`APM Server`端或者消息中间件或存储器等
 #### 1、采集功能
 所有的采集功能均有单独开关配置
-- 分布式调用链
+- 分布式调用链（方法调用链路、远程调用追踪）
 - 采样控制
 - 方法采集
-    - 调用链路
+    - 方法调用链路
     - 参数采集
     - 执行耗时
-    - 返回值采集 （待确定）
-- http链路
+    - 方法信息
+    - 耗时阀值控制（超过一定时间阀值的不采集）
+    - 采集点配置
+    - 返回值采集 （考虑）
+- http追踪
   - 支持httpclient3
   - 支持httpclient4
   - 支持okhttp3
 - 支持servlet采集（tomcat，weblogic，jetty等）
     - 链路支持
+    - 基本请求信息
+    - 耗时采集
+    - 耗时阀值控制
     - request body采集（待开发）
     - request parameter
     - request header采集（待开发）
     - response body采集（待开发）
     - session采集（待开发）
-- jdbc采集，包含采集sql语句，参数，执行耗时，结果集大小
-- logger采集（支持log4j，log4j2，logback），采集点可配置，支持error以上级别是否采样开关
-- spring事务采集,包含事务持有时间，执行sql次数
+- jdbc采集，包含采集sql语句、参数、执行耗时、耗时阀值控制、结果集大小
+- logger采集（支持log4j，log4j2，logback），采集点可配置，error以上级别是否采样控制
+- spring事务采集,包含事务持有时间、执行sql次数、事务耗时阀值控制
 - 异常信息采集,支持采集点黑白名单配置
+- 半自动API（待开发）
+- jvm、cpu、磁盘、内存、线程等采集（待开发）
 
 #### 2、传输能力
 - 输出到控制台
@@ -35,7 +43,9 @@ Application Performance Monitoring
   - 使用okhttp发送
 - 输出到kafka（待开发）
 - 输出到ElasticSearcch（待开发）
-
+~~~
+备注：servlet-plugin插件需复制servlet-api.jar到“/{bee-agent.jar目录}/ext-lib”目录里
+~~~
 ## APM Server端
 数据收集和存储。从采集端接受数据或者从消息中间件中拉取数据，并进行存储
 #### 1、数据收集
