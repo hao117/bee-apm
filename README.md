@@ -2,6 +2,11 @@
 Application Performance Monitoring
 基于电信系统一天二三十亿条调用链数据采集经验
 
+## 部署
+- [agent配置](/docs/agent-deploy.md)
+- server安装
+- web安装
+
 ## 采集端（agent）
 采集数据发送到`APM Server`端或者消息中间件或存储器等
 #### 1、采集功能
