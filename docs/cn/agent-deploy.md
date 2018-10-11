@@ -17,6 +17,6 @@ mvn package
 -Dbee.cluster= xxx
 ~~~
 其中`xxx`为根据自己的情况设置相应的值
-`bee.server`配置应用名称
-`bee.port`配置应用容器端口号
-`bee.cluster`配置应用集群名称
+- `bee.server`配置应用名称
+- `bee.port`配置应用容器端口号
+- `bee.cluster`配置应用集群名称
