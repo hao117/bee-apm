@@ -3,11 +3,12 @@ Application Performance Monitoring
 基于电信系统一天二三十亿条调用链数据采集经验
 
 ## 部署
-- [agent配置](docs/cn/agent-deploy.md)
-- server安装
-- web安装
+- [agent部署](docs/cn/agent-deploy.md)
+- [server部署](docs/cn/server-deploy.md)
+- [UI部署](docs/cn/ui-deploy.md)
 
-## 采集端（agent）
+## 介绍
+### 采集端（agent）
 采集数据发送到`APM Server`端或者消息中间件或存储器等
 #### 1、采集功能
 所有的采集功能均有单独开关配置
@@ -50,7 +51,7 @@ Application Performance Monitoring
 - 输出到kafka（待开发）
 - 输出到ElasticSearcch（待开发）
 
-## APM Server端
+### APM Server端
 数据收集和存储。从采集端接受数据或者从消息中间件中拉取数据，并进行存储
 #### 1、数据收集
 - http接受，使用servlet接收采集端发送过来的数据
@@ -62,7 +63,7 @@ Application Performance Monitoring
 - oracle（待开发）
 - h2（待开发）
 
-## APM UI端
+### APM UI端
 开发中。。。
 支持调用链展示，采集数据查询，报表等
 
