@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigUtils {
-    private static LogImpl log = LogManager.getLog(ConfigUtils.class.getSimpleName());
     private static JSONObject config;
     private static ConfigUtils instance;
     public static ConfigUtils me(){
@@ -46,7 +45,7 @@ public class ConfigUtils {
             Map map = yaml.load(fis);
             config = JSON.parseObject(JSON.toJSONString(map));
         }catch (Exception e){
-            log.error("",e);
+            e.printStackTrace();
         }finally {
             BeeUtils.close(fis);
         }
