@@ -21,6 +21,9 @@ public class HelloServlet extends HttpServlet{
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
         try {
+            request.getInputStream();
+            request.getInputStream();
+            request.getReader();
             IHelloService helloService = new HelloServiceImpl();
             helloService.sayHello(context);
             PrintWriter writer = response.getWriter();
