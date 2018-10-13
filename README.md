@@ -32,7 +32,7 @@ Application Performance Monitoring
     - 基本请求信息
     - 耗时采集
     - 耗时阀值控制
-    - request body采集（待开发）
+    - request body采集
     - request parameter
     - request header采集（待开发）
     - response body采集（待开发）
