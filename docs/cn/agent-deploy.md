@@ -20,6 +20,6 @@ mvn package
 ~~~
 其中`xxx`为根据自己的情况设置相应的值
 - `bee.cluster`配置应用集群名称
-- `bee.server`配置应用名称
+- `bee.server`配置应用实例名称（集群中每个实例取个不同的名称，好区分）
 - `bee.port`配置应用容器端口号
 - `bee.ip`配置应用主机IP
