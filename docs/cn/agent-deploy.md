@@ -12,11 +12,14 @@ mvn package
 ### 3、vm配置
 ~~~shell
 -javaagent:/home/packages/bee-agent.jar
--Dbee.server= xxx
--Dbee.port= xxx
 -Dbee.cluster= xxx
+-Dbee.server= xxx
+-Dbee.ip= xxx
+-Dbee.port= xxx
+
 ~~~
 其中`xxx`为根据自己的情况设置相应的值
+- `bee.cluster`配置应用集群名称
 - `bee.server`配置应用名称
 - `bee.port`配置应用容器端口号
-- `bee.cluster`配置应用集群名称
+- `Dbee.ip`配置应用主机IP
