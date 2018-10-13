@@ -1,6 +1,6 @@
 # BeeAPM
 Application Performance Monitoring
-基于电信系统一天二三十亿条调用链数据采集经验
+基于电信系统一天几十亿条调用链数据采集经验
 
 ## 部署
 - [agent部署](docs/cn/agent-deploy.md)
