@@ -84,6 +84,8 @@ plugins:
             - net.beeapm.demo|info
     servlet:
         enable: true       #开关，是否采集
+        enableParam: true #参数采集开关，是否采集
+        enableBody: true  #RequestBody采集开关，是否采集
         spend: 1           #耗时阀值，小于等于process.spend
     springTx:
         enable: true       #开关，是否采集

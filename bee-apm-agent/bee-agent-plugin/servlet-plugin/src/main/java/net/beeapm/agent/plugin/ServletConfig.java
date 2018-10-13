@@ -8,6 +8,7 @@ public class ServletConfig extends AbstractBeeConfig {
     private static ServletConfig config;
     private Boolean enable;
     private Boolean enableParam;
+    private Boolean enableBody;
     private long spend;
 
     public static ServletConfig me(){
@@ -29,7 +30,8 @@ public class ServletConfig extends AbstractBeeConfig {
     @Override
     public void initConfig() {
         enable = ConfigUtils.me().getBoolean("plugins.servlet.enable",true);
-        enableParam = ConfigUtils.me().getBoolean("plugins.servlet.enableParam",false);
+        enableParam = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableParam",false);
+        enableBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableBody",false);
 
         //http入口的耗时要小于等于方法的耗时，否则会造成调用链断开
         long processSpend = ConfigUtils.me().getInt("plugins.process.spend",-1);
@@ -48,5 +50,8 @@ public class ServletConfig extends AbstractBeeConfig {
     }
     public Boolean isEnableParam() {
         return enableParam;
+    }
+    public Boolean isEnableBody() {
+        return enableBody;
     }
 }

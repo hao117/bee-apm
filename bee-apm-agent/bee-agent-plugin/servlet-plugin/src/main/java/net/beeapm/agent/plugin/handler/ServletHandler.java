@@ -8,6 +8,7 @@ import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.ServletConfig;
+import net.beeapm.agent.plugin.common.RequestBodyHolder;
 import net.beeapm.agent.transmit.TransmitterFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,6 +68,21 @@ public class ServletHandler extends AbstractHandler {
                     paramSpan.setCluster(null);
                     paramSpan.addTag("param", JSON.toJSONString(request.getParameterMap()));
                     TransmitterFactory.transmit(paramSpan);
+                }
+                if(ServletConfig.me().isEnableBody()){
+                    try {
+                        //触发获取body的代码植入
+                        request.getInputStream();
+                    }catch (Exception e){
+                    }
+                    Span bodySpan = new Span(SpanType.REQUEST_BODY);
+                    bodySpan.setId(span.getId());
+                    bodySpan.setIp(null);
+                    bodySpan.setPort(null);
+                    bodySpan.setServer(null);
+                    bodySpan.setCluster(null);
+                    bodySpan.addTag("body", RequestBodyHolder.getRequestBody());
+                    TransmitterFactory.transmit(bodySpan);
                 }
             }
             return result;

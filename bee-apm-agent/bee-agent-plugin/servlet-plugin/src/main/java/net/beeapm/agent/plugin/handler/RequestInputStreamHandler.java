@@ -4,6 +4,7 @@ import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
+import net.beeapm.agent.plugin.ServletConfig;
 import net.beeapm.agent.plugin.common.RequestBodyHolder;
 
 import javax.servlet.ReadListener;
@@ -22,6 +23,10 @@ public class RequestInputStreamHandler extends AbstractHandler {
 
     @Override
     public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t,Object[] extVal) {
+        if(!ServletConfig.me().isEnableBody()){
+            RequestBodyHolder.remove();
+            return result;
+        }
         InputStream is = (InputStream)result;
         if(is == null){
             return null;
