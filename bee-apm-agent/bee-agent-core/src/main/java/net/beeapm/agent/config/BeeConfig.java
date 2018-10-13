@@ -10,7 +10,7 @@ import net.beeapm.agent.log.LogLevel;
 public class BeeConfig extends AbstractBeeConfig {
     private LogLevel logLevel;
     private Boolean  isLogConsole;
-    private int rate;
+    private int ratio;
     private static BeeConfig config;
     private String server;
     private String cluster;
@@ -51,7 +51,7 @@ public class BeeConfig extends AbstractBeeConfig {
         }
         isLogConsole = ConfigUtils.me().getBoolean("logger.console",false);
 
-        rate = ConfigUtils.me().getInt("collect.ratio",10000);
+        ratio = ConfigUtils.me().getInt("collect.ratio",10000);
         server = System.getProperty(SysPropKey.BEE_SERVER,"unknown");
         cluster = System.getProperty(SysPropKey.BEE_CLUSTER,"unknown");
         port = System.getProperty(SysPropKey.BEE_PORT,"-9999");
@@ -69,8 +69,8 @@ public class BeeConfig extends AbstractBeeConfig {
         return isLogConsole;
     }
 
-    public int getRate() {
-        return rate;
+    public int getRatio() {
+        return ratio;
     }
 
     public String getServer(){
