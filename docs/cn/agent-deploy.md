@@ -22,4 +22,4 @@ mvn package
 - `bee.cluster`配置应用集群名称
 - `bee.server`配置应用名称
 - `bee.port`配置应用容器端口号
-- `Dbee.ip`配置应用主机IP
+- `bee.ip`配置应用主机IP
