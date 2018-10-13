@@ -127,7 +127,7 @@
             }
             return {
                 pickerDate:[],
-                activeTagTitle:'系统首页',
+                activeTagTitle:'仪表盘',
                 name: localStorage.getItem('ms_username'),
                 statData:{
                     req: 0,
