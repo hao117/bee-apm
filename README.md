@@ -23,11 +23,12 @@ Application Performance Monitoring
     - 采集点配置
     - 返回值采集 （考虑）
 - http追踪
-  - 支持httpclient3
-  - 支持httpclient4
-  - 支持okhttp3
-  - jdk-http（待开发）
-- 支持servlet采集（tomcat，weblogic，jetty等）
+    - 支持httpclient3
+    - 支持httpclient4
+    - 支持okhttp3
+    - jdk-http（待开发）
+- 支持servlet采集
+    - 主流容器支持（tomcat，weblogic，jetty等）
     - 链路支持
     - 基本请求信息
     - 耗时采集
@@ -37,9 +38,22 @@ Application Performance Monitoring
     - request header采集（待开发）
     - response body采集（待开发）
     - session采集（待开发）
-- jdbc采集，包含采集sql语句、参数、执行耗时、耗时阀值控制、结果集大小
-- logger采集（支持log4j，log4j2，logback），采集点可配置，error以上级别是否采样控制
-- spring事务采集,包含事务持有时间、执行sql次数、事务耗时阀值控制
+- jdbc采集，
+    - 采集sql语句
+    - 采集sql参数
+    - 采集执行时间
+    - 耗时阀值控制
+    - 采集结果集大小
+- logger采集
+    - 支持log4j
+    - 支持log4j2
+    - 支持logback
+    - 采集点可配置
+    - error以上级别是否采样控制
+- spring事务
+    - 事务持有时间
+    - 执行sql次数
+    - 事务耗时阀值控制
 - 异常信息采集,支持采集点黑白名单配置
 - 半自动API（待开发）
 - jvm、cpu、磁盘、内存、线程等采集（待开发）
@@ -47,7 +61,7 @@ Application Performance Monitoring
 #### 2、传输能力
 - 输出到控制台
 - 输出到远程http服务器
-  - 使用okhttp发送
+    - 使用okhttp发送
 - 输出到kafka（待开发）
 - 输出到ElasticSearcch（待开发）
 
