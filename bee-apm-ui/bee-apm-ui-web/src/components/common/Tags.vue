@@ -11,7 +11,7 @@
         <div class="tags-close-box">
             <el-dropdown @command="handleTags">
                 <el-button size="mini" type="primary">
-                    标签选项<i class="el-icon-arrow-down el-icon--right"></i>
+                    标签管理<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu size="small" slot="dropdown">
                     <el-dropdown-item command="refresh">刷新当前</el-dropdown-item>
