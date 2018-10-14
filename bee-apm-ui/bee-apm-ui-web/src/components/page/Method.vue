@@ -72,7 +72,7 @@
                         </el-table-column>
                         <el-table-column prop="url" label="URL" min-width="250">
                         </el-table-column>
-                        <el-table-column label="操作" width="180" align="center" fixed="right">
+                        <el-table-column label="操作" width="180" align="center"  fixed="right">
                             <template slot-scope="scope">
                                 <el-button type="text">参数</el-button>
                                 <el-button type="text">调用链</el-button>

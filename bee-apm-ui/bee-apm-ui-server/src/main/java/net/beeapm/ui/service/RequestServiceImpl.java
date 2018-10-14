@@ -5,6 +5,8 @@ import net.beeapm.ui.model.TwoKeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.TableVo;
 import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,10 @@ public class RequestServiceImpl implements IRequestService {
         List<Object> rows = new ArrayList<>();
         for(int i = 0; i < 10; i++){
             Map item = new HashMap();
-            item.put("id", (res.getPageNum()-1)*10 + i + 1);
-            item.put("gId", "6666666666666");
+            item.put("id", "1"+StringUtils.leftPad(""+((res.getPageNum()-1)*10 + i + 1),19,'0'));
+            item.put("gId", "2"+StringUtils.leftPad(""+((res.getPageNum()-1)*10 + i + 1),19,'0'));
+            item.put("date",DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+            item.put("spend",101);
             item.put("ip","192.168.1."+(i+1));
             item.put("url","http://www.beeapm.net/"+i);
             item.put("server","beeweb"+(i+1));

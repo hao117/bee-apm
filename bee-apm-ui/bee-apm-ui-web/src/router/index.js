@@ -25,6 +25,16 @@ export default new Router({
                     meta: { title: '拓扑图' }
                 },
                 {
+                    path: '/request',
+                    component: resolve => require(['../components/page/Request.vue'], resolve),
+                    meta: { title: '请求查询' }
+                },
+                {
+                    path: '/method',
+                    component: resolve => require(['../components/page/Method.vue'], resolve),
+                    meta: { title: '方法查询' }
+                },
+                {
                     path: '/icon',
                     component: resolve => require(['../components/page/Icon.vue'], resolve),
                     meta: { title: '自定义图标' }
@@ -38,11 +48,6 @@ export default new Router({
                     path: '/tabs',
                     component: resolve => require(['../components/page/Tabs.vue'], resolve),
                     meta: { title: 'tab选项卡' }
-                },
-                {
-                    path: '/request',
-                    component: resolve => require(['../components/page/Request.vue'], resolve),
-                    meta: { title: '请求查询' }
                 },
                 {
                     // vue-schart组件
