@@ -7,8 +7,9 @@ import net.beeapm.agent.config.ConfigUtils;
 public class ServletConfig extends AbstractBeeConfig {
     private static ServletConfig config;
     private Boolean enable;
-    private Boolean enableParam;
-    private Boolean enableBody;
+    private Boolean enableReqParam;
+    private Boolean enableReqBody;
+    private Boolean enableReqHeaders;
     private long spend;
 
     public static ServletConfig me(){
@@ -30,9 +31,9 @@ public class ServletConfig extends AbstractBeeConfig {
     @Override
     public void initConfig() {
         enable = ConfigUtils.me().getBoolean("plugins.servlet.enable",true);
-        enableParam = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableParam",false);
-        enableBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableBody",false);
-
+        enableReqParam = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqParam",false);
+        enableReqBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqBody",false);
+        enableReqHeaders = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqHeaders",false);
         //http入口的耗时要小于等于方法的耗时，否则会造成调用链断开
         long processSpend = ConfigUtils.me().getInt("plugins.process.spend",-1);
         spend = ConfigUtils.me().getInt("plugins.servlet.spend",-1);
@@ -48,10 +49,13 @@ public class ServletConfig extends AbstractBeeConfig {
     public Boolean isEnable() {
         return enable;
     }
-    public Boolean isEnableParam() {
-        return enableParam;
+    public Boolean isEnableReqParam() {
+        return enableReqParam;
     }
-    public Boolean isEnableBody() {
-        return enableBody;
+    public Boolean isEnableReqBody() {
+        return enableReqBody;
+    }
+    public Boolean isEnableReqHeaders() {
+        return enableReqHeaders;
     }
 }

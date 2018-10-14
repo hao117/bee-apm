@@ -21,8 +21,14 @@ public class HelloServlet extends HttpServlet{
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
         try {
+            System.out.println("----------------------------------->getParameterMap : "+request.getParameterMap());
+            System.out.println("----------------------------------->getParameterMap : "+request.getParameterMap());
+            request.getParameterMap();
+            System.out.println("----------------------------------->getInputStream");
             request.getInputStream();
+            System.out.println("----------------------------------->getInputStream");
             request.getInputStream();
+            System.out.println("----------------------------------->getReader");
             request.getReader();
             IHelloService helloService = new HelloServiceImpl();
             helloService.sayHello(context);

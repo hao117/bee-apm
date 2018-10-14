@@ -2,7 +2,6 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
-import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
@@ -10,9 +9,11 @@ import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.ServletConfig;
 import net.beeapm.agent.plugin.common.RequestBodyHolder;
 import net.beeapm.agent.transmit.TransmitterFactory;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,35 +60,68 @@ public class ServletHandler extends AbstractHandler {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
                 TransmitterFactory.transmit(span);
-                if(ServletConfig.me().isEnableParam()){
-                    Span paramSpan = new Span(SpanType.REQUEST_PARAM);
-                    paramSpan.setId(span.getId());
-                    paramSpan.setIp(null);
-                    paramSpan.setPort(null);
-                    paramSpan.setServer(null);
-                    paramSpan.setCluster(null);
-                    paramSpan.addTag("param", JSON.toJSONString(request.getParameterMap()));
-                    TransmitterFactory.transmit(paramSpan);
-                }
-                if(ServletConfig.me().isEnableBody()){
-                    try {
-                        //触发获取body的代码植入
-                        request.getInputStream();
-                    }catch (Exception e){
-                    }
-                    Span bodySpan = new Span(SpanType.REQUEST_BODY);
-                    bodySpan.setId(span.getId());
-                    bodySpan.setIp(null);
-                    bodySpan.setPort(null);
-                    bodySpan.setServer(null);
-                    bodySpan.setCluster(null);
-                    bodySpan.addTag("body", RequestBodyHolder.getRequestBody());
-                    TransmitterFactory.transmit(bodySpan);
-                }
+                collectRequestParameter(span,request);//采集参数
+                collectRequestBody(span,request);//采集body
+                collectRequestHeader(span,request);//采集header
             }
             return result;
         }
         return null;
     }
 
+    private void collectRequestParameter(Span span,HttpServletRequest request){
+        if(ServletConfig.me().isEnableReqParam()){
+            Map<String, String[]> params = request.getParameterMap();
+            if(params != null && !params.isEmpty()) {
+                Span paramSpan = new Span(SpanType.REQUEST_PARAM);
+                paramSpan.setId(span.getId());
+                paramSpan.setIp(null);
+                paramSpan.setPort(null);
+                paramSpan.setServer(null);
+                paramSpan.setCluster(null);
+                paramSpan.addTag("param", JSON.toJSONString(params));
+                TransmitterFactory.transmit(paramSpan);
+            }
+        }
+    }
+    private void collectRequestBody(Span span,HttpServletRequest request){
+        if(ServletConfig.me().isEnableReqBody()){
+            try {
+                //触发获取body的代码植入
+                request.getInputStream();
+            }catch (Exception e){
+            }
+            if(StringUtils.isNotBlank(RequestBodyHolder.getRequestBody())) {
+                Span bodySpan = new Span(SpanType.REQUEST_BODY);
+                bodySpan.setId(span.getId());
+                bodySpan.setIp(null);
+                bodySpan.setPort(null);
+                bodySpan.setServer(null);
+                bodySpan.setCluster(null);
+                bodySpan.addTag("body", RequestBodyHolder.getRequestBody());
+                TransmitterFactory.transmit(bodySpan);
+            }
+        }
+    }
+    private void collectRequestHeader(Span span,HttpServletRequest request){
+        if(ServletConfig.me().isEnableReqHeaders()){
+            Map<String, String> headers = new HashMap<String, String>();
+            Enumeration headerNames = request.getHeaderNames();
+            while (headerNames.hasMoreElements()) {
+                String key = (String) headerNames.nextElement();
+                String value = request.getHeader(key);
+                headers.put(key, value);
+            }
+            if(!headers.isEmpty()) {
+                Span headersSpan = new Span(SpanType.REQUEST_BODY);
+                headersSpan.setId(span.getId());
+                headersSpan.setIp(null);
+                headersSpan.setPort(null);
+                headersSpan.setServer(null);
+                headersSpan.setCluster(null);
+                headersSpan.addTag("headers", JSON.toJSONString(headers));
+                TransmitterFactory.transmit(headersSpan);
+            }
+        }
+    }
 }

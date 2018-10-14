@@ -23,7 +23,7 @@ public class RequestInputStreamHandler extends AbstractHandler {
 
     @Override
     public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t,Object[] extVal) {
-        if(!ServletConfig.me().isEnableBody()){
+        if(!ServletConfig.me().isEnableReqBody()){
             RequestBodyHolder.remove();
             return result;
         }
