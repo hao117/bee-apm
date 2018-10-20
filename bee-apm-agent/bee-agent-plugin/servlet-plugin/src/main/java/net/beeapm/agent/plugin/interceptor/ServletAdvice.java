@@ -23,15 +23,9 @@ public class ServletAdvice {
                              @Advice.Argument(value = 1,readOnly = false) HttpServletResponse resp,
                              @Advice.Argument(value = 0) HttpServletRequest req){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
-//        try {
-//            if(!resp.getClass().getSimpleName().equals("BeeHttpResponseWrapper")) {
-//                resp = (HttpServletResponse) HandlerLoader.loadClass("net.beeapm.agent.plugin.BeeHttpResponseWrapper").getDeclaredConstructor(HttpServletResponse.class).newInstance(resp);
-//            }
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
         Span span = handler.before(className,methodName,new Object[]{req,resp},null);
         if(span != null && span.getTags().get("_respWrapper") != null){
+            //修改resp
             resp = (HttpServletResponse)span.getTags().get("_respWrapper");
             span.getTags().remove("_respWrapper");
         }
