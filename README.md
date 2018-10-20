@@ -35,8 +35,8 @@ Application Performance Monitoring
     - 耗时阀值控制
     - request body采集
     - request parameter
-    - request header采集（待开发）
-    - response body采集（待开发）
+    - request header采集
+    - response body采集
     - session采集（待开发）
 - jdbc采集，
     - 采集sql语句
