@@ -120,7 +120,7 @@ public class ServletHandler extends AbstractHandler {
                 headers.put(key, value);
             }
             if(!headers.isEmpty()) {
-                Span headersSpan = new Span(SpanType.REQUEST_BODY);
+                Span headersSpan = new Span(SpanType.REQUEST_HEADERS);
                 headersSpan.setId(span.getId());
                 headersSpan.setIp(null);
                 headersSpan.setPort(null);

@@ -14,5 +14,6 @@ public class SpanType {
     public final static String ERROR = "err";
     public final static String REQUEST_PARAM = "rp";
     public final static String REQUEST_BODY = "reqb";
+    public final static String REQUEST_HEADERS ="reqh";
     public final static String RESPONSE_BODY = "resb";
 }
