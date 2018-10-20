@@ -40,6 +40,14 @@ public class HelloServlet extends HttpServlet{
                     .append("</p></body></html>");
             writer.flush();
             writer.close();
+//            System.out.println(response.getOutputStream().toString());
+////
+//            response.getOutputStream();
+//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//            String body = baos.toString();
+//            System.out.println("====================="+body);
+//            body = "<!DOCTYPE html><html><head></head><body><p>Hello World !</p><p>11111111111</p></body></html>";
+//            response.getOutputStream().write(body.getBytes());
         }catch (Exception e){
             e.printStackTrace();
         }
