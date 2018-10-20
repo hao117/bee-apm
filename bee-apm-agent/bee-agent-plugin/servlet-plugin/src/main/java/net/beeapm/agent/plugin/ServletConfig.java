@@ -10,6 +10,7 @@ public class ServletConfig extends AbstractBeeConfig {
     private Boolean enableReqParam;
     private Boolean enableReqBody;
     private Boolean enableReqHeaders;
+    private Boolean enableRespBody;
     private long spend;
 
     public static ServletConfig me(){
@@ -34,6 +35,7 @@ public class ServletConfig extends AbstractBeeConfig {
         enableReqParam = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqParam",false);
         enableReqBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqBody",false);
         enableReqHeaders = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqHeaders",false);
+        enableRespBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableRespBody",false);
         //http入口的耗时要小于等于方法的耗时，否则会造成调用链断开
         long processSpend = ConfigUtils.me().getInt("plugins.process.spend",-1);
         spend = ConfigUtils.me().getInt("plugins.servlet.spend",-1);
@@ -57,5 +59,8 @@ public class ServletConfig extends AbstractBeeConfig {
     }
     public Boolean isEnableReqHeaders() {
         return enableReqHeaders;
+    }
+    public Boolean isEnableRespBody() {
+        return enableRespBody;
     }
 }

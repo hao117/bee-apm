@@ -6,6 +6,7 @@ import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.plugin.common.BeeHttpResponseWrapper;
 import net.beeapm.agent.plugin.ServletConfig;
 import net.beeapm.agent.plugin.common.RequestBodyHolder;
 import net.beeapm.agent.transmit.TransmitterFactory;
@@ -36,6 +37,11 @@ public class ServletHandler extends AbstractHandler {
             Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
             span.addTag("sc",request.getHeader(HeaderKey.SRC_CLUSTER));
             span.addTag("ss",request.getHeader(HeaderKey.SRC_SERVER));
+            HttpServletResponse resp = (HttpServletResponse) allArguments[1];
+            if(ServletConfig.me().isEnableRespBody() && !resp.getClass().getSimpleName().equals("BeeHttpResponseWrapper")){
+                BeeHttpResponseWrapper wrapper = new BeeHttpResponseWrapper(resp);
+                span.addTag("_respWrapper",wrapper);
+            }
             return span;
         }
         return null;
@@ -53,8 +59,8 @@ public class ServletHandler extends AbstractHandler {
             HttpServletResponse response = (HttpServletResponse) allArguments[1];
             span.addTag("url", request.getRequestURL());
             span.addTag("remote", request.getRemoteAddr());
-            span.addTag("method", methodName);
-            span.addTag("clazz", className);
+            span.addTag("method", request.getMethod());
+            //span.addTag("clazz", className);
             calculateSpend(span);
             if(span.getSpend() > ServletConfig.me().getSpend() && CollectRatio.YES()) {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
@@ -63,6 +69,7 @@ public class ServletHandler extends AbstractHandler {
                 collectRequestParameter(span,request);//采集参数
                 collectRequestBody(span,request);//采集body
                 collectRequestHeader(span,request);//采集header
+                collectResponseBody(span,response);
             }
             return result;
         }
@@ -122,6 +129,20 @@ public class ServletHandler extends AbstractHandler {
                 headersSpan.addTag("headers", JSON.toJSONString(headers));
                 TransmitterFactory.transmit(headersSpan);
             }
+        }
+    }
+    private void collectResponseBody(Span span,HttpServletResponse resp){
+        if(ServletConfig.me().isEnableRespBody()){
+            BeeHttpResponseWrapper beeResp = (BeeHttpResponseWrapper)resp;
+            beeResp.out();//触发原有的输出
+            Span respSpan = new Span(SpanType.RESPONSE_BODY);
+            respSpan.setId(span.getId());
+            respSpan.setIp(null);
+            respSpan.setPort(null);
+            respSpan.setServer(null);
+            respSpan.setCluster(null);
+            respSpan.addTag("body", new String(beeResp.getBytes()));
+            TransmitterFactory.transmit(respSpan);
         }
     }
 }

@@ -1,8 +1,12 @@
 package net.beeapm.agent.plugin.interceptor;
 
+import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.handler.HandlerLoader;
 import net.beeapm.agent.plugin.handler.IHandler;
 import net.bytebuddy.asm.Advice;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by yuan on 2018/8/5.
@@ -16,9 +20,21 @@ public class ServletAdvice {
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
-                             @Advice.AllArguments Object[] args){
+                             @Advice.Argument(value = 1,readOnly = false) HttpServletResponse resp,
+                             @Advice.Argument(value = 0) HttpServletRequest req){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
-        handler.before(className,methodName,args,null);
+//        try {
+//            if(!resp.getClass().getSimpleName().equals("BeeHttpResponseWrapper")) {
+//                resp = (HttpServletResponse) HandlerLoader.loadClass("net.beeapm.agent.plugin.BeeHttpResponseWrapper").getDeclaredConstructor(HttpServletResponse.class).newInstance(resp);
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+        Span span = handler.before(className,methodName,new Object[]{req,resp},null);
+        if(span != null && span.getTags().get("_respWrapper") != null){
+            resp = (HttpServletResponse)span.getTags().get("_respWrapper");
+            span.getTags().remove("_respWrapper");
+        }
     }
 
     /**
