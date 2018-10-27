@@ -12,14 +12,19 @@ mvn package
 ### 3、vm配置
 ~~~shell
 -javaagent:/home/packages/bee-agent.jar
--Dbee.cluster= xxx
--Dbee.server= xxx
+-Dbee.config=/home/packages
+-Dbee.env= xxx
+-Dbee.app= xxx
+-Dbee.inst= xxx
 -Dbee.ip= xxx
 -Dbee.port= xxx
 
 ~~~
 其中`xxx`为根据自己的情况设置相应的值
-- `bee.cluster`配置应用集群名称
-- `bee.server`配置应用实例名称（集群中每个实例取个不同的名称，好区分）
-- `bee.port`配置应用容器端口号
-- `bee.ip`配置应用主机IP
+- `javaagent` 指定`bee-agent.jar`包位置
+- `bee.config` 指定`config.yml`所在`目录`，不配置的话默认和`bee-agent.jar`同级目录，如果配置了指定位置，`以指定位置的为准`
+- `bee.env` 配置环境名称（比如生产prod，测试test，开发dev）
+- `bee.app` 配置应用名称或者工程名称出人命（比如应用名称crm）
+- `bee.inst` 配置应用实例名称（应用部署了多个实例，比如有三个实例，可以命名为crm01、crm02，crm03）
+- `bee.port` 配置应用端口号
+- `bee.ip` 配置应用主机IP
