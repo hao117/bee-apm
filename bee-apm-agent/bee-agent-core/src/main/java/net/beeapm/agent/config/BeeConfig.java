@@ -12,8 +12,9 @@ public class BeeConfig extends AbstractBeeConfig {
     private Boolean  isLogConsole;
     private int ratio;
     private static BeeConfig config;
-    private String server;
-    private String cluster;
+    private String inst;
+    private String app;
+    private String env;
     private String ip;
     private String port;
 
@@ -52,8 +53,9 @@ public class BeeConfig extends AbstractBeeConfig {
         isLogConsole = ConfigUtils.me().getBoolean("logger.console",false);
 
         ratio = ConfigUtils.me().getInt("collect.ratio",10000);
-        server = System.getProperty(SysPropKey.BEE_SERVER,"unknown");
-        cluster = System.getProperty(SysPropKey.BEE_CLUSTER,"unknown");
+        inst = System.getProperty(SysPropKey.BEE_INST,"unknown");
+        app = System.getProperty(SysPropKey.BEE_APP,"unknown");
+        env = System.getProperty(SysPropKey.BEE_ENV,"unknown");
         port = System.getProperty(SysPropKey.BEE_PORT,"-9999");
         ip = System.getProperty(SysPropKey.BEE_IP);
         if(ip==null){
@@ -73,12 +75,12 @@ public class BeeConfig extends AbstractBeeConfig {
         return ratio;
     }
 
-    public String getServer(){
-        return server;
+    public String getInst(){
+        return inst;
     }
 
-    public String getCluster() {
-        return cluster;
+    public String getApp() {
+        return app;
     }
 
     public String getIp() {
@@ -87,5 +89,9 @@ public class BeeConfig extends AbstractBeeConfig {
 
     public String getPort() {
         return port;
+    }
+
+    public String getEnv(){
+        return env;
     }
 }

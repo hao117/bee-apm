@@ -20,6 +20,7 @@ public class SpringTxEndHandler extends AbstractHandler {
         if(span != null) {
             calculateSpend(span);
             if(span.getSpend() > SpringTxConfig.me().getSpend()) {
+                span.fillEnvInfo();
                 TransmitterFactory.transmit(span);
             }
         }

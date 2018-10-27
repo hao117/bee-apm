@@ -8,8 +8,9 @@ public class Span{
     private Tags tags = new Tags();
     private String type;
     private Date time;
-    private String server;
-    private String cluster;
+    private String inst;
+    private String app;
+    private String env;
     private String pid;
     private String gid;
     private String id;
@@ -17,15 +18,17 @@ public class Span{
     private String port;
     private String ip;
 
-
-
     public Span(String spanType){
         setType(spanType);
         setTime(new Date());
+    }
+
+    public void fillEnvInfo(){
         setIp(BeeConfig.me().getIp());
         setPort(BeeConfig.me().getPort());
-        setServer(BeeConfig.me().getServer());
-        setCluster(BeeConfig.me().getCluster());
+        setInst(BeeConfig.me().getInst());
+        setApp(BeeConfig.me().getApp());
+        setEnv(BeeConfig.me().getEnv());
     }
 
     public Tags getTags() {
@@ -60,21 +63,21 @@ public class Span{
         return this;
     }
 
-    public String getServer() {
-        return server;
+    public String getInst() {
+        return inst;
     }
 
-    public Span setServer(String server) {
-        this.server = server;
+    public Span setInst(String inst) {
+        this.inst = inst;
         return this;
     }
 
-    public String getCluster() {
-        return cluster;
+    public String getApp() {
+        return app;
     }
 
-    public Span setCluster(String cluster) {
-        this.cluster = cluster;
+    public Span setApp(String app) {
+        this.app = app;
         return this;
     }
 
@@ -127,5 +130,13 @@ public class Span{
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public String getEnv() {
+        return env;
+    }
+
+    public void setEnv(String env) {
+        this.env = env;
     }
 }

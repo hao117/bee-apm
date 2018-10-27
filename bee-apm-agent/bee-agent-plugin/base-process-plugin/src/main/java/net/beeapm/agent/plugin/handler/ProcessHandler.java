@@ -57,6 +57,7 @@ public class ProcessHandler extends AbstractHandler {
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
         if(span.getSpend() > ProcessConfig.me().getSpend() && CollectRatio.YES()) {
+            span.fillEnvInfo();
             TransmitterFactory.transmit(span);
             collectParams(allArgs, span.getId());
         }
@@ -104,6 +105,7 @@ public class ProcessHandler extends AbstractHandler {
     public void sendError(String id,String errorPoint,Throwable t){
         if(ProcessConfig.me().checkErrorPoint(errorPoint)){
             Span err = new Span(SpanType.ERROR);
+            err.fillEnvInfo();
             err.setId(id);
             err.setGid(BeeTraceContext.getGId());
             err.addTag("desc",formatThrowable(t));
@@ -126,11 +128,6 @@ public class ProcessHandler extends AbstractHandler {
         if(ProcessConfig.me().isEnableParam() && allArgs != null && allArgs.length > 0) {
             Span paramSpan = new Span(SpanType.PARAM);
             paramSpan.setId(id);
-            paramSpan.setTime(null);
-            paramSpan.setPort(null);
-            paramSpan.setCluster(null);
-            paramSpan.setIp(null);
-            paramSpan.setServer(null);
             Object[] params = new Object[allArgs.length];
             for(int i = 0; i < allArgs.length; i++){
                 if(allArgs[i] != null && ProcessConfig.me().isExcludeParamType(allArgs[i].getClass())){

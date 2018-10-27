@@ -51,16 +51,12 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
             span.removeTag("params");
             if(params != null){
                 Span paramSpan = new Span(SpanType.SQL_PARAM);
-                paramSpan.setTime(null);
-                paramSpan.setPort(null);
-                paramSpan.setCluster(null);
-                paramSpan.setIp(null);
-                paramSpan.setServer(null);
                 paramSpan.setId(span.getId());
                 paramSpan.addTag("args", JSON.toJSONString(params.values()));
                 TransmitterFactory.transmit(paramSpan);
             }
             span.addTag("count",calcResultCount(result));
+            span.fillEnvInfo();
             TransmitterFactory.transmit(span);
         }
         return result;

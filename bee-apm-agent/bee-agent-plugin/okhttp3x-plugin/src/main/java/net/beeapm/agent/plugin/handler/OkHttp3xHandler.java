@@ -19,8 +19,8 @@ public class OkHttp3xHandler extends AbstractHandler {
                 okhttp3.Request.Builder builder = (okhttp3.Request.Builder)allArguments[0];
                 builder.header(HeaderKey.GID, BeeTraceContext.getGId());
                 builder.header(HeaderKey.PID,BeeTraceContext.getCurrentId());
-                builder.header(HeaderKey.SRC_CLUSTER, BeeConfig.me().getCluster());
-                builder.header(HeaderKey.SRC_SERVER, BeeConfig.me().getServer());
+                builder.header(HeaderKey.SRC_CLUSTER, BeeConfig.me().getApp());
+                builder.header(HeaderKey.SRC_SERVER, BeeConfig.me().getInst());
                 if(BeeTraceContext.getCTag() != null) {
                     builder.header(HeaderKey.CTAG, BeeTraceContext.getCTag());
                 }

@@ -23,8 +23,8 @@ public class HttpClient4xHandler extends AbstractHandler {
                         req.setHeader(HeaderKey.GID, BeeTraceContext.getGId());
                         req.setHeader(HeaderKey.PID,BeeTraceContext.getCurrentId());
                         req.setHeader(HeaderKey.CTAG,BeeTraceContext.getCTag());
-                        req.setHeader(HeaderKey.SRC_CLUSTER, BeeConfig.me().getCluster());
-                        req.setHeader(HeaderKey.SRC_SERVER, BeeConfig.me().getServer());
+                        req.setHeader(HeaderKey.SRC_CLUSTER, BeeConfig.me().getApp());
+                        req.setHeader(HeaderKey.SRC_SERVER, BeeConfig.me().getInst());
                     }
                 }
             }

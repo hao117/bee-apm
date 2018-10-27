@@ -65,6 +65,7 @@ public class ServletHandler extends AbstractHandler {
             if(span.getSpend() > ServletConfig.me().getSpend() && CollectRatio.YES()) {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
+                span.fillEnvInfo();
                 TransmitterFactory.transmit(span);
                 collectRequestParameter(span,request);//采集参数
                 collectRequestBody(span,request);//采集body
@@ -82,10 +83,6 @@ public class ServletHandler extends AbstractHandler {
             if(params != null && !params.isEmpty()) {
                 Span paramSpan = new Span(SpanType.REQUEST_PARAM);
                 paramSpan.setId(span.getId());
-                paramSpan.setIp(null);
-                paramSpan.setPort(null);
-                paramSpan.setServer(null);
-                paramSpan.setCluster(null);
                 paramSpan.addTag("param", JSON.toJSONString(params));
                 TransmitterFactory.transmit(paramSpan);
             }
@@ -101,10 +98,6 @@ public class ServletHandler extends AbstractHandler {
             if(StringUtils.isNotBlank(RequestBodyHolder.getRequestBody())) {
                 Span bodySpan = new Span(SpanType.REQUEST_BODY);
                 bodySpan.setId(span.getId());
-                bodySpan.setIp(null);
-                bodySpan.setPort(null);
-                bodySpan.setServer(null);
-                bodySpan.setCluster(null);
                 bodySpan.addTag("body", RequestBodyHolder.getRequestBody());
                 TransmitterFactory.transmit(bodySpan);
             }
@@ -122,10 +115,6 @@ public class ServletHandler extends AbstractHandler {
             if(!headers.isEmpty()) {
                 Span headersSpan = new Span(SpanType.REQUEST_HEADERS);
                 headersSpan.setId(span.getId());
-                headersSpan.setIp(null);
-                headersSpan.setPort(null);
-                headersSpan.setServer(null);
-                headersSpan.setCluster(null);
                 headersSpan.addTag("headers", JSON.toJSONString(headers));
                 TransmitterFactory.transmit(headersSpan);
             }
@@ -137,10 +126,6 @@ public class ServletHandler extends AbstractHandler {
             beeResp.out();//触发原有的输出
             Span respSpan = new Span(SpanType.RESPONSE_BODY);
             respSpan.setId(span.getId());
-            respSpan.setIp(null);
-            respSpan.setPort(null);
-            respSpan.setServer(null);
-            respSpan.setCluster(null);
             respSpan.addTag("body", new String(beeResp.getBytes()));
             TransmitterFactory.transmit(respSpan);
         }

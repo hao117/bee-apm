@@ -54,6 +54,7 @@ public class LoggerHandler extends AbstractHandler {
         span.addTag("point",point);
         span.addTag("log",logBuff.toString());
         span.addTag("level",methodName);
+        span.fillEnvInfo();
         TransmitterFactory.transmit(span);
         return null;
     }
