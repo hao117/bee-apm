@@ -28,3 +28,6 @@ mvn package
 - `bee.inst` 配置应用实例名称（应用部署了多个实例，比如有三个实例，可以命名为crm01、crm02，crm03）
 - `bee.port` 配置应用端口号
 - `bee.ip` 配置应用主机IP
+
+
+**备注：** 在启动应用之前，记得先启动zookeeper，bee-agent依赖zookeeper来生成id值。
