@@ -23,7 +23,8 @@ public class ConnectionPlugin extends AbstractPlugin {
                     public ElementMatcher<TypeDescription> buildTypesMatcher() {
                         return ElementMatchers.isSubTypeOf (java.sql.Connection.class)
                                 .and(ElementMatchers.not(ElementMatchers.isInterface()))
-                                .and(ElementMatchers.not(ElementMatchers.<TypeDescription>isAbstract()));
+                                .and(ElementMatchers.not(ElementMatchers.<TypeDescription>isAbstract()))
+                                .and(ElementMatchers.not(ElementMatchers.<TypeDescription>nameStartsWith("com.sun")));
                     }
 
                     @Override
