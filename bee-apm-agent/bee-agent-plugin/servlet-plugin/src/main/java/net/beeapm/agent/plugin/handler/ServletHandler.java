@@ -28,19 +28,23 @@ public class ServletHandler extends AbstractHandler {
         if(!ServletConfig.me().isEnable()){
             return null;
         }
+        HttpServletRequest request = (HttpServletRequest)allArguments[0];
+        HttpServletResponse resp = (HttpServletResponse) allArguments[1];
+        String url = request.getRequestURL().toString();
+        if(ServletConfig.me().checkUrlSuffixExclude(url)){
+            return null;
+        }
         Span currSpan = SpanManager.getCurrentSpan();
         if(currSpan == null || !currSpan.getType().equals(SpanType.REQUEST)){
-            HttpServletRequest request = (HttpServletRequest)allArguments[0];
             BeeTraceContext.setGId(request.getHeader(HeaderKey.GID));
             BeeTraceContext.setPId(request.getHeader(HeaderKey.PID));
             BeeTraceContext.setCTag(request.getHeader(HeaderKey.CTAG));
             Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
-            span.addTag("sc",request.getHeader(HeaderKey.SRC_CLUSTER));
-            span.addTag("ss",request.getHeader(HeaderKey.SRC_SERVER));
-            HttpServletResponse resp = (HttpServletResponse) allArguments[1];
+            span.addTag("srcApp",request.getHeader(HeaderKey.SRC_APP));
+            span.addTag("srcInst",request.getHeader(HeaderKey.SRC_INST));
             if(ServletConfig.me().isEnableRespBody() && !resp.getClass().getSimpleName().equals("BeeHttpResponseWrapper")){
                 BeeHttpResponseWrapper wrapper = new BeeHttpResponseWrapper(resp);
-                span.addTag("_respWrapper",wrapper);
+                span.addTag("_respWrapper",wrapper);//在ServletAdvice里取出来要清除掉
             }
             return span;
         }

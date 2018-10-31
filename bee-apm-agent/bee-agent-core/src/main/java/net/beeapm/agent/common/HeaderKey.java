@@ -8,6 +8,6 @@ public class HeaderKey {
     public final static String GID = "bee-gid";
     public final static String CTAG = "bee-ctag";
     public final static String ID  = "bee-id";
-    public final static String SRC_CLUSTER = "bee-src-cluster";
-    public final static String SRC_SERVER = "bee-src-server";
+    public final static String SRC_APP = "bee-src-app";
+    public final static String SRC_INST = "bee-src-inst";
 }

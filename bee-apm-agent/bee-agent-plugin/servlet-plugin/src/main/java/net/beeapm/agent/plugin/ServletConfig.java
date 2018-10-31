@@ -4,6 +4,10 @@ import net.beeapm.agent.config.AbstractBeeConfig;
 import net.beeapm.agent.config.BeeConfigFactory;
 import net.beeapm.agent.config.ConfigUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ServletConfig extends AbstractBeeConfig {
     private static ServletConfig config;
     private Boolean enable;
@@ -12,6 +16,7 @@ public class ServletConfig extends AbstractBeeConfig {
     private Boolean enableReqHeaders;
     private Boolean enableRespBody;
     private long spend;
+    private List<String> urlSuffixExcludeList;
 
     public static ServletConfig me(){
         if(config == null){
@@ -36,6 +41,7 @@ public class ServletConfig extends AbstractBeeConfig {
         enableReqBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqBody",false);
         enableReqHeaders = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqHeaders",false);
         enableRespBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableRespBody",false);
+        urlSuffixExcludeList = Arrays.asList(ConfigUtils.me().getStr("plugins.servlet.urlSuffixExclude","").split(","));
         //http入口的耗时要小于等于方法的耗时，否则会造成调用链断开
         long processSpend = ConfigUtils.me().getInt("plugins.process.spend",-1);
         spend = ConfigUtils.me().getInt("plugins.servlet.spend",-1);
@@ -62,5 +68,17 @@ public class ServletConfig extends AbstractBeeConfig {
     }
     public Boolean isEnableRespBody() {
         return enableRespBody;
+    }
+    public Boolean checkUrlSuffixExclude(String url){
+        if(urlSuffixExcludeList == null || urlSuffixExcludeList.isEmpty()){
+            return false;
+        }
+        int size = urlSuffixExcludeList.size();
+        for(int i = 0; i < size; i++){
+            if(url.endsWith(urlSuffixExcludeList.get(i))){
+                return true;
+            }
+        }
+        return false;
     }
 }
