@@ -12,10 +12,10 @@ import java.lang.reflect.Method;
 public abstract class AbstractHandler implements IHandler {
 
     public void logBeginTrace(String className,String methodName, Span span, LogImpl log){
-        log.trace("[begin]{}.{} tc={}", className, methodName, span.getType());
+        log.trace("[begin]{}.{} type={}", className, methodName, span.getType());
     }
     public void logEndTrace(String className,String methodName, Span span,LogImpl log){
-        log.trace("[end]{}.{} tc={}", className, methodName, span.getType());
+        log.trace("[end]{}.{} type={}", className, methodName, span.getType());
     }
 
     public void calculateSpend(Span span){
