@@ -130,8 +130,11 @@ public class ServletHandler extends AbstractHandler {
             beeResp.out();//触发原有的输出
             Span respSpan = new Span(SpanType.RESPONSE_BODY);
             respSpan.setId(span.getId());
-            respSpan.addTag("body", new String(beeResp.getBytes()));
-            TransmitterFactory.transmit(respSpan);
+            String body = new String(beeResp.getBytes());
+            if(StringUtils.isNotBlank(body)){
+                respSpan.addTag("body", body);
+                TransmitterFactory.transmit(respSpan);
+            }
         }
     }
 }
