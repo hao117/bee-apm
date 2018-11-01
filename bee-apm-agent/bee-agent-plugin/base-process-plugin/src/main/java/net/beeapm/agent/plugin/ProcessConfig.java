@@ -3,21 +3,21 @@ package net.beeapm.agent.plugin;
 import net.beeapm.agent.config.AbstractBeeConfig;
 import net.beeapm.agent.config.BeeConfigFactory;
 import net.beeapm.agent.config.ConfigUtils;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class ProcessConfig extends AbstractBeeConfig {
     private static ProcessConfig config;
     private Boolean enableParam;
     private Boolean enable;
-    private Set<String> excludeParamTypes = new HashSet<String>();
     private Set<String> excludeParamTypePrefix = new HashSet<String>();
     private long spend;
     private Boolean enableError;
     private Set<String> includeErrorPointPrefix = new HashSet<String>();
     private Set<String> excludeErrorPointPrefix = new HashSet<String>();
+    private List<Pattern> excludePointMatchesList = new ArrayList<Pattern>();
+    private List<Pattern> includePointMatchesList = new ArrayList<Pattern>();
 
     public static ProcessConfig me(){
         if(config == null){
@@ -37,18 +37,13 @@ public class ProcessConfig extends AbstractBeeConfig {
 
     @Override
     public void initConfig() {
-        excludeParamTypes.clear();
         excludeParamTypePrefix.clear();
         includeErrorPointPrefix.clear();
         excludeErrorPointPrefix.clear();
 
-        enableParam = ConfigUtils.me().getBoolean("plugins.process.enableParam",true);
+        enableParam = ConfigUtils.me().getBoolean("plugins.process.param.enable",true);
         enable = ConfigUtils.me().getBoolean("plugins.process.enable",true);
-        List<String> excludeParamTypesList = ConfigUtils.me().getList("plugins.process.excludeParamTypes");
-        List<String> excludeParamTypePrefixList = ConfigUtils.me().getList("plugins.process.excludeParamTypePrefix");
-        if(excludeParamTypesList != null && !excludeParamTypesList.isEmpty()){
-            excludeParamTypes.addAll(excludeParamTypesList);
-        }
+        List<String> excludeParamTypePrefixList = ConfigUtils.me().getList("plugins.process.param.excludeTypePrefix");
         if(excludeParamTypePrefixList != null && !excludeParamTypePrefixList.isEmpty()){
             excludeParamTypePrefix.addAll(excludeParamTypePrefixList);
         }
@@ -62,8 +57,23 @@ public class ProcessConfig extends AbstractBeeConfig {
         if(excludeErrorPointPrefix != null && !excludeErrorPointPrefix.isEmpty()){
             excludeErrorPointPrefix.addAll(excludeErrorPointPrefix);
         }
-
         spend = ConfigUtils.me().getInt("plugins.process.spend",-1);
+
+        List<String> excludeParamPointList = ConfigUtils.me().getList("plugins.process.param.excludePointMatches");
+        if(excludeParamPointList != null && excludeParamPointList.size() > 0){
+            int size = excludeParamPointList.size();
+            for(int i = 0; i < size; i++){
+                excludePointMatchesList.add(Pattern.compile(excludeParamPointList.get(i)));
+            }
+        }
+        List<String> includeParamPointList = ConfigUtils.me().getList("plugins.process.param.includePointMatches");
+        if(includeParamPointList != null && includeParamPointList.size() > 0){
+            int size = includeParamPointList.size();
+            for(int i = 0; i < size; i++){
+                includePointMatchesList.add(Pattern.compile(includeParamPointList.get(i)));
+            }
+        }
+
     }
     public boolean isEnableParam(){
         return enableParam;
@@ -79,9 +89,6 @@ public class ProcessConfig extends AbstractBeeConfig {
 
     public boolean isExcludeParamType(Class clazz){
         String name = clazz.getName();
-        if(excludeParamTypes.contains(name)){
-            return true;
-        }
         Iterator<String> it = excludeParamTypePrefix.iterator();
         while (it.hasNext()){
             String prefix = it.next();
@@ -119,7 +126,29 @@ public class ProcessConfig extends AbstractBeeConfig {
         return false;
     }
 
-
-
-
+    /**
+     * 判断采集点是否采集参数，true进行采集，false不采集
+     * @param point
+     * @return
+     */
+    public boolean checkParamPoint(String point){
+        int excludeSize = excludePointMatchesList.size();
+        for(int i = 0; i < excludeSize; i++){
+            if(excludePointMatchesList.get(i).matcher(point).matches()){
+                return false;
+            }
+        }
+        int includeSize = includePointMatchesList.size();
+        if(includeSize == 0){//没有配置采集范围，默认全部采集
+            return true;
+        }
+        //有配置采集范围，只采集配置的范围
+        for(int i = 0; i < includeSize; i++){
+            if(includePointMatchesList.get(i).matcher(point).matches()){
+                return true;
+            }
+        }
+        //不在采集范围的不采集
+        return false;
+    }
 }

@@ -45,6 +45,7 @@ public class ProcessHandler extends AbstractHandler {
         String childId = (String)span.getTags().get(KEY_BEE_CHILD_ID);
         String childErrorPoint = (String)span.getTags().get(KEY_ERROR_POINT);
         String errorPoint = className + "." + methodName;
+        //清除暂存的异常信息
         span.removeTag(KEY_ERROR_THROWABLE);
         span.removeTag(KEY_BEE_CHILD_ID);
         span.removeTag(KEY_ERROR_POINT);
@@ -52,14 +53,13 @@ public class ProcessHandler extends AbstractHandler {
         if(!ProcessConfig.me().isEnable()){
             return null;
         }
-
         calculateSpend(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
         if(span.getSpend() > ProcessConfig.me().getSpend() && CollectRatio.YES()) {
             span.fillEnvInfo();
             TransmitterFactory.transmit(span);
-            collectParams(allArgs, span.getId());
+            collectParams(allArgs, span.getId(),className+"."+methodName);
         }
         //异常处理
         handleError(span.getId(),errorPoint,t,childId,childErrorPoint,childThrowable);
@@ -70,7 +70,7 @@ public class ProcessHandler extends AbstractHandler {
         if(t == null && childThrowable == null){
             return;
         }
-        Span parentSpan = SpanManager.getCurrentSpan();
+        Span parentSpan = SpanManager.getCurrentSpan(); //当前栈顶的为parent，当然span已经被SpanManager.getExitSpan弹出
         if(parentSpan == null){      //栈顶
             if(t == null && childThrowable != null){
                 sendError(childId,childErrorPoint,childThrowable);
@@ -86,6 +86,7 @@ public class ProcessHandler extends AbstractHandler {
             }
         }else{
             if (childThrowable == null && t != null) {
+                //暂存异常信息
                 parentSpan.addTag(KEY_ERROR_THROWABLE, t);
                 parentSpan.addTag(KEY_BEE_CHILD_ID, id);
                 parentSpan.addTag(KEY_ERROR_POINT,errorPoint);
@@ -103,7 +104,7 @@ public class ProcessHandler extends AbstractHandler {
     }
 
     public void sendError(String id,String errorPoint,Throwable t){
-        if(ProcessConfig.me().checkErrorPoint(errorPoint)){
+        if(ProcessConfig.me().isEnableError() && ProcessConfig.me().checkErrorPoint(errorPoint)){
             Span err = new Span(SpanType.ERROR);
             err.fillEnvInfo();
             err.setId(id);
@@ -124,8 +125,8 @@ public class ProcessHandler extends AbstractHandler {
         return expMessage;
     }
 
-    private void collectParams(Object[] allArgs,String id){
-        if(ProcessConfig.me().isEnableParam() && allArgs != null && allArgs.length > 0) {
+    private void collectParams(Object[] allArgs,String id,String point){
+        if(ProcessConfig.me().isEnableParam() && allArgs != null && allArgs.length > 0 && ProcessConfig.me().checkParamPoint(point)) {
             Span paramSpan = new Span(SpanType.PARAM);
             paramSpan.setId(id);
             Object[] params = new Object[allArgs.length];

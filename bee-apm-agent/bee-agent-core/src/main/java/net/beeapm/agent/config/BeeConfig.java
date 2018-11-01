@@ -56,7 +56,7 @@ public class BeeConfig extends AbstractBeeConfig {
         inst = System.getProperty(SysPropKey.BEE_INST,"unknown");
         app = System.getProperty(SysPropKey.BEE_APP,"unknown");
         env = System.getProperty(SysPropKey.BEE_ENV,"unknown");
-        port = System.getProperty(SysPropKey.BEE_PORT,"-9999");
+        port = System.getProperty(SysPropKey.BEE_PORT,"0");
         ip = System.getProperty(SysPropKey.BEE_IP);
         if(ip==null){
             ip = BeeUtils.getLocalIp();

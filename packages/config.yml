@@ -29,27 +29,30 @@ plugins:
     process:
         enable: true  #采集开关
         spend: -1 #耗时阀值
-        enableParam: true  #参数采集开关
-        excludeParamTypes: #排除的参数类型，参数不被系列化
-            - javax.servlet.http.HttpServletRequest
-        excludeParamTypePrefix: #排除的参数类型，参数不被系列化
-            - org.apache.velocity.
-            - javax.
-            - org.w3c
-            - org.springframework
-            - org.apache
-            - org.jdom
-            - com.fasterxml
-            - org.mybatis
-            - com.fasterxml
-            - net.sf.json
-            - org.codehaus
-            - java.lang.reflect
-            - java.lang.Object
-            - java.io
-            - java.nio
-            - sun.nio
-            - org.aspectj
+        param:
+            enable: true  #参数采集开关
+            excludeTypePrefix: #排除的参数类型，参数不被系列化
+                - org.apache.velocity.
+                - javax.
+                - org.w3c
+                - org.springframework
+                - org.apache
+                - org.jdom
+                - com.fasterxml
+                - org.mybatis
+                - com.fasterxml
+                - net.sf.json
+                - org.codehaus
+                - java.lang.reflect
+                - java.lang.Object
+                - java.io
+                - java.nio
+                - sun.nio
+                - org.aspectj
+            excludePointMatches: #正则表达式，排除的采集点的参数不被采集，可以配置到方法级别，优先级别高于includePointPrefix
+                - com.asiainfo.rule.*
+            includePointMatches:  #正则表达式，包含的采集点的参数才被采集，可以配置到方法级别，不配置的话默认都采集，前提在interceptPoints的前提下
+                - com.asiainfo.*
         error:
             enable: true
             #白名单配置，不在白名单的不采集，该前缀是在interceptPoint的前提下，多个前缀用英文逗号分开，支持到方法级别(fullClassName.methodName)
@@ -89,7 +92,7 @@ plugins:
         enableReqHeaders: true  #Request headers采集开关，是否采集
         enableRespBody: true # response采集开关，是否采集
         spend: 1           #耗时阀值，小于等于process.spend
-        urlSuffixExclude: .html,.jsp,hello2 #url后缀排除
+        urlSuffixExclude: .html,.jsp,hello2 #url后缀排除，多个用逗号分开
     springTx:
         enable: true       #开关，是否采集
         spend: 0           #耗时阀值
