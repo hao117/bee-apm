@@ -1,5 +1,8 @@
 package net.beeapm.agent.plugin.common;
 
+import net.beeapm.agent.log.LogImpl;
+import net.beeapm.agent.log.LogManager;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +15,7 @@ public class BeeHttpResponseWrapper extends HttpServletResponseWrapper {
     private boolean isOutputStream = false;
     private boolean isWrite = false;
     private PrintWriter pwrite;
+    private LogImpl log = LogManager.getLog(BeeHttpResponseWrapper.class);
 
     public BeeHttpResponseWrapper(HttpServletResponse response) {
         super(response);
@@ -32,7 +36,7 @@ public class BeeHttpResponseWrapper extends HttpServletResponseWrapper {
             pwrite = new PrintWriter(new OutputStreamWriter(bytes, "utf-8"));// 将数据写到 byte 中
         } catch (UnsupportedEncodingException e) {
             isWrite = false;
-            e.printStackTrace();
+            log.error("",e);
         }
         return pwrite;
     }
@@ -46,18 +50,17 @@ public class BeeHttpResponseWrapper extends HttpServletResponseWrapper {
                 os.flush();
                 os.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("",e);
             }
         }
         if (isWrite) {
             try {
                 PrintWriter writer = response.getWriter();
-                System.out.println(new String(getBytes()));
                 writer.append(new String(getBytes()));
                 writer.flush();
                 writer.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("",e);
             }
         }
     }
@@ -72,7 +75,7 @@ public class BeeHttpResponseWrapper extends HttpServletResponseWrapper {
             try {
                 bytes.flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("",e);
             }
         }
         return bytes.toByteArray();
