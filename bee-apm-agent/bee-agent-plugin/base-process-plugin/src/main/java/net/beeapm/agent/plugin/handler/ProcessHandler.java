@@ -118,7 +118,7 @@ public class ProcessHandler extends AbstractHandler {
             return;
         }
         if(ProcessConfig.me().isEnableMethodSign()){
-            span.addTag("methodSign",sign.substring(1,sign.length()-1));
+            span.addTag("msign",sign.substring(1,sign.length()-1));
         }
     }
 
