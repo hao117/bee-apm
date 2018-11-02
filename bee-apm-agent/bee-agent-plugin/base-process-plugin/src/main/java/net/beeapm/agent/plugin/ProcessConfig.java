@@ -11,6 +11,7 @@ public class ProcessConfig extends AbstractBeeConfig {
     private static ProcessConfig config;
     private Boolean enableParam;
     private Boolean enable;
+    private Boolean enableMethodSign;
     private Set<String> excludeParamTypePrefix = new HashSet<String>();
     private long spend;
     private Boolean enableError;
@@ -43,6 +44,7 @@ public class ProcessConfig extends AbstractBeeConfig {
 
         enableParam = ConfigUtils.me().getBoolean("plugins.process.param.enable",true);
         enable = ConfigUtils.me().getBoolean("plugins.process.enable",true);
+        enableMethodSign = ConfigUtils.me().getBoolean("plugins.process.enableMethodSign",false);
         List<String> excludeParamTypePrefixList = ConfigUtils.me().getList("plugins.process.param.excludeTypePrefix");
         if(excludeParamTypePrefixList != null && !excludeParamTypePrefixList.isEmpty()){
             excludeParamTypePrefix.addAll(excludeParamTypePrefixList);
@@ -85,6 +87,10 @@ public class ProcessConfig extends AbstractBeeConfig {
 
     public boolean isEnableError(){
         return enableError;
+    }
+
+    public boolean isEnableMethodSign(){
+        return enableMethodSign;
     }
 
     public boolean isExcludeParamType(Class clazz){

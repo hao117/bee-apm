@@ -29,6 +29,7 @@ plugins:
     process:
         enable: true  #采集开关
         spend: -1 #耗时阀值
+        enableMethodSign: true #是否采集方法签名,默认false
         param:
             enable: true  #参数采集开关
             excludeTypePrefix: #排除的参数类型，参数不被系列化

@@ -28,9 +28,10 @@ public class ProcessAdvice {
     public static void exit(@Advice.Local("handler") IHandler handler,
                             @Advice.Origin("#t") String className,
                             @Advice.Origin("#m") String methodName,
+                            @Advice.Origin("#s") String methodSignature,
                             @Advice.AllArguments Object[] allParams,
                             @Advice.Thrown Throwable t){
-        handler.after(className,methodName,allParams, null,t,null);
+        handler.after(className,methodName,allParams, null,t,new Object[]{methodSignature});
     }
 
 }

@@ -30,7 +30,6 @@ public class ProcessHandler extends AbstractHandler {
         }
         Span span = SpanManager.createEntrySpan(SpanType.PROCESS);
         logBeginTrace(className,methodName,span,log);
-        span.addTag("method",methodName).addTag("clazz",className);
         return span;
     }
 
@@ -40,7 +39,6 @@ public class ProcessHandler extends AbstractHandler {
         if(span == null){
             return result;
         }
-
         Throwable childThrowable = (Throwable)span.getTags().get(KEY_ERROR_THROWABLE);
         String childId = (String)span.getTags().get(KEY_BEE_CHILD_ID);
         String childErrorPoint = (String)span.getTags().get(KEY_ERROR_POINT);
@@ -57,6 +55,8 @@ public class ProcessHandler extends AbstractHandler {
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
         if(span.getSpend() > ProcessConfig.me().getSpend() && CollectRatio.YES()) {
+            span.addTag("method",methodName).addTag("clazz",className);
+            handleMethodSignature(span,(String) extVal[0]);
             span.fillEnvInfo();
             TransmitterFactory.transmit(span);
             collectParams(allArgs, span.getId(),className+"."+methodName);
@@ -110,6 +110,15 @@ public class ProcessHandler extends AbstractHandler {
             err.setId(id);
             err.setGid(BeeTraceContext.getGId());
             err.addTag("desc",formatThrowable(t));
+        }
+    }
+
+    private void handleMethodSignature(Span span,String sign){
+        if(sign == null || sign.length() < 3){
+            return;
+        }
+        if(ProcessConfig.me().isEnableMethodSign()){
+            span.addTag("methodSign",sign.substring(1,sign.length()-1));
         }
     }
 
