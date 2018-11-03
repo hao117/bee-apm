@@ -66,7 +66,8 @@ gitee ：https://gitee.com/beetle082/bee-apm
 - 输出到控制台
 - 输出到远程http服务器
     - 使用okhttp发送
-- 输出到kafka（待开发）
+- 输出到kafka，支持kafka 1.x
+- 输出到pulsar（待开发）
 - 输出到ElasticSearcch（待开发）
 
 ### APM Server端
@@ -74,6 +75,7 @@ gitee ：https://gitee.com/beetle082/bee-apm
 #### 1、数据收集
 - http接受，使用servlet接收采集端发送过来的数据
 - 从kafka拉取数据（待开发）
+- 从pulsar拉取数据（待开发）
 
 #### 2、数据存储
 - ElasticSearch
