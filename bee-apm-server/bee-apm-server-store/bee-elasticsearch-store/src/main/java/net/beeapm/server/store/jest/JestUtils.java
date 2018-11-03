@@ -21,8 +21,8 @@ public class JestUtils {
     private static Logger logger = LoggerFactory.getLogger(StoreFactory.class);
     static JestClient jestClient ;
     static JestUtils inst;
-    private String indexKeyPrefix = "bee.store.elasticsearch.indices.";
-    private String DEFAULT_INDEX_NAME = ConfigHolder.getProperty(indexKeyPrefix+"def");
+    private static String indexKeyPrefix = "bee.store.elasticsearch.indices.";
+    private static String DEFAULT_INDEX_NAME;
 
     public static JestUtils inst(){
         if(jestClient == null){
@@ -37,6 +37,7 @@ public class JestUtils {
     }
 
     private static void initJestClient(){
+        DEFAULT_INDEX_NAME = ConfigHolder.getProperty(indexKeyPrefix+"def");
         String prefix = "bee.store.elasticsearch.";
         String[] urls = ConfigHolder.getProperty(prefix+"url").split(",");
         HttpClientConfig.Builder builder = new  HttpClientConfig.Builder(Arrays.asList(urls));
