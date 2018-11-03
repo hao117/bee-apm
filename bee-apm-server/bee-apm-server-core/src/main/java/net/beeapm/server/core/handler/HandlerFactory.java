@@ -29,7 +29,7 @@ public class HandlerFactory {
     public void init(){
         try {
             handlerList = new ArrayList<>();
-            String[] handlerNames = ConfigHolder.getEnv().getProperty("bee.handlers.flow", "").split(">");
+            String[] handlerNames = ConfigHolder.getProperty("bee.handlers.flow", "").split(">");
             ServiceProviderLoader loader = new ServiceProviderLoader("bee-handler.def");
             IStreamHandler prevHandler = null;
             for (String name : handlerNames) {
