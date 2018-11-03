@@ -32,6 +32,10 @@ public class TransmitterFactory {
             transmitterName = ConfigUtils.me().getStr("transmitter.name");
             transmitterMap = TransmitterLoader.loadTransmitters();
             transmitter = transmitterMap.get(transmitterName);
+            if(transmitter == null){
+                System.out.println("===========================>transmitter：" + transmitterName + "不存在");
+                throw new RuntimeException("transmitter：" + transmitterName + "不存在");
+            }
             transmitter.init();
             initQueue();
             initTask();
