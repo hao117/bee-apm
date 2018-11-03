@@ -19,6 +19,7 @@
     <modules>
         <module>console-transmitter</module>
         <module>elasticsearch-transmitter</module>
+        <module>kafka-1.x-transmitter</module>
         <module>okhttp-transmitter</module>
     </modules>
     <dependencies>
@@ -59,6 +60,22 @@
                                 <relocation>
                                     <pattern>org.apache.commons.lang3</pattern>
                                     <shadedPattern>${shade.package}.org.apache.commons.lang3</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>okhttp3</pattern>
+                                    <shadedPattern>${shade.package}.okhttp3</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>okio</pattern>
+                                    <shadedPattern>${shade.package}.okio</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.kafka</pattern>
+                                    <shadedPattern>${shade.package}.org.apache.kafka</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.slf4j</pattern>
+                                    <shadedPattern>${shade.package}.org.slf4j</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
