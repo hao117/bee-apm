@@ -1,5 +1,6 @@
 package net.beeapm.server.stream;
 
+import com.sun.deploy.config.Config;
 import net.beeapm.server.core.common.ConfigHolder;
 import net.beeapm.server.core.common.Stream;
 import net.beeapm.server.core.stream.AbstractStreamProvider;
@@ -28,7 +29,10 @@ public class BeeKafka1xStreamProvider extends AbstractStreamProvider {
         initKafkaConfig();
         String[] topics = ConfigHolder.getProperty("bee.provider.kafka1x.topics").split(",");
         for (String topic : topics) {
-            final KafkaConsumer consumer = createKafkaConsumer(topic, kafkaConfig);
+            Properties config = new Properties();
+            config.putAll(kafkaConfig);
+            setClientId(config);
+            final KafkaConsumer consumer = createKafkaConsumer(topic, config);
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -67,6 +71,20 @@ public class BeeKafka1xStreamProvider extends AbstractStreamProvider {
             props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,DEF_DESERIALIZER);
         }
         kafkaConfig = props;
+    }
+
+    private void setClientId(Properties properties){
+        String clientId = "bee-";
+        String ip = System.getProperty("bee.ip");
+        String port = System.getProperty("bee.port");
+        if(ip !=null && !ip.isEmpty() && port != null && !port.isEmpty()){
+            clientId = clientId + ip + "_" + port;
+            clientId = clientId.replace(":","."); //ipv6转换
+        }
+        logger.debug("clientId = {}",clientId);
+        if(clientId != null) {
+            properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
+        }
     }
 
     private KafkaConsumer createKafkaConsumer(String topic,Properties props){
