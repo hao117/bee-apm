@@ -5,18 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>bee-apm-server</artifactId>
+        <artifactId>bee-apm-server-stream</artifactId>
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-apm-server-stream</artifactId>
-    <packaging>pom</packaging>
-    <name>bee-apm-server-stream</name>
+    <artifactId>bee-kafka-1x-stream</artifactId>
+    <packaging>jar</packaging>
+    <name>bee-kafka-1x-stream</name>
     <url>http://www.beeapm.net</url>
 
     <modules>
-        <module>bee-servlet-stream</module>
-        <module>bee-kafka-1x-stream</module>
     </modules>
 
     <properties>
@@ -25,9 +23,18 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-apm-server-core</artifactId>
+            <version>${bee-server-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>1.1.0</version>
+        </dependency>
     </dependencies>
     <build>
-        <finalName>bee-apm-server-stream</finalName>
+        <finalName>bee-kafka-1x-stream-${bee-server-version}</finalName>
     </build>
 </project>

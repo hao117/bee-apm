@@ -29,7 +29,7 @@ public class StoreFactory {
 
     public void init(){
         try {
-            String storeName = ConfigHolder.getEnv().getProperty("bee.store.name");
+            String storeName = ConfigHolder.getProperty("bee.store.name");
             ServiceProviderLoader loader = new ServiceProviderLoader("bee-store.def");
             store = loader.load(storeName);
             if(store != null){

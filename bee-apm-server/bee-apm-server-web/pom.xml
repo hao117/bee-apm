@@ -27,6 +27,11 @@
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
+            <artifactId>bee-kafka-1x-stream</artifactId>
+            <version>${bee-server-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.beeapm</groupId>
             <artifactId>bee-elasticsearch-store</artifactId>
             <version>${bee-server-version}</version>
         </dependency>

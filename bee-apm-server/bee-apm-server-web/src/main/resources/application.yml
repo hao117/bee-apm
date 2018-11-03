@@ -5,9 +5,18 @@ logging:
     classpath: log4j2.xml
 
 bee:
-  provider: servlet
+  provider:
+    name: kafka1x  #servlet,kafka1x
+    kafka1x:
+      idleSleep: 5000 #队列为空时候，线程休眠时间，默认100ms
+      pollTimeout: 2000 #kafka拉取超时时间，默认1000ms
+      topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-logger
+      kafkaConfig:
+        #kafka配置值项，项名称和值请参考kafka文档
+        bootstrap.servers: 127.0.0.1:9092
+        max.poll.records: 5 #默认500
   store:
-    name: elasticsearch
+    name: console
     elasticsearch:
       url: http://192.168.1.24:9200
 #      username: xx

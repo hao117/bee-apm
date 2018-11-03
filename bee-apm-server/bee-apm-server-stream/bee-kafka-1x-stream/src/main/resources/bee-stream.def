@@ -1,0 +1,1 @@
+kafka1x=net.beeapm.server.stream.BeeKafka1xStreamProvider
