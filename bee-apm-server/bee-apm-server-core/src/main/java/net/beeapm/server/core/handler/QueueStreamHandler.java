@@ -4,8 +4,6 @@ import net.beeapm.server.core.common.ConfigHolder;
 import net.beeapm.server.core.common.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -30,12 +28,11 @@ public class QueueStreamHandler extends AbstractStreamHandler {
     private final static String THREAD_NAME_PREFIX = "hlog-stream-thread-";
 
     private void initConfig(){
-        Environment env = ConfigHolder.getEnv();
-        threadNum = Integer.parseInt(env.getProperty("bee.handlers.queue.threadNum",Runtime.getRuntime().availableProcessors()+""));
-        queueSize = Integer.parseInt(env.getProperty("bee.handlers.queue.queueSize","2000"));
-        sleep = Integer.parseInt(env.getProperty("bee.handlers.queue.sleep","100"));
-        batchSize = Integer.parseInt(env.getProperty("bee.handlers.queue.batchSize","100"));
-        maxLoopTimes = Integer.parseInt(env.getProperty("bee.handlers.queue.maxLoopTimes","3"));
+        threadNum = Integer.parseInt(ConfigHolder.getProperty("bee.handlers.queue.threadNum",Runtime.getRuntime().availableProcessors()+""));
+        queueSize = Integer.parseInt(ConfigHolder.getProperty("bee.handlers.queue.queueSize","2000"));
+        sleep = Integer.parseInt(ConfigHolder.getProperty("bee.handlers.queue.sleep","100"));
+        batchSize = Integer.parseInt(ConfigHolder.getProperty("bee.handlers.queue.batchSize","100"));
+        maxLoopTimes = Integer.parseInt(ConfigHolder.getProperty("bee.handlers.queue.maxLoopTimes","3"));
     }
 
     @Override
