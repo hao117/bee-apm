@@ -10,7 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class BeeInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        ConfigHolder.setEnv(configurableApplicationContext.getEnvironment());
+        ConfigHolder.buildConfig(configurableApplicationContext.getEnvironment());
         try {
             initHandler();
             startStreamProvider();
@@ -25,8 +25,10 @@ public class BeeInitializer implements ApplicationContextInitializer<Configurabl
 
     private void startStreamProvider() throws Exception{
         ServiceProviderLoader streamLoader = new ServiceProviderLoader("bee-stream.def");
-        String provider = ConfigHolder.getEnv().getProperty("bee.provider");
+        String provider = ConfigHolder.getProperty("bee.provider.name");
         IStreamProvider servletProvider = streamLoader.load(provider);
         servletProvider.start();
     }
+
+
 }
