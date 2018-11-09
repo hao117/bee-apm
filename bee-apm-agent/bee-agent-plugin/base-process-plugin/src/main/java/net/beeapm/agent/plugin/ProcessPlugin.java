@@ -29,7 +29,9 @@ public class ProcessPlugin extends AbstractPlugin {
                         @Override
                         public ElementMatcher<TypeDescription> buildTypesMatcher() {
                             return MatchKit.buildTypesMatcher(null,null)
-                                    .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))));
+                                    .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))))
+                                    .and(ElementMatchers.not(ElementMatchers.<TypeDescription>nameContains("$$EnhancerBySpringCGLIB$$")))
+                                    .and(ElementMatchers.not(ElementMatchers.<TypeDescription>nameContains("$$EnhancerByCGLIB$$")));
                         }
 
                         @Override
