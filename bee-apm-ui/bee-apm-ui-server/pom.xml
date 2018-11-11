@@ -57,8 +57,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.8</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>io.searchbox</groupId>
+			<artifactId>jest</artifactId>
+			<version>5.3.3</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -79,7 +82,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass> net.beeapm.ui.WebServerApplication</mainClass>
+					<mainClass>net.beeapm.ui.WebServerApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>
@@ -117,8 +120,23 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>*.*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>*.*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 

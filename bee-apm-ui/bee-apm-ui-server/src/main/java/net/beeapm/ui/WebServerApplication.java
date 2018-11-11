@@ -10,13 +10,13 @@ public class WebServerApplication extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		//application.initializers(new BeeInitializer());
+		application.initializers(new BeeInitializer());
 		return application.sources(WebServerApplication.class);
 	}
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication springApplication = new SpringApplication(WebServerApplication.class);
-		//springApplication.addInitializers(new BeeInitializer());
+		springApplication.addInitializers(new BeeInitializer());
 		springApplication.run(args);
 	}
 

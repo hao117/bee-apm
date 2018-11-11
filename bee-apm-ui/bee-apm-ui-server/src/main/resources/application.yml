@@ -3,3 +3,10 @@ server:
 logging:
     config:
       classpath: log4j2.xml
+# 配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
+elasticsearch:
+    url: http://192.168.1.24:9200
+    username: es
+    password: 123
+    connTimeoutMs: 30000
+    readTimeoutMs: 30000
