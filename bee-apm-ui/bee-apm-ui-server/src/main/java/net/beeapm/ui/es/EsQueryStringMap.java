@@ -1,17 +1,20 @@
 package net.beeapm.ui.es;
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class EsQueryStringMap {
     private static final Logger LOGGER = LoggerFactory.getLogger(EsQueryStringMap.class);
-    private static Map<String,String> queryMap = new HashMap<>();
+    private static Map<String, List> queryMap = new HashMap<>();
     static EsQueryStringMap map;
     public static EsQueryStringMap me(){
         if(map == null){
@@ -31,7 +34,7 @@ public class EsQueryStringMap {
     private void init(){
         try {
             InputStream in = this.getClass().getResourceAsStream("/es_query_string.map");
-            StringBuilder sb = new StringBuilder();
+            List<String> list = new ArrayList<>();
             String id = null;
             String line;
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -39,30 +42,58 @@ public class EsQueryStringMap {
                 if(line.startsWith("//")){
                     continue;
                 }
-                if(line.startsWith("#####")){
-                    if(id != null && sb.length() > 0){
-                        LOGGER.debug("key={},queryString:\n{}",id,sb.toString());
-                        queryMap.put(id,sb.toString());
-                    }
-                    id = line.split("_")[1];
-                    sb.setLength(0);
-                    continue;
-                }
+                line = line.trim();
                 if(line.length() == 0){
                     continue;
                 }
-                sb.append(line).append("\n");
+                if(line.startsWith("#####")){
+                    if(id != null && list.size() > 0){
+                        if(LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("key={},queryString:\n{}", id, JSON.toJSON(list));
+                        }
+                        queryMap.put(id,list);
+                    }
+                    id = line.split("_")[1];
+                    list = new ArrayList<>();
+                    continue;
+                }
+                list.add(line);
             }
-            if(id != null && sb.length() > 0){
-                LOGGER.debug("key={},queryString:\n{}",id,sb.toString());
-                queryMap.put(id,sb.toString());
+            if(id != null && list.size() > 0){
+                if(LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("key={},queryString:\n{}", id, JSON.toJSON(list));
+                }
+                queryMap.put(id,list);
             }
         }catch (Exception e){
             LOGGER.error("",e);
         }
     }
 
-    public String getQueryString(String id){
-        return queryMap.get(id);
+    public String getQueryString(String id, Map<String,String> param){
+        List<String> list = queryMap.get(id);
+        if(list == null || list.isEmpty()){
+            return null;
+        }
+        if(param != null && !param.isEmpty()) {
+            for (Entry<String, String> entry : param.entrySet()) {
+                int i = 0;
+                for (String item : list) {
+                    String key = "{{" + entry + "}}";
+                    if (item.contains(key)) {
+                        item = item.replace(key, entry.getValue());
+                        if (item.startsWith("@if")) {
+                            item = item.substring(4);
+                        }
+                        list.set(i, item);
+                    }
+                    i++;
+                }
+            }
+        }
+        String queryString = String.join(" ",list.toArray(new String[list.size()]));
+        LOGGER.debug("queryString = {}",queryString);
+        return queryString;
     }
+
 }
