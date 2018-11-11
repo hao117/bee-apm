@@ -42,7 +42,7 @@ gitee ：https://gitee.com/beetle082/bee-apm
     - request header采集
     - response body采集
     - session采集（待开发）
-- jdbc采集，
+- jdbc采集（jdbc规范）
     - 采集sql语句
     - 采集sql参数
     - 采集执行时间
