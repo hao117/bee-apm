@@ -31,6 +31,12 @@ public class ApolloBootPlugin extends AbstractBootPlugin{
             if(clusterName == null){
                 clusterName = "default";
             }
+
+            if(url == null || url.isEmpty()){
+                System.out.println("=============>apollo插件启动失败，没有配置apollo地址，不拉取配置。如果不需要从apollo拉取配置，请忽略改提示！");
+                return;
+            }
+
             String ip = System.getProperty(SysPropKey.BEE_IP);
             url = url + "/configs/" + appId + "/" + clusterName + "/" + namespaceName;
             System.out.println(url);
