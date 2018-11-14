@@ -43,7 +43,7 @@ sampling:
     rate: 10000 #采样率，万分几，默认全采集,比如100就是100/10000的采样
 id:
     zk:
-        url: 118.31.150.102:6001
+        url: 118.31.50.102:6001
         timeout: 5000
         retryTimes: 3
         retrySleep: 5000
@@ -83,18 +83,19 @@ plugins:
             includeErrorPointPrefix:
             #黑名单配置，优先级别最高，该前缀是在interceptPoint的前提下，多个前缀用英文逗号分开，支持到方法级别(fullClassName.methodName)
             excludeErrorPointPrefix:
+        #采集范围配置，请根据自己的情况，调整下采集范围
         interceptPoints:
             -
-                typeMatch:
-                    include: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
+                typeMatch:  #类匹配规则
+                    include: #包含规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
                         nameStartsWith: net.beeapm.demo
-                    exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
+                    exclude: #排除规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
                         nameContains: CGLIB
                         nameStartsWith:
-                methodMatch: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
-                    include:
+                methodMatch: #方法匹配规则
+                    include: #包含规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                         named:
-                    exclude: #named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
+                    exclude: #排除规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                         named:
 
     jdbc:
@@ -115,7 +116,7 @@ plugins:
         enableReqParam: true #参数采集开关，是否采集
         enableReqBody: true  #RequestBody采集开关，是否采集
         enableReqHeaders: true  #Request headers采集开关，是否采集
-        enableRespBody: true # response采集开关，是否采集
+        enableRespBody: false # response采集开关，是否采集
         spend: 1           #耗时阀值，小于等于process.spend
         urlSuffixExclude: .html,.jsp,hello2 #url后缀排除，多个用逗号分开
     springTx:
