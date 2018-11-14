@@ -23,7 +23,7 @@ public class LoggerHandler extends AbstractHandler {
         String point = (String) extVal[0];
         boolean isCollect = true;
         if(LoggerConfig.me().level(methodName) >= LoggerConfig.LEVEL_ERROR){
-            if(LoggerConfig.me().errorRatio()){// 是否error采样
+            if(LoggerConfig.me().errorRate()){// 是否error采样
                 isCollect = SamplingUtil.YES();
             }else {                            //error不采样，全采集
                 isCollect = true;

@@ -16,7 +16,7 @@ public class LoggerConfig extends AbstractBeeConfig {
     public static int LEVEL_ERROR = LEVEL_WARN + 1;
     public static int LEVEL_FATAL = LEVEL_ERROR + 1;
     private Boolean enable;
-    private Boolean errorRatio;
+    private Boolean errorRate;
     private String defLevel;
     private List<LoggerPoint> points;
     private Map<String,Integer> levelMap;
@@ -51,7 +51,7 @@ public class LoggerConfig extends AbstractBeeConfig {
         defLevel = ConfigUtils.me().getStr("plugins.logger.defLevel","debug");
         initLoggerPoints();
         enable = ConfigUtils.me().getBoolean("plugins.logger.enable",true);
-        errorRatio = ConfigUtils.me().getBoolean("plugins.logger.errorRatio",false);
+        errorRate = ConfigUtils.me().getBoolean("plugins.logger.errorRate",false);
     }
 
     public int level(String level){
@@ -111,8 +111,8 @@ public class LoggerConfig extends AbstractBeeConfig {
         return enable;
     }
 
-    public Boolean errorRatio(){
-        return errorRatio;
+    public Boolean errorRate(){
+        return errorRate;
     }
 
     private class LoggerPoint{

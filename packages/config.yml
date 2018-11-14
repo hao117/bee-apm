@@ -104,7 +104,7 @@ plugins:
         enableParam: true  #参数采集开关
     logger:
         enable: true    #开关，是否采集,默认true
-        errorRatio: false #开关，error及以上级别是否使用采样率,默认false
+        errorRate: false #开关，error及以上级别是否使用采样率,默认false
         defLevel: debug #默认级别，默认值为debug
         points:
         #日志采集点配置，规则为包名和日志级别，如a.b.c|debug，日志级别可不配置，为默认defLevel级别
