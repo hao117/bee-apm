@@ -10,7 +10,7 @@ transmitter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: console  #使用哪种transmitter支持console,okhttp,kafka1x
+    name: kafka1x  #使用哪种transmitter支持console,okhttp,kafka1x
     okhttp:        #name对应的transmitter的配置参数
         connectTimeout: 30
         writeTimeout: 10
@@ -21,7 +21,7 @@ transmitter:
     kafka1x:
         kafkaConfig:
             #kafka配置值项，项名称和值请参考kafka文档
-            bootstrap.servers: 127.0.0.1:9092
+            bootstrap.servers: 118.31.150.102:6000
             linger.ms: 200
         topic: #配置span type和kafka topic映射关系
             default: bee-default #配置默认topic，没有配置映射关系的，数据写到该topic
@@ -31,12 +31,19 @@ transmitter:
             sqlp: bee-sql-param
             req: bee-request
             rq: bee-request-param
+            tx: bee-tx
             log: bee-logger
-collect:
-    ratio: 10000 #采样率，万分几，默认全采集
+            err: bee-error
+            reqb: bee-request-body
+            reqh: bee-request-headers
+            respb: bee-response-body
+            hb: bee-heartbeat
+
+sampling:
+    rate: 10000 #采样率，万分几，默认全采集,比如100就是100/10000的采样
 id:
     zk:
-        url: 127.0.0.1:2181
+        url: 118.31.150.102:6001
         timeout: 5000
         retryTimes: 3
         retrySleep: 5000
