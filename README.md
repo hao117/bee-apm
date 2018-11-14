@@ -86,7 +86,7 @@ gitee ：https://gitee.com/beetle082/bee-apm
 - h2（待开发）
 
 ### APM UI端
-开发中。。。。
+开发中。。。
 支持调用链展示，采集数据查询，报表等
 
 ## 联系
