@@ -2,7 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.BeeTraceContext;
-import net.beeapm.agent.common.CollectRatio;
+import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -24,7 +24,7 @@ public class LoggerHandler extends AbstractHandler {
         boolean isCollect = true;
         if(LoggerConfig.me().level(methodName) >= LoggerConfig.LEVEL_ERROR){
             if(LoggerConfig.me().errorRatio()){// 是否error采样
-                isCollect = CollectRatio.YES();
+                isCollect = SamplingUtil.YES();
             }else {                            //error不采样，全采集
                 isCollect = true;
             }

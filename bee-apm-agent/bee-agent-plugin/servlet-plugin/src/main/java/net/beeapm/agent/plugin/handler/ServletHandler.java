@@ -54,7 +54,7 @@ public class ServletHandler extends AbstractHandler {
     @Override
     public Object after(String className,String methodName, Object[] allArguments,Object result, Throwable t,Object[] extVal) {
         Span currSpan = SpanManager.getCurrentSpan();
-        if(!ServletConfig.me().isEnable() || CollectRatio.NO()){
+        if(!ServletConfig.me().isEnable() || SamplingUtil.NO()){
             return null;
         }
         if(currSpan!=null && currSpan.getType().equals(SpanType.REQUEST)) {
@@ -66,7 +66,7 @@ public class ServletHandler extends AbstractHandler {
             span.addTag("method", request.getMethod());
             //span.addTag("clazz", className);
             calculateSpend(span);
-            if(span.getSpend() > ServletConfig.me().getSpend() && CollectRatio.YES()) {
+            if(span.getSpend() > ServletConfig.me().getSpend() && SamplingUtil.YES()) {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
                 span.fillEnvInfo();

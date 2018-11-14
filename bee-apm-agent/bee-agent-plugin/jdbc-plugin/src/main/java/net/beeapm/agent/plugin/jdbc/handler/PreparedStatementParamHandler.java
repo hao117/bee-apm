@@ -1,6 +1,6 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
-import net.beeapm.agent.common.CollectRatio;
+import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
@@ -20,7 +20,7 @@ public class PreparedStatementParamHandler extends AbstractHandler {
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
-        if(!JdbcConfig.me().isEnable() || CollectRatio.NO()){
+        if(!JdbcConfig.me().isEnable() || SamplingUtil.NO()){
             return null;
         }
         Span span = JdbcContext.getJdbcSpan();

@@ -4,7 +4,7 @@ import net.beeapm.agent.config.BeeConfig;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class CollectRatio {
+public class SamplingUtil {
     private static AtomicLong total = new AtomicLong(0);
     private static AtomicLong currNum = new AtomicLong(0);
 
@@ -33,11 +33,11 @@ public class CollectRatio {
     }
 
     private static boolean isCollect(){
-        if(BeeConfig.me().getRatio() <= 0){
+        if(BeeConfig.me().getRate() <= 0){
             BeeTraceContext.setCTag("N");
             return false;
         }
-        if(BeeConfig.me().getRatio() >= 10000){
+        if(BeeConfig.me().getRate() >= 10000){
             BeeTraceContext.setCTag("Y");
             return true;
         }
@@ -55,7 +55,7 @@ public class CollectRatio {
         long tmpTotal = incrTotal();
         long tmpCurrNum = getCurrNum() + 1;
         Double rate = tmpCurrNum * 1.0 / tmpTotal * 10000;
-        if(rate.intValue() > BeeConfig.me().getRatio()){
+        if(rate.intValue() > BeeConfig.me().getRate()){
             BeeTraceContext.setCTag("N");
             return false;
         }

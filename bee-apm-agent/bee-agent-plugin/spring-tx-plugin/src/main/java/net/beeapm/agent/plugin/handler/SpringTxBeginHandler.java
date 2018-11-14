@@ -1,6 +1,6 @@
 package net.beeapm.agent.plugin.handler;
 
-import net.beeapm.agent.common.CollectRatio;
+import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -18,7 +18,7 @@ public class SpringTxBeginHandler extends AbstractHandler {
 
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal){
-        if(t != null || !SpringTxConfig.me().isEnable() || CollectRatio.NO()){
+        if(t != null || !SpringTxConfig.me().isEnable() || SamplingUtil.NO()){
             return result;
         }
         Span span = SpanManager.createLocalSpan(SpanType.SPRING_TX);

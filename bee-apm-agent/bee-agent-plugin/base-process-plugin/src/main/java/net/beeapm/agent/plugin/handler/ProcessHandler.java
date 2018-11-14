@@ -54,7 +54,7 @@ public class ProcessHandler extends AbstractHandler {
         calculateSpend(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
-        if(span.getSpend() > ProcessConfig.me().getSpend() && CollectRatio.YES()) {
+        if(span.getSpend() > ProcessConfig.me().getSpend() && SamplingUtil.YES()) {
             span.addTag("method",methodName).addTag("clazz",className);
             handleMethodSignature(span,(String) extVal[0]);
             span.fillEnvInfo();

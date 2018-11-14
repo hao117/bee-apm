@@ -1,6 +1,6 @@
 package net.beeapm.agent.plugin.handler;
 
-import net.beeapm.agent.common.CollectRatio;
+import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
@@ -12,7 +12,7 @@ public class SpringTxEndHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(SpringTxEndHandler.class.getSimpleName());
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal)  {
-        if(!SpringTxConfig.me().isEnable() || CollectRatio.NO()){
+        if(!SpringTxConfig.me().isEnable() || SamplingUtil.NO()){
             return null;
         }
         Span span = SpringTxContext.getTxSpan();
