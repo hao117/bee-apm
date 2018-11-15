@@ -46,7 +46,7 @@ public class ApolloBootPlugin extends AbstractBootPlugin{
                 JSONObject json = JSON.parseObject(result);
                 String content = json.getJSONObject("configurations").getString("content");
                 //String releaseKey = json.getString("releaseKey");
-                writeFile(configPath+".txt",content);
+                writeFile(configPath,content);
             }
         }catch (Exception e){
             e.printStackTrace();
