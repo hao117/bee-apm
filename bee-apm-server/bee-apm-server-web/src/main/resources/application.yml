@@ -18,13 +18,15 @@ bee:
   store:
     name: elasticsearch
     elasticsearch:
+       #配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
        config:
          url: http://es.skyeye.cc:8000
   #      username: xx
   #      password: xx
-  #      connTimeout: 6000
-  #      readTimeout: 6000
-  #      defaultMaxTotalConnectionPerRoute: 2
+         connTimeout: 6000
+         readTimeout: 6000
+         multiThreaded: true
+         defaultMaxTotalConnectionPerRoute: 2
        indices:
           default: bee-default #配置默认topic，没有配置映射关系的，数据写到该topic
           proc: bee-process

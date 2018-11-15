@@ -97,7 +97,7 @@
           "type": "keyword"
         },
         "time":{
-          "type":"long"
+          "type":"date"
         },
         "spend":{
           "type":"long"
