@@ -39,9 +39,9 @@ public class ProcessHandler extends AbstractHandler {
         if(span == null){
             return result;
         }
-        Throwable childThrowable = (Throwable)span.getTags().get(KEY_ERROR_THROWABLE);
-        String childId = (String)span.getTags().get(KEY_BEE_CHILD_ID);
-        String childErrorPoint = (String)span.getTags().get(KEY_ERROR_POINT);
+        Throwable childThrowable = (Throwable)span.getTag(KEY_ERROR_THROWABLE);
+        String childId = (String)span.getTag(KEY_BEE_CHILD_ID);
+        String childErrorPoint = (String)span.getTag(KEY_ERROR_POINT);
         String errorPoint = className + "." + methodName;
         //清除暂存的异常信息
         span.removeTag(KEY_ERROR_THROWABLE);

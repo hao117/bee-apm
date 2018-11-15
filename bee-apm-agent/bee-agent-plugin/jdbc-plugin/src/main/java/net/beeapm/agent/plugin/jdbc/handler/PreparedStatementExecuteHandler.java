@@ -47,7 +47,7 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
         }
         calculateSpend(span);
         if(span.getSpend() > JdbcConfig.me().getSpend()) {
-            Map<String,Object> params = (Map<String,Object>)span.getTags().get("params");
+            Map<String,Object> params = (Map<String,Object>)span.getTag("params");
             span.removeTag("params");
             if(params != null){
                 Span paramSpan = new Span(SpanType.SQL_PARAM);

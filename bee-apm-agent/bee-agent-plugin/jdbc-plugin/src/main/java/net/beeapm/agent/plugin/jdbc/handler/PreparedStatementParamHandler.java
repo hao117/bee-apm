@@ -26,7 +26,7 @@ public class PreparedStatementParamHandler extends AbstractHandler {
         Span span = JdbcContext.getJdbcSpan();
         // 参数处理
         if(span != null && allArguments.length > 1 && JdbcConfig.me().isEnableParam()) {
-            LinkedHashMap<String,Object> params = (LinkedHashMap<String,Object>)span.getTags().get("params");
+            LinkedHashMap<String,Object> params = (LinkedHashMap<String,Object>)span.getTag("params");
             if(params == null){
                 params = new LinkedHashMap<String,Object>();
                 span.addTag("params",params);

@@ -5,7 +5,7 @@ import net.beeapm.agent.config.BeeConfig;
 import java.util.Date;
 
 public class Span{
-    private Tags tags = new Tags();
+    private Tags tags;
     private String type;
     private Date time;
     private String inst;
@@ -31,17 +31,25 @@ public class Span{
         setEnv(BeeConfig.me().getEnv());
     }
 
-    public Tags getTags() {
-        return tags;
+    public Object getTag(String key){
+        if(tags == null){
+            return null;
+        }
+        return tags.get(key);
     }
 
     public Span addTag(String key,Object val) {
+        if(tags == null){
+            tags = new Tags();
+        }
         this.tags.put(key,val);
         return this;
     }
 
     public Span removeTag(String key){
-        this.tags.remove(key);
+        if(tags != null){
+            this.tags.remove(key);
+        }
         return this;
     }
 

@@ -15,7 +15,7 @@ public class RequestReaderAdvice {
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.RequestReaderHandler");
         Span span = handler.before(null,null,null,null);
         //跳过原始的代码逻辑，执行下面OnMethodExit的代码
-        return (Boolean) span.getTags().get("skip");
+        return (Boolean) span.getTag("skip");
     }
 
     @Advice.OnMethodExit(onThrowable = Throwable.class)

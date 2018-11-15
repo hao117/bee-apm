@@ -24,10 +24,10 @@ public class ServletAdvice {
                              @Advice.Argument(value = 0) HttpServletRequest req){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
         Span span = handler.before(className,methodName,new Object[]{req,resp},null);
-        if(span != null && span.getTags().get("_respWrapper") != null){
+        if(span != null && span.getTag("_respWrapper") != null){
             //修改resp
-            resp = (HttpServletResponse)span.getTags().get("_respWrapper");
-            span.getTags().remove("_respWrapper");
+            resp = (HttpServletResponse)span.getTag("_respWrapper");
+            span.removeTag("_respWrapper");
         }
     }
 

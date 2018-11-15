@@ -14,7 +14,7 @@ public class SqlExecuteCountHandler extends AbstractHandler {
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         Span span = SpringTxContext.getTxSpan();
         if(span != null){
-           Integer sqlCount = (Integer)span.getTags().get(KEY_SQL_COUNT);
+           Integer sqlCount = (Integer)span.getTag(KEY_SQL_COUNT);
            if(sqlCount == null){
                sqlCount = new Integer(0);
            }
