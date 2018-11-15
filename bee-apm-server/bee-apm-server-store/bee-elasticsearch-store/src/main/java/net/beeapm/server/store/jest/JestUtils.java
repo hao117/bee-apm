@@ -15,14 +15,17 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class JestUtils {
     private static Logger logger = LoggerFactory.getLogger(StoreFactory.class);
     static JestClient jestClient ;
     static JestUtils inst;
-    private static String indexKeyPrefix = "bee.store.elasticsearch.indices.";
+    private static String KEY_INDEX_PREFIX = "bee.store.elasticsearch.indices";
+    private static String KEY_CONFIG_PREFIX = "bee.store.elasticsearch.config";
     private static String DEFAULT_INDEX_NAME;
+    private static Properties INDEX_MAP;
 
     public static JestUtils inst(){
         if(jestClient == null){
@@ -37,26 +40,48 @@ public class JestUtils {
     }
 
     private static void initJestClient(){
-        DEFAULT_INDEX_NAME = ConfigHolder.getProperty(indexKeyPrefix+"def");
-        String prefix = "bee.store.elasticsearch.";
-        String[] urls = ConfigHolder.getProperty(prefix+"url").split(",");
+        INDEX_MAP = ConfigHolder.getProperties(KEY_INDEX_PREFIX,true);
+        Properties esConfig = ConfigHolder.getProperties(KEY_CONFIG_PREFIX,true);
+        DEFAULT_INDEX_NAME = INDEX_MAP.getProperty("default","bee-default");
+        String[] urls = esConfig.getProperty("url").split(",");
         HttpClientConfig.Builder builder = new  HttpClientConfig.Builder(Arrays.asList(urls));
-        String userName = ConfigHolder.getProperty(prefix+"username");
-        String password = ConfigHolder.getProperty(prefix+"password");
+        String userName = esConfig.getProperty("username");
+        String password = esConfig.getProperty("password");
         if(StringUtils.isNotBlank(userName)){
             builder = builder.defaultCredentials(userName,password);
         }
-        builder = builder.connTimeout(ConfigHolder.getPropInt(prefix,"connTimeout",60000))
-                .readTimeout(ConfigHolder.getPropInt(prefix,"readTimeout",60000))
-                .multiThreaded(true)
-                .defaultMaxTotalConnectionPerRoute(ConfigHolder.getPropInt(prefix,"defaultMaxTotalConnectionPerRoute",2));
-        //Per default this implementation will create no more than 2 concurrent connections per given route
-        //.defaultMaxTotalConnectionPerRoute(<YOUR_DESIRED_LEVEL_OF_CONCURRENCY_PER_ROUTE>)
-        // and no more 20 connections in total
-        //.maxTotalConnection(<YOUR_DESIRED_LEVEL_OF_CONCURRENCY_TOTAL>)
+        builder = buildConfig(builder,esConfig);
+//        builder = builder.connTimeout(ConfigHolder.getPropInt(prefix,"connTimeout",60000))
+//                .readTimeout(ConfigHolder.getPropInt(prefix,"readTimeout",60000))
+//                .multiThreaded(true)
+//                .defaultMaxTotalConnectionPerRoute(ConfigHolder.getPropInt(prefix,"defaultMaxTotalConnectionPerRoute",2));
+//        //Per default this implementation will create no more than 2 concurrent connections per given route
+//        //.defaultMaxTotalConnectionPerRoute(<YOUR_DESIRED_LEVEL_OF_CONCURRENCY_PER_ROUTE>)
+//        // and no more 20 connections in total
+//        //.maxTotalConnection(<YOUR_DESIRED_LEVEL_OF_CONCURRENCY_TOTAL>)
         JestClientFactory factory = new JestClientFactory();
         factory.setHttpClientConfig(builder.build());
         jestClient = factory.getObject();
+
+    }
+
+    private static HttpClientConfig.Builder buildConfig(HttpClientConfig.Builder builder,Properties esConfig){
+        esConfig.remove("username");
+        esConfig.remove("password");
+        esConfig.remove("url");
+        Iterator iterator = esConfig.entrySet().iterator();
+        while (iterator.hasNext()){
+            try {
+                Map.Entry<String, Object> entry = (Map.Entry<String, Object>) iterator.next();
+                Method method = builder.getClass().getMethod(entry.getKey(), entry.getValue().getClass());
+                if(method != null){
+                    builder = (HttpClientConfig.Builder)method.invoke(builder,entry.getValue());
+                }
+            }catch (Exception e){
+                logger.error("",e);
+            }
+        }
+        return builder;
 
     }
 
@@ -88,8 +113,8 @@ public class JestUtils {
 
     private String getIndexName(JSONObject data){
         String type = data.getString("type");
-        String date = DateFormatUtils.format(new Date(),"yyyy-MM-dd");
-        return ConfigHolder.getProperty(indexKeyPrefix+type,DEFAULT_INDEX_NAME) + "-" + date;
+        String date = DateFormatUtils.format(new Date(),"yyyy.MM.dd");
+        return INDEX_MAP.getProperty(type,DEFAULT_INDEX_NAME) + "-" + date;
     }
 
 
