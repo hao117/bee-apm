@@ -1,6 +1,5 @@
 package net.beeapm.server.stream;
 
-import com.sun.deploy.config.Config;
 import net.beeapm.server.core.common.ConfigHolder;
 import net.beeapm.server.core.common.Stream;
 import net.beeapm.server.core.stream.AbstractStreamProvider;
@@ -10,6 +9,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.ConnectException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,10 +29,11 @@ public class BeeKafka1xStreamProvider extends AbstractStreamProvider {
         logger.info("BeeKafka1xStreamProvider start ............................................");
         initKafkaConfig();
         String[] topics = ConfigHolder.getProperty("bee.provider.kafka1x.topics").split(",");
+        int idx = 0;
         for (String topic : topics) {
             Properties config = new Properties();
             config.putAll(kafkaConfig);
-            setClientId(config);
+            setClientId(config,idx++);
             final KafkaConsumer consumer = createKafkaConsumer(topic, config);
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -73,7 +75,7 @@ public class BeeKafka1xStreamProvider extends AbstractStreamProvider {
         kafkaConfig = props;
     }
 
-    private void setClientId(Properties properties){
+    private void setClientId(Properties properties,int i){
         String clientId = "bee-";
         String ip = System.getProperty("bee.ip");
         String port = System.getProperty("bee.port");
@@ -83,7 +85,7 @@ public class BeeKafka1xStreamProvider extends AbstractStreamProvider {
         }
         logger.debug("clientId = {}",clientId);
         if(clientId != null) {
-            properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
+            properties.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId+i);
         }
     }
 
@@ -115,9 +117,14 @@ public class BeeKafka1xStreamProvider extends AbstractStreamProvider {
                 for(int i = 0; i < count; i++){
                     write(new Stream(cacheMsgList.get(i)));//QueueStreamHandler里的队列如果满了，会阻塞住
                 }
-
-            }catch (Exception e){
+            }catch (Throwable e){
                 logger.error("",e);
+                if(e instanceof ConnectException){
+                    try {
+                        Thread.sleep(IDLE_SLEEP);
+                    }catch (Exception e2){
+                    }
+                }
             }
         }
     }
