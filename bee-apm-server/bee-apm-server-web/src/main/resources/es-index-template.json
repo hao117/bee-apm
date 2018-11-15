@@ -1,0 +1,109 @@
+{
+  "order": 1,
+  "template": "bee-*",
+  "settings": {
+    "index": {
+      "max_result_window": "1000000",
+      "refresh_interval": "20s",
+      "number_of_shards": "3",
+      "number_of_replicas": "1",
+      "translog": {
+        "flush_threshold_size": "512mb",
+        "sync_interval": "20s",
+        "durability": "async"
+      }
+    }
+  },
+  "mappings": {
+    "bee-tmp": {
+      "properties": {
+        "gid": {
+          "type": "keyword"
+        },
+        "tags": {
+          "properties": {
+            "clazz": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "msign": {
+              "type": "keyword"
+            },
+            "count": {
+              "type": "long"
+            },
+            "status": {
+              "type": "keyword"
+            },
+            "point": {
+              "type": "keyword"
+            },
+            "level": {
+              "type": "keyword"
+            },
+            "srcApp": {
+              "type": "keyword"
+            },
+            "srcInst": {
+              "type": "keyword"
+            },
+            "remote": {
+              "type": "keyword"
+            },
+            "url": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            },
+            "method": {
+              "type": "keyword"
+            }
+          }
+        },
+        "env": {
+          "type": "keyword"
+        },
+        "inst": {
+          "type": "keyword"
+        },
+        "app": {
+          "type": "keyword"
+        },
+        "ip": {
+          "type": "keyword"
+        },
+        "port": {
+          "type": "keyword"
+        },
+        "pid": {
+          "type": "keyword"
+        },
+        "type": {
+          "type": "keyword"
+        },
+        "id": {
+          "type": "keyword"
+        },
+        "time":{
+          "type":"long"
+        },
+        "spend":{
+          "type":"long"
+        }
+      }
+    }
+  },
+  "aliases": {}
+}

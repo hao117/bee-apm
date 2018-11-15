@@ -24,9 +24,12 @@
         <Logger name="org.springframework.beans" level="error"></Logger>
         <Logger name="org.hibernate.validator" level="error"></Logger>
         <Logger name="net.beeapm" level="debug"></Logger>
+        <Logger name="org.apache.kafka" level="info"></Logger>
         <Root level="debug">
             <appender-ref ref="Console"/>
+            <!--
             <appender-ref ref="RollingFile"/>
+            -->
         </Root>
 
     </loggers>

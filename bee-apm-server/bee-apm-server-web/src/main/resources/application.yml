@@ -13,27 +13,33 @@ bee:
       topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-logger
       kafkaConfig:
         #kafka配置值项，项名称和值请参考kafka文档
-        bootstrap.servers: 127.0.0.1:9092
+        bootstrap.servers: 118.31.50.102:6000
         max.poll.records: 5 #默认500
   store:
-    name: console
+    name: elasticsearch
     elasticsearch:
-      url: http://192.168.1.24:9200
-#      username: xx
-#      password: xx
-#      connTimeout: 6000
-#      readTimeout: 6000
-#      defaultMaxTotalConnectionPerRoute: 2
-      indices:
-        def: bee-comm-def
-        process: bee-comm-process
-        request: bee-comm-request
-        sql: bee-comm-sql
-        sqlp: bee-comm-sql-param
-        tx: bee-comm-tx
-        log: bee-comm-logger
-        param: bee-comm-param
-        err : bee-comm-error
+       config:
+         url: http://es.skyeye.cc:8000
+  #      username: xx
+  #      password: xx
+  #      connTimeout: 6000
+  #      readTimeout: 6000
+  #      defaultMaxTotalConnectionPerRoute: 2
+       indices:
+          default: bee-default #配置默认topic，没有配置映射关系的，数据写到该topic
+          proc: bee-process
+          para: bee-process-param
+          sql: bee-sql
+          sqlp: bee-sql-param
+          req: bee-request
+          rp: bee-request-param
+          tx: bee-tx
+          log: bee-logger
+          err: bee-error
+          reqb: bee-request-body
+          reqh: bee-request-headers
+          respb: bee-response-body
+          hb: bee-heartbeat
   handlers:
     flow: empty>json>queue>store
     queue:
