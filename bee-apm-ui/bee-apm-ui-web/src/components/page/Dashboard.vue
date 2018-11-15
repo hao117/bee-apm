@@ -193,7 +193,8 @@
             getStatData(){
                 const url = "/api/dashboard/stat";
                 this.$axios.post(url, {
-                    dateTime: "2018-09-24 17:12"
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm'),
                 }).then((res) => {
                     console.log(res.data);
                     this.statData = res.data;
@@ -230,8 +231,8 @@
             getRequestBarData(){
                 const url = "/api/dashboard/getRequestBarData";
                 this.$axios.post(url, {
-                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH-mm'),
-                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH-mm'),
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm'),
                 }).then((res) => {
                     console.log("==>getRequestBarData:%o",res);
                     this.requestBarData.rows = res.data.rows;
@@ -240,8 +241,8 @@
             getRequestLineData(){
                 const url = "/api/dashboard/getRequestLineData";
                 this.$axios.post(url, {
-                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH-mm'),
-                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH-mm'),
+                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
+                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm'),
                 }).then((res) => {
                     console.log("==>getRequestLineData:%o",res);
                     this.requestLineData.rows = res.data.rows;
