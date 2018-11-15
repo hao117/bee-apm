@@ -24,8 +24,11 @@ public class ApolloBootPlugin extends AbstractBootPlugin{
             if(configPath == null){
                 configPath = BeeAgentJarUtils.getAgentJarDirPath() + "/" + namespaceName;
             }
-            String env = System.getProperty("env").toLowerCase();
-            String url = System.getProperty(env+"_meta");
+            String env = System.getProperty("env");
+            if(env == null){
+                return;
+            }
+            String url = System.getProperty(env.toLowerCase()+"_meta");
             String appId = System.getProperty("app.id");
             String clusterName = System.getProperty("apollo.cluster");
             if(clusterName == null){
