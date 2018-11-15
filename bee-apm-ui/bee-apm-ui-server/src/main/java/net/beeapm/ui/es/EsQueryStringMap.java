@@ -49,7 +49,7 @@ public class EsQueryStringMap {
                 if(line.startsWith("#####")){
                     if(id != null && list.size() > 0){
                         if(LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("key={},queryString:\n{}", id, JSON.toJSON(list));
+                            LOGGER.debug("key={},queryString:\n{}", id, String.join(" ",list.toArray(new String[list.size()])));
                         }
                         queryMap.put(id,list);
                     }
@@ -61,7 +61,7 @@ public class EsQueryStringMap {
             }
             if(id != null && list.size() > 0){
                 if(LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("key={},queryString:\n{}", id, JSON.toJSON(list));
+                    LOGGER.debug("key={},queryString:\n{}", id, String.join(" ",list.toArray(new String[list.size()])));
                 }
                 queryMap.put(id,list);
             }
@@ -79,7 +79,7 @@ public class EsQueryStringMap {
             for (Entry<String, String> entry : param.entrySet()) {
                 int i = 0;
                 for (String item : list) {
-                    String key = "{{" + entry + "}}";
+                    String key = "{{" + entry.getKey() + "}}";
                     if (item.contains(key)) {
                         item = item.replace(key, entry.getValue());
                         if (item.startsWith("@if")) {

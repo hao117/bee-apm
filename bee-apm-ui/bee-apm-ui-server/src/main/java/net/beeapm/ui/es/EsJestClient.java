@@ -71,10 +71,10 @@ public class EsJestClient {
     }
 
     private static void initJestClient(){
-        String[] urls = ConfigHolder.getProperty(BeeConst.KEY_ES_PASSWORD).split(",");
+        String[] urls = ConfigHolder.getProperty(BeeConst.KEY_ELASTICSEARCH + "." + BeeConst.KEY_ES_HTTP_URL).split(",");
         HttpClientConfig.Builder builder = new  HttpClientConfig.Builder(Arrays.asList(urls));
-        String userName = ConfigHolder.getProperty(BeeConst.KEY_ES_USERNAME);
-        String password = ConfigHolder.getProperty(BeeConst.KEY_ES_PASSWORD);
+        String userName = ConfigHolder.getProperty(BeeConst.KEY_ELASTICSEARCH + "." + BeeConst.KEY_ES_USERNAME);
+        String password = ConfigHolder.getProperty(BeeConst.KEY_ELASTICSEARCH + "." + BeeConst.KEY_ES_PASSWORD);
         if(StringUtils.isNotBlank(userName)){
             builder = builder.defaultCredentials(userName,password);
         }
@@ -103,7 +103,7 @@ public class EsJestClient {
         return jestClient.execute(search);
     }
 
-    public static SSLConnectionSocketFactory sslConnectionSocketFactory(){
+    private static SSLConnectionSocketFactory sslConnectionSocketFactory(){
         try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
                 // 信任所有
