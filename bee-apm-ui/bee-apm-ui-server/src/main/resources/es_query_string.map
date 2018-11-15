@@ -3,10 +3,30 @@
 //用一个下划线“_”作为查询语句的id分割符号，#号下面的内容为查询语句内容
 //参数变量用{{}}包起来，比如{{param_key}}
 //判断参数变量是否为空，语句用@if开始，后面紧跟一个空格，如果为空，该行语句将被忽略。格式如@if select {{param_key}} from table_user
-#####_stat
+#####_demo
 {{ddd}}
 @if select {{key}} from table_user
 select tab2
 select tab3
+#####_instCount
+{
+  "size": 0,
+  "aggs": {
+    "inst_count": {
+      "cardinality": {
+        "field": "inst"
+      }
+    }
+  },
+  "query": {
+    "range": {
+      "time": {
+        "gte": {{beginTime}},
+        "lte": {{endTime}}
+      }
+    }
+  }
+}
+
 
 

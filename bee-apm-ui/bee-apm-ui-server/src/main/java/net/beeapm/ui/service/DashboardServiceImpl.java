@@ -1,9 +1,17 @@
 package net.beeapm.ui.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONPath;
+import io.searchbox.core.SearchResult;
+import net.beeapm.ui.common.BeeUtils;
+import net.beeapm.ui.es.EsJestClient;
+import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.SevenKey;
 import net.beeapm.ui.model.TwoKeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
 import org.apache.commons.lang3.RandomUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +21,7 @@ import java.util.Map;
 
 @Service
 public class DashboardServiceImpl implements IDashboardService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServiceImpl.class);
     public Map<String,Object> getRequestBarData(Map<String,String> params){
         Map<String,Object> res = new HashMap<>();
         res.put("code",0);
@@ -37,5 +46,25 @@ public class DashboardServiceImpl implements IDashboardService {
         }
         res.setRows(list);
         return res;
+    }
+
+    @Override
+    public Long queryInstCount(Map<String, Object> params) {
+        Long count = 0L;
+        try {
+            Map<String, String> args = new HashMap<>();
+            args.put("beginTime", BeeUtils.getBeginTime(params).toString());
+            args.put("endTime", BeeUtils.getEndTime(params).toString());
+            String queryString = EsQueryStringMap.me().getQueryString("instCount", args);
+            String[] indices = BeeUtils.getIndices("bee-heartbeat-", params);
+            SearchResult result = EsJestClient.inst().search(indices, null, queryString);
+            if("404".equals(result.getResponseCode())){
+                return 0L;
+            }
+            count = result.getJsonObject().getAsJsonObject("aggregations").getAsJsonObject("inst_count").getAsJsonPrimitive("value").getAsLong();
+        }catch (Exception e){
+            LOGGER.error("",e);
+        }
+        return count;
     }
 }
