@@ -4,7 +4,7 @@ logger:
     fileSize: 10485760 #日志文件大小，单位字节,默认10M
     fileNum: 3     #日志文件保留数量，默认5个文件
 heartbeat:
-    period: 10 #心跳周期，单位秒,默认60
+    period: 5 #心跳周期，单位秒,默认60
 transmitter:
     queueSize: 200 #缓冲队列大小，默认1000
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
@@ -21,7 +21,7 @@ transmitter:
     kafka1x:
         kafkaConfig:
             #kafka配置值项，项名称和值请参考kafka文档
-            bootstrap.servers: 118.31.150.102:6000
+            bootstrap.servers: 118.31.50.102:6000
             linger.ms: 200
         topic: #配置span type和kafka topic映射关系
             default: bee-default #配置默认topic，没有配置映射关系的，数据写到该topic
@@ -30,7 +30,7 @@ transmitter:
             sql: bee-sql
             sqlp: bee-sql-param
             req: bee-request
-            rq: bee-request-param
+            rp: bee-request-param
             tx: bee-tx
             log: bee-logger
             err: bee-error
