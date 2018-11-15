@@ -9,7 +9,7 @@ import net.beeapm.agent.plugin.common.SpringTxContext;
 
 public class SqlExecuteCountHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(SqlExecuteCountHandler.class.getSimpleName());
-    private static final String KEY_SQL_COUNT = "sqlCount";
+    private static final String KEY_SQL_COUNT = "count";
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         Span span = SpringTxContext.getTxSpan();
