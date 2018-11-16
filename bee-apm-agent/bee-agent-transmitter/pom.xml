@@ -20,6 +20,7 @@
         <module>console-transmitter</module>
         <module>elasticsearch-transmitter</module>
         <module>kafka-1.x-transmitter</module>
+        <module>rocketmq-transmitter</module>
         <module>okhttp-transmitter</module>
     </modules>
     <dependencies>
