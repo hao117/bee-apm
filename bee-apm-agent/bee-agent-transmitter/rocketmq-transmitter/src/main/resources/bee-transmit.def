@@ -1,0 +1,1 @@
+rocketmq=net.beeapm.agent.transmit.rocketmq.RocketMqTransmitter
