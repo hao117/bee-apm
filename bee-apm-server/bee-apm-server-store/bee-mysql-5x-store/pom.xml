@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>bee-apm-server-store</artifactId>
+        <groupId>net.beeapm</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>bee-mysql-5x-store</artifactId>
+    <packaging>jar</packaging>
+    <name>bee-mysql-5x-store</name>
+    <url>http://www.beeapm.net</url>
+
+    <modules>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <compiler.version>1.8</compiler.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-apm-server-core</artifactId>
+            <version>${bee-server-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.28</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.41</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>bee-mysql-5x-store-${bee-server-version}</finalName>
+    </build>
+</project>

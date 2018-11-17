@@ -51,12 +51,12 @@ public class RocketMqTransmitter extends AbstractTransmitter {
                 @Override
                 public void onSuccess(SendResult sendResult) {
                     //System.out.printf("%-10d OK %s %n", index, sendResult.getMsgId());
-                    System.out.println("发送成功---"+ new String (msg.getBody()));
+                    log.debug("发送成功---"+ new String (msg.getBody()));
                 }
 
                 @Override
                 public void onException(Throwable e) {
-                    System.out.printf("%-10d Exception %s %n", e);
+                    log.error("发送失败---%-10d Exception %s %n", e);
                     e.printStackTrace();
                 }
             });

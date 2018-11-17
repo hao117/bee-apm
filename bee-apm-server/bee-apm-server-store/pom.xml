@@ -16,6 +16,7 @@
 
     <modules>
         <module>bee-elasticsearch-store</module>
+        <module>bee-mysql-5x-store</module>
     </modules>
 
     <properties>
