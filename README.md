@@ -65,12 +65,13 @@ gitee ：https://gitee.com/beetle082/bee-apm
 - 统计采集（待开发）
 
 #### 2、传输能力
-- 输出到控制台
-- 输出到远程http服务器
-    - 使用okhttp发送
-- 输出到kafka，支持kafka 1.x
-- 输出到pulsar（待开发）
-- 输出到ElasticSearcch（待开发）
+- 支持输出到控制台
+- 支持输出到远程http服务器
+    - 支持okhttp
+- 支持输出到kafka，支持kafka 1.x
+- 支持输出到RocketMq
+- 支持输出到pulsar（待开发）
+- 支持输出到ElasticSearcch（待开发）
 
 ### APM Server端
 数据收集和存储。从采集端接受数据或者从消息中间件中拉取数据，并进行存储
