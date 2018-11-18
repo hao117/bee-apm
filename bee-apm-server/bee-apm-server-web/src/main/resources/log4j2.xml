@@ -20,9 +20,7 @@
 
     <loggers>
         <Logger name="org.springframework" level="info"></Logger>
-        <Logger name="org.springframework.jndi" level="error"></Logger>
-        <Logger name="org.springframework.beans" level="error"></Logger>
-        <Logger name="org.hibernate.validator" level="error"></Logger>
+        <Logger name="org.apache.http" level="error"></Logger>
         <Logger name="net.beeapm" level="debug"></Logger>
         <Logger name="org.apache.kafka" level="info"></Logger>
         <Root level="debug">
