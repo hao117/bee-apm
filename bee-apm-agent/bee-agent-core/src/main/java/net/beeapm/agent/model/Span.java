@@ -147,4 +147,9 @@ public class Span{
     public void setEnv(String env) {
         this.env = env;
     }
+
+    public Tags getTags() {
+        return tags;
+    }
+
 }
