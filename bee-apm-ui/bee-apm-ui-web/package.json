@@ -11,6 +11,8 @@
   "dependencies": {
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
+    "cytoscape": "^3.2.20",
+    "cytoscape-cose-bilkent": "^4.0.0",
     "echarts": "^4.2.0-rc.1",
     "element-ui": "2.4.8",
     "moment": "^2.22.2",

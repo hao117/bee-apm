@@ -100,7 +100,9 @@ public class EsJestClient {
             builder = builder.addTypes(Arrays.asList(types));
         }
         Search search = builder.build();
-        return jestClient.execute(search);
+        SearchResult res = jestClient.execute(search);
+        LOGGER.debug("SearchResult={}", res.getJsonString());
+        return res;
     }
 
     private static SSLConnectionSocketFactory sslConnectionSocketFactory(){

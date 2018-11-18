@@ -1,7 +1,5 @@
 package net.beeapm.ui.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONPath;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeUtils;
 import net.beeapm.ui.es.EsJestClient;
@@ -58,7 +56,7 @@ public class DashboardServiceImpl implements IDashboardService {
             String queryString = EsQueryStringMap.me().getQueryString("instCount", args);
             String[] indices = BeeUtils.getIndices("bee-heartbeat-", params);
             SearchResult result = EsJestClient.inst().search(indices, null, queryString);
-            if("404".equals(result.getResponseCode())){
+            if(404 == result.getResponseCode()){
                 return 0L;
             }
             count = result.getJsonObject().getAsJsonObject("aggregations").getAsJsonObject("inst_count").getAsJsonPrimitive("value").getAsLong();
@@ -66,5 +64,39 @@ public class DashboardServiceImpl implements IDashboardService {
             LOGGER.error("",e);
         }
         return count;
+    }
+
+    @Override
+    public Long queryAllCount(Map<String, Object> params) {
+        return queryCount("bee-*-",params);
+    }
+
+    private Long queryCount(String indexPrefix,Map<String, Object> params) {
+        Long count = 0L;
+        try {
+            Map<String, String> args = new HashMap<>();
+            args.put("beginTime", BeeUtils.getBeginTime(params).toString());
+            args.put("endTime", BeeUtils.getEndTime(params).toString());
+            String queryString = EsQueryStringMap.me().getQueryString("count", args);
+            String[] indices = BeeUtils.getIndices(indexPrefix, params);
+            SearchResult result = EsJestClient.inst().search(indices, null, queryString);
+            if(404 == result.getResponseCode()){
+                return 0L;
+            }
+            count = result.getTotal();
+        }catch (Exception e){
+            LOGGER.error("",e);
+        }
+        return count;
+    }
+
+    @Override
+    public Long queryRequestCount(Map<String, Object> params) {
+        return queryCount("bee-request-",params);
+    }
+
+    @Override
+    public Long queryErrorCount(Map<String, Object> params) {
+        return queryCount("bee-error-",params);
     }
 }

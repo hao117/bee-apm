@@ -27,6 +27,18 @@ select tab3
     }
   }
 }
+#####_count
+{
+  "size": 0,
+  "query": {
+    "range": {
+      "time": {
+        "gte": {{beginTime}},
+        "lte": {{endTime}}
+      }
+    }
+  }
+}
 
 
 

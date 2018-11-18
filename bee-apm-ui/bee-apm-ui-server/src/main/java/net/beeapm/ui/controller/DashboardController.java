@@ -28,12 +28,10 @@ public class DashboardController {
     @ResponseBody
     public Map stat(@RequestBody Map<String,Object> reqBody){
         Map<String,Object> data = new HashMap<>();
-        dashboardService.queryInstCount(reqBody);
-        data.put("log", RandomUtils.nextInt(1001,5000));
-        data.put("req",RandomUtils.nextInt(300,500));
+        data.put("log", dashboardService.queryAllCount(reqBody));
+        data.put("req",dashboardService.queryRequestCount(reqBody));
         data.put("inst",dashboardService.queryInstCount(reqBody));
-        data.put("error",RandomUtils.nextInt(200,500));
-        System.out.println("=============dashboard>>>" + DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        data.put("error",dashboardService.queryErrorCount(reqBody));
         return data;
     }
 
