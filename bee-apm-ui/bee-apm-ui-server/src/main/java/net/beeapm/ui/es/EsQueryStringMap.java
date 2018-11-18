@@ -71,10 +71,12 @@ public class EsQueryStringMap {
     }
 
     public String getQueryString(String id, Map<String,String> param){
-        List<String> list = queryMap.get(id);
-        if(list == null || list.isEmpty()){
+        List<String> temp = queryMap.get(id);
+        if(temp == null || temp.isEmpty()){
             return null;
         }
+        List<String> list = new ArrayList();
+        list.addAll(temp);
         if(param != null && !param.isEmpty()) {
             for (Entry<String, String> entry : param.entrySet()) {
                 int i = 0;
