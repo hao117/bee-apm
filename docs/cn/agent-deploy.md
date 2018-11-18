@@ -30,5 +30,6 @@ mvn package
 - `bee.ip` 配置应用主机IP
 
 
-**备注：** 在启动应用之前，记得先启动zookeeper，bee-agent依赖zookeeper来生成id值。
-调整配置文件`config.yml`里`plugins.process.interceptPoints.typeMatch.include.nameStartsWith`节点的值为您应用的包名，当然您也可以配置其它规则，具体参考配置文件里相关注释说明
+**备注：**
+- 在启动应用之前，记得先启动zookeeper，bee-agent依赖zookeeper来生成id值。
+- 调整配置文件`config.yml`里`plugins.process.interceptPoints.typeMatch.include.nameStartsWith`节点的值为您应用的包名，当然您也可以配置其它规则，具体参考配置文件里相关注释说明
