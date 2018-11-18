@@ -96,6 +96,10 @@ public class JestUtils {
                 String index = getIndexName(data);
                 String id = data.getString("id");
                 String type = data.getString("type");
+                Object time = data.get("time");
+                if(time instanceof  Long){
+                    data.put("time",new Date((Long)time));
+                }
                 BulkableAction action = new Index.Builder(data).index(index).type(type).id(id).build();
                 bulkList.add(action);
             }
