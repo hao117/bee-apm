@@ -89,7 +89,7 @@ gitee ：https://gitee.com/beetle082/bee-apm
 ### APM UI端
 开发中。。。
 支持调用链展示，采集数据查询，报表等
-
+![](./docs/pic/beeapm.png)
 ## 联系
 ```
 QQ: 275951533
