@@ -8,5 +8,6 @@ elasticsearch:
     url: http://es.skyeye.cc:8000
     username: es
     password: 123
-    connTimeoutMs: 30000
-    readTimeoutMs: 30000
+    connTimeout: 30000
+    readTimeout: 30000
+    multiThreaded: true

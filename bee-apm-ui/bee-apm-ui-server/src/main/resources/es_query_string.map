@@ -39,6 +39,28 @@ select tab3
     }
   }
 }
-
+#####_errorPie
+{
+  "size": 0,
+  "query": {
+    "range": {
+      "time": {
+        "gte": {{beginTime}},
+        "lte": {{endTime}}
+      }
+    }
+  },
+  "aggs": {
+    "errorCount": {
+      "terms": {
+        "field": "app",
+        "order": {
+          "_count": "desc"
+        },
+        "size": 100000
+      }
+    }
+  }
+}
 
 

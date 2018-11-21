@@ -3,6 +3,7 @@ package net.beeapm.ui.controller;
 import com.alibaba.fastjson.JSON;
 import net.beeapm.ui.model.KeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
+import net.beeapm.ui.model.vo.ResultVo;
 import net.beeapm.ui.service.IDashboardService;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -37,26 +38,9 @@ public class DashboardController {
 
     @RequestMapping("/getErrorPieData")
     @ResponseBody
-    public Map getErrorPieData(@RequestBody Map<String,Object> reqBody){
-        System.out.println("getErrorPieData RequestBody : "+JSON.toJSONString(reqBody));
-        List list = new ArrayList();
-        list.add(new KeyValue("crm3-app1",24234));
-        list.add(new KeyValue("crm3-app2",4546));
-        list.add(new KeyValue("crm3-app3",4527));
-        list.add(new KeyValue("crm3-app4",343));
-        list.add(new KeyValue("crm3-app5",7345));
-        list.add(new KeyValue("crm3-app6",2323));
-        list.add(new KeyValue("crm3-app7",345));
-        list.add(new KeyValue("crm3-app8",2345));
-        list.add(new KeyValue("crm3-app9",1300));
-        list.add(new KeyValue("crm3-app10",1246));
-        list.add(new KeyValue("crm3-app11",3248));
-        list.add(new KeyValue("crm3-app12",521));
-        Map res = new HashMap();
-        res.put("list",list);
-        res.put("code",0);
-        System.out.println("getErrorPieData Result : "+JSON.toJSONString(res));
-        return res;
+    public ResultVo getErrorPieData(@RequestBody Map<String,Object> reqBody){
+        ResultVo result = dashboardService.queryErrorPieData(reqBody);
+        return result;
     }
 
     @RequestMapping("/getErrorLineData")

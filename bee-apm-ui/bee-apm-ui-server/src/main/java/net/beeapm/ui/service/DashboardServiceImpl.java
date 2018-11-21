@@ -1,17 +1,26 @@
 package net.beeapm.ui.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
+import com.google.gson.JsonObject;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.MetricAggregation;
 import net.beeapm.ui.common.BeeUtils;
 import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
+import net.beeapm.ui.model.KeyValue;
 import net.beeapm.ui.model.SevenKey;
 import net.beeapm.ui.model.TwoKeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
+import net.beeapm.ui.model.vo.ResultVo;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,12 +59,7 @@ public class DashboardServiceImpl implements IDashboardService {
     public Long queryInstCount(Map<String, Object> params) {
         Long count = 0L;
         try {
-            Map<String, String> args = new HashMap<>();
-            args.put("beginTime", BeeUtils.getBeginTime(params).toString());
-            args.put("endTime", BeeUtils.getEndTime(params).toString());
-            String queryString = EsQueryStringMap.me().getQueryString("instCount", args);
-            String[] indices = BeeUtils.getIndices("bee-heartbeat-", params);
-            SearchResult result = EsJestClient.inst().search(indices, null, queryString);
+            SearchResult result = EsJestClient.inst().search(params, "instCount", "bee-heartbeat-");
             if(404 == result.getResponseCode()){
                 return 0L;
             }
@@ -74,12 +78,7 @@ public class DashboardServiceImpl implements IDashboardService {
     private Long queryCount(String indexPrefix,Map<String, Object> params) {
         Long count = 0L;
         try {
-            Map<String, String> args = new HashMap<>();
-            args.put("beginTime", BeeUtils.getBeginTime(params).toString());
-            args.put("endTime", BeeUtils.getEndTime(params).toString());
-            String queryString = EsQueryStringMap.me().getQueryString("count", args);
-            String[] indices = BeeUtils.getIndices(indexPrefix, params);
-            SearchResult result = EsJestClient.inst().search(indices, null, queryString);
+            SearchResult result = EsJestClient.inst().search(params, "count", indexPrefix);
             if(404 == result.getResponseCode()){
                 return 0L;
             }
@@ -98,5 +97,35 @@ public class DashboardServiceImpl implements IDashboardService {
     @Override
     public Long queryErrorCount(Map<String, Object> params) {
         return queryCount("bee-error-",params);
+    }
+
+    @Override
+    public ResultVo queryErrorPieData(Map<String, Object> params) {
+        ResultVo res = new ResultVo();
+        try {
+            SearchResult result = EsJestClient.inst().search(params, "errorPie", "bee-error-");
+            if(404 == result.getResponseCode()){
+                res.setCode("-1");
+                res.setResult(new ArrayList<>());
+                return res;
+            }
+            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
+            JSONArray buckets = (JSONArray)JSONPath.eval(jsonObject,"$.aggregations.errorCount.buckets");
+            if(buckets == null || buckets.size() == 0){
+                res.setCode("0");
+                res.setResult(new ArrayList<>());
+                return res;
+            }
+            List<KeyValue> list = new ArrayList<>();
+            for(int i = 0; i < buckets.size(); i++){
+                JSONObject item = buckets.getJSONObject(i);
+                list.add(new KeyValue(item.getString("key"),item.getInteger("doc_count")));
+            }
+            res.setCode("0");
+            res.setResult(list);
+        }catch (Exception e){
+            LOGGER.error("",e);
+        }
+        return res;
     }
 }
