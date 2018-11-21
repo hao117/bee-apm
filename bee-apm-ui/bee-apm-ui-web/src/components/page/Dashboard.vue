@@ -190,11 +190,17 @@
                 });
 
             },
+            getBeginTime(){
+                return moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm');
+            },
+            getEndTime(){
+                return moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm');
+            },
             getStatData(){
                 const url = "/api/dashboard/stat";
                 this.$axios.post(url, {
-                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
-                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm'),
+                    beginTime: this.getBeginTime(),
+                    endTime:this.getEndTime(),
                 }).then((res) => {
                     console.log(res.data);
                     this.statData = res.data;
@@ -203,25 +209,25 @@
             getErrorPieData(){
                 const url = "/api/dashboard/getErrorPieData";
                 this.$axios.post(url, {
-                    beginTime: "2018-09-24 17:12",
-                    endTime:"2018-09-24 17:13"
+                    beginTime: this.getBeginTime(),
+                    endTime:this.getEndTime(),
                 }).then((res) => {
                     console.log(res.data);
-                    this.errorPieData.rows = res.data.list;
+                    this.errorPieData.rows = res.data.result;
                 })
             },
             getErrorLineData(){
                 const url = "/api/dashboard/getErrorLineData";
                 this.$axios.post(url, {
-                    beginTime: "2018-09-24 17:12",
-                    endTime:"2018-09-24 17:13"
+                    beginTime: this.getBeginTime(),
+                    endTime:this.getEndTime(),
                 }).then((res) => {
                     console.log(res.data);
                     this.errorLineData.rows = res.data.rows;
                     this.errorLineData.columns = res.data.columns;
                 })
             },
-            getPickerDate(){
+            getPickerDate(){//时间选择框选择的日期
                 const self = this;
                 bus.$on("pickerDateEvent",function (val) {
                     self.pickerDate = val;
@@ -231,8 +237,8 @@
             getRequestBarData(){
                 const url = "/api/dashboard/getRequestBarData";
                 this.$axios.post(url, {
-                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
-                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm'),
+                    beginTime: this.getBeginTime(),
+                    endTime:this.getEndTime(),
                 }).then((res) => {
                     console.log("==>getRequestBarData:%o",res);
                     this.requestBarData.rows = res.data.rows;
@@ -241,8 +247,8 @@
             getRequestLineData(){
                 const url = "/api/dashboard/getRequestLineData";
                 this.$axios.post(url, {
-                    beginTime: moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm'),
-                    endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm'),
+                    beginTime: this.getBeginTime(),
+                    endTime:this.getEndTime(),
                 }).then((res) => {
                     console.log("==>getRequestLineData:%o",res);
                     this.requestLineData.rows = res.data.rows;
