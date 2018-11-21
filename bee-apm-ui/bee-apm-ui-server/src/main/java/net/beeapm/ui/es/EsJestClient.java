@@ -6,6 +6,7 @@ import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeConst;
+import net.beeapm.ui.common.BeeUtils;
 import net.beeapm.ui.common.ConfigHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -21,10 +22,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by yuan on 2018/11/11.
@@ -58,7 +56,8 @@ public class EsJestClient {
         while (iterator.hasNext()){
             try {
                 Map.Entry<String, Object> entry = (Map.Entry<String, Object>) iterator.next();
-                Method method = builder.getClass().getMethod(entry.getKey(), entry.getValue().getClass());
+                //Method method = builder.getClass().getMethod(entry.getKey(),entry.getValue().getClass());
+                Method method = getMethod(builder,entry.getKey());
                 if(method != null){
                     builder = (HttpClientConfig.Builder)method.invoke(builder,entry.getValue());
                 }
@@ -67,8 +66,19 @@ public class EsJestClient {
             }
         }
         return builder;
-
     }
+
+    private static Method getMethod(Object inst,String methodName){
+        Method[] methods = inst.getClass().getMethods();
+        for(Method m : methods){
+            if(m.getName().equals(methodName)){
+                return m;
+            }
+        }
+        return null;
+    }
+
+
 
     private static void initJestClient(){
         String[] urls = ConfigHolder.getProperty(BeeConst.KEY_ELASTICSEARCH + "." + BeeConst.KEY_ES_HTTP_URL).split(",");
@@ -105,6 +115,15 @@ public class EsJestClient {
         return res;
     }
 
+    public SearchResult search(Map<String,Object> params,String mapId,String indexPrefix) throws IOException{
+        Map<String, String> args = new HashMap<>();
+        args.put("beginTime", BeeUtils.getBeginTime(params).toString());
+        args.put("endTime", BeeUtils.getEndTime(params).toString());
+        String queryString = EsQueryStringMap.me().getQueryString(mapId, args);
+        String[] indices = BeeUtils.getIndices(indexPrefix, params);
+        return search(indices, null, queryString);
+    }
+
     private static SSLConnectionSocketFactory sslConnectionSocketFactory(){
         try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
@@ -125,4 +144,6 @@ public class EsJestClient {
         }
         return null;
     }
+
+
 }
