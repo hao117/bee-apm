@@ -10,7 +10,7 @@ transmitter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: rocketmq  #使用哪种transmitter支持console,okhttp,kafka1x,rocketmq
+    name: kafka1x  #使用哪种transmitter支持console,okhttp,kafka1x,rocketmq
     okhttp:        #name对应的transmitter的配置参数
         connectTimeout: 30
         writeTimeout: 10
