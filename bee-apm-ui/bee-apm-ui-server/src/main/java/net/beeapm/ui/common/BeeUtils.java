@@ -1,7 +1,6 @@
 package net.beeapm.ui.common;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,5 +54,93 @@ public class BeeUtils {
         }catch (Exception e){
             throw new RuntimeException("日期格式不正确",e);
         }
+    }
+
+    /**
+     * 返回值：间隔单位，日期格式，时区格式，间隔数
+     * <br/>按分钟：1m YYYY-MM-dd HH:mm
+     * <br/>按小时：1h YYYY-MM-dd HH
+     * <br/>按天：1d YYYY-MM-dd
+     * <br/>按月：1M YYYY-MM
+     * <br/>按年：1Y YYYY
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
+    public String[] parseDateInterval(Date beginDate,Date endDate){
+        long MAX_DIFF = 30;//最大范围30分钟合0.5小时
+        String timeZone = "+08:00";
+        long diff = DateUtils.diffMinute(beginDate,endDate);
+        if(diff < MAX_DIFF){
+            return new String[]{"1m","YYYY-MM-dd HH:mm",timeZone,diff+""};
+        }
+        if(diff < MAX_DIFF*2){
+            return new String[]{"2m","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/2.0)+""};
+        }
+        if(diff < (MAX_DIFF * 5)){
+            return new String[]{"5m","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/5.0)+""};
+        }
+        if(diff < (MAX_DIFF * 10)){
+            return new String[]{"10m","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/10.0)+""};
+        }
+        if(diff < (MAX_DIFF * 30)){
+            return new String[]{"30m","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/30.0)+""};
+        }
+        diff = DateUtils.diffHour(beginDate,endDate);
+        MAX_DIFF = 36;//最大范围36小时合1.5天
+        if(diff < MAX_DIFF){
+            return new String[]{"1h","YYYY-MM-dd HH:mm",timeZone,diff+""};
+        }
+        if(diff < (MAX_DIFF * 2)){
+            return new String[]{"2h","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/2.0)+""};
+        }
+        if(diff < (MAX_DIFF * 4)){
+            return new String[]{"4h","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/4.0)+""};
+        }
+        if(diff < (MAX_DIFF * 6)){
+            return new String[]{"6h","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/6.0)+""};
+        }
+        if(diff < (MAX_DIFF * 8)){
+            return new String[]{"8h","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/8.0)+""};
+        }
+        if(diff < (MAX_DIFF * 12)){
+            return new String[]{"12h","YYYY-MM-dd HH:mm",timeZone,Math.ceil(diff/12.0)+""};
+        }
+        diff = DateUtils.diffDay(beginDate,endDate);
+        MAX_DIFF = 30;//最大范围30天合1个月
+        if(diff < MAX_DIFF){
+            return new String[]{"1d","YYYY-MM-dd",timeZone,diff+""};
+        }
+        if(diff < (MAX_DIFF * 2)){
+            return new String[]{"2d","YYYY-MM-dd",timeZone,Math.ceil(diff/2.0)+""};
+        }
+        if(diff < (MAX_DIFF * 4)){
+            return new String[]{"4d","YYYY-MM-dd",timeZone,Math.ceil(diff/4.0)+""};
+        }
+        if(diff < (MAX_DIFF * 7)){
+            return new String[]{"7d","YYYY-MM-dd",timeZone,Math.ceil(diff/7.0)+""};
+        }
+        if(diff < (MAX_DIFF * 10)){
+            return new String[]{"10d","YYYY-MM-dd",timeZone,Math.ceil(diff/10.0)+""};
+        }
+        if(diff < (MAX_DIFF * 15)){
+            return new String[]{"15d","YYYY-MM-dd",timeZone,Math.ceil(diff/15.0)+""};
+        }
+        diff = DateUtils.diffMonth(beginDate,endDate);
+        MAX_DIFF = 36;//最大范围36个月合3年
+        if(diff < MAX_DIFF){
+            return new String[]{"1M","YYYY-MM",timeZone,diff+""};
+        }
+        if(diff < (MAX_DIFF * 2)){
+            return new String[]{"2M","YYYY-MM",timeZone,Math.ceil(diff/2.0)+""};
+        }
+        if(diff < (MAX_DIFF * 3)){
+            return new String[]{"3M","YYYY-MM",timeZone,Math.ceil(diff/3.0)+""};
+        }
+        if(diff < (MAX_DIFF * 6)){
+            return new String[]{"6M","YYYY-MM",timeZone,Math.ceil(diff/6.0)+""};
+        }
+        diff = DateUtils.diffYear(beginDate,endDate);
+        return new String[]{"1Y","YYYY",timeZone,diff+""};
     }
 }
