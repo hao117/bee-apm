@@ -62,5 +62,32 @@ select tab3
     }
   }
 }
-
-
+#####_ErrorLine
+{
+  "size": 0,
+  "query": {
+    "range": {
+      "time": {
+        "gte": {{beginTime}},
+        "lte": {{endTime}}
+      }
+    }
+  },
+  "aggs": {
+    "app_group": {
+      "terms": {
+        "field": "app"
+      },
+      "aggs": {
+        "time_group": {
+          "date_histogram": {
+            "field": "time",
+            "interval": "{{interval}}",
+            "format": "{{format}}",
+            "time_zone": "{{timeZone}}"
+          }
+        }
+      }
+    }
+  }
+}

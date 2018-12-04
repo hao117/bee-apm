@@ -67,7 +67,7 @@ public class BeeUtils {
      * @param endDate
      * @return
      */
-    public String[] parseDateInterval(Date beginDate,Date endDate){
+    public static String[] parseDateInterval(Date beginDate,Date endDate){
         long MAX_DIFF = 30;//最大范围30分钟合0.5小时
         String timeZone = "+08:00";
         long diff = DateUtils.diffMinute(beginDate,endDate);
@@ -143,4 +143,21 @@ public class BeeUtils {
         diff = DateUtils.diffYear(beginDate,endDate);
         return new String[]{"1Y","YYYY",timeZone,diff+""};
     }
+
+    public static Date nextDateTime(Date beginDate,String interval){
+        int num = Integer.parseInt(interval.substring(0,interval.length()-1));
+        if(interval.endsWith("m")){
+            beginDate = DateUtils.addMinute(beginDate,num);
+        }else if(interval.endsWith("h")){
+            beginDate = DateUtils.addHours(beginDate,num);
+        }else if(interval.endsWith("d")){
+            beginDate = DateUtils.setDay(beginDate,num);
+        }else if(interval.endsWith("M")){
+            beginDate = DateUtils.addMonths(beginDate,num);
+        }else if(interval.endsWith("Y")){
+            beginDate = DateUtils.addYears(beginDate,num);
+        }
+        return beginDate;
+    }
+
 }

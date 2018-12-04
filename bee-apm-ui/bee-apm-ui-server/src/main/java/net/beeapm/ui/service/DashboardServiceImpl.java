@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
-import com.google.gson.JsonObject;
 import io.searchbox.core.SearchResult;
-import io.searchbox.core.search.aggregation.MetricAggregation;
 import net.beeapm.ui.common.BeeUtils;
+import net.beeapm.ui.common.DateUtils;
 import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.KeyValue;
@@ -20,15 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.sound.midi.Soundbank;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DashboardServiceImpl implements IDashboardService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DashboardServiceImpl.class);
     public Map<String,Object> getRequestBarData(Map<String,String> params){
         Map<String,Object> res = new HashMap<>();
         res.put("code",0);
@@ -65,7 +60,7 @@ public class DashboardServiceImpl implements IDashboardService {
             }
             count = result.getJsonObject().getAsJsonObject("aggregations").getAsJsonObject("inst_count").getAsJsonPrimitive("value").getAsLong();
         }catch (Exception e){
-            LOGGER.error("",e);
+            logger.error("",e);
         }
         return count;
     }
@@ -84,7 +79,7 @@ public class DashboardServiceImpl implements IDashboardService {
             }
             count = result.getTotal();
         }catch (Exception e){
-            LOGGER.error("",e);
+            logger.error("",e);
         }
         return count;
     }
@@ -124,7 +119,86 @@ public class DashboardServiceImpl implements IDashboardService {
             res.setCode("0");
             res.setResult(list);
         }catch (Exception e){
-            LOGGER.error("",e);
+            logger.error("",e);
+        }
+        return res;
+    }
+
+    @Override
+    public ResultVo queryErrorLineData(Map<String, Object> params) {
+        ResultVo res = new ResultVo();
+        try {
+            Long beginTime = BeeUtils.getBeginTime(params);
+            Long endTime = BeeUtils.getEndTime(params);
+            Map<String, String> args = new HashMap<>();
+            args.put("beginTime", beginTime.toString());
+            args.put("endTime", endTime.toString());
+            String[] timeInfo = BeeUtils.parseDateInterval(new Date(beginTime),new Date(endTime));
+            logger.debug("timeInfo============>{}",JSON.toJSONString(timeInfo));
+            args.put("interval", timeInfo[0]);
+            args.put("format", timeInfo[1]);
+            args.put("timeZone", timeInfo[2]);
+            String queryString = EsQueryStringMap.me().getQueryString("ErrorLine", args);
+            String[] indices = BeeUtils.getIndices("bee-error-", params);
+            SearchResult result = EsJestClient.inst().search(indices,null,queryString);
+            if(404 == result.getResponseCode()){
+                res.setCode("-1");
+                res.setResult(new ArrayList<>());
+                return res;
+            }
+            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
+            JSONArray buckets = (JSONArray)JSONPath.eval(jsonObject,"$.aggregations.app_group.buckets");
+            if(buckets == null || buckets.size() == 0){
+                res.setCode("0");
+                res.setResult(new ArrayList<>());
+                return res;
+            }
+            List<String> appList = new ArrayList<>();
+            Map<String,Map<String,Integer>> appsMap = new HashMap<>();
+            Map<String,Integer> appDateNumMap = new HashMap<>();
+            String beginDateStr = "9999-12-31 23:59:59";
+            for(int i = 0; i < buckets.size(); i++){
+                JSONObject item = buckets.getJSONObject(i);
+                String appName = item.getString("key");
+                appList.add(appName);
+                JSONArray timeGroup = (JSONArray)JSONPath.eval(item,"$.time_group.buckets");
+                Map<String,Integer> appTimeMap = new HashMap<>();
+                appsMap.put(appName,appTimeMap);
+                for(int j = 0; j < timeGroup.size(); j++){
+                    JSONObject tItem = timeGroup.getJSONObject(j);
+                    String tmpDate = tItem.getString("key_as_string");
+                    appTimeMap.put(tmpDate,tItem.getInteger("doc_count"));
+                    appDateNumMap.put(appName+tmpDate,tItem.getInteger("doc_count"));
+                    if(beginDateStr.compareTo(tmpDate) > 0){
+                        beginDateStr = tmpDate;
+                    }
+                }
+            }
+            Date beginDate = DateUtils.parseDate(beginDateStr,timeInfo[1]);
+            List<Map<String,Object>> rowList = new ArrayList<>();
+            while (!appDateNumMap.isEmpty()) {
+                Map<String,Object> row = new HashMap<>();
+                row.put("time",beginDateStr);
+                for (int i = 0; i < appList.size(); i++) {
+                    String appName = appList.get(i);
+                    Integer num = appDateNumMap.remove(appName+beginDateStr);
+                    if(num == null){
+                        num = 0;
+                    }
+                    row.put(appName,num);
+                }
+                rowList.add(row);
+                beginDate = BeeUtils.nextDateTime(beginDate,timeInfo[0]);
+                beginDateStr = DateUtils.format(beginDate,timeInfo[1]);
+            }
+            Map resMap = new HashMap();
+            appList.add(0,"time");
+            resMap.put("columns",appList);
+            resMap.put("rows",rowList);
+            res.setResult(resMap);
+            res.setCode("0");
+        }catch (Exception e){
+            logger.error("",e);
         }
         return res;
     }

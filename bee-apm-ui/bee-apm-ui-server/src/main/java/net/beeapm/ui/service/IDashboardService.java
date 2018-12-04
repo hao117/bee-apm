@@ -12,4 +12,5 @@ public interface IDashboardService {
     Long queryRequestCount(Map<String,Object> params);
     Long queryErrorCount(Map<String,Object> params);
     ResultVo queryErrorPieData(Map<String,Object> params);
+    ResultVo queryErrorLineData(Map<String,Object> params);
 }
