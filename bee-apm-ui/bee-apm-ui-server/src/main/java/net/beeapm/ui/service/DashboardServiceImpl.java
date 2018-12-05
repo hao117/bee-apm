@@ -10,11 +10,8 @@ import net.beeapm.ui.common.DateUtils;
 import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.KeyValue;
-import net.beeapm.ui.model.SevenKey;
-import net.beeapm.ui.model.TwoKeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
-import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,29 +21,85 @@ import java.util.*;
 @Service
 public class DashboardServiceImpl implements IDashboardService {
     private static final Logger logger = LoggerFactory.getLogger(DashboardServiceImpl.class);
-    public Map<String,Object> getRequestBarData(Map<String,String> params){
-        Map<String,Object> res = new HashMap<>();
-        res.put("code",0);
-        List list = new ArrayList();
-        list.add(new TwoKeyValue("区间","0~200", "请求数量",RandomUtils.nextInt(1001,5000)));
-        list.add(new TwoKeyValue("区间","200~500", "请求数量",RandomUtils.nextInt(1001,5000)));
-        list.add(new TwoKeyValue("区间","500~1000", "请求数量",RandomUtils.nextInt(1001,5000)));
-        list.add(new TwoKeyValue("区间","1000~2000", "请求数量",RandomUtils.nextInt(1001,5000)));
-        list.add(new TwoKeyValue("区间","2000~5000", "请求数量",RandomUtils.nextInt(1001,5000)));
-        list.add(new TwoKeyValue("区间","5000~*", "请求数量",RandomUtils.nextInt(1001,5000)));
-        res.put("rows",list);
+    public ResultVo getRequestBarData(Map<String,Object> params){
+        ResultVo res = new ResultVo();
+        try {
+            SearchResult result = EsJestClient.inst().search(params, "RequestBar", "bee-request-");
+            if (404 == result.getResponseCode()) {
+                res.setCode("-1");
+                res.setResult(new ArrayList<>());
+                return res;
+            }
+            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
+            JSONArray buckets = (JSONArray) JSONPath.eval(jsonObject, "$.aggregations.req_bar.buckets");
+            if(buckets == null || buckets.size() == 0){
+                res.setCode("0");
+                res.setResult(new ArrayList<>());
+                return res;
+            }
+            List<Map<String,Object>> list = new ArrayList<>();
+            for(int i = 0; i < buckets.size(); i++){
+                JSONObject obj = buckets.getJSONObject(i);
+                Map<String,Object> item = new HashMap<>();
+                item.put("区间",obj.getString("key"));
+                item.put("请求数量",obj.getLongValue("doc_count"));
+                list.add(item);
+            }
+            res.setCode("0");
+            res.setResult(list);
+        }catch (Exception e){
+            logger.error("",e);
+        }
         return res;
     }
 
     @Override
-    public ChartVo getRequestLineData(Map<String, String> params) {
+    public ChartVo getRequestLineData(Map<String, Object> params) {
         ChartVo res = new ChartVo();
-        res.setCode("0");
-        List list = new ArrayList();
-        for(int i = 0; i < 10; i++) {
-            list.add(new SevenKey(i+1, "time", "0~200", "200~500", "500~1000", "1000~2000", "2000~3000", "3000~*"));
+        try {
+            Long beginTime = BeeUtils.getBeginTime(params);
+            Long endTime = BeeUtils.getEndTime(params);
+            Map<String, String> args = new HashMap<>();
+            args.put("beginTime", beginTime.toString());
+            args.put("endTime", endTime.toString());
+            String[] timeInfo = BeeUtils.parseDateInterval(new Date(beginTime),new Date(endTime));
+            logger.debug("timeInfo============>{}",JSON.toJSONString(timeInfo));
+            args.put("interval", timeInfo[0]);
+            args.put("format", timeInfo[1]);
+            args.put("timeZone", timeInfo[2]);
+            String queryString = EsQueryStringMap.me().getQueryString("RequestLine", args);
+            String[] indices = BeeUtils.getIndices("bee-request-", params);
+            SearchResult result = EsJestClient.inst().search(indices,null,queryString);
+
+            if(404 == result.getResponseCode()){
+                res.setCode("-1");
+                res.setRows(new ArrayList<>());
+                return res;
+            }
+            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
+            JSONArray buckets = (JSONArray)JSONPath.eval(jsonObject,"$.aggregations.req_qs.buckets");
+            if(buckets == null || buckets.size() == 0){
+                res.setCode("0");
+                res.setRows(new ArrayList<>());
+                return res;
+            }
+            List<Object> list = new ArrayList<>();
+            for(int i = 0; i < buckets.size(); i++){
+                JSONObject obj = buckets.getJSONObject(i);
+                Map<String,Object> item = new HashMap<>();
+                item.put("time",obj.getString("key_as_string"));
+                JSONArray reqBuckets = (JSONArray)JSONPath.eval(obj,"$.req_aggs.buckets");
+                for(int j = 0; j < reqBuckets.size(); j++){
+                    JSONObject reqObj = reqBuckets.getJSONObject(j);
+                    item.put(reqObj.getString("key"),reqObj.getLongValue("doc_count"));
+                }
+                list.add(item);
+            }
+            res.setCode("0");
+            res.setRows(list);
+        }catch (Exception e){
+            logger.error("",e);
         }
-        res.setRows(list);
         return res;
     }
 
@@ -143,14 +196,14 @@ public class DashboardServiceImpl implements IDashboardService {
             SearchResult result = EsJestClient.inst().search(indices,null,queryString);
             if(404 == result.getResponseCode()){
                 res.setCode("-1");
-                res.setResult(new ArrayList<>());
+                res.setResult(new HashMap<>());
                 return res;
             }
             JSONObject jsonObject = JSON.parseObject(result.getJsonString());
             JSONArray buckets = (JSONArray)JSONPath.eval(jsonObject,"$.aggregations.app_group.buckets");
             if(buckets == null || buckets.size() == 0){
                 res.setCode("0");
-                res.setResult(new ArrayList<>());
+                res.setResult(new HashMap<>());
                 return res;
             }
             List<String> appList = new ArrayList<>();

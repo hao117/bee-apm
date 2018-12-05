@@ -76,7 +76,8 @@ select tab3
   "aggs": {
     "app_group": {
       "terms": {
-        "field": "app"
+        "field": "app",
+        "size": 1000
       },
       "aggs": {
         "time_group": {
@@ -85,6 +86,106 @@ select tab3
             "interval": "{{interval}}",
             "format": "{{format}}",
             "time_zone": "{{timeZone}}"
+          }
+        }
+      }
+    }
+  }
+}
+
+#####_RequestBar
+{
+    "size":0,
+    "query":{
+		"range":{
+			"time":{
+				"gte":{{beginTime}},
+				"lte":{{endTime}}
+			}
+		}
+	},
+	"aggs":{
+		"req_bar":{
+			"range":{
+				"field":"spend",
+				"format":"0",
+				"ranges":[
+					{
+						"from":0,
+						"to":200
+					},
+					{
+						"from":200,
+						"to":500
+					},
+					{
+						"from":500,
+						"to":1000
+					},
+					{
+						"from":1000,
+						"to":2000
+					},
+					{
+						"from":2000,
+						"to":5000
+					},
+					{
+						"from":5000
+					}
+				]
+			}
+		}
+	}
+}
+#####_RequestLine
+{
+   "size":0,
+    "query":{
+		"range":{
+			"time":{
+				"gte":{{beginTime}},
+				"lte":{{endTime}}
+			}
+		}
+   },
+  "aggs": {
+    "req_qs": {
+      "date_histogram": {
+        "field": "time",
+        "interval": "{{interval}}",
+        "format": "{{format}}",
+        "time_zone": "{{timeZone}}"
+      },
+      "aggs": {
+        "req_aggs": {
+          "range": {
+            "field": "spend",
+            "ranges": [
+              {
+                "to": 200
+              },
+              {
+                "from": 200,
+                "to": 500
+              },
+              {
+                "from": 500,
+                "to": 1000
+              },
+              {
+                "from": 1000,
+                "to": 2000
+              },
+              {
+                "from": 2000,
+                "to": 5000
+              },
+              {
+                "from": 5000
+              }
+            ],
+            "format": "0"
           }
         }
       }

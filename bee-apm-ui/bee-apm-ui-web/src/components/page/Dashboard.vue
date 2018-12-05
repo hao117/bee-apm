@@ -149,7 +149,7 @@
                     rows: []
                 },
                 requestLineData: {
-                    columns: ['time', '0~200',"200~500","500~1000","1000~2000","2000~3000","3000~*"],
+                    columns: ['time', '0-200',"200-500","500-1000","1000-2000","2000-5000","5000-*"],
                     rows: []
                 }
 
@@ -241,7 +241,7 @@
                     endTime:this.getEndTime(),
                 }).then((res) => {
                     console.log("==>getRequestBarData:%o",res);
-                    this.requestBarData.rows = res.data.rows;
+                    this.requestBarData.rows = res.data.result;
                 })
             },
             getRequestLineData(){
@@ -254,7 +254,6 @@
                     this.requestLineData.rows = res.data.rows;
                 })
             }
-
         }
     }
 </script>
