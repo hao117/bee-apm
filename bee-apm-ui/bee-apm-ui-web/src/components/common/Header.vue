@@ -7,7 +7,7 @@
         <div class="logo">BeeAPM</div>
         <div class="header-right">
             <div class="header-user-con">
-                <div>
+                <div id="date-picker">
                     <el-date-picker v-model="datePicker.values" type="datetimerange" :picker-options="datePicker.options"
                         range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
                         :clearable="datePicker.clearable" :editable="datePicker.editable"
@@ -219,7 +219,13 @@
         }
     }
 </script>
-<style scoped>
+<style>
+    #date-picker input{
+        width: 110px;
+    }
+    #date-picker div{
+        width: 270px;
+    }
     .header {
         position: relative;
         box-sizing: border-box;
@@ -290,11 +296,4 @@
         color: #fff;
         cursor: pointer;
     }
-    .el-dropdown-menu__item{
-        text-align: center;
-    }
-    .el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner {
-        width: 350px;
-    }
-
 </style>
