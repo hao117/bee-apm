@@ -58,7 +58,7 @@
             </el-col>
             <el-col :span="15">
                 <el-card>
-                    <ve-line :data="errorLineData" :title="errorLineTitle" :extend="chartLineExtend" :settings="errorLineSettings"></ve-line>
+                    <ve-line :data="errorLineData" :title="errorLineTitle" :extend="errorLineExtend" :settings="errorLineSettings"></ve-line>
                 </el-card>
             </el-col>
         </el-row>
@@ -84,9 +84,16 @@
     export default {
         name: 'dashboard',
         data() {
-            this.chartLineExtend = {
+            this.errorLineExtend = {
                 'xAxis.0.axisLabel.rotate': 60,
-                'xAxis.0.boundaryGap':false
+                'xAxis.0.boundaryGap':false,
+                toolbox: {
+                    y:15,
+                    feature: {
+                        mark : {show: true},
+                        magicType : {show: true, type: ['line', 'bar','stack','tiled']}
+                    }
+                }
             }
             this.errorPieSettings = {
                 limitShowNum: 8
@@ -118,7 +125,13 @@
                     smooth: false
                 },
                 'xAxis.0.axisLabel.rotate': 60,
-                'xAxis.0.boundaryGap':false
+                'xAxis.0.boundaryGap':false,
+                toolbox: {
+                    feature: {
+                        mark : {show: true},
+                        magicType : {show: true, type: ['line', 'bar','stack','tiled']}
+                    }
+                }
             },
             this.requestLineTitle = {
                 text:"请求量趋势图（耗时区间）",

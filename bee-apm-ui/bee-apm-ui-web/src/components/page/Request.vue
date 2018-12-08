@@ -4,10 +4,10 @@
             <el-form ref="form" :model="form" label-width="80px" width="100%">
                 <el-row :gutter="20">
                     <el-col :span="7">
-                        <el-form-item label="集群名称">
-                            <el-select v-model="form.group" placeholder="请选择">
+                        <el-form-item label="环境">
+                            <el-select v-model="form.env" placeholder="请选择">
                                 <el-option
-                                    v-for="item in groupOptions"
+                                    v-for="item in envOptions"
                                     :key="item.value"
                                     :label="item.name"
                                     :value="item.value">
@@ -16,16 +16,22 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item label="应用实例">
-                            <el-input v-model="form.server"></el-input>
+                        <el-form-item label="应用">
+                            <el-select v-model="form.app" placeholder="请选择">
+                                <el-option
+                                    v-for="item in appOptions"
+                                    :key="item.value"
+                                    :label="item.name"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
                         <el-form-item label="排序">
                             <el-select v-model="form.sort" placeholder="请选择">
-                                <el-option key="bbk" label="步步高" value="bbk"></el-option>
-                                <el-option key="xtc" label="小天才" value="xtc"></el-option>
-                                <el-option key="imoo" label="imoo" value="imoo"></el-option>
+                                <el-option key="time" label="时间" value="time"></el-option>
+                                <el-option key="spend" label="耗时" value="spend"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -118,7 +124,8 @@
                     ip:'',
                     sort:''
                 },
-                groupOptions:[]
+                envOptions:[],
+                appOptions:[]
             }
         },
         created(){
@@ -141,7 +148,7 @@
                     endTime:moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm')
                 }).then((res) => {
                     console.log("==>queryGroupList=%o",res);
-                    this.groupOptions = res.data.result;
+                    this.envOptions = res.data.result;
                 })
             },
             // 分页导航
