@@ -21,7 +21,7 @@ public class CommonController {
 
     @RequestMapping("/getGroupList")
     @ResponseBody
-    public Object getGroupList(@RequestBody Map<String,String> params){
+    public Object getGroupList(@RequestBody Map<String,Object> params){
         logger.debug("RequestBody={}",params);
         return commonService.queryGroupList(params);
     }

@@ -116,11 +116,18 @@ public class EsJestClient {
     }
 
     public SearchResult search(Map<String,Object> params,String mapId,String indexPrefix) throws IOException{
+        String[] indices = BeeUtils.getIndices(indexPrefix, params);
         Map<String, String> args = new HashMap<>();
         args.put("beginTime", BeeUtils.getBeginTime(params).toString());
         args.put("endTime", BeeUtils.getEndTime(params).toString());
+        params.remove("beginTime");
+        params.remove("endTime");
+        for(Map.Entry<String,Object> entry : params.entrySet()){
+            if(entry.getValue() != null && !entry.getValue().toString().isEmpty()){
+                args.put(entry.getKey(),entry.getValue().toString());
+            }
+        }
         String queryString = EsQueryStringMap.me().getQueryString(mapId, args);
-        String[] indices = BeeUtils.getIndices(indexPrefix, params);
         return search(indices, null, queryString);
     }
 

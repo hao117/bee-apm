@@ -93,6 +93,11 @@ public class EsQueryStringMap {
                 }
             }
         }
+        for(int i = list.size() - 1 ;i >= 0; i--){
+            if(list.get(i).startsWith("@if")){
+                list.remove(i);
+            }
+        }
         String queryString = String.join(" ",list.toArray(new String[list.size()]));
         LOGGER.debug("queryString = {}",queryString);
         return queryString;

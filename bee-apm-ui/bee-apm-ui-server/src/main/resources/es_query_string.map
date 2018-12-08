@@ -192,3 +192,57 @@ select tab3
     }
   }
 }
+#####_GroupList
+{
+  "size": 0,
+  "query": {
+    "range": {
+       "time":{
+          "gte":{{beginTime}},
+          "lte":{{endTime}}
+       }
+    }
+  },
+  "aggs": {
+    "group_list": {
+      "terms": {
+        "field": "{{group}}",
+        "size": 100,
+        "order": [
+           {
+             "_term": "asc"
+           }
+        ]
+      }
+    }
+  }
+}
+
+#####_PageDataList
+{
+  "from":{{from}},
+  "size": {{size}},
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "time": {
+               "gte":{{beginTime}},
+               "lte":{{endTime}}
+            }
+          }
+        }
+        @if ,{"term": {"app": "{{app}}"}}
+        @if ,{"term": {"env": "{{env}}"}}
+        @if ,{"term": {"ip": "{{ip}}"}}
+        @if ,{"term": {"gid": "{{gid}}"}}
+      ]
+    }
+  },
+  "sort": [
+      {
+       "{{sort}}": { "order": "desc"   }
+      }
+  ]
+}

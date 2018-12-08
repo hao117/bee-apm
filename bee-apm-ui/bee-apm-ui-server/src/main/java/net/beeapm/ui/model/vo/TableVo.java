@@ -5,7 +5,7 @@ import java.util.List;
 public class TableVo extends BaseVo{
     private List<Object> rows;
     private Integer pageNum;
-    private Integer pageTotal;
+    private Long pageTotal;
 
     public List<Object> getRows() {
         return rows;
@@ -23,11 +23,11 @@ public class TableVo extends BaseVo{
         this.pageNum = pageNum;
     }
 
-    public Integer getPageTotal() {
+    public Long getPageTotal() {
         return pageTotal;
     }
 
-    public void setPageTotal(Integer pageTotal) {
+    public void setPageTotal(Long pageTotal) {
         this.pageTotal = pageTotal;
     }
 }

@@ -5,5 +5,5 @@ import net.beeapm.ui.model.vo.ResultVo;
 import java.util.Map;
 
 public interface ICommonService {
-    ResultVo queryGroupList(Map<String,String> param);
+    ResultVo queryGroupList(Map<String,Object> param);
 }
