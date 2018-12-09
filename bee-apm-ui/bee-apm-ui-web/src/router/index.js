@@ -75,6 +75,11 @@ export default new Router({
                     path: '/sql',
                     component: resolve => require(['../components/page/Sql.vue'], resolve),
                     meta: { title: 'SQL查询' }
+                },
+                {
+                    path: '/tx',
+                    component: resolve => require(['../components/page/Tx.vue'], resolve),
+                    meta: { title: '事务查询' }
                 }
             ]
         },
