@@ -237,14 +237,11 @@ select tab3
         @if ,{"term": {"env": "{{env}}"}}
         @if ,{"term": {"ip": "{{ip}}"}}
         @if ,{"term": {"gid": "{{gid}}"}}
+        @if ,{"term": {"tags.level": "{{tags.level}}"}}
       ]
     }
-  },
-  "sort": [
-      {
-       "{{sort}}": { "order": "desc"   }
-      }
-  ]
+  }
+  @if ,"sort": [{"{{sort}}": { "order": "desc" }}]
 }
 
 #####_BarDataList
@@ -265,6 +262,7 @@ select tab3
         @if ,{"term": {"env": "{{env}}"}}
         @if ,{"term": {"ip": "{{ip}}"}}
         @if ,{"term": {"gid": "{{gid}}"}}
+        @if ,{"term": {"tags.level": "{{tags.level}}"}}
       ]
     }
   },

@@ -28,10 +28,15 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item label="排序">
-                            <el-select v-model="form.sort" placeholder="请选择">
-                                <el-option key="time" label="时间" value="time"></el-option>
-                                <el-option key="spend" label="耗时" value="spend"></el-option>
+                        <el-form-item label="级别">
+                            <el-select v-model="form['tags.level']" placeholder="请选择">
+                                <el-option key="全部" label="全部" value=""></el-option>
+                                <el-option key="trace" label="trace" value="trace"></el-option>
+                                <el-option key="debug" label="debug" value="debug"></el-option>
+                                <el-option key="info" label="info" value="info"></el-option>
+                                <el-option key="warm" label="warm" value="warm"></el-option>
+                                <el-option key="error" label="error" value="error"></el-option>
+                                <el-option key="fatal" label="fatal" value="fatal"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -74,9 +79,9 @@
                         </el-table-column>
                         <el-table-column prop="app" label="应用" width="120">
                         </el-table-column>
-                        <el-table-column prop="spend" label="耗时" width="100">
+                        <el-table-column prop="tags.level" label="级别" width="100">
                         </el-table-column>
-                        <el-table-column prop="method" label="方法" :formatter="methodFormatter" min-width="250">
+                        <el-table-column prop="tags.log" label="日志"  min-width="250">
                         </el-table-column>
                         <el-table-column label="操作" width="180" align="center" fixed="right">
                             <template slot-scope="scope">
@@ -100,7 +105,7 @@
     let moment = require("moment");
 
     export default {
-        name: 'method',
+        name: 'logger',
         data: function(){
             this.chartSettings = {
             }
@@ -122,7 +127,7 @@
                     env:null,
                     app:null,
                     ip:null,
-                    sort:null
+                    "tags.level":null
                 },
                 envOptions:[],
                 appOptions:[]
@@ -140,8 +145,8 @@
                 let self = this;
                 bus.$on("refreshTag",function (val) {
                     console.log("refreshTag =========== " + val);
-                    if(val === 'method'){
-                        console.log("method refresh.................")
+                    if(val === 'logger'){
+                        console.log("logger refresh.................")
                         self.getPickerDate();
                         self.queryEnvGroupList();
                         self.queryAppGroupList();
@@ -193,13 +198,13 @@
                 if(pageNum == 1){
                     this.queryChartData();
                 }
-                const url = "/api/method/list";
+                const url = "/api/logger/list";
                 let params = this.form;
                 params.pageNum = pageNum;
                 params.beginTime=this.getBeginTime();
                 params.endTime=this.getEndTime();
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryMethodtList=%o",res);
+                    console.log("==>queryLoggerList=%o",res);
                     this.tableData.rows = res.data.rows;
                     this.tableData.currPageNum = res.data.pageNum;
                     this.tableData.pageTotal = res.data.pageTotal;
@@ -207,20 +212,17 @@
             },
             // 柱状图数据
             queryChartData(){
-                const url = "/api/method/chart";
+                const url = "/api/logger/chart";
                 let params = this.form;
                 params.beginTime=this.getBeginTime();
                 params.endTime=this.getEndTime();
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryMethodChartData=%o",res);
+                    console.log("==>queryLoggerChartData=%o",res);
                     this.chartData.rows = res.data.rows;
                 })
             },
             timeFormatter(row, column){
                 return row.time.substring(11,19);
-            },
-            methodFormatter(row, column){
-                return row.tags.clazz+"."+row.tags.method;
             }
         }
     }

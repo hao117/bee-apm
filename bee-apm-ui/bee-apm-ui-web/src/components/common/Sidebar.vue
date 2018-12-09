@@ -75,7 +75,7 @@
                     },
                     {
                         icon: 'el-icon-lx-info',
-                        index: 'icon',
+                        index: 'logger',
                         title: 'Logger查询'
                     },
                     {

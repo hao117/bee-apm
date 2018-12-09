@@ -35,9 +35,9 @@ export default new Router({
                     meta: { title: '方法查询' }
                 },
                 {
-                    path: '/icon',
-                    component: resolve => require(['../components/page/Icon.vue'], resolve),
-                    meta: { title: '自定义图标' }
+                    path: '/logger',
+                    component: resolve => require(['../components/page/Logger.vue'], resolve),
+                    meta: { title: 'Logger查询' }
                 },
                 {
                     path: '/table',
