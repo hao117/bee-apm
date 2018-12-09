@@ -120,9 +120,10 @@ public class EsJestClient {
         Map<String, String> args = new HashMap<>();
         args.put("beginTime", BeeUtils.getBeginTime(params).toString());
         args.put("endTime", BeeUtils.getEndTime(params).toString());
-        params.remove("beginTime");
-        params.remove("endTime");
         for(Map.Entry<String,Object> entry : params.entrySet()){
+            if("beginTime".equals(entry.getKey()) || "endTime".equals(entry.getKey())){
+                continue;
+            }
             if(entry.getValue() != null && !entry.getValue().toString().isEmpty()){
                 args.put(entry.getKey(),entry.getValue().toString());
             }
