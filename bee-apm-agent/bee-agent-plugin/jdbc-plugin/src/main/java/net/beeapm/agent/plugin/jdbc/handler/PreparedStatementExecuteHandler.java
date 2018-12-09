@@ -42,8 +42,10 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
         if(!JdbcConfig.me().isEnable() || span == null || SamplingUtil.NO()){
             return null;
         }
-        if(t != null){
-            span.addTag("status","1");
+        if(t != null){//Y成功，N失败
+            span.addTag("status","Y");
+        }else{
+            span.addTag("status","N");
         }
         calculateSpend(span);
         if(span.getSpend() > JdbcConfig.me().getSpend()) {
