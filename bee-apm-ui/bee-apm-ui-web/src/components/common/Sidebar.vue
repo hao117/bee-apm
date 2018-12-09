@@ -64,8 +64,8 @@
                         title: '数据库',
                         subs: [
                             {
-                                index: 'form',
-                                title: 'SQL'
+                                index: 'sql',
+                                title: 'SQL查询'
                             },
                             {
                                 index: 'tx',

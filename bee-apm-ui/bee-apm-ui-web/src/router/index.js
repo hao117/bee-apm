@@ -70,6 +70,11 @@ export default new Router({
                     path: '/403',
                     component: resolve => require(['../components/page/403.vue'], resolve),
                     meta: { title: '403' }
+                },
+                {
+                    path: '/sql',
+                    component: resolve => require(['../components/page/Sql.vue'], resolve),
+                    meta: { title: 'SQL查询' }
                 }
             ]
         },
