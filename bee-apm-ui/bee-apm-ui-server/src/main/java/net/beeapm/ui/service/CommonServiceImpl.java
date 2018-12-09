@@ -48,6 +48,10 @@ public class CommonServiceImpl implements ICommonService {
                 item.put("value",bucket.getString("key"));
                 list.add(item);
             }
+            Map<String,String> item = new HashMap<>();
+            item.put("name","全部");
+            item.put("value","");
+            list.add(0,item);
             res.setCode("0");
             res.setResult(list);
         }catch (Exception e){

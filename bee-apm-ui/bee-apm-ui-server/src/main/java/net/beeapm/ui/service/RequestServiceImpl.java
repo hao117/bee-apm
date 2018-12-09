@@ -6,13 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeConst;
+import net.beeapm.ui.common.BeeUtils;
 import net.beeapm.ui.common.EsIndicesPrefix;
 import net.beeapm.ui.es.EsJestClient;
-import net.beeapm.ui.model.TwoKeyValue;
+import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.TableVo;
-import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,23 +31,7 @@ public class RequestServiceImpl implements IRequestService {
         if(params.get("sort") == null || params.get("sort").toString().isEmpty()){
             params.put("sort","time");
         }
-
         List<Object> rows = new ArrayList<>();
-        /*
-        for(int i = 0; i < 10; i++){
-            Map item = new HashMap();
-            item.put("id", "1"+StringUtils.leftPad(""+((res.getPageNum()-1)*10 + i + 1),19,'0'));
-            item.put("gId", "2"+StringUtils.leftPad(""+((res.getPageNum()-1)*10 + i + 1),19,'0'));
-            item.put("date",DateFormatUtils.format(new Date(),"yyyy-MM-dd HH:mm:ss"));
-            item.put("spend",101);
-            item.put("ip","192.168.1."+(i+1));
-            item.put("url","http://www.beeapm.net/"+i);
-            item.put("server","beeweb"+(i+1));
-            item.put("group","beeweb");
-            rows.add(item);
-        }
-        res.setRows(rows);
-        */
         try {
             SearchResult searchResult = EsJestClient.inst().search(params, "PageDataList", EsIndicesPrefix.REQUEST);
             if(404 == searchResult.getResponseCode()){
@@ -76,12 +59,50 @@ public class RequestServiceImpl implements IRequestService {
     public ChartVo chart(Map<String, Object> params) {
         ChartVo res = new ChartVo();
         List<Object> rows = new ArrayList<>();
-        long time = new Date().getTime();
-        for(int i = 0; i < 20; i++){
-            rows.add(new TwoKeyValue("time", DateFormatUtils.format(new Date(time+(i*60)),"yyyy-MM-dd HH:mm"),"请求量", RandomUtils.nextInt(500,3000)));
+        try {
+            Long beginTime = BeeUtils.getBeginTime(params);
+            Long endTime = BeeUtils.getEndTime(params);
+            Map<String, String> args = new HashMap<>();
+            for(Map.Entry<String,Object> entry : params.entrySet()){
+                if(entry.getValue() != null && !entry.getValue().toString().isEmpty()){
+                    args.put(entry.getKey(),entry.getValue().toString());
+                }
+            }
+            args.put("beginTime", beginTime.toString());
+            args.put("endTime", endTime.toString());
+            String[] timeInfo = BeeUtils.parseDateInterval(new Date(beginTime), new Date(endTime));
+            logger.debug("timeInfo============>{}", JSON.toJSONString(timeInfo));
+            args.put("interval", timeInfo[0]);
+            args.put("format", timeInfo[1]);
+            args.put("timeZone", timeInfo[2]);
+            String queryString = EsQueryStringMap.me().getQueryString("BarDataList", args);
+            String[] indices = BeeUtils.getIndices(EsIndicesPrefix.REQUEST, params);
+            SearchResult result = EsJestClient.inst().search(indices, null, queryString);
+            if (404 == result.getResponseCode()) {
+                res.setCode("-1");
+                res.setRows(rows);
+                return res;
+            }
+            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
+            JSONArray buckets = (JSONArray) JSONPath.eval(jsonObject, "$.aggregations.bar_aggs.buckets");
+            if (buckets == null || buckets.size() == 0) {
+                res.setCode("0");
+                res.setRows(rows);
+                return res;
+            }
+
+            for(int i = 0; i < buckets.size(); i++) {
+                JSONObject bucket = buckets.getJSONObject(i);
+                Map<String,Object> row = new HashMap<>();
+                row.put("time",bucket.getString("key_as_string"));
+                row.put("请求量",bucket.getLongValue("doc_count"));
+                rows.add(row);
+            }
+            res.setCode("0");
+            res.setRows(rows);
+        }catch (Exception e){
+            logger.error("",e);
         }
-        res.setRows(rows);
-        res.setCode("0");
         return res;
     }
 }

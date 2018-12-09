@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONPath;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeUtils;
 import net.beeapm.ui.common.DateUtils;
+import net.beeapm.ui.common.EsIndicesPrefix;
 import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.KeyValue;
@@ -107,7 +108,7 @@ public class DashboardServiceImpl implements IDashboardService {
     public Long queryInstCount(Map<String, Object> params) {
         Long count = 0L;
         try {
-            SearchResult result = EsJestClient.inst().search(params, "instCount", "bee-heartbeat-");
+            SearchResult result = EsJestClient.inst().search(params, "instCount", EsIndicesPrefix.HEARTBEAT);
             if(404 == result.getResponseCode()){
                 return 0L;
             }

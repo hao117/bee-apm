@@ -246,3 +246,36 @@ select tab3
       }
   ]
 }
+
+#####_BarDataList
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "time": {
+               "gte":{{beginTime}},
+               "lte":{{endTime}}
+            }
+          }
+        }
+        @if ,{"term": {"app": "{{app}}"}}
+        @if ,{"term": {"env": "{{env}}"}}
+        @if ,{"term": {"ip": "{{ip}}"}}
+        @if ,{"term": {"gid": "{{gid}}"}}
+      ]
+    }
+  },
+  "aggs": {
+    "bar_aggs": {
+      "date_histogram": {
+        "field": "time",
+        "interval": "{{interval}}",
+        "format": "{{format}}",
+        "time_zone": "{{timeZone}}"
+      }
+    }
+  }
+}
