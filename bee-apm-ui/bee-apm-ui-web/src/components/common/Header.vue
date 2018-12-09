@@ -121,27 +121,34 @@
                                 picker.$emit('pick', [start, end]);
                             }
                         }, {
-                            text: '最近12小时',
+                            text: '今天就今天',
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
-                                start.setTime(start.getTime() - 12 * 3600 * 1000);
+                                start.setHours(0);
+                                start.setMinutes(0);
+                                start.setSeconds(0);
+                                start.setMilliseconds(0);
+                                end.setHours(23);
+                                end.setMinutes(59);
+                                end.setSeconds(59);
+                                end.setMilliseconds(999);
                                 picker.$emit('pick', [start, end]);
                             }
                         }, {
-                            text: '最近1天',
+                            text: '昨天和今天',
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
                                 start.setTime(start.getTime() - 24 * 3600 * 1000);
-                                picker.$emit('pick', [start, end]);
-                            }
-                        }, {
-                            text: '最近2天',
-                            onClick(picker) {
-                                const end = new Date();
-                                const start = new Date();
-                                start.setTime(start.getTime() - 2 * 24 * 3600 * 1000);
+                                start.setHours(0);
+                                start.setMinutes(0);
+                                start.setSeconds(0);
+                                start.setMilliseconds(0);
+                                end.setHours(23);
+                                end.setMinutes(59);
+                                end.setSeconds(59);
+                                end.setMilliseconds(999);
                                 picker.$emit('pick', [start, end]);
                             }
                         }]
