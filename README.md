@@ -92,7 +92,7 @@ gitee ：https://gitee.com/beetle082/bee-apm
 ![](./docs/pic/beeapm.png)
 ## 联系
 ```
-QQ: 275951533
+QQ群: 961882872
 EMAIL: beetle082@163.com
 ```
 
