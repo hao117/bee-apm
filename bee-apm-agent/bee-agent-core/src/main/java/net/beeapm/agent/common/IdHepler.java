@@ -53,9 +53,9 @@ public class IdHepler {
                             .build();
                     client.getConnectionStateListenable().addListener(clientListener);
                     client.start();
-                    System.out.println("hlog-agent init node name");
+                    System.out.println("bee apm agent init node name");
                     genNodeName(initTimes.incrementAndGet());
-                    System.out.println("hlog-agent init time tag");
+                    System.out.println("bee apm init time tag");
                     initTag();
                     initFlag = true;
                 }catch (Throwable e){
