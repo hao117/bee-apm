@@ -7,6 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 用于BeeAPM的log组件还没初始化前的日志打印，日志内容输出到{user.home}/logs/bee-apm.log文件里，并输出到控制台中<br/>
+ * 比如BeeAPM启动时候的日志输出<br/>
+ * 其它地方请使用 {@link LogManager} 获取{@link LogImpl}对象进行日志打印<br/>
+ *
  * @author yuan
  * @date 2019/12/19
  */
