@@ -3,6 +3,7 @@ package net.beeapm.agent.boot;
 import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.Heartbeat;
 import net.beeapm.agent.common.IdHepler;
+import net.beeapm.agent.log.BeeLog;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.FieldDefine;
@@ -25,7 +26,8 @@ import java.util.List;
  */
 public class BeeAgent {
     public static void premain(String arguments, Instrumentation inst) {
-        System.out.println("\n---------------------------------Welcome BeeAPM ---------------------------------------");
+        BeeLog.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
+        BeeLog.log("start......");
         BeeAgentJarUtils.getAgentJarDirPath();
         IdHepler.init();
         BootPluginFactory.init();

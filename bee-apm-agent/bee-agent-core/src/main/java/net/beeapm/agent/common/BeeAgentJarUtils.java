@@ -1,5 +1,7 @@
 package net.beeapm.agent.common;
 
+import net.beeapm.agent.log.BeeLog;
+
 import java.io.File;
 import java.net.URL;
 
@@ -19,7 +21,7 @@ public class BeeAgentJarUtils {
             return agentJarPath;
         }catch (Exception e){
             e.printStackTrace();
-            //logger.error("",e);
+            BeeLog.log(e.getMessage());
         }
         return null;
     }
@@ -34,6 +36,7 @@ public class BeeAgentJarUtils {
             }
         }catch (Exception e){
             e.printStackTrace();
+            BeeLog.log(e.getMessage());
         }
         return agentJarDirPath;
     }
@@ -41,7 +44,7 @@ public class BeeAgentJarUtils {
 
     private static String findPath() throws Exception{
         String classPath = BeeAgentJarUtils.class.getName().replaceAll("\\.", "/") + ".class";
-        URL resource = BeeAgentJarUtils.class.getClassLoader().getSystemClassLoader().getResource(classPath);
+        URL resource = ClassLoader.getSystemClassLoader().getResource(classPath);
         if (resource != null) {
             String path = resource.toString();
             int jarIndex = path.indexOf('!');
@@ -54,7 +57,7 @@ public class BeeAgentJarUtils {
             if(f.exists()){
                 path = f.getCanonicalPath();
             }
-            System.out.println("agent jar path = " + path);
+            BeeLog.log("agent jar path = " + path);
             return path;
         }
         return null;
