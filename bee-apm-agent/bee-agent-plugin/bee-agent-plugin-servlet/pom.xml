@@ -9,7 +9,7 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>servlet-plugin</artifactId>
+    <artifactId>bee-agent-plugin-servlet</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -23,7 +23,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>servlet-plugin</finalName>
+        <finalName>bee-agent-plugin-servlet</finalName>
     </build>
 
 </project>

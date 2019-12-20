@@ -9,13 +9,13 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>jdbc-plugin</artifactId>
+    <artifactId>bee-agent-plugin-logger</artifactId>
     <packaging>jar</packaging>
 
     <properties>
     </properties>
     <build>
-        <finalName>jdbc-plugin</finalName>
+        <finalName>bee-agent-plugin-logger</finalName>
     </build>
 
 </project>

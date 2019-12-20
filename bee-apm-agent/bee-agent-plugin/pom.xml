@@ -19,14 +19,14 @@
         <shade.net.bytebuddy.target>${shade.package}.${shade.net.bytebuddy.source}</shade.net.bytebuddy.target>
     </properties>
     <modules>
-        <module>base-process-plugin</module>
-        <module>servlet-plugin</module>
-        <module>jdbc-plugin</module>
-        <module>httpclient4x-plugin</module>
-        <module>httpclient3x-plugin</module>
-        <module>okhttp3x-plugin</module>
-        <module>logger-plugin</module>
-        <module>spring-tx-plugin</module>
+        <module>bee-agent-plugin-httpclient3x</module>
+        <module>bee-agent-plugin-httpclient4x</module>
+        <module>bee-agent-plugin-jdbc</module>
+        <module>bee-agent-plugin-logger</module>
+        <module>bee-agent-plugin-okhttp3x</module>
+        <module>bee-agent-plugin-process</module>
+        <module>bee-agent-plugin-servlet</module>
+        <module>bee-agent-plugin-springtx</module>
     </modules>
     <dependencies>
         <dependency>

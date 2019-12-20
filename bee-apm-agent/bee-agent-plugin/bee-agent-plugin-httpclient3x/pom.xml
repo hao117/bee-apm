@@ -9,21 +9,21 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>httpclient4x-plugin</artifactId>
+    <artifactId>bee-agent-plugin-httpclient3x</artifactId>
     <packaging>jar</packaging>
 
     <properties>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
+            <groupId>commons-httpclient</groupId>
+  			<artifactId>commons-httpclient</artifactId>
+  			<version>3.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>
-        <finalName>httpclient4x-plugin</finalName>
+        <finalName>bee-agent-plugin-httpclient3x</finalName>
     </build>
 
 </project>

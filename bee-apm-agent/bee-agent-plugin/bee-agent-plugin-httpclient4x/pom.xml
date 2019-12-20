@@ -9,11 +9,21 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>spring-tx-plugin</artifactId>
+    <artifactId>bee-agent-plugin-httpclient4x</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     <build>
-        <finalName>spring-tx-plugin</finalName>
+        <finalName>bee-agent-plugin-httpclient4x</finalName>
     </build>
 
 </project>

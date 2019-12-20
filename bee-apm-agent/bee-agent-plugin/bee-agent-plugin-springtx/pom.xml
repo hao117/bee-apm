@@ -9,19 +9,11 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>okhttp3x-plugin</artifactId>
+    <artifactId>bee-agent-plugin-springtx</artifactId>
     <packaging>jar</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>3.6.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
     <build>
-        <finalName>okhttp3x-plugin</finalName>
+        <finalName>bee-agent-plugin-springtx</finalName>
     </build>
 
 </project>
