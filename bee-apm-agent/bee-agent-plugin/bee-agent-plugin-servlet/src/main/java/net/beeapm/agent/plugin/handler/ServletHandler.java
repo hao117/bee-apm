@@ -9,7 +9,7 @@ import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.common.BeeHttpResponseWrapper;
 import net.beeapm.agent.plugin.ServletConfig;
 import net.beeapm.agent.plugin.common.RequestBodyHolder;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,7 +70,7 @@ public class ServletHandler extends AbstractHandler {
                 response.setHeader(HeaderKey.GID, span.getGid());   //返回gid，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());     //返回id，用于跟踪
                 span.fillEnvInfo();
-                TransmitterFactory.transmit(span);
+                ReporterFactory.report(span);
                 collectRequestParameter(span,request);//采集参数
                 collectRequestBody(span,request);//采集body
                 collectRequestHeader(span,request);//采集header
@@ -88,7 +88,7 @@ public class ServletHandler extends AbstractHandler {
                 Span paramSpan = new Span(SpanType.REQUEST_PARAM);
                 paramSpan.setId(span.getId());
                 paramSpan.addTag("param", JSON.toJSONString(params));
-                TransmitterFactory.transmit(paramSpan);
+                ReporterFactory.report(paramSpan);
             }
         }
     }
@@ -103,7 +103,7 @@ public class ServletHandler extends AbstractHandler {
                 Span bodySpan = new Span(SpanType.REQUEST_BODY);
                 bodySpan.setId(span.getId());
                 bodySpan.addTag("body", RequestBodyHolder.getRequestBody());
-                TransmitterFactory.transmit(bodySpan);
+                ReporterFactory.report(bodySpan);
             }
         }
     }
@@ -120,7 +120,7 @@ public class ServletHandler extends AbstractHandler {
                 Span headersSpan = new Span(SpanType.REQUEST_HEADERS);
                 headersSpan.setId(span.getId());
                 headersSpan.addTag("headers", JSON.toJSONString(headers));
-                TransmitterFactory.transmit(headersSpan);
+                ReporterFactory.report(headersSpan);
             }
         }
     }
@@ -133,7 +133,7 @@ public class ServletHandler extends AbstractHandler {
             String body = new String(beeResp.getBytes());
             if(StringUtils.isNotBlank(body)){
                 respSpan.addTag("body", body);
-                TransmitterFactory.transmit(respSpan);
+                ReporterFactory.report(respSpan);
             }
         }
     }

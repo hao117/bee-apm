@@ -11,6 +11,6 @@ target/
 dependency-reduced-pom.xml
 weaving-class/
 plugins/
-transmit/
+reporter/
 node_modules/
 dist/

@@ -3,7 +3,7 @@ package net.beeapm.agent.common;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,7 +20,7 @@ public class Heartbeat {
                 Span span = new Span(SpanType.HEARTBEAT);
                 span.fillEnvInfo();
                 span.setId(IdHepler.id());
-                TransmitterFactory.transmit(span);
+                ReporterFactory.report(span);
             }
         },0,period, TimeUnit.SECONDS);
     }

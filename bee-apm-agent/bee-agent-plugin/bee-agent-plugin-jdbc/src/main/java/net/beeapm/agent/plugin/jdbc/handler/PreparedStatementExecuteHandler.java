@@ -10,7 +10,7 @@ import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.handler.AbstractHandler;
 import net.beeapm.agent.plugin.jdbc.JdbcConfig;
 import net.beeapm.agent.plugin.jdbc.common.JdbcContext;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.sql.ResultSet;
 import java.util.Date;
@@ -55,11 +55,11 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
                 Span paramSpan = new Span(SpanType.SQL_PARAM);
                 paramSpan.setId(span.getId());
                 paramSpan.addTag("args", JSON.toJSONString(params.values()));
-                TransmitterFactory.transmit(paramSpan);
+                ReporterFactory.report(paramSpan);
             }
             span.addTag("count",calcResultCount(result));
             span.fillEnvInfo();
-            TransmitterFactory.transmit(span);
+            ReporterFactory.report(span);
         }
         return result;
     }

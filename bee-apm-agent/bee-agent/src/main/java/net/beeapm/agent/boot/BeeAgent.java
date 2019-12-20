@@ -10,7 +10,7 @@ import net.beeapm.agent.model.FieldDefine;
 import net.beeapm.agent.plugin.AbstractPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.PluginLoder;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
@@ -31,7 +31,7 @@ public class BeeAgent {
         BeeAgentJarUtils.getAgentJarDirPath();
         IdHepler.init();
         BootPluginFactory.init();
-        TransmitterFactory.init();
+        ReporterFactory.init();
         Heartbeat.start();//心跳
 
         List<AbstractPlugin> plugins = PluginLoder.loadPlugins();

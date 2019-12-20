@@ -19,7 +19,7 @@
         <module>bee-agent</module>
         <module>bee-agent-core</module>
         <module>bee-agent-plugin</module>
-        <module>bee-agent-transmitter</module>
+        <module>bee-agent-reporter</module>
         <module>bee-agent-boot-plugin</module>
     </modules>
 

@@ -9,7 +9,7 @@ import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.LoggerConfig;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -55,7 +55,7 @@ public class LoggerHandler extends AbstractHandler {
         span.addTag("log",logBuff.toString());
         span.addTag("level",methodName);
         span.fillEnvInfo();
-        TransmitterFactory.transmit(span);
+        ReporterFactory.report(span);
         return null;
     }
 

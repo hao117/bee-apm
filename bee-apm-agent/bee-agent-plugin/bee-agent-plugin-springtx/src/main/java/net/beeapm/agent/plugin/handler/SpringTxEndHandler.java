@@ -6,7 +6,7 @@ import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.common.SpringTxConfig;
 import net.beeapm.agent.plugin.common.SpringTxContext;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 
 public class SpringTxEndHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(SpringTxEndHandler.class.getSimpleName());
@@ -22,7 +22,7 @@ public class SpringTxEndHandler extends AbstractHandler {
             calculateSpend(span);
             if(span.getSpend() > SpringTxConfig.me().getSpend()) {
                 span.fillEnvInfo();
-                TransmitterFactory.transmit(span);
+                ReporterFactory.report(span);
             }
         }
         return span;

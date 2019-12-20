@@ -7,7 +7,7 @@ package net.beeapm.agent.annotation;
 public final class BeePluginType {
     public static final String BOOT = "boot";
     public static final String HANDLER = "handler";
-    public static final String TRANSMIT = "transmit";
+    public static final String REPORTER = "reporter";
     public static final String AGENT_PLUGIN = "plugin";
     public static final String STORE = "store";
     public static final String STREAM = "stream";

@@ -6,7 +6,7 @@ import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.ProcessConfig;
-import net.beeapm.agent.transmit.TransmitterFactory;
+import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -58,7 +58,7 @@ public class ProcessHandler extends AbstractHandler {
             span.addTag("method",methodName).addTag("clazz",className);
             handleMethodSignature(span,(String) extVal[0]);
             span.fillEnvInfo();
-            TransmitterFactory.transmit(span);
+            ReporterFactory.report(span);
             collectParams(allArgs, span.getId(),className+"."+methodName);
         }
         //异常处理
@@ -147,7 +147,7 @@ public class ProcessHandler extends AbstractHandler {
                 }
             }
             paramSpan.addTag("param",params);
-            TransmitterFactory.transmit(paramSpan);
+            ReporterFactory.report(paramSpan);
         }
     }
 
