@@ -105,7 +105,7 @@
                                     <equals arg1="${project.packaging}" arg2="jar" />
                                     <then>
                                         <mkdir dir="${plugin.dir}" />
-                                        <copy file="${project.build.directory}/${project.artifactId}.jar" tofile="${plugin.dir}/bee-${project.artifactId}-${project.version}.jar" overwrite="true" />
+                                        <copy file="${project.build.directory}/${project.artifactId}.jar" tofile="${plugin.dir}/${project.artifactId}-${project.version}.jar" overwrite="true" />
                                     </then>
                                 </if>
                             </tasks>
