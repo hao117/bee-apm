@@ -9,7 +9,7 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-boot-apollo-plugin</artifactId>
+    <artifactId>bee-boot-plugin-apollo</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -19,7 +19,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>bee-boot-apollo-plugin</finalName>
+        <finalName>bee-boot-plugin-apollo</finalName>
     </build>
 
 </project>

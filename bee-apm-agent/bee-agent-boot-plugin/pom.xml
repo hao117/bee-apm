@@ -17,12 +17,18 @@
         <shade.package>net.beeapm.agent.deps</shade.package>
     </properties>
     <modules>
-        <module>bee-boot-apollo-plugin</module>
+        <module>bee-boot-plugin-apollo</module>
     </modules>
     <dependencies>
         <dependency>
             <groupId>net.beeapm</groupId>
             <artifactId>bee-agent-core</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-plugin-annotation</artifactId>
             <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>
