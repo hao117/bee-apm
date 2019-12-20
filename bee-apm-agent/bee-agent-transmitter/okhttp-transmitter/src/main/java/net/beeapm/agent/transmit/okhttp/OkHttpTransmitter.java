@@ -1,14 +1,18 @@
 package net.beeapm.agent.transmit.okhttp;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.annotation.BeePlugin;
+import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.transmit.AbstractTransmitter;
 
 import java.util.List;
 
 /**
- * Created by yuan on 2018/8/5.
+ * @author yuan
+ * @date 2018/08/30
  */
+@BeePlugin(type = BeePluginType.TRANSMIT, name = "kafka")
 public class OkHttpTransmitter extends AbstractTransmitter {
     public String name = "okhttp";
 

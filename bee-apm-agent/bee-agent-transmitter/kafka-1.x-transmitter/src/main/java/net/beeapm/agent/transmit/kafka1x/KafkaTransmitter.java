@@ -1,6 +1,8 @@
 package net.beeapm.agent.transmit.kafka1x;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.annotation.BeePlugin;
+import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -11,8 +13,10 @@ import org.apache.kafka.clients.producer.*;
 import java.util.*;
 
 /**
- * Created by yuan on 2018/8/5.
+ * @author yuan
+ * @date 2018/08/05
  */
+@BeePlugin(type = BeePluginType.TRANSMIT, name = "kafka")
 public class KafkaTransmitter extends AbstractTransmitter {
     private static final LogImpl log = LogManager.getLog(KafkaTransmitter.class);
     private Producer kafkaProducer;

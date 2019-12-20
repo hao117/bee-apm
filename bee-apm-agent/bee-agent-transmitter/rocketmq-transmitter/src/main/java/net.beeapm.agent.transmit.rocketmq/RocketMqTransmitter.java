@@ -7,6 +7,8 @@ import com.alibaba.rocketmq.client.producer.SendCallback;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
 import com.alibaba.rocketmq.remoting.common.RemotingHelper;
+import net.beeapm.agent.annotation.BeePlugin;
+import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -16,8 +18,10 @@ import net.beeapm.agent.transmit.AbstractTransmitter;
 import java.util.*;
 
 /**
- * Created by kaddddd on 2018/8/5.
+ * @author yuan
+ * @date 2018/08/05
  */
+@BeePlugin(type = BeePluginType.TRANSMIT, name = "rocketmq")
 public class RocketMqTransmitter extends AbstractTransmitter {
     private static final LogImpl log = LogManager.getLog(RocketMqTransmitter.class);
     private DefaultMQProducer rocketMqProducer;

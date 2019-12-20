@@ -16,6 +16,7 @@
         <module>bee-apm-server</module>
         <module>bee-apm-ui</module>
         <module>bee-apm-agent-test</module>
+        <module>bee-plugin-annotation</module>
     </modules>
 
     <properties>

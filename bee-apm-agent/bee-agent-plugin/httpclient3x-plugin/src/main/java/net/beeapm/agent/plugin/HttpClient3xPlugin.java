@@ -1,5 +1,7 @@
 package net.beeapm.agent.plugin;
 
+import net.beeapm.agent.annotation.BeePlugin;
+import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.plugin.interceptor.HttpClient3xAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -7,8 +9,10 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 /**
- * Created by yuan on 2018/8/16.
+ * @author yuan
+ * @date 2018/08/16
  */
+@BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "httpclient3x")
 public class HttpClient3xPlugin extends AbstractPlugin {
 
     @Override

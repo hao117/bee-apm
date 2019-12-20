@@ -1,11 +1,17 @@
 package net.beeapm.agent.plugin;
 
+import net.beeapm.agent.annotation.BeePlugin;
+import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.plugin.interceptor.LoggerAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
-
+/**
+ * @author yuan
+ * @date 2018/08/19
+ */
+@BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "logger")
 public class LoggerPlugin extends AbstractPlugin {
     @Override
     public String getName() {

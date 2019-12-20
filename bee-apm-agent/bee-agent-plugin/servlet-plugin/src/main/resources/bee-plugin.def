@@ -1,3 +1,0 @@
-servlet=net.beeapm.agent.plugin.ServletPlugin
-requestInputStream=net.beeapm.agent.plugin.RequestInputStreamPlugin
-requestReader=net.beeapm.agent.plugin.RequestReaderPlugin
