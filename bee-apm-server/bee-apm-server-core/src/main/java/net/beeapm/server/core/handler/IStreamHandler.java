@@ -1,7 +1,10 @@
 package net.beeapm.server.core.handler;
 
 import net.beeapm.server.core.common.Stream;
-
+/**
+ * @author yuan
+ * @date 2018/08/27
+ */
 public interface IStreamHandler {
     /**
      * 设置处理器名称

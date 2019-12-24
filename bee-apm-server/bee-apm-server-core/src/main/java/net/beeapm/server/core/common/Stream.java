@@ -1,5 +1,10 @@
 package net.beeapm.server.core.common;
 
+/**
+ *
+ * @author yuan
+ * @date 2018/08/27
+ */
 public class Stream {
     private Object source;
 

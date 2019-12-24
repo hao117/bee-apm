@@ -1,4 +1,0 @@
-empty=net.beeapm.server.core.handler.EmptyStreamHandler
-json=net.beeapm.server.core.handler.JsonStreamHandler
-queue=net.beeapm.server.core.handler.QueueStreamHandler
-store=net.beeapm.server.core.handler.StoreStreamHandler

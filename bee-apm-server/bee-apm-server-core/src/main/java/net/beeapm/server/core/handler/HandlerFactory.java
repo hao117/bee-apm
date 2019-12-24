@@ -8,7 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author yuan
+ * @date 2018/08/27
+ */
 public class HandlerFactory {
     private static final Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
     static HandlerFactory instance;
