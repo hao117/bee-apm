@@ -9,9 +9,9 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-elasticsearch-store</artifactId>
+    <artifactId>bee-store-elasticsearch</artifactId>
     <packaging>jar</packaging>
-    <name>bee-elasticsearch-store</name>
+    <name>bee-store-elasticsearch</name>
     <url>http://www.beeapm.net</url>
 
     <modules>
@@ -41,6 +41,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>bee-elasticsearch-store-${bee-server-version}</finalName>
+        <finalName>bee-store-elasticsearch-${bee-server-version}</finalName>
     </build>
 </project>

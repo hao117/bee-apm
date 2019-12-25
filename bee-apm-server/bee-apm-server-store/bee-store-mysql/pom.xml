@@ -47,6 +47,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>bee-mysql-5x-store-${bee-server-version}</finalName>
+        <finalName>bee-store-mysql-${bee-server-version}</finalName>
     </build>
 </project>
