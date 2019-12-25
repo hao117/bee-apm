@@ -15,8 +15,8 @@
     <url>http://www.beeapm.net</url>
 
     <modules>
-        <module>bee-servlet-stream</module>
-        <module>bee-kafka-1x-stream</module>
+        <module>bee-stream-servlet</module>
+        <module>bee-stream-kafka1x</module>
     </modules>
 
     <properties>

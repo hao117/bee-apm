@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
-            <artifactId>bee-elasticsearch-store</artifactId>
+            <artifactId>bee-store-elasticsearch</artifactId>
             <version>${bee-server-version}</version>
         </dependency>
 

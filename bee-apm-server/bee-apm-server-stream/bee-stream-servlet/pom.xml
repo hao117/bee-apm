@@ -9,9 +9,9 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-servlet-stream</artifactId>
+    <artifactId>bee-stream-servlet</artifactId>
     <packaging>jar</packaging>
-    <name>bee-servlet-stream</name>
+    <name>bee-stream-servlet</name>
     <url>http://www.beeapm.net</url>
 
     <modules>
@@ -30,6 +30,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>bee-servlet-stream-${bee-server-version}</finalName>
+        <finalName>bee-stream-servlet-${bee-server-version}</finalName>
     </build>
 </project>
