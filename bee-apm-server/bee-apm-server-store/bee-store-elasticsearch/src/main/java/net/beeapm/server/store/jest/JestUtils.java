@@ -17,7 +17,10 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.*;
-
+/**
+ * @author yuan
+ * @date 2018/08/27
+ */
 public class JestUtils {
     private static Logger logger = LoggerFactory.getLogger(StoreFactory.class);
     static JestClient jestClient ;
