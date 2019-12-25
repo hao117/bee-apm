@@ -25,6 +25,12 @@
     <dependencies>
         <dependency>
             <groupId>net.beeapm</groupId>
+            <artifactId>bee-plugin-annotation</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.beeapm</groupId>
             <artifactId>bee-apm-server-core</artifactId>
             <version>${bee-server-version}</version>
         </dependency>

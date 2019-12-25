@@ -1,9 +1,6 @@
 package net.beeapm.server.store.mysql;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
-import com.alibaba.fastjson.JSONObject;
-import net.beeapm.server.core.common.ConfigHolder;
-import org.apache.commons.lang3.StringUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,7 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Administrator on 2018/11/17/017.
+ * @author kaddddd
+ * @date 2018/11/17
  */
 public class MysqlUtils {
     private static Logger logger = LoggerFactory.getLogger(MysqlUtils.class);

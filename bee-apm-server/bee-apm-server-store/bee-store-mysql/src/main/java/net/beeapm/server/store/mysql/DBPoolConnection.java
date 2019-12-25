@@ -3,7 +3,6 @@ package net.beeapm.server.store.mysql;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
-import com.alibaba.fastjson.JSONObject;
 import net.beeapm.server.core.store.StoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +10,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * @author kaddddd
+ * @date 2018/11/17
+ */
 public class DBPoolConnection {
     private static Logger logger = LoggerFactory.getLogger(StoreFactory.class);
     static DBPoolConnection dbPoolConnection;
@@ -23,7 +25,8 @@ public class DBPoolConnection {
     static {
         Properties properties = loadPropertiesFile("resource/db_server.properties");
         try {
-            druidDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties); //DruidDataSrouce工厂模式
+            //DruidDataSource工厂模式
+            druidDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
         } catch (Exception e) {
             logger.error("获取配置失败");
         }
