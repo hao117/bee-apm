@@ -9,9 +9,9 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-mysql-5x-store</artifactId>
+    <artifactId>bee-store-mysql</artifactId>
     <packaging>jar</packaging>
-    <name>bee-mysql-5x-store</name>
+    <name>bee-store-mysql</name>
     <url>http://www.beeapm.net</url>
 
     <modules>

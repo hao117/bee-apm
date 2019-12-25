@@ -15,8 +15,8 @@
     <url>http://www.beeapm.net</url>
 
     <modules>
-        <module>bee-elasticsearch-store</module>
-        <module>bee-mysql-5x-store</module>
+        <module>bee-store-elasticsearch</module>
+        <module>bee-store-mysql</module>
     </modules>
 
     <properties>
