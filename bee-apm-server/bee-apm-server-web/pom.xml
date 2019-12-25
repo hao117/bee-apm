@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
-            <artifactId>bee-kafka-1x-stream</artifactId>
+            <artifactId>bee-stream-kafka1x</artifactId>
             <version>${bee-server-version}</version>
         </dependency>
         <dependency>

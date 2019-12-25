@@ -9,9 +9,9 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-kafka-1x-stream</artifactId>
+    <artifactId>bee-stream-kafka1x</artifactId>
     <packaging>jar</packaging>
-    <name>bee-kafka-1x-stream</name>
+    <name>bee-stream-kafka1x</name>
     <url>http://www.beeapm.net</url>
 
     <modules>
@@ -35,6 +35,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>bee-kafka-1x-stream-${bee-server-version}</finalName>
+        <finalName>bee-stream-kafka1x-${bee-server-version}</finalName>
     </build>
 </project>
