@@ -9,7 +9,7 @@ import net.beeapm.server.store.mysql.MysqlUtils;
  * @date 2018/11/17
  */
 @BeePlugin(type = BeePluginType.STORE,name = "mysql")
-public class Mysql5xStore implements IStore {
+public class MysqlStore implements IStore {
     @Override
     public void init() {
         System.out.println("Mysql5xStore init ......................");
