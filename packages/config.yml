@@ -10,7 +10,7 @@ reporter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: kafka1x  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
+    name: console  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
     okhttp:        #name对应的reporter的配置参数
         connectTimeout: 30
         writeTimeout: 10
@@ -62,7 +62,7 @@ sampling:
     rate: 10000 #采样率，万分几，默认全采集,比如100就是100/10000的采样
 id:
     zk:
-        url: 118.31.50.102:6001
+        url: 127.0.0.1:2181
         timeout: 5000
         retryTimes: 3
         retrySleep: 5000

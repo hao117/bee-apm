@@ -29,10 +29,10 @@ public class BeeAgent {
         BeeLog.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
         BeeLog.log("start......");
         BeeAgentJarUtils.getAgentJarDirPath();
-        IdHepler.init();
         BootPluginFactory.init();
+        IdHepler.init();
         ReporterFactory.init();
-        Heartbeat.start();//心跳
+        //Heartbeat.start();心跳
 
         List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
 
