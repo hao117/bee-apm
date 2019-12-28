@@ -117,7 +117,7 @@ public class ServletHandler extends AbstractHandler {
      * @param request
      */
     private void collectRequestBody(Span span, HttpServletRequest request) {
-        if (ServletConfig.me().isEnableReqBody()) {
+        if (request instanceof BeeHttpServletRequestWrapper) {
             BeeHttpServletRequestWrapper wrapper = (BeeHttpServletRequestWrapper) request;
             Span bodySpan = new Span(SpanType.REQUEST_BODY);
             bodySpan.setId(span.getId());
@@ -160,7 +160,7 @@ public class ServletHandler extends AbstractHandler {
      * @param resp
      */
     private void collectResponseBody(Span span, HttpServletResponse resp) {
-        if (ServletConfig.me().isEnableRespBody()) {
+        if (resp instanceof BeeHttpServletResponseWrapper) {
             BeeHttpServletResponseWrapper beeResp = (BeeHttpServletResponseWrapper) resp;
             //触发原有的输出
             beeResp.writeOriginOutputStream();
