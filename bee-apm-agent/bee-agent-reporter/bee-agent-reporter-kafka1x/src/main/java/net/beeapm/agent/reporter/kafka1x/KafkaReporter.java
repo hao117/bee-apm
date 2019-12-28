@@ -16,7 +16,7 @@ import java.util.*;
  * @author yuan
  * @date 2018/08/05
  */
-@BeePlugin(type = BeePluginType.REPORTER, name = "kafka")
+@BeePlugin(type = BeePluginType.REPORTER, name = "kafka1x")
 public class KafkaReporter extends AbstractReporter {
     private static final LogImpl log = LogManager.getLog(KafkaReporter.class);
     private Producer kafkaProducer;
