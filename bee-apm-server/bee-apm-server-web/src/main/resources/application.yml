@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9900
 logging:
   config:
     classpath: log4j2.xml
@@ -13,10 +13,10 @@ bee:
       topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-tx,bee-logger,bee-error,bee-request-body,bee-request-headers,bee-response-body,bee-heartbeat
       kafkaConfig:
         #kafka配置值项，项名称和值请参考kafka文档
-        bootstrap.servers: 118.31.50.102:6000
+        bootstrap.servers: 10.130.90.50:9092
         max.poll.records: 5 #默认500
   store:
-    name: mysql
+    name: elasticsearch
     mysql:
       #配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
       config:
@@ -30,7 +30,7 @@ bee:
     elasticsearch:
            #配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
            config:
-             url: http://es.skyeye.cc:8000
+             url: http://127.0.0.1:9200,http://127.0.0.1:9201
       #      username: xx
       #      password: xx
              connTimeout: 6000
@@ -50,7 +50,7 @@ bee:
               err: bee-error
               reqb: bee-request-body
               reqh: bee-request-headers
-              respb: bee-response-body
+              resb: bee-response-body
               hb: bee-heartbeat
   handlers:
     flow: empty>json>queue>store
