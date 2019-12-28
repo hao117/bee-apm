@@ -1,5 +1,6 @@
 package net.beeapm.agent.reporter;
 
+import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.BeeLog;
 import net.beeapm.agent.log.LogImpl;
@@ -90,7 +91,12 @@ public class ReporterFactory {
     }
 
     public static void report(Span span) {
+        if (ConfigUtils.me().getBoolean("reporter.log", false)) {
+            log.debug(JSON.toJSONString(span));
+        }
         //如果队列已满，则返回false
-        queue.offer(span);
+        if (!queue.offer(span)) {
+            log.debug("report queue is full.");
+        }
     }
 }
