@@ -32,7 +32,7 @@ public class IdHepler {
     private static char[] lock = new char[1];
     private static CuratorFramework client = null;
     public static String nodeName;
-    private static String datePattern = "yyyy-MM-dd HH:mm:ss";
+    private static String datePattern = "yyMMddHHmmss";
     private static SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
     public static AtomicLong id = new AtomicLong(1);
     public static String timeTag = sdf.format(new Date());

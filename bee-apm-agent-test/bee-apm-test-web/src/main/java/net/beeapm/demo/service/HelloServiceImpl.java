@@ -16,7 +16,7 @@ public class HelloServiceImpl implements IHelloService {
         try {
             System.out.println("     ============HelloServiceImpl.sayHello:" + context);
             testA("a", "b");
-            testB(new FileInputStream(new File("C:\\Users\\yuan\\Desktop\\service.txt")));
+            //testB(new FileInputStream(new File("C:\\Users\\yuan\\Desktop\\service.txt")));
         }catch (Exception e){
             e.printStackTrace();
         }

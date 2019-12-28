@@ -4,10 +4,14 @@ import net.beeapm.agent.config.AbstractBeeConfig;
 import net.beeapm.agent.config.BeeConfigFactory;
 import net.beeapm.agent.config.ConfigUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *
+ * @author yuan
+ * @date 2018/09/19
+ */
 public class ServletConfig extends AbstractBeeConfig {
     private static ServletConfig config;
     private Boolean enable;
