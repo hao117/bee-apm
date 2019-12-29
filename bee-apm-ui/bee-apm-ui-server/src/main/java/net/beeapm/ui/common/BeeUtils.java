@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BeeUtils {
-    private static String DATE_FORMAT_DAY = "yyyy-MM-dd";
+    private static String DATE_FORMAT_DAY = "yyyy.MM.dd";
     public static Long getBeginTime(Map<String,Object> param){
         String beginTime = (String) param.get("beginTime");
         try {
