@@ -41,12 +41,12 @@
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="7">
-                        <el-form-item label="gId"  style="margin-bottom: 0px">
+                        <el-form-item label="gId" style="margin-bottom: 0px">
                             <el-input v-model="form.gid"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="7">
-                        <el-form-item label="IP"  style="margin-bottom: 0px">
+                        <el-form-item label="IP" style="margin-bottom: 0px">
                             <el-input v-model="form.ip"></el-input>
                         </el-form-item>
                     </el-col>
@@ -56,7 +56,8 @@
         <el-card style="margin-top: -2px">
             <el-row>
                 <el-col :span="24">
-                    <ve-histogram :legend-visible='false' :extend="requestCharExtend" :data="requestChartData" :settings="requestChartSettings"></ve-histogram>
+                    <ve-histogram :legend-visible='false' :extend="requestCharExtend" :data="requestChartData"
+                                  :settings="requestChartSettings"></ve-histogram>
                 </el-col>
             </el-row>
             <el-row>
@@ -76,7 +77,7 @@
                         </el-table-column>
                         <el-table-column prop="spend" label="耗时" width="100">
                         </el-table-column>
-                        <el-table-column prop="url" label="URL" min-width="250">
+                        <el-table-column prop="tags.url" label="URL" min-width="250">
                         </el-table-column>
                         <el-table-column label="操作" width="180" align="center" fixed="right">
                             <template slot-scope="scope">
@@ -86,7 +87,8 @@
                         </el-table-column>
                     </el-table>
                     <div class="pagination">
-                        <el-pagination background  @current-change="handlePageChange" layout="prev, pager, next" :total="requestTableData.pageTotal" :current-page="requestTableData.currPageNum">
+                        <el-pagination background @current-change="handlePageChange" layout="prev, pager, next"
+                                       :total="requestTableData.pageTotal" :current-page="requestTableData.currPageNum">
                         </el-pagination>
                     </div>
                 </el-col>
@@ -97,38 +99,44 @@
 
 <script>
     import bus from '../common/bus';
+
     let moment = require("moment");
 
     export default {
         name: 'request',
-        data: function(){
-            this.requestChartSettings = {
-            }
-            this.requestCharExtend = {
-                'xAxis.0.axisLabel.rotate': 60
-            }
+        data: function () {
             return {
+                requestChartSettings: {},
+                requestCharExtend: {
+                    'xAxis.0.axisLabel.rotate': 60,
+                    series(v) {
+                        v.forEach(i => {
+                            i.barMaxWidth = 50
+                        })
+                        return v
+                    }
+                },
                 requestChartData: {
                     columns: ['time', '请求量'],
                     rows: []
                 },
                 requestTableData: {
-                    currPageNum:1,
+                    currPageNum: 1,
                     pageTotal: 150,
                     rows: []
                 },
-                form:{
-                    gid:null,
-                    env:null,
-                    app:null,
-                    ip:null,
-                    sort:null
+                form: {
+                    gid: null,
+                    env: null,
+                    app: null,
+                    ip: null,
+                    sort: null
                 },
-                envOptions:[],
-                appOptions:[]
+                envOptions: [],
+                appOptions: []
             }
         },
-        created(){
+        created() {
             this.onRefresh();
             this.getPickerDate();
             this.queryEnvGroupList();
@@ -136,11 +144,11 @@
             this.queryAppGroupList();
         },
         methods: {
-            onRefresh(){
+            onRefresh() {
                 let self = this;
-                bus.$on("refreshTag",function (val) {
+                bus.$on("refreshTag", function (val) {
                     console.log("refreshTag =========== " + val);
-                    if(val === 'request'){
+                    if (val === 'request') {
                         console.log("request refresh.................")
                         self.getPickerDate();
                         self.queryEnvGroupList();
@@ -149,15 +157,15 @@
                     }
                 });
             },
-            getBeginTime(){
+            getBeginTime() {
                 return moment(this.pickerDate[0]).format('YYYY-MM-DD HH:mm');
             },
-            getEndTime(){
+            getEndTime() {
                 return moment(this.pickerDate[1]).format('YYYY-MM-DD HH:mm');
             },
-            getPickerDate(){
+            getPickerDate() {
                 const self = this;
-                bus.$on("pickerDateEvent",function (val) {
+                bus.$on("pickerDateEvent", function (val) {
                     self.pickerDate = val;
                 });
                 bus.$emit("getPickerDateEvent");
@@ -165,22 +173,22 @@
             queryEnvGroupList() {
                 const url = "/api/common/getGroupList";
                 this.$axios.post(url, {
-                    beginTime:this.getBeginTime(),
-                    endTime:this.getEndTime(),
-                    group:"env"
+                    beginTime: this.getBeginTime(),
+                    endTime: this.getEndTime(),
+                    group: "env"
                 }).then((res) => {
-                    console.log("==>queryEnvGroupList=%o",res);
+                    console.log("==>queryEnvGroupList=%o", res);
                     this.envOptions = res.data.result;
                 })
             },
             queryAppGroupList() {
                 const url = "/api/common/getGroupList";
                 this.$axios.post(url, {
-                    beginTime:this.getBeginTime(),
-                    endTime:this.getEndTime(),
-                    group:"app"
+                    beginTime: this.getBeginTime(),
+                    endTime: this.getEndTime(),
+                    group: "app"
                 }).then((res) => {
-                    console.log("==>queryAppGroupList=%o",res);
+                    console.log("==>queryAppGroupList=%o", res);
                     this.appOptions = res.data.result;
                 })
             },
@@ -190,34 +198,34 @@
             },
             // 表格数据
             queryRequestList(pageNum) {
-                if(pageNum == 1){
+                if (pageNum == 1) {
                     this.getRequestChartData();
                 }
                 const url = "/api/request/list";
                 let params = this.form;
                 params.pageNum = pageNum;
-                params.beginTime=this.getBeginTime();
-                params.endTime=this.getEndTime();
+                params.beginTime = this.getBeginTime();
+                params.endTime = this.getEndTime();
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryRequestList=%o",res);
+                    console.log("==>queryRequestList=%o", res);
                     this.requestTableData.rows = res.data.rows;
                     this.requestTableData.currPageNum = res.data.pageNum;
                     this.requestTableData.pageTotal = res.data.pageTotal;
                 })
             },
             // 柱状图数据
-            getRequestChartData(){
+            getRequestChartData() {
                 const url = "/api/request/chart";
                 let params = this.form;
-                params.beginTime=this.getBeginTime();
-                params.endTime=this.getEndTime();
+                params.beginTime = this.getBeginTime();
+                params.endTime = this.getEndTime();
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>getRequestChartData=%o",res);
+                    console.log("==>getRequestChartData=%o", res);
                     this.requestChartData.rows = res.data.rows;
                 })
             },
-            timeFormatter(row, column){
-                return row.time.substring(11,19);
+            timeFormatter(row, column) {
+                return row.time.substring(11, 19);
             }
         }
     }

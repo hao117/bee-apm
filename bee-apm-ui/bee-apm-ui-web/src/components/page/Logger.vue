@@ -107,12 +107,17 @@
     export default {
         name: 'logger',
         data: function(){
-            this.chartSettings = {
-            }
-            this.chartExtend = {
-                'xAxis.0.axisLabel.rotate': 60
-            }
             return {
+                chartSettings: {},
+                chartExtend: {
+                    'xAxis.0.axisLabel.rotate': 60,
+                    series(v) {
+                        v.forEach(i => {
+                            i.barMaxWidth = 50
+                        })
+                        return v
+                    }
+                },
                 chartData: {
                     columns: ['time', '请求量'],
                     rows: []
