@@ -1,13 +1,13 @@
 server:
-  port: 9000
+  port: 8001
 logging:
     config:
       classpath: log4j2.xml
 # 配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
 elasticsearch:
-    url: http://es.skyeye.cc:8000
-    username: es
-    password: 123
+    url: http://127.0.0.1:9200
+    #username: es
+    #password: 123
     connTimeout: 30000
     readTimeout: 30000
     multiThreaded: true
