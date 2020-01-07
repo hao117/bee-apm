@@ -1,111 +1,158 @@
 <template>
     <div>
-        <el-card>
-            <el-form ref="form" :model="form" label-width="80px" width="100%">
-                <el-row :gutter="20">
-                    <el-col :span="7">
-                        <el-form-item label="环境">
-                            <el-select v-model="form.env" placeholder="请选择">
-                                <el-option
-                                    v-for="item in envOptions"
-                                    :key="item.value"
-                                    :label="item.name"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="应用">
-                            <el-select v-model="form.app" placeholder="请选择">
-                                <el-option
-                                    v-for="item in appOptions"
-                                    :key="item.value"
-                                    :label="item.name"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="排序">
-                            <el-select v-model="form.sort" placeholder="请选择">
-                                <el-option key="time" label="时间" value="time"></el-option>
-                                <el-option key="spend" label="耗时" value="spend"></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="3" align="right">
-                        <el-button @click="queryRequestList(1)" type="primary">查&nbsp;&nbsp;询</el-button>
+        <el-row v-show="isShowTable">
+            <el-card>
+                <el-form ref="form" :model="form" label-width="80px" width="100%">
+                    <el-row :gutter="20">
+                        <el-col :span="7">
+                            <el-form-item label="环境">
+                                <el-select v-model="form.env" placeholder="请选择">
+                                    <el-option
+                                        v-for="item in envOptions"
+                                        :key="item.value"
+                                        :label="item.name"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="7">
+                            <el-form-item label="应用">
+                                <el-select v-model="form.app" placeholder="请选择">
+                                    <el-option
+                                        v-for="item in appOptions"
+                                        :key="item.value"
+                                        :label="item.name"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="7">
+                            <el-form-item label="排序">
+                                <el-select v-model="form.sort" placeholder="请选择">
+                                    <el-option key="time" label="时间" value="time"></el-option>
+                                    <el-option key="spend" label="耗时" value="spend"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="3" align="right">
+                            <el-button @click="queryRequestList(1)" type="primary">查&nbsp;&nbsp;询</el-button>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="7">
+                            <el-form-item label="gId" style="margin-bottom: 0px">
+                                <el-input v-model="form.gid"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="7">
+                            <el-form-item label="IP" style="margin-bottom: 0px">
+                                <el-input v-model="form.ip"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </el-card>
+            <el-card style="margin-top: -2px">
+                <el-row>
+                    <el-col :span="24">
+                        <ve-histogram :legend-visible='false' :extend="requestCharExtend" :data="requestChartData"
+                                      :settings="requestChartSettings"></ve-histogram>
                     </el-col>
                 </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="7">
-                        <el-form-item label="gId" style="margin-bottom: 0px">
-                            <el-input v-model="form.gid"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="7">
-                        <el-form-item label="IP" style="margin-bottom: 0px">
-                            <el-input v-model="form.ip"></el-input>
-                        </el-form-item>
+                <el-row>
+                    <el-col :span="24">
+                        <el-table :data="requestTableData.rows" border stripe>
+                            <el-table-column prop="id" label="ID" width="170" fixed>
+                            </el-table-column>
+                            <el-table-column prop="time" label="时间" width="150" :formatter="timeFormatter" fixed>
+                            </el-table-column>
+                            <el-table-column prop="gid" label="GID" width="170">
+                            </el-table-column>
+                            <el-table-column prop="ip" label="IP" width="120">
+                            </el-table-column>
+                            <el-table-column prop="env" label="环境" width="120">
+                            </el-table-column>
+                            <el-table-column prop="app" label="应用" width="120">
+                            </el-table-column>
+                            <el-table-column prop="spend" label="耗时" width="100">
+                            </el-table-column>
+                            <el-table-column prop="tags.url" label="URL" min-width="250">
+                            </el-table-column>
+                            <el-table-column label="操作" width="180" align="center" fixed="right">
+                                <template slot-scope="_">
+                                    <el-button type="text">参数</el-button>
+                                    <el-button type="text" @click="queryCallTree(_.row)">调用链</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                        <div class="pagination">
+                            <el-pagination background @current-change="handlePageChange" layout="prev, pager, next"
+                                           :total="requestTableData.pageTotal"
+                                           :current-page="requestTableData.currPageNum">
+                            </el-pagination>
+                        </div>
                     </el-col>
                 </el-row>
-            </el-form>
-        </el-card>
-        <el-card style="margin-top: -2px">
-            <el-row>
-                <el-col :span="24">
-                    <ve-histogram :legend-visible='false' :extend="requestCharExtend" :data="requestChartData"
-                                  :settings="requestChartSettings"></ve-histogram>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-table :data="requestTableData.rows" border stripe>
-                        <el-table-column prop="id" label="ID" width="170" fixed>
-                        </el-table-column>
-                        <el-table-column prop="time" label="时间" width="150" :formatter="timeFormatter" fixed>
-                        </el-table-column>
-                        <el-table-column prop="gid" label="GID" width="170">
-                        </el-table-column>
-                        <el-table-column prop="ip" label="IP" width="120">
-                        </el-table-column>
-                        <el-table-column prop="env" label="环境" width="120">
-                        </el-table-column>
-                        <el-table-column prop="app" label="应用" width="120">
-                        </el-table-column>
-                        <el-table-column prop="spend" label="耗时" width="100">
-                        </el-table-column>
-                        <el-table-column prop="tags.url" label="URL" min-width="250">
-                        </el-table-column>
-                        <el-table-column label="操作" width="180" align="center" fixed="right">
-                            <template slot-scope="scope">
-                                <el-button type="text">参数</el-button>
-                                <el-button type="text">调用链</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <div class="pagination">
-                        <el-pagination background @current-change="handlePageChange" layout="prev, pager, next"
-                                       :total="requestTableData.pageTotal" :current-page="requestTableData.currPageNum">
-                        </el-pagination>
-                    </div>
-                </el-col>
-            </el-row>
-        </el-card>
+            </el-card>
+        </el-row>
+        <el-row v-show="isShowTree">
+            <el-card>
+                <el-row>
+                    <el-col :span="24" align="right">
+                        <el-button type="success">刷新</el-button>
+                        <el-button type="primary" @click="backButtonEvent()">返回</el-button>
+
+                    </el-col>
+                </el-row>
+            </el-card>
+            <el-card style="margin-top: -2px">
+                <v-jstree :data="treeData">
+                    <template slot-scope="_">
+                        <div style="display: inherit;width: 100%" >
+                            <i :class="_.vm.themeIconClasses" role="presentation"
+                               v-if="!_.model.loading && !!_.model.icon"></i>
+                            <div style="width: 100%;float: left;margin-right: -190px">
+                                <div style="margin-right: 85px;overflow:hidden;;margin-right: 190px" :title="_.model.text">
+                                    {{_.model.text}}
+                                </div>
+                            </div>
+                            <div style="width: 185px;float: right;text-align: left">
+                                 <span class="el-button--text" >入参</span>&nbsp;
+                                <span class="el-button--text" >返回</span>&nbsp;
+                                <span  :title="_.model.spend" style="color: #67c23a">{{_.model.spend}}</span>
+                            </div>
+                        </div>
+                    </template>
+                </v-jstree>
+            </el-card>
+        </el-row>
     </div>
 </template>
+<style>
+    .tree-anchor {
+        line-height: 24px;
+        height: 24px;
+        width: 100%;
+    }
+</style>
 
 <script>
     import bus from '../common/bus';
+    import VJstree from 'vue-jstree'
 
     let moment = require("moment");
 
     export default {
         name: 'request',
+        components: {
+            VJstree
+        },
         data: function () {
             return {
+                isShowTable: true,
+                isShowTree: false,
                 requestChartSettings: {},
                 requestCharExtend: {
                     'xAxis.0.axisLabel.rotate': 60,
@@ -125,6 +172,80 @@
                     pageTotal: 150,
                     rows: []
                 },
+                treeData: [
+                    {
+                        "text": "Same but with checkboxes",
+                        "spend": 1234567,
+                        "opened": true,
+                        "children": [
+                            {
+                                "text": "initially selected initially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially initially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selected  selectedinitially selectedinitially selected",
+                                "spend": 123
+                            },
+                            {
+                                "text": "custom icon",
+                                "spend": 123
+                            },
+                            {
+                                "text": "initially open",
+                                "opened": true,
+                                "spend": 123,
+                                "children": [
+                                    {
+                                        "text": "Another node",
+                                        "cost": 123
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "custom icon",
+                                "spend": 123,
+                            },
+                            {
+                                "text": "disabled node",
+                                "spend": 123,
+                            }
+                        ]
+                    },
+                    {
+                        "text": "Same but with checkboxes",
+                        "opened": true,
+                        "spend": 123,
+                        "children": [
+                            {
+                                "text": "initially selected",
+                                "spend": 123,
+                            },
+                            {
+                                "text": "custom icon",
+                                "spend": 123,
+                            },
+                            {
+                                "text": "initially open",
+                                "opened": true,
+                                "spend": 123,
+                                "children": [
+                                    {
+                                        "text": "Another node",
+                                        "spend": 123,
+                                    }
+                                ]
+                            },
+                            {
+                                "text": "custom icon",
+                                "spend": 123,
+                            },
+                            {
+                                "text": "disabled node",
+                                "spend": 123,
+                            }
+                        ]
+                    },
+                    {
+                        "text": "And wholerow selection",
+                        "spend": 123,
+                    }
+                ],
                 form: {
                     gid: null,
                     env: null,
@@ -226,6 +347,21 @@
             },
             timeFormatter(row, column) {
                 return row.time.substring(11, 19);
+            },
+            queryCallTree(row){
+                console.log("==>queryCallTree row=%o", row);
+                const url = "/api/request/callTree";
+                let params = {gid:row.gid,time:row.time};
+                this.$axios.post(url, params).then((res) => {
+                    console.log("==>queryCallTree result=%o", res);
+                    this.treeData = res.data.result;
+                })
+                this.isShowTable = false;
+                this.isShowTree = true;
+            },
+            backButtonEvent(){
+                this.isShowTable = true;
+                this.isShowTree = false;
             }
         }
     }

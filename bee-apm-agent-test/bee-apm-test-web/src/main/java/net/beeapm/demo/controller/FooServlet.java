@@ -48,9 +48,7 @@ public class FooServlet extends HttpServlet {
             a.tell();
 
             b.say();
-            b.speak();
-            b.talk();
-            b.tell();
+
 
             c.say();
             c.speak();
@@ -68,9 +66,7 @@ public class FooServlet extends HttpServlet {
             da.tell();
 
             e.say();
-            e.speak();
-            e.talk();
-            e.tell();
+
 
             StringBuilder out = new StringBuilder();
 

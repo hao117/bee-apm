@@ -159,5 +159,4 @@ public class BeeUtils {
         }
         return beginDate;
     }
-
 }

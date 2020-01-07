@@ -277,3 +277,23 @@ select tab3
     }
   }
 }
+
+#####_QueryList
+{
+  "size": 10000,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "time": {
+               "gte":{{beginTime}},
+               "lte":{{endTime}}
+            }
+          }
+        },
+       {"term": {"gid": "{{gid}}"}}
+      ]
+    }
+  }
+}

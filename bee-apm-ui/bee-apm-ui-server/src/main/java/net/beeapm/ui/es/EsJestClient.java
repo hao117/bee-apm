@@ -101,7 +101,6 @@ public class EsJestClient {
     }
 
     public SearchResult search(String[] indices, String[] types, String queryString) throws IOException{
-        LOGGER.debug("queryString={}",queryString);
         Search.Builder builder = new Search.Builder(queryString);
         if(indices != null && indices.length>0){
             builder = builder.addIndices(Arrays.asList(indices));

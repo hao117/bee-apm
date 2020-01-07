@@ -22,7 +22,7 @@ reporter:
     kafka1x:
         kafkaConfig:
             #kafka配置值项，项名称和值请参考kafka文档
-            bootstrap.servers: 10.130.90.50:9092
+            bootstrap.servers: 127.0.0.1:9092
             linger.ms: 200
         topic: #配置span type和kafka topic映射关系
             default: bee-default #配置默认topic，没有配置映射关系的，数据写到该topic
