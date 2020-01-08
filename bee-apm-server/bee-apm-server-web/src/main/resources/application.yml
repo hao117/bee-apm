@@ -13,7 +13,7 @@ bee:
       topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-tx,bee-logger,bee-error,bee-request-body,bee-request-headers,bee-response-body,bee-heartbeat
       kafkaConfig:
         #kafka配置值项，项名称和值请参考kafka文档 10.130.90.50
-        bootstrap.servers: 192.168.10.103:9092
+        bootstrap.servers: 10.130.90.50:9092
         max.poll.records: 5 #默认500
   store:
     name: elasticsearch
@@ -30,7 +30,7 @@ bee:
     elasticsearch:
            #配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
            config:
-             url: http://127.0.0.1:9200,http://127.0.0.1:9201
+             url: http://10.130.90.50:9200,http://10.130.90.50:9201
       #      username: xx
       #      password: xx
              connTimeout: 6000

@@ -100,32 +100,47 @@
         <el-row v-show="isShowTree">
             <el-card>
                 <el-row>
-                    <el-col :span="24" align="right">
+                    <el-col :span="24" align="right" style="padding-bottom: 10px">
                         <el-button type="success">刷新</el-button>
                         <el-button type="primary" @click="backButtonEvent()">返回</el-button>
-
                     </el-col>
                 </el-row>
-            </el-card>
-            <el-card style="margin-top: -2px">
-                <v-jstree :data="treeData">
-                    <template slot-scope="_">
-                        <div style="display: inherit;width: 100%" >
-                            <i :class="_.vm.themeIconClasses" role="presentation"
-                               v-if="!_.model.loading && !!_.model.icon"></i>
-                            <div style="width: 100%;float: left;margin-right: -190px">
-                                <div style="margin-right: 85px;overflow:hidden;;margin-right: 190px" :title="_.model.text">
-                                    {{_.model.text}}
-                                </div>
-                            </div>
-                            <div style="width: 185px;float: right;text-align: left">
-                                 <span class="el-button--text" >入参</span>&nbsp;
-                                <span class="el-button--text" >返回</span>&nbsp;
-                                <span  :title="_.model.spend" style="color: #67c23a">{{_.model.spend}}</span>
-                            </div>
-                        </div>
-                    </template>
-                </v-jstree>
+                <el-row>
+                    <el-table
+                        :data="tableListData"
+                        :row-style="toggleDisplayTr"
+                        border stripe
+                        class="init_table">
+                        <el-table-column
+                            label="调用链路"
+                            min-width="500"
+                            show-overflow-tooltip
+                            align="left">
+                            <template slot-scope="_">
+                                <p :style="`margin-left: ${_.row.__level * 20}px;margin-top:0;margin-bottom:0`"><i
+                                    @click="toggleFoldingStatus(_.row)" class="permission_toggleFold"
+                                    :class="toggleFoldingClass(_.row)"></i>{{_.row.text}}</p>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            align="center"
+                            prop="spend"
+                            width="60"
+                            label="耗时(ms)">
+                        </el-table-column>
+
+                        <el-table-column
+                            align="center"
+                            width="100"
+                            label="操作">
+                            <template slot-scope="_">
+                                <el-button type="text">入参</el-button>
+                                <el-button type="text">返回</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-row>
             </el-card>
         </el-row>
     </div>
@@ -140,17 +155,21 @@
 
 <script>
     import bus from '../common/bus';
-    import VJstree from 'vue-jstree'
+    import Vue from 'vue';
+    import VJstree from 'vue-jstree';
+    import '../iconfont/iconfont.css';
 
     let moment = require("moment");
 
     export default {
         name: 'request',
         components: {
-            VJstree
+            VJstree,
         },
         data: function () {
             return {
+                tableListData: [], //调用链数据
+                foldList: [], // 该数组中的值 都会在列表中进行隐藏  死亡名单
                 isShowTable: true,
                 isShowTree: false,
                 requestChartSettings: {},
@@ -172,80 +191,7 @@
                     pageTotal: 150,
                     rows: []
                 },
-                treeData: [
-                    {
-                        "text": "Same but with checkboxes",
-                        "spend": 1234567,
-                        "opened": true,
-                        "children": [
-                            {
-                                "text": "initially selected initially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially initially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selectedinitially selected  selectedinitially selectedinitially selected",
-                                "spend": 123
-                            },
-                            {
-                                "text": "custom icon",
-                                "spend": 123
-                            },
-                            {
-                                "text": "initially open",
-                                "opened": true,
-                                "spend": 123,
-                                "children": [
-                                    {
-                                        "text": "Another node",
-                                        "cost": 123
-                                    }
-                                ]
-                            },
-                            {
-                                "text": "custom icon",
-                                "spend": 123,
-                            },
-                            {
-                                "text": "disabled node",
-                                "spend": 123,
-                            }
-                        ]
-                    },
-                    {
-                        "text": "Same but with checkboxes",
-                        "opened": true,
-                        "spend": 123,
-                        "children": [
-                            {
-                                "text": "initially selected",
-                                "spend": 123,
-                            },
-                            {
-                                "text": "custom icon",
-                                "spend": 123,
-                            },
-                            {
-                                "text": "initially open",
-                                "opened": true,
-                                "spend": 123,
-                                "children": [
-                                    {
-                                        "text": "Another node",
-                                        "spend": 123,
-                                    }
-                                ]
-                            },
-                            {
-                                "text": "custom icon",
-                                "spend": 123,
-                            },
-                            {
-                                "text": "disabled node",
-                                "spend": 123,
-                            }
-                        ]
-                    },
-                    {
-                        "text": "And wholerow selection",
-                        "spend": 123,
-                    }
-                ],
+                treeData: [],
                 form: {
                     gid: null,
                     env: null,
@@ -348,21 +294,133 @@
             timeFormatter(row, column) {
                 return row.time.substring(11, 19);
             },
-            queryCallTree(row){
+            queryCallTree(row) {
                 console.log("==>queryCallTree row=%o", row);
                 const url = "/api/request/callTree";
-                let params = {gid:row.gid,time:row.time};
+                let params = {gid: row.gid, time: row.time};
                 this.$axios.post(url, params).then((res) => {
                     console.log("==>queryCallTree result=%o", res);
-                    this.treeData = res.data.result;
+                    this.tableListData = this.formatConversion([], res.data.result);
                 })
                 this.isShowTable = false;
                 this.isShowTree = true;
             },
-            backButtonEvent(){
+            backButtonEvent() {
                 this.isShowTable = true;
                 this.isShowTree = false;
+            },
+            /*********************************
+             ** 切换展开 还是折叠
+             ** @params: params 当前点击行的数据
+             *********************************/
+            toggleFoldingStatus(params) {
+                this.foldList.includes(params.__identity) ? this.foldList.splice(this.foldList.indexOf(params.__identity), 1) : this.foldList.push(params.__identity)
+            },
+            /*********************************
+             ** 该方法会对每一行数据都做判断 如果foldList 列表中的元素 也存在与当前行的 __family列表中  则该行不展示
+             *********************************/
+            toggleDisplayTr({row, index}) {
+                for (let i = 0; i < this.foldList.length; i++) {
+                    let item = this.foldList[i]
+                    // 如果foldList中元素存在于 row.__family中，则该行隐藏。  如果该行的自身标识等于隐藏元素，则代表该元素就是折叠点
+                    if (row.__family.includes(item) && row.__identity !== item) return 'display:none;'
+                }
+                return ''
+            },
+            /*********************************
+             ** 如果子集长度为0，则不返回字体图标。
+             ** 如果子集长度为不为0，根据foldList是否存在当前节点的标识返回相应的折叠或展开图标
+             ** 关于class说明：permission_placeholder返回一个占位符，具体查看class
+             ** @params: params 当前行的数据对象
+             *********************************/
+            toggleFoldingClass(params) {
+                let hasChildren = true;
+                if (typeof (params.children) == "undefined" || params.children.length === 0) {
+                    hasChildren = false;
+                }
+                return !hasChildren ? 'permission_placeholder' : (this.foldList.indexOf(params.__identity) === -1 ? 'iconfont icon-minus-square-o' : 'iconfont icon-plussquareo')
+            },
+            /*********************************
+             ** 将树形接口数据扁平化
+             ** @params: parent 为当前累计的数组  也是最后返回的数组
+             ** @params: children 为当前节点仍需继续扁平子节点的数据
+             ** @params: index 默认等于0， 用于在递归中进行累计叠加 用于层级标识
+             ** @params: family 装有当前包含元素自身的所有父级 身份标识
+             ** @params: elderIdentity 父级的  唯一身份标识
+             *********************************/
+            formatConversion(parent, children, index = 0, family = [], elderIdentity = 'x') {
+                // children如果长度等于0，则代表已经到了最低层
+                // let page = (this.startPage - 1) * 10
+                if (children && children.length > 0) {
+                    children.map((x, i) => {
+                        // 设置 __level 标志位 用于展示区分层级
+                        Vue.set(x, '__level', index)
+                        // 设置 __family 为家族关系 为所有父级，包含本身在内
+                        Vue.set(x, '__family', [...family, elderIdentity + '_' + i])
+                        // 本身的唯一标识  可以理解为个人的身份证咯 一定唯一。
+                        Vue.set(x, '__identity', elderIdentity + '_' + i)
+                        parent.push(x)
+                        // 如果仍有子集，则进行递归
+                        if (x.children && x.children.length > 0) this.formatConversion(parent, x.children, index + 1, [...family, elderIdentity + '_' + i], elderIdentity + '_' + i)
+                    })
+                }
+                return parent
             }
         }
     }
 </script>
+
+<style lang='stylus' rel='stylesheet/stylus'>
+    .app_title
+        display block
+        width 100%
+        font-size 24px
+        line-height 60px
+        color #41dae4
+        text-align center
+
+    .permission_toggleFold
+        vertical-align middle
+        padding-right 5px
+        font-size 16px
+        cursor pointer
+
+    .permission_placeholder
+        content ' '
+        display inline-block
+        width 16px
+        font-size 16px
+
+    .init_table
+        width 100% !important
+        margin 0 auto !important
+
+        th
+            background-color: #edf6ff
+            text-align: center !important
+            color #066cd4
+            padding-left 5px !important
+            font-weight bold
+
+            .cell
+                padding 0 !important
+
+        td, th
+            font-family: '宋体'
+            font-size 12px
+            padding 0 !important
+            height 40px !important
+
+        .el-table--border, .el-table--group
+            border: 1px solid #dde2ef
+
+        td, th.is-leaf
+            border-bottom: 1px solid #dde2ef
+
+        .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed
+            border-right: 1px solid #dde2ef
+
+        .el-table--striped .el-table__body tr.el-table__row--striped td
+            background-color #f7f9fa
+</style>
+

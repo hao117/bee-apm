@@ -5,7 +5,7 @@ logging:
       classpath: log4j2.xml
 # 配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
 elasticsearch:
-    url: http://127.0.0.1:9200
+    url: http://10.130.90.50:9200,http://10.130.90.50:9201
     #username: es
     #password: 123
     connTimeout: 30000
