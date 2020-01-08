@@ -9,7 +9,7 @@
         "build": "node build/build.js"
     },
     "dependencies": {
-        "axios": "^0.15.3",
+        "axios": "^0.18.1",
         "babel-polyfill": "^6.23.0",
         "cytoscape": "^3.2.20",
         "cytoscape-cose-bilkent": "^4.0.0",
