@@ -1,16 +1,27 @@
 package net.beeapm.demo.service.test;
 
 public class FooCcc {
-    public void say(){
-        System.out.println("-------------------->FooCcc::say");
+    public void say() {
+        try {
+            System.out.println("-------------------->FooCcc::say");
+            tell();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
-    public void tell(){
+
+    public void tell() throws Exception {
         System.out.println("-------------------->FooCcc::tell");
+        speak();
     }
-    public void speak(){
+
+    public void speak() throws Exception {
         System.out.println("-------------------->FooCcc::speak");
+        talk();
     }
-    public void talk(){
+
+    public void talk() throws Exception {
         System.out.println("-------------------->FooCcc::talk");
+        throw new Exception("oh my god!");
     }
 }

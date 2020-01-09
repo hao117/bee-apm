@@ -49,21 +49,11 @@ public class FooServlet extends HttpServlet {
 
             b.say();
 
-
             c.say();
-            c.speak();
-            c.talk();
-            c.tell();
 
             d.say();
-            d.speak();
-            d.talk();
-            d.tell();
 
             da.say();
-            da.speak();
-            da.talk();
-            da.tell();
 
             e.say();
 
