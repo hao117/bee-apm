@@ -96,6 +96,7 @@ public class ProcessHandler extends AbstractHandler {
             }else{
                 parentSpan.addTag(KEY_ERROR_THROWABLE, t);
                 parentSpan.addTag(KEY_BEE_CHILD_ID, id);
+                parentSpan.addTag(KEY_ERROR_POINT,errorPoint);
                 if(t != childThrowable && t.getCause() != childThrowable){
                     sendError(childId,childErrorPoint,childThrowable);
                 }
@@ -110,6 +111,7 @@ public class ProcessHandler extends AbstractHandler {
             err.setId(id);
             err.setGid(BeeTraceContext.getGId());
             err.addTag("desc",formatThrowable(t));
+            ReporterFactory.report(err);
         }
     }
 

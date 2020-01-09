@@ -51,13 +51,13 @@ public class ProcessConfig extends AbstractBeeConfig {
         }
 
         enableError = ConfigUtils.me().getBoolean("plugins.process.error.enable",true);
-        List<String> includeErrorPointPrefix = ConfigUtils.me().getList("plugins.process.error.includeErrorPointPrefix");
-        List<String> excludeErrorPointPrefix = ConfigUtils.me().getList("plugins.process.error.excludeErrorPointPrefix");
-        if(includeErrorPointPrefix != null && !includeErrorPointPrefix.isEmpty()){
-            includeErrorPointPrefix.addAll(includeErrorPointPrefix);
+        List<String> includeErrorPointPrefixList = ConfigUtils.me().getList("plugins.process.error.includeErrorPointPrefix");
+        List<String> excludeErrorPointPrefixList = ConfigUtils.me().getList("plugins.process.error.excludeErrorPointPrefix");
+        if(includeErrorPointPrefixList != null && !includeErrorPointPrefixList.isEmpty()){
+            includeErrorPointPrefix.addAll(includeErrorPointPrefixList);
         }
-        if(excludeErrorPointPrefix != null && !excludeErrorPointPrefix.isEmpty()){
-            excludeErrorPointPrefix.addAll(excludeErrorPointPrefix);
+        if(excludeErrorPointPrefixList != null && !excludeErrorPointPrefixList.isEmpty()){
+            excludeErrorPointPrefix.addAll(excludeErrorPointPrefixList);
         }
         spend = ConfigUtils.me().getInt("plugins.process.spend",-1);
 
