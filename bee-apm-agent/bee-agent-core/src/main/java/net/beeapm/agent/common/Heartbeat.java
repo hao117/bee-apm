@@ -5,12 +5,10 @@ import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.reporter.ReporterFactory;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class Heartbeat {
-    private static ScheduledExecutorService service = Executors.newScheduledThreadPool(1,new BeeThreadFactory("heartbeat"));
+    private static ScheduledExecutorService service = new ScheduledThreadPoolExecutor(1,new BeeThreadFactory("heartbeat"));
 
     public static void start(){
         int period = BeeConfig.me().getPeriod();

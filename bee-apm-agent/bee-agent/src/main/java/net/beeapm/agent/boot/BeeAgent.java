@@ -32,7 +32,7 @@ public class BeeAgent {
         BootPluginFactory.init();
         IdHepler.init();
         ReporterFactory.init();
-        //Heartbeat.start();心跳
+        Heartbeat.start();
 
         List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
 

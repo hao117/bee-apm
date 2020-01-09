@@ -3,6 +3,10 @@ package net.beeapm.agent.common;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author yuan
+ * @date 2018-11-07
+ */
 public class BeeThreadFactory implements ThreadFactory {
     private final AtomicInteger poolNumber = new AtomicInteger(1);
     private final ThreadGroup group;
@@ -18,14 +22,17 @@ public class BeeThreadFactory implements ThreadFactory {
                 "-thread-";
     }
 
+    @Override
     public Thread newThread(Runnable r) {
         Thread t = new Thread(group, r,
                 namePrefix + threadNumber.getAndIncrement(),
                 0);
-        if (t.isDaemon())
+        if (t.isDaemon()) {
             t.setDaemon(false);
-        if (t.getPriority() != Thread.NORM_PRIORITY)
+        }
+        if (t.getPriority() != Thread.NORM_PRIORITY) {
             t.setPriority(Thread.NORM_PRIORITY);
+        }
         return t;
     }
 }
