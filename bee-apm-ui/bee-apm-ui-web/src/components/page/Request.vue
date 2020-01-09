@@ -83,6 +83,7 @@
                             <el-table-column label="操作" width="180" align="center" fixed="right">
                                 <template slot-scope="_">
                                     <el-button type="text">参数</el-button>
+                                    <el-button type="text">返回</el-button>
                                     <el-button type="text" @click="queryCallTree(_.row)">调用链</el-button>
                                 </template>
                             </el-table-column>
@@ -132,11 +133,10 @@
 
                         <el-table-column
                             align="center"
-                            width="100"
+                            width="50"
                             label="操作">
                             <template slot-scope="_">
                                 <el-button type="text">入参</el-button>
-                                <el-button type="text">返回</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -145,6 +145,7 @@
         </el-row>
     </div>
 </template>
+<style lang='stylus' rel='stylesheet/stylus' src="../css/tree-table.styl"></style>
 <style>
     .tree-anchor {
         line-height: 24px;
@@ -156,7 +157,6 @@
 <script>
     import bus from '../common/bus';
     import Vue from 'vue';
-    import VJstree from 'vue-jstree';
     import '../iconfont/iconfont.css';
 
     let moment = require("moment");
@@ -164,7 +164,6 @@
     export default {
         name: 'request',
         components: {
-            VJstree,
         },
         data: function () {
             return {
@@ -370,57 +369,4 @@
     }
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'>
-    .app_title
-        display block
-        width 100%
-        font-size 24px
-        line-height 60px
-        color #41dae4
-        text-align center
-
-    .permission_toggleFold
-        vertical-align middle
-        padding-right 5px
-        font-size 16px
-        cursor pointer
-
-    .permission_placeholder
-        content ' '
-        display inline-block
-        width 16px
-        font-size 16px
-
-    .init_table
-        width 100% !important
-        margin 0 auto !important
-
-        th
-            background-color: #edf6ff
-            text-align: center !important
-            color #066cd4
-            padding-left 5px !important
-            font-weight bold
-
-            .cell
-                padding 0 !important
-
-        td, th
-            font-family: '宋体'
-            font-size 12px
-            padding 0 !important
-            height 40px !important
-
-        .el-table--border, .el-table--group
-            border: 1px solid #dde2ef
-
-        td, th.is-leaf
-            border-bottom: 1px solid #dde2ef
-
-        .el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed
-            border-right: 1px solid #dde2ef
-
-        .el-table--striped .el-table__body tr.el-table__row--striped td
-            background-color #f7f9fa
-</style>
 
