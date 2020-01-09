@@ -4,13 +4,13 @@ logger:
     fileSize: 10485760 #日志文件大小，单位字节,默认10M
     fileNum: 3     #日志文件保留数量，默认5个文件
 heartbeat:
-    period: 5 #心跳周期，单位秒,默认60
+    period: 60 #心跳周期，单位秒,默认60
 reporter:
     queueSize: 200 #缓冲队列大小，默认1000
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: kafka1x  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
+    name: console  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
     log: true      #是否以logger.debug输出上报的日志数据
     okhttp:        #name对应的reporter的配置参数
         connectTimeout: 30
@@ -99,9 +99,10 @@ plugins:
                 - com.asiainfo.*
         error:
             enable: true
-            #白名单配置，不在白名单的不采集，该前缀是在interceptPoint的前提下，多个前缀用英文逗号分开，支持到方法级别(fullClassName.methodName)
+            #白名单配置，不在白名单的不采集，该前缀是在interceptPoint的前提下，支持到方法级别(fullClassName.methodName)
             includeErrorPointPrefix:
-            #黑名单配置，优先级别最高，该前缀是在interceptPoint的前提下，多个前缀用英文逗号分开，支持到方法级别(fullClassName.methodName)
+                - net.beeapm.demo
+            #黑名单配置，优先级别最高，该前缀是在interceptPoint的前提下，支持到方法级别(fullClassName.methodName)
             excludeErrorPointPrefix:
         #采集范围配置，请根据自己的情况，调整下采集范围
         interceptPoints:
