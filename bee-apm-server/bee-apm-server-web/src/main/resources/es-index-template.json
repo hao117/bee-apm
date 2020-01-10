@@ -15,7 +15,7 @@
     }
   },
   "mappings": {
-    "bee-tmp": {
+    "_default_": {
       "properties": {
         "gid": {
           "type": "keyword"
@@ -53,21 +53,6 @@
               "type": "keyword"
             },
             "url": {
-              "type": "keyword"
-            },
-            "method": {
-              "type": "keyword"
-            },
-            "method": {
-              "type": "keyword"
-            },
-            "method": {
-              "type": "keyword"
-            },
-            "method": {
-              "type": "keyword"
-            },
-            "method": {
               "type": "keyword"
             }
           }
