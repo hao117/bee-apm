@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.common.BeeHttpServletRequestWrapper;
@@ -52,6 +53,7 @@ public class ServletHandler extends AbstractHandler {
                 //在ServletAdvice里取出来要清除掉
                 span.addTag(Const.KEY_REQ_WRAPPER, wrapper);
             }
+            SpanManager.createTopologySpan(request.getHeader(HeaderKey.SRC_APP),BeeConfig.me().getApp());
             return span;
         }
         return null;
