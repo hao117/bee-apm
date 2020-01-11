@@ -99,7 +99,7 @@ public class EsQueryStringMap {
             }
         }
         String queryString = String.join(" ",list.toArray(new String[list.size()]));
-        LOGGER.debug("queryString = {}",queryString);
+        LOGGER.debug("{}_queryString = {}",id,queryString);
         return queryString;
     }
 
