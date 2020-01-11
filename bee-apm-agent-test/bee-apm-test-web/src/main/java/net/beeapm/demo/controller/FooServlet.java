@@ -1,7 +1,6 @@
 package net.beeapm.demo.controller;
 
-import net.beeapm.demo.service.HelloServiceImpl;
-import net.beeapm.demo.service.IHelloService;
+
 import net.beeapm.demo.service.test.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
 
 /**
  * Created by yuan on 2018/8/2.

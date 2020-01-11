@@ -1,5 +1,7 @@
 package net.beeapm.demo.service.test;
 
+import org.apache.commons.lang3.RandomUtils;
+
 public class FooEee {
     public void say(){
         System.out.println("-------------------->FooEee::say");
@@ -15,6 +17,7 @@ public class FooEee {
     }
     public void say4(){
         System.out.println("-------------------->FooEee::say4");
+        say5();
     }
     public void say5(){
         System.out.println("-------------------->FooEee::say5");
@@ -23,9 +26,19 @@ public class FooEee {
     public void say6(){
         System.out.println("-------------------->FooEee::say6");
         say7();
+        try{
+            Thread.sleep(RandomUtils.nextInt(1,1000));
+        }catch (Exception e){
+
+        }
     }
     public void say7(){
         System.out.println("-------------------->FooEee::say7");
+        try{
+            Thread.sleep(RandomUtils.nextInt(1,500));
+        }catch (Exception e){
+
+        }
         say8();
     }
     public void say8(){
