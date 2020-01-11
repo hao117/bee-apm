@@ -163,6 +163,7 @@ select tab3
             "field": "spend",
             "ranges": [
               {
+                "from": 0,
                 "to": 200
               },
               {

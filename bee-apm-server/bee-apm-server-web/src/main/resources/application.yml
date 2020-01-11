@@ -10,10 +10,10 @@ bee:
     kafka1x:
       idleSleep: 5000 #队列为空时候，线程休眠时间，默认100ms
       pollTimeout: 2000 #kafka拉取超时时间，默认1000ms
-      topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-tx,bee-logger,bee-error,bee-request-body,bee-request-headers,bee-response-body,bee-heartbeat
+      topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-tx,bee-logger,bee-error,bee-request-body,bee-request-headers,bee-response-body,bee-heartbeat,bee-topology
       kafkaConfig:
         #kafka配置值项，项名称和值请参考kafka文档 10.130.90.50
-        bootstrap.servers: 10.130.90.50:9092
+        bootstrap.servers: 192.168.137.100:9092
         max.poll.records: 5 #默认500
   store:
     name: elasticsearch
@@ -30,7 +30,7 @@ bee:
     elasticsearch:
            #配置项参考类io.searchbox.client.config.HttpClientConfig.Builder里的方法，配置项与方法名称对应.
            config:
-             url: http://10.130.90.50:9200,http://10.130.90.50:9201
+             url: http://192.168.137.100:9200,http://192.168.137.100:9201
       #      username: xx
       #      password: xx
              connTimeout: 6000
@@ -52,6 +52,7 @@ bee:
               reqh: bee-request-headers
               resb: bee-response-body
               hb: bee-heartbeat
+              topo: bee-topology
   handlers:
     flow: empty>json>queue>store
     queue:
