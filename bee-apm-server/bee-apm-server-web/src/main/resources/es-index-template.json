@@ -16,6 +16,9 @@
   },
   "mappings": {
     "_default_": {
+      "_all": {
+        "enabled": false
+      },
       "properties": {
         "gid": {
           "type": "keyword"
