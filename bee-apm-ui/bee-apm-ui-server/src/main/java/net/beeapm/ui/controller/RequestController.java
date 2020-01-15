@@ -39,4 +39,11 @@ public class RequestController {
         logger.debug("RequestBody={}",params);
         return requestService.callTree(params);
     }
+
+    @RequestMapping("/topology")
+    @ResponseBody
+    public Object topology(@RequestBody Map<String,Object> params){
+        logger.debug("RequestBody={}",params);
+        return requestService.topology(params);
+    }
 }

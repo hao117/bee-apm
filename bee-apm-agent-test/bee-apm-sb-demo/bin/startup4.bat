@@ -1,0 +1,1 @@
+java  -javaagent:D:\Java\myspace\bee-apm\packages\bee-agent.jar -Dbee.app=duck -Dbee.env=dev -Dbee.inst=duck04 -Dbee.port=8104 -Dserver.port=8104 -Dbee.ip=192.168.137.14 -Dmax.counter=6 -Dremote.ports=8101_8102_8103_8104_8105_8106 -jar bee-apm-sb-demo.jar

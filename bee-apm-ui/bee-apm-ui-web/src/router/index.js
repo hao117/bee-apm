@@ -20,11 +20,6 @@ export default new Router({
                     meta: { title: '仪表盘' }
                 },
                 {
-                    path: '/topology',
-                    component: resolve => require(['../components/page/Topology.vue'], resolve),
-                    meta: { title: '拓扑图' }
-                },
-                {
                     path: '/request',
                     component: resolve => require(['../components/page/Request.vue'], resolve),
                     meta: { title: '请求查询' }

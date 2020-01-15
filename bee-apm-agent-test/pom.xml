@@ -11,6 +11,7 @@
     </properties>
     <modules>
         <module>bee-apm-test-web</module>
+        <module>bee-apm-sb-demo</module>
     </modules>
     <dependencies>
 

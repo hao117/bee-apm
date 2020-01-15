@@ -16,4 +16,11 @@ public interface IRequestService {
      * @return
      */
     ResultVo callTree(Map<String,Object> params);
+
+    /**
+     * 拓扑图数据
+     * @param params
+     * @return
+     */
+    ResultVo topology(Map<String,Object> params);
 }

@@ -84,6 +84,7 @@
                                 <template slot-scope="_">
                                     <el-button type="text">参数</el-button>
                                     <el-button type="text">返回</el-button>
+                                    <el-button type="text" @click="showVisTopology(_.row)">拓扑</el-button>
                                     <el-button type="text" @click="queryCallTree(_.row)">调用链</el-button>
                                 </template>
                             </el-table-column>
@@ -143,6 +144,20 @@
                 </el-row>
             </el-card>
         </el-row>
+        <el-row v-show="isShowTopology">
+            <el-card>
+                <el-row>
+                    <el-col :span="24" align="right" style="padding-bottom: 10px">
+                        <el-button type="success">刷新</el-button>
+                        <el-button type="primary" @click="backButtonEvent()">返回</el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-card id="vis-topology" style="height: 700px">
+                    </el-card>
+                </el-row>
+            </el-card>
+        </el-row>
     </div>
 </template>
 <style lang='stylus' rel='stylesheet/stylus' src="../css/tree-table.styl"></style>
@@ -158,6 +173,7 @@
     import bus from '../common/bus';
     import Vue from 'vue';
     import '../iconfont/iconfont.css';
+    import Vis from 'vis-network';
 
     let moment = require("moment");
 
@@ -171,6 +187,16 @@
                 foldList: [], // 该数组中的值 都会在列表中进行隐藏  死亡名单
                 isShowTable: true,
                 isShowTree: false,
+                isShowTopology: false,
+                visTopology:{
+                    nodes:[],
+                    edges:[],
+                    container:null,
+                    options: {
+                        autoResize: true,
+                    },
+                    data:{}
+                },
                 requestChartSettings: {},
                 requestCharExtend: {
                     'xAxis.0.axisLabel.rotate': 60,
@@ -307,6 +333,7 @@
             backButtonEvent() {
                 this.isShowTable = true;
                 this.isShowTree = false;
+                this.isShowTopology = false;
             },
             /*********************************
              ** 切换展开 还是折叠
@@ -364,6 +391,45 @@
                     })
                 }
                 return parent
+            },
+            showVisTopology(row){
+                let _this = this;
+                console.log("==>initVisTopology row=%o", row);
+                const url = "/api/request/topology";
+                let params = {gid: row.gid, time: row.time};
+                this.$axios.post(url, params).then((res) => {
+                    console.log("==>initVisTopology result=%o", res);
+                    let data = res.data.result;
+                    _this.visTopology.nodes = new Vis.DataSet(_this.formatNodes(data.nodes));
+                    _this.visTopology.edges = new Vis.DataSet(_this.formatEdges(data.edges));
+                    _this.visTopology.container = document.getElementById('vis-topology');
+                    _this.visTopology.data = {
+                        nodes: _this.visTopology.nodes,
+                        edges: _this.visTopology.edges
+                    };
+                    _this.network = new Vis.Network(_this.visTopology.container, _this.visTopology.data, _this.visTopology.options);
+                })
+                this.isShowTable = false;
+                this.isShowTopology = true;
+            },
+            formatNodes(nodes){
+                for(let i = 0; i < nodes.length; i++){
+                    let node = nodes[i]
+                    node.shape = 'circle';
+                    if(node.label == 'nvl'){
+                        node.label = 'start';
+                        node.color = '#C2FABC';
+                    }
+                }
+                return nodes;
+            },
+            formatEdges(edges){
+                for(let i = 0; i < edges.length; i++){
+                    let edge = edges[i]
+                    edge.arrows = 'to';
+                    edge.label = edge.times  + '';
+                }
+                return edges;
             }
         }
     }

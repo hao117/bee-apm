@@ -14,5 +14,6 @@ public class EsIndicesPrefix {
     public static final String REQUEST_HEADERS = "bee-request-headers-";
     public static final String RESPONSE_BODY = "bee-response-body-";
     public static final String HEARTBEAT = "bee-heartbeat-";
+    public static final String TOPOLOGY = "bee-topology-";
 
 }

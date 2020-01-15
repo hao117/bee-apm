@@ -3,6 +3,8 @@ package net.beeapm.agent.plugin.handler;
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
 import net.beeapm.agent.config.BeeConfig;
+import net.beeapm.agent.log.LogImpl;
+import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.common.BeeHttpServletRequestWrapper;
@@ -23,6 +25,7 @@ import java.util.Map;
  * @date 2018/08/05
  */
 public class ServletHandler extends AbstractHandler {
+    private static final LogImpl log = LogManager.getLog("ServletHandler");
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
@@ -53,7 +56,7 @@ public class ServletHandler extends AbstractHandler {
                 //在ServletAdvice里取出来要清除掉
                 span.addTag(Const.KEY_REQ_WRAPPER, wrapper);
             }
-            SpanManager.createTopologySpan(request.getHeader(HeaderKey.SRC_APP),BeeConfig.me().getApp());
+            SpanManager.createTopologySpan(request.getHeader(HeaderKey.SRC_APP), BeeConfig.me().getApp());
             return span;
         }
         return null;
@@ -62,13 +65,14 @@ public class ServletHandler extends AbstractHandler {
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal) {
         Span currSpan = SpanManager.getCurrentSpan();
+        HttpServletResponse response = (HttpServletResponse) allArguments[1];
         if (!ServletConfig.me().isEnable() || SamplingUtil.NO()) {
+            flush(response);
             return null;
         }
         if (currSpan != null && currSpan.getType().equals(SpanType.REQUEST)) {
             Span span = SpanManager.getExitSpan();
             HttpServletRequest request = (HttpServletRequest) allArguments[0];
-            HttpServletResponse response = (HttpServletResponse) allArguments[1];
             span.addTag("url", request.getRequestURL());
             span.addTag("remote", request.getRemoteAddr());
             span.addTag("method", request.getMethod());
@@ -89,9 +93,19 @@ public class ServletHandler extends AbstractHandler {
                 //采集ResponseBody
                 collectResponseBody(span, response);
             }
+            flush(response);
             return result;
         }
+        flush(response);
         return null;
+    }
+
+    private void flush(HttpServletResponse response){
+        try {
+            response.flushBuffer();
+        }catch (Exception e){
+            log.error("response flush error",e);
+        }
     }
 
     /**
@@ -168,9 +182,9 @@ public class ServletHandler extends AbstractHandler {
             beeResp.writeOriginOutputStream();
             Span respSpan = new Span(SpanType.RESPONSE_BODY);
             respSpan.setId(span.getId());
-            String body = new String(beeResp.toByteArray());
-            if (StringUtils.isNotBlank(body)) {
-                respSpan.addTag("body", body);
+            byte[] body = beeResp.toByteArray();
+            if (body != null && body.length > 0 ) {
+                respSpan.addTag("body", new String(body));
                 ReporterFactory.report(respSpan);
             }
         }

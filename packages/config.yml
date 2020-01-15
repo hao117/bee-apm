@@ -114,7 +114,7 @@ plugins:
                         nameStartsWith: net.beeapm.demo
                     exclude: #排除规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
                         nameContains: CGLIB
-                        nameStartsWith:
+                        nameStartsWith: org.apache.catalina,net.beeapm.demo.model.,net.beeapm.demo.common.
                 methodMatch: #方法匹配规则
                     include: #包含规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,isAnnotatedWith
                         named:

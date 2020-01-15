@@ -1,5 +1,6 @@
 package net.beeapm.agent.plugin.common;
 
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
 
@@ -13,29 +14,23 @@ import java.io.*;
  * @date 2018/10/20
  */
 public class BeeHttpServletResponseWrapper extends HttpServletResponseWrapper {
-    private ByteArrayOutputStream byteArrayOutputStream;
-    private HttpServletResponse response;
+    private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    private PrintWriter printWriter = new PrintWriter(byteArrayOutputStream);
+    private BeeServletOutputStream outputStream = new BeeServletOutputStream(byteArrayOutputStream);
     private LogImpl log = LogManager.getLog(BeeHttpServletResponseWrapper.class);
 
     public BeeHttpServletResponseWrapper(HttpServletResponse response) {
         super(response);
-        this.response = response;
     }
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {
-        if (byteArrayOutputStream != null) {
-            return super.getOutputStream();
-        }
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        // 将数据写到 byte 中
-        return new BeeServletOutputStream(byteArrayOutputStream);
+        return outputStream;
     }
-
 
     @Override
     public PrintWriter getWriter() throws IOException {
-        return new PrintWriter(getOutputStream());
+        return printWriter;
     }
 
     /**
@@ -43,8 +38,11 @@ public class BeeHttpServletResponseWrapper extends HttpServletResponseWrapper {
      */
     public void writeOriginOutputStream() {
         try {
-            OutputStream os = response.getOutputStream();
-            os.write(toByteArray());
+            OutputStream os = getResponse().getOutputStream();
+            byte[] bytes = toByteArray();
+            if(bytes != null) {
+                os.write(bytes);
+            }
             os.flush();
             os.close();
         } catch (Exception e) {
@@ -52,15 +50,20 @@ public class BeeHttpServletResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-    public byte[] toByteArray() {
-        if (byteArrayOutputStream == null) {
-            return null;
-        }
+    @Override
+    public void flushBuffer() {
         try {
-            byteArrayOutputStream.flush();
-        } catch (IOException e) {
+            getResponse().flushBuffer();
+        } catch (Exception e) {
             log.error("", e);
         }
+        BeeUtils.flush(printWriter);
+        BeeUtils.flush(outputStream);
+    }
+
+
+    public byte[] toByteArray() {
+        flushBuffer();
         return byteArrayOutputStream.toByteArray();
     }
 

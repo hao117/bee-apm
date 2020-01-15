@@ -44,11 +44,6 @@
                         title: '仪表盘'
                     },
                     {
-                        icon: 'icon beeicon bee-gongzuoliu',
-                        index: 'topology',
-                        title: '拓扑图'
-                    },
-                    {
                         icon: 'el-icon-lx-people',
                         index: 'request',
                         title: '请求查询'

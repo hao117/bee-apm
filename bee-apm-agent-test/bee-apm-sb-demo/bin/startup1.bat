@@ -1,0 +1,1 @@
+java  -javaagent:D:\Java\myspace\bee-apm\packages\bee-agent.jar -Dbee.app=test -Dbee.env=dev -Dbee.inst=test01 -Dbee.port=8101 -Dserver.port=8101 -Dbee.ip=192.168.137.11 -Dmax.counter=6 -Dremote.ports=8101_8102_8103_8104_8105_8106 -jar bee-apm-sb-demo.jar

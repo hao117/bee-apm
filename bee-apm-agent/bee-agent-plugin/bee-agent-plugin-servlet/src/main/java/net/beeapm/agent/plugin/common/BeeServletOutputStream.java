@@ -17,7 +17,8 @@ public class BeeServletOutputStream extends ServletOutputStream {
 
     @Override
     public void write(int b) {
-        output.write(b); // 将数据写到stream中
+        // 将数据写到stream中
+        output.write(b);
     }
 
     @Override

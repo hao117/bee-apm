@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
-import com.google.gson.JsonObject;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeConst;
 import net.beeapm.ui.common.BeeUtils;
@@ -12,6 +11,7 @@ import net.beeapm.ui.common.DateUtils;
 import net.beeapm.ui.common.EsIndicesPrefix;
 import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
+import net.beeapm.ui.model.TopologyEdge;
 import net.beeapm.ui.model.vo.BaseVo;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
@@ -131,7 +131,7 @@ public class RequestServiceImpl implements IRequestService {
             buildTree(rows);
             res.setCode("0");
             res.setResult(rows);
-            logger.debug("返回结果:{}", JSON.toJSONString(rows));
+            logger.debug("返回结果:{}", JSON.toJSONString(res));
         } catch (Exception e) {
             logger.error("", e);
         }
@@ -200,5 +200,77 @@ public class RequestServiceImpl implements IRequestService {
                 rows.remove(i);
             }
         }
+    }
+
+    @Override
+    public ResultVo topology(Map<String, Object> params) {
+        logger.debug("请求参数:{}", JSON.toJSONString(params));
+        ResultVo res = new ResultVo();
+        try {
+            Date time = DateUtils.parseDate((String) params.get("time"), "yyyy-MM-dd'T'HH:mm:ssZ");
+            Map<String, Object> args = new HashMap<>(8);
+            args.put("beginTime", DateUtils.format(new Date(time.getTime() - HALF_HOUR), "yyyy-MM-dd HH:mm"));
+            args.put("endTime", DateUtils.format(new Date(time.getTime() + HALF_HOUR), "yyyy-MM-dd HH:mm"));
+            args.put("gid", params.get("gid"));
+            logger.debug("查询参数:{}", JSON.toJSONString(args));
+            List<Object> rows = new ArrayList<>();
+            Long total = queryList(args, EsIndicesPrefix.TOPOLOGY, "QueryList", res, rows);
+            if (total < 0) {
+                return res;
+            }
+            logger.debug("查询结果:{}", JSON.toJSONString(rows));
+            res.setCode("0");
+            res.setResult(buildTopology(rows));
+            logger.debug("返回结果:{}", JSON.toJSONString(res));
+        } catch (Exception e) {
+            logger.error("查询拓扑关系失败", e);
+        }
+
+        return res;
+    }
+
+    private Map<String, Object> buildTopology(List<Object> rows) {
+        int len = rows.size();
+        HashMap<String, TopologyEdge> edgeMap = new HashMap<>(16);
+        Set<String> nodeSet = new HashSet<>();
+        for (int i = 0; i < len; i++) {
+            JSONObject item = (JSONObject) rows.get(i);
+            String to = item.getString("app");
+            String from = JSONPath.eval(item, "$.tags.from").toString();
+            nodeSet.add(to);
+            nodeSet.add(from);
+            String key = from + "_" + to;
+            TopologyEdge edge = edgeMap.get(key);
+            if (edge == null) {
+                edge = new TopologyEdge(0);
+                edgeMap.put(key, edge);
+            }
+            edge.setFrom(from);
+            edge.setTo(to);
+            edge.setTimes(edge.getTimes() + 1);
+        }
+
+        List<Object> nodes = new ArrayList<>();
+        Iterator<String> nodeIterator = nodeSet.iterator();
+        while (nodeIterator.hasNext()) {
+            String name = nodeIterator.next();
+            Map<String, String> node = new HashMap<>(16);
+            node.put("id", name);
+            //node.put("shape", "circle");
+//            if(name.equals("nvl")){
+//                node.put("label", "start");
+//                node.put("color", "#C2FABC");
+//            }else{
+            node.put("label", name);
+
+            nodes.add(node);
+        }
+        for (Map.Entry<String, TopologyEdge> entry : edgeMap.entrySet()) {
+            TopologyEdge edge = entry.getValue();
+        }
+        Map<String, Object> result = new HashMap<>(4);
+        result.put("nodes", nodes);
+        result.put("edges", edgeMap.values());
+        return result;
     }
 }

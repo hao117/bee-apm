@@ -11,15 +11,18 @@
     "dependencies": {
         "axios": "^0.15.3",
         "babel-polyfill": "^6.23.0",
-        "cytoscape": "^3.2.20",
-        "cytoscape-cose-bilkent": "^4.0.0",
         "echarts": "^4.2.0-rc.2",
         "element-ui": "2.4.11",
-        "moment": "^2.22.2",
+        "moment": "^2.24.0",
         "v-charts": "^1.19.0",
         "vue": "^2.5.18",
         "vue-router": "^3.0.2",
-        "vue-schart": "^1.0.0"
+        "vue-schart": "^1.0.0",
+        "vis-network": "^6.5.2",
+        "keycharm": "^0.2.0",
+        "vis-data": "^6.2.1",
+        "vis-util": "^1.1.8",
+        "fsevents": "^1.2.4"
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",

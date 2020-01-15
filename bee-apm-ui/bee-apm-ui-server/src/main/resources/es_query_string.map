@@ -285,14 +285,6 @@ select tab3
   "query": {
     "bool": {
       "must": [
-        {
-          "range": {
-            "time": {
-               "gte":{{beginTime}},
-               "lte":{{endTime}}
-            }
-          }
-        },
        {"term": {"gid": "{{gid}}"}}
       ]
     }
