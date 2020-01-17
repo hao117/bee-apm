@@ -4,7 +4,7 @@
             <el-card>
                 <el-form ref="form" :model="form" label-width="80px" width="100%">
                     <el-row :gutter="20">
-                        <el-col :span="7">
+                        <el-col :span="5">
                             <el-form-item label="环境">
                                 <el-select v-model="form.env" placeholder="请选择">
                                     <el-option
@@ -16,7 +16,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="7">
+                        <el-col :span="5">
                             <el-form-item label="应用">
                                 <el-select v-model="form.app" placeholder="请选择">
                                     <el-option
@@ -28,7 +28,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="7">
+                        <el-col :span="5">
                             <el-form-item label="排序">
                                 <el-select v-model="form.sort" placeholder="请选择">
                                     <el-option key="time" label="时间" value="time"></el-option>
@@ -36,17 +36,25 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="3" align="right">
+                        <el-col :span="5">
+                            <el-form-item label="类型">
+                                <el-select v-model="form.entry" placeholder="请选择">
+                                    <el-option key="all" label="全部" value=""></el-option>
+                                    <el-option key="entry" label="入口请求" value="nvl"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="2" align="right">
                             <el-button @click="queryRequestList(1)" type="primary">查&nbsp;&nbsp;询</el-button>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
-                        <el-col :span="7">
+                        <el-col :span="10">
                             <el-form-item label="gId" style="margin-bottom: 0px">
                                 <el-input v-model="form.gid"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="7">
+                        <el-col :span="10">
                             <el-form-item label="IP" style="margin-bottom: 0px">
                                 <el-input v-model="form.ip"></el-input>
                             </el-form-item>
@@ -194,6 +202,19 @@
                     container:null,
                     options: {
                         autoResize: true,
+                        nodes: {
+                            shape: 'image',
+                            borderWidth: 2,
+                            shadow:true,
+                            size:20,
+                            image:{
+                                selected: 'static/img/app1.png',
+                                unselected: 'static/img/app1.png'
+                            }
+                        },
+                        edges: {
+                            shadow:true
+                        }
                     },
                     data:{}
                 },
@@ -222,7 +243,8 @@
                     env: null,
                     app: null,
                     ip: null,
-                    sort: null
+                    sort: null,
+                    entry: null,
                 },
                 envOptions: [],
                 appOptions: []
@@ -415,17 +437,19 @@
             formatNodes(nodes){
                 for(let i = 0; i < nodes.length; i++){
                     let node = nodes[i]
-                    node.shape = 'circle';
                     if(node.label == 'nvl'){
                         node.label = 'start';
-                        node.color = '#C2FABC';
+                        node.image = {
+                            selected: 'static/img/user.png',
+                            unselected: 'static/img/user.png'
+                        }
                     }
                 }
                 return nodes;
             },
             formatEdges(edges){
                 for(let i = 0; i < edges.length; i++){
-                    let edge = edges[i]
+                    let edge = edges[i];
                     edge.arrows = 'to';
                     edge.label = edge.times  + '';
                 }

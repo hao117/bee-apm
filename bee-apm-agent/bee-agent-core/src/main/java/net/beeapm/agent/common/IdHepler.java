@@ -35,8 +35,8 @@ public class IdHepler {
     private static String datePattern = "yyMMddHHmmss";
     private static SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
     public static AtomicLong id = new AtomicLong(1);
-    public static String timeTag = sdf.format(new Date());
-    public static String prevTimeTag = timeTag;
+    public static String timestamp = sdf.format(new Date());
+    public static String prevTimestamp = timestamp;
     public static AtomicInteger initTimes = new AtomicInteger(0);
     private static String rootDir = "/bee/ids/";
     private static final LogImpl log = LogManager.getLog(IdHepler.class.getSimpleName());
@@ -79,7 +79,7 @@ public class IdHepler {
                     log.info("bee apm agent init node name");
                     genNodeName(initTimes.incrementAndGet());
                     log.info("bee apm init time tag");
-                    initTag();
+                    initTimestamp();
                     initFlag = true;
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -89,10 +89,10 @@ public class IdHepler {
         }
     }
 
-    private static void initTag() {
+    private static void initTimestamp() {
         Calendar cal = Calendar.getInstance();
-        timeTag = sdf.format(cal.getTime());
-        prevTimeTag = timeTag;
+        timestamp = sdf.format(cal.getTime());
+        prevTimestamp = timestamp;
         cal.set(Calendar.SECOND, cal.get(Calendar.SECOND) + 1);
         cal.set(Calendar.MILLISECOND, 0);
         long delay = cal.getTimeInMillis() - System.currentTimeMillis();
@@ -100,7 +100,7 @@ public class IdHepler {
             service.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    timeTag = sdf.format(new Date());
+                    timestamp = sdf.format(new Date());
                 }
             }, delay, 1000, TimeUnit.MILLISECONDS);
 
@@ -114,15 +114,15 @@ public class IdHepler {
         if (nodeName == null) {
             return null;
         }
-        if (!prevTimeTag.equals(timeTag)) {
+        if (!prevTimestamp.equals(timestamp)) {
             synchronized (IdHepler.class) {
-                if (!prevTimeTag.equals(timeTag)) {
-                    prevTimeTag = timeTag;
+                if (!prevTimestamp.equals(timestamp)) {
+                    prevTimestamp = timestamp;
                     id.set(1);
                 }
             }
         }
-        return nodeName + prevTimeTag + id.getAndIncrement();
+        return nodeName + prevTimestamp + id.getAndIncrement();
     }
 
 

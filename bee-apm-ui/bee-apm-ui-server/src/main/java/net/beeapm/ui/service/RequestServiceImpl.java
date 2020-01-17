@@ -204,6 +204,7 @@ public class RequestServiceImpl implements IRequestService {
 
     @Override
     public ResultVo topology(Map<String, Object> params) {
+        params.remove("entry");
         logger.debug("请求参数:{}", JSON.toJSONString(params));
         ResultVo res = new ResultVo();
         try {
@@ -256,13 +257,7 @@ public class RequestServiceImpl implements IRequestService {
             String name = nodeIterator.next();
             Map<String, String> node = new HashMap<>(16);
             node.put("id", name);
-            //node.put("shape", "circle");
-//            if(name.equals("nvl")){
-//                node.put("label", "start");
-//                node.put("color", "#C2FABC");
-//            }else{
             node.put("label", name);
-
             nodes.add(node);
         }
         for (Map.Entry<String, TopologyEdge> entry : edgeMap.entrySet()) {

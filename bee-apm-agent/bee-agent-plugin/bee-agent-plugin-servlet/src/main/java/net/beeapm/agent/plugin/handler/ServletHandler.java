@@ -44,7 +44,11 @@ public class ServletHandler extends AbstractHandler {
             BeeTraceContext.setPId(request.getHeader(HeaderKey.PID));
             BeeTraceContext.setCTag(request.getHeader(HeaderKey.CTAG));
             Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
-            span.addTag("srcApp", request.getHeader(HeaderKey.SRC_APP));
+            String srcApp = request.getHeader(HeaderKey.SRC_APP);
+            if (srcApp == null) {
+                srcApp = "nvl";
+            }
+            span.addTag("srcApp", srcApp);
             span.addTag("srcInst", request.getHeader(HeaderKey.SRC_INST));
             if (ServletConfig.me().isEnableRespBody() && !resp.getClass().getSimpleName().equals(Const.CLASS_BEE_HTTP_SERVLET_RESPONSE_WRAPPER)) {
                 BeeHttpServletResponseWrapper wrapper = new BeeHttpServletResponseWrapper(resp);
@@ -100,11 +104,11 @@ public class ServletHandler extends AbstractHandler {
         return null;
     }
 
-    private void flush(HttpServletResponse response){
+    private void flush(HttpServletResponse response) {
         try {
             response.flushBuffer();
-        }catch (Exception e){
-            log.error("response flush error",e);
+        } catch (Exception e) {
+            log.error("response flush error", e);
         }
     }
 
@@ -183,7 +187,7 @@ public class ServletHandler extends AbstractHandler {
             Span respSpan = new Span(SpanType.RESPONSE_BODY);
             respSpan.setId(span.getId());
             byte[] body = beeResp.toByteArray();
-            if (body != null && body.length > 0 ) {
+            if (body != null && body.length > 0) {
                 respSpan.addTag("body", new String(body));
                 ReporterFactory.report(respSpan);
             }

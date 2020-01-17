@@ -239,6 +239,7 @@ select tab3
         @if ,{"term": {"ip": "{{ip}}"}}
         @if ,{"term": {"gid": "{{gid}}"}}
         @if ,{"term": {"tags.level": "{{tags.level}}"}}
+        @if ,{"term": {"tags.srcApp": "{{entry}}"}}
       ]
     }
   }
@@ -264,6 +265,7 @@ select tab3
         @if ,{"term": {"ip": "{{ip}}"}}
         @if ,{"term": {"gid": "{{gid}}"}}
         @if ,{"term": {"tags.level": "{{tags.level}}"}}
+        @if ,{"term": {"tags.srcApp": "{{entry}}"}}
       ]
     }
   },
