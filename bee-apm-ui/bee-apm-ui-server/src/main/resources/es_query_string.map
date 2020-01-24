@@ -292,3 +292,15 @@ select tab3
     }
   }
 }
+
+#####_QueryById
+{
+  "size": 1,
+  "query": {
+    "bool": {
+      "must": [
+       {"term": {"id": "{{id}}"}}
+      ]
+    }
+  }
+}

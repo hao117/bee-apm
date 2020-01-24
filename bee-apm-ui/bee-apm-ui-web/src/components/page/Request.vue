@@ -64,9 +64,9 @@
             </el-card>
             <el-card style="margin-top: -2px">
                 <el-row>
-                    <el-col :span="24">
-                        <ve-histogram :legend-visible='false' :extend="requestCharExtend" :data="requestChartData"
-                                      :settings="requestChartSettings"></ve-histogram>
+                    <el-col :span="24" >
+                        <ve-histogram style="height: 250px" height="100%" :legend-visible='false' :extend="requestCharExtend" :data="requestChartData"
+                                      :settings="requestChartSettings" ></ve-histogram>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -90,10 +90,10 @@
                             </el-table-column>
                             <el-table-column label="操作" width="180" align="center" fixed="right">
                                 <template slot-scope="_">
-                                    <el-button type="text">参数</el-button>
-                                    <el-button type="text">返回</el-button>
+                                    <el-button type="text" @click="queryRequestBody(_.row)">入参</el-button>
+                                    <el-button type="text" @click="queryResponseBody(_.row)">回参</el-button>
                                     <el-button type="text" @click="showVisTopology(_.row)">拓扑</el-button>
-                                    <el-button type="text" @click="queryCallTree(_.row)">调用链</el-button>
+                                    <el-button type="text" @click="queryCallTree(_.row)">链路</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -111,44 +111,50 @@
             <el-card>
                 <el-row>
                     <el-col :span="24" align="right" style="padding-bottom: 10px">
-                        <el-button type="success">刷新</el-button>
                         <el-button type="primary" @click="backButtonEvent()">返回</el-button>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-table
-                        :data="tableListData"
-                        :row-style="toggleDisplayTr"
-                        border stripe
-                        class="init_table">
-                        <el-table-column
-                            label="调用链路"
-                            min-width="500"
-                            show-overflow-tooltip
-                            align="left">
-                            <template slot-scope="_">
-                                <p :style="`margin-left: ${_.row.__level * 20}px;margin-top:0;margin-bottom:0`"><i
-                                    @click="toggleFoldingStatus(_.row)" class="permission_toggleFold"
-                                    :class="toggleFoldingClass(_.row)"></i>{{_.row.text}}</p>
-                            </template>
-                        </el-table-column>
+                    <el-col :span="24">
+                        <el-table
+                            :data="tableListData"
+                            :row-style="toggleDisplayTr"
+                            border stripe
+                            class="init_table">
+                            <el-table-column
+                                label="调用链路"
+                                show-tooltip-when-overflow
+                                min-width="1000"
+                                align="left">
+                                <template slot-scope="_">
+                                    <p :style="`margin-left: ${_.row.__level * 20}px;margin-top:0;margin-bottom:0`"><i
+                                        @click="toggleFoldingStatus(_.row)" class="permission_toggleFold"
+                                        :class="toggleFoldingClass(_.row)"></i>{{_.row.text}}
+                                        <a style="color:#cccccc;font-weight: bolder">|</a>
+                                        <a style="color: orange">{{_.row.app}}</a>
+                                    </p>
+                                </template>
+                            </el-table-column>
 
-                        <el-table-column
-                            align="center"
-                            prop="spend"
-                            width="60"
-                            label="耗时(ms)">
-                        </el-table-column>
+                            <el-table-column
+                                align="center"
+                                prop="spend"
+                                width="60"
+                                fixed="right"
+                                label="耗时(ms)">
+                            </el-table-column>
 
-                        <el-table-column
-                            align="center"
-                            width="50"
-                            label="操作">
-                            <template slot-scope="_">
-                                <el-button type="text">入参</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                            <el-table-column
+                                align="center"
+                                width="50"
+                                fixed="right"
+                                label="操作">
+                                <template slot-scope="_">
+                                    <el-button type="text">入参</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-col>
                 </el-row>
             </el-card>
         </el-row>
@@ -156,7 +162,6 @@
             <el-card>
                 <el-row>
                     <el-col :span="24" align="right" style="padding-bottom: 10px">
-                        <el-button type="success">刷新</el-button>
                         <el-button type="primary" @click="backButtonEvent()">返回</el-button>
                     </el-col>
                 </el-row>
@@ -166,6 +171,16 @@
                 </el-row>
             </el-card>
         </el-row>
+        <el-dialog
+            title="参数"
+            :visible.sync="dialogVisible"
+            width="60%">
+            <el-input v-model="dialogTextarea" :rows="22" type="textarea" readonly>
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">关 闭</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <style lang='stylus' rel='stylesheet/stylus' src="../css/tree-table.styl"></style>
@@ -175,6 +190,16 @@
         height: 24px;
         width: 100%;
     }
+    .el-dialog__body{
+        padding: 0px 20px !important;
+        border-top: 1px;
+        border-top-color: #1f2f3d;
+    }
+    textarea{
+        overflow-wrap: normal !important;
+        white-space:pre !important;
+        padding: 10px !important;
+    }
 </style>
 
 <script>
@@ -182,13 +207,13 @@
     import Vue from 'vue';
     import '../iconfont/iconfont.css';
     import Vis from 'vis-network';
+    import JSONFormatter from "json-fmt";
 
     let moment = require("moment");
 
     export default {
         name: 'request',
-        components: {
-        },
+        components: {},
         data: function () {
             return {
                 tableListData: [], //调用链数据
@@ -196,37 +221,45 @@
                 isShowTable: true,
                 isShowTree: false,
                 isShowTopology: false,
-                visTopology:{
-                    nodes:[],
-                    edges:[],
-                    container:null,
+                dialogVisible: false,
+                dialogTextarea: '',
+                visTopology: {
+                    nodes: [],
+                    edges: [],
+                    container: null,
                     options: {
                         autoResize: true,
                         nodes: {
                             shape: 'image',
                             borderWidth: 2,
-                            shadow:true,
-                            size:20,
-                            image:{
+                            shadow: true,
+                            size: 20,
+                            image: {
                                 selected: 'static/img/app1.png',
                                 unselected: 'static/img/app1.png'
                             }
                         },
                         edges: {
-                            shadow:true
+                            shadow: true
                         }
                     },
-                    data:{}
+                    data: {}
                 },
-                requestChartSettings: {},
+                requestChartSettings: {
+                },
                 requestCharExtend: {
                     'xAxis.0.axisLabel.rotate': 60,
                     series(v) {
                         v.forEach(i => {
-                            i.barMaxWidth = 50
+                            i.barMaxWidth = 30
                         })
                         return v
-                    }
+                    },
+                    grid: {
+                        top: 10,
+                        bottom: 5,
+                        height:230,
+                    },
                 },
                 requestChartData: {
                     columns: ['time', '请求量'],
@@ -338,6 +371,36 @@
                     this.requestChartData.rows = res.data.rows;
                 })
             },
+            // 请求参数
+            queryRequestBody(row) {
+                const url = "/api/common/queryById";
+                let params = {id: row.id, index: "bee-request-body"};
+                params.beginTime = this.getBeginTime();
+                params.endTime = this.getEndTime();
+                this.$axios.post(url, params).then((res) => {
+                    console.log("==>queryRequestBody=%o", res);
+                    this.dialogVisible = true;
+                    let fmt = new JSONFormatter(JSONFormatter.PRETTY);
+                    fmt.append(res.data.result.tags.body);
+                    this.dialogTextarea = fmt.flush();
+                    console.log(this.dialogTextarea);
+                })
+            },
+            // 请求参数
+            queryResponseBody(row) {
+                const url = "/api/common/queryById";
+                let params = {id: row.id, index: "bee-response-body"};
+                params.beginTime = this.getBeginTime();
+                params.endTime = this.getEndTime();
+                this.$axios.post(url, params).then((res) => {
+                    console.log("==>queryResponseBody=%o", res);
+                    this.dialogVisible = true;
+                    let fmt = new JSONFormatter(JSONFormatter.PRETTY);
+                    fmt.append(res.data.result.tags.body);
+                    this.dialogTextarea = fmt.flush();
+                    console.log(this.dialogTextarea);
+                })
+            },
             timeFormatter(row, column) {
                 return row.time.substring(11, 19);
             },
@@ -409,12 +472,14 @@
                         Vue.set(x, '__identity', elderIdentity + '_' + i)
                         parent.push(x)
                         // 如果仍有子集，则进行递归
-                        if (x.children && x.children.length > 0) this.formatConversion(parent, x.children, index + 1, [...family, elderIdentity + '_' + i], elderIdentity + '_' + i)
+                        if (x.children && x.children.length > 0) {
+                            this.formatConversion(parent, x.children, index + 1, [...family, elderIdentity + '_' + i], elderIdentity + '_' + i)
+                        }
                     })
                 }
                 return parent
             },
-            showVisTopology(row){
+            showVisTopology(row) {
                 let _this = this;
                 console.log("==>initVisTopology row=%o", row);
                 const url = "/api/request/topology";
@@ -434,10 +499,10 @@
                 this.isShowTable = false;
                 this.isShowTopology = true;
             },
-            formatNodes(nodes){
-                for(let i = 0; i < nodes.length; i++){
+            formatNodes(nodes) {
+                for (let i = 0; i < nodes.length; i++) {
                     let node = nodes[i]
-                    if(node.label == 'nvl'){
+                    if (node.label == 'nvl') {
                         node.label = 'start';
                         node.image = {
                             selected: 'static/img/user.png',
@@ -447,11 +512,11 @@
                 }
                 return nodes;
             },
-            formatEdges(edges){
-                for(let i = 0; i < edges.length; i++){
+            formatEdges(edges) {
+                for (let i = 0; i < edges.length; i++) {
                     let edge = edges[i];
                     edge.arrows = 'to';
-                    edge.label = edge.times  + '';
+                    edge.label = edge.times + '';
                 }
                 return edges;
             }

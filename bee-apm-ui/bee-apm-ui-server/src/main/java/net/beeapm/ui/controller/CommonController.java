@@ -25,4 +25,12 @@ public class CommonController {
         logger.debug("RequestBody={}",params);
         return commonService.queryGroupList(params);
     }
+
+    @RequestMapping("/queryById")
+    @ResponseBody
+    public Object queryById(@RequestBody Map<String,Object> params){
+        logger.debug("RequestBody={}",params);
+        return commonService.queryById(params);
+    }
+
 }

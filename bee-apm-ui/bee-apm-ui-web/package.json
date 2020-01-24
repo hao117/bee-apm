@@ -22,7 +22,11 @@
         "keycharm": "^0.2.0",
         "vis-data": "^6.2.1",
         "vis-util": "^1.1.8",
-        "fsevents": "^1.2.4"
+        "fsevents": "^1.2.4",
+        "json-fmt": "^1.1.2",
+        "xe-utils" : "^2.3.0",
+        "vxe-table" : "^2.8.0-beta.2"
+
     },
     "devDependencies": {
         "autoprefixer": "^7.1.2",

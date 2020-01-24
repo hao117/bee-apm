@@ -98,7 +98,7 @@ plugins:
             excludePointMatches: #正则表达式，排除的采集点的参数不被采集，可以配置到方法级别，优先级别高于includePointPrefix
                 - com.asiainfo.rule.*
             includePointMatches:  #正则表达式，包含的采集点的参数才被采集，可以配置到方法级别，不配置的话默认都采集，前提在interceptPoints的前提下
-                - com.asiainfo.*
+                - net.beeapm.demo.*
         error:
             enable: true
             #白名单配置，不在白名单的不采集，该前缀是在interceptPoint的前提下，支持到方法级别(fullClassName.methodName)

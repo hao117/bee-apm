@@ -9,8 +9,11 @@ import '../static/css/icon.css';
 import './assets/icon/iconfont.css';
 import "babel-polyfill";
 import VCharts from 'v-charts'
+import 'xe-utils'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/index.css'
 
-
+Vue.use(VXETable)
 Vue.use(VCharts);
 Vue.use(ElementUI, { size: 'small' });
 Vue.prototype.$axios = axios;

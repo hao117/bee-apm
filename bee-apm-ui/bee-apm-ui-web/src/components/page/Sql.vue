@@ -57,7 +57,7 @@
         <el-card style="margin-top: -2px">
             <el-row>
                 <el-col :span="24">
-                    <ve-histogram :legend-visible='false' :extend="chartExtend" :data="chartData" :settings="chartSettings"></ve-histogram>
+                    <ve-histogram style="height: 250px" height="100%" :legend-visible='false' :extend="chartExtend" :data="chartData" :settings="chartSettings"></ve-histogram>
                 </el-col>
             </el-row>
             <el-row>
@@ -114,7 +114,12 @@
                             i.barMaxWidth = 50
                         })
                         return v
-                    }
+                    },
+                    grid: {
+                        top: 10,
+                        bottom: 5,
+                        height:230,
+                    },
                 },
                 chartData: {
                     columns: ['time', '请求量'],

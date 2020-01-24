@@ -70,75 +70,78 @@ public class BeeUtils {
     public static String[] parseDateInterval(Date beginDate,Date endDate){
         long MAX_DIFF = 30;//最大范围30分钟合0.5小时
         String timeZone = "+08:00";
+        String timeFormat = "HH:mm";
         long diff = DateUtils.diffMinute(beginDate,endDate);
         if(diff < MAX_DIFF){
-            return new String[]{"1m","MM-dd HH:mm",timeZone,diff+""};
+            return new String[]{"1m",timeFormat,timeZone,diff+""};
         }
         if(diff < MAX_DIFF*2){
-            return new String[]{"2m","MM-dd HH:mm",timeZone,Math.ceil(diff/2.0)+""};
+            return new String[]{"2m",timeFormat,timeZone,Math.ceil(diff/2.0)+""};
         }
         if(diff < (MAX_DIFF * 5)){
-            return new String[]{"5m","MM-dd HH:mm",timeZone,Math.ceil(diff/5.0)+""};
+            return new String[]{"5m",timeFormat,timeZone,Math.ceil(diff/5.0)+""};
         }
         if(diff < (MAX_DIFF * 10)){
-            return new String[]{"10m","MM-dd HH:mm",timeZone,Math.ceil(diff/10.0)+""};
+            return new String[]{"10m",timeFormat,timeZone,Math.ceil(diff/10.0)+""};
         }
         if(diff < (MAX_DIFF * 30)){
-            return new String[]{"30m","MM-dd HH:mm",timeZone,Math.ceil(diff/30.0)+""};
+            return new String[]{"30m",timeFormat,timeZone,Math.ceil(diff/30.0)+""};
         }
         diff = DateUtils.diffHour(beginDate,endDate);
         MAX_DIFF = 36;//最大范围36小时合1.5天
         if(diff < MAX_DIFF){
-            return new String[]{"1h","MM-dd HH:mm",timeZone,diff+""};
+            return new String[]{"1h",timeFormat,timeZone,diff+""};
         }
         if(diff < (MAX_DIFF * 2)){
-            return new String[]{"2h","MM-dd HH:mm",timeZone,Math.ceil(diff/2.0)+""};
+            return new String[]{"2h",timeFormat,timeZone,Math.ceil(diff/2.0)+""};
         }
         if(diff < (MAX_DIFF * 4)){
-            return new String[]{"4h","MM-dd HH:mm",timeZone,Math.ceil(diff/4.0)+""};
+            return new String[]{"4h",timeFormat,timeZone,Math.ceil(diff/4.0)+""};
         }
         if(diff < (MAX_DIFF * 6)){
-            return new String[]{"6h","MM-dd HH:mm",timeZone,Math.ceil(diff/6.0)+""};
+            return new String[]{"6h",timeFormat,timeZone,Math.ceil(diff/6.0)+""};
         }
         if(diff < (MAX_DIFF * 8)){
-            return new String[]{"8h","MM-dd HH:mm",timeZone,Math.ceil(diff/8.0)+""};
+            return new String[]{"8h",timeFormat,timeZone,Math.ceil(diff/8.0)+""};
         }
         if(diff < (MAX_DIFF * 12)){
-            return new String[]{"12h","MM-dd HH:mm",timeZone,Math.ceil(diff/12.0)+""};
+            return new String[]{"12h",timeFormat,timeZone,Math.ceil(diff/12.0)+""};
         }
         diff = DateUtils.diffDay(beginDate,endDate);
         MAX_DIFF = 30;//最大范围30天合1个月
+        timeFormat = "MM-dd";
         if(diff < MAX_DIFF){
-            return new String[]{"1d","YYYY-MM-dd",timeZone,diff+""};
+            return new String[]{"1d",timeFormat,timeZone,diff+""};
         }
         if(diff < (MAX_DIFF * 2)){
-            return new String[]{"2d","YYYY-MM-dd",timeZone,Math.ceil(diff/2.0)+""};
+            return new String[]{"2d",timeFormat,timeZone,Math.ceil(diff/2.0)+""};
         }
         if(diff < (MAX_DIFF * 4)){
-            return new String[]{"4d","YYYY-MM-dd",timeZone,Math.ceil(diff/4.0)+""};
+            return new String[]{"4d",timeFormat,timeZone,Math.ceil(diff/4.0)+""};
         }
         if(diff < (MAX_DIFF * 7)){
-            return new String[]{"7d","YYYY-MM-dd",timeZone,Math.ceil(diff/7.0)+""};
+            return new String[]{"7d",timeFormat,timeZone,Math.ceil(diff/7.0)+""};
         }
         if(diff < (MAX_DIFF * 10)){
-            return new String[]{"10d","YYYY-MM-dd",timeZone,Math.ceil(diff/10.0)+""};
+            return new String[]{"10d",timeFormat,timeZone,Math.ceil(diff/10.0)+""};
         }
         if(diff < (MAX_DIFF * 15)){
-            return new String[]{"15d","YYYY-MM-dd",timeZone,Math.ceil(diff/15.0)+""};
+            return new String[]{"15d",timeFormat,timeZone,Math.ceil(diff/15.0)+""};
         }
         diff = DateUtils.diffMonth(beginDate,endDate);
         MAX_DIFF = 36;//最大范围36个月合3年
+        timeFormat = "YYYY-MM";
         if(diff < MAX_DIFF){
-            return new String[]{"1M","YYYY-MM",timeZone,diff+""};
+            return new String[]{"1M",timeFormat,timeZone,diff+""};
         }
         if(diff < (MAX_DIFF * 2)){
-            return new String[]{"2M","YYYY-MM",timeZone,Math.ceil(diff/2.0)+""};
+            return new String[]{"2M",timeFormat,timeZone,Math.ceil(diff/2.0)+""};
         }
         if(diff < (MAX_DIFF * 3)){
-            return new String[]{"3M","YYYY-MM",timeZone,Math.ceil(diff/3.0)+""};
+            return new String[]{"3M",timeFormat,timeZone,Math.ceil(diff/3.0)+""};
         }
         if(diff < (MAX_DIFF * 6)){
-            return new String[]{"6M","YYYY-MM",timeZone,Math.ceil(diff/6.0)+""};
+            return new String[]{"6M",timeFormat,timeZone,Math.ceil(diff/6.0)+""};
         }
         diff = DateUtils.diffYear(beginDate,endDate);
         return new String[]{"1Y","YYYY",timeZone,diff+""};

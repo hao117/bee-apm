@@ -52,25 +52,25 @@
         </el-row>
         <el-row :gutter="20" class="mgb20">
             <el-col :span="9">
-                <el-card>
-                    <ve-pie :data="errorPieData" :title="errorPieTitle" :settings="errorPieSettings"></ve-pie>
+                <el-card >
+                    <ve-pie :data="errorPieData" :theme="light" :title="errorPieTitle" :extend="errorPieExtend"  :settings="errorPieSettings"></ve-pie>
                 </el-card>
             </el-col>
             <el-col :span="15">
                 <el-card>
-                    <ve-line :data="errorLineData" :title="errorLineTitle" :extend="errorLineExtend" :settings="errorLineSettings"></ve-line>
+                    <ve-line :data="errorLineData" :theme="light" :title="errorLineTitle" :extend="errorLineExtend" :settings="errorLineSettings"></ve-line>
                 </el-card>
             </el-col>
         </el-row>
         <el-row :gutter="20">
             <el-col :span="9">
                 <el-card shadow="hover">
-                    <ve-bar :data="requestBarData" :legend-visible='false' :title="requestBarTitle" :settings="requestBarSettings"></ve-bar>
+                    <ve-bar :data="requestBarData" :theme="light" :legend-visible='false' :title="requestBarTitle" :extend="requestBarExtend" :settings="requestBarSettings"></ve-bar>
                 </el-card>
             </el-col>
             <el-col :span="15">
                 <el-card shadow="hover">
-                    <ve-line :data="requestLineData" :title="requestLineTitle" :extend="requestLineExtend" :settings="requestLineSettings"></ve-line>
+                    <ve-line :data="requestLineData" :theme="light" :title="requestLineTitle" :extend="requestLineExtend" :settings="requestLineSettings"></ve-line>
                 </el-card>
             </el-col>
         </el-row>
@@ -80,65 +80,12 @@
 <script>
     import bus from '../common/bus';
     let moment = require("moment");
-
+    const light = require('echarts/lib/theme/light');
     export default {
         name: 'dashboard',
         data() {
-            this.errorLineExtend = {
-                'xAxis.0.axisLabel.rotate': 60,
-                'xAxis.0.boundaryGap':false,
-                toolbox: {
-                    y:15,
-                    feature: {
-                        mark : {show: true},
-                        magicType : {show: true, type: ['line', 'bar','stack','tiled']}
-                    }
-                }
-            }
-            this.errorPieSettings = {
-                limitShowNum: 8
-            }
-            this.errorPieTitle = {
-                text:"异常占比",
-                bottom:"10",
-                left: 'middle'
-            }
-            this.errorLineSettings = {
-                area: true
-            }
-            this.errorLineTitle = {
-                text:"异常趋势图",
-                bottom:"10",
-                left: 'middle'
-            }
-            this.requestBarSettings = {
-            }
-            this.requestBarTitle = {
-                text:'请求耗时区间统计',
-                bottom:"10",
-                left: 'middle'
-            }
-            this.requestLineSettings = {
-            }
-            this.requestLineExtend = {
-                series: {
-                    smooth: false
-                },
-                'xAxis.0.axisLabel.rotate': 60,
-                'xAxis.0.boundaryGap':false,
-                toolbox: {
-                    feature: {
-                        mark : {show: true},
-                        magicType : {show: true, type: ['line', 'bar','stack','tiled']}
-                    }
-                }
-            },
-            this.requestLineTitle = {
-                text:"请求量趋势图（耗时区间）",
-                bottom:"10",
-                left: 'middle'
-            }
             return {
+                light:light,
                 pickerDate:[],
                 activeTagTitle:'仪表盘',
                 name: localStorage.getItem('ms_username'),
@@ -164,7 +111,80 @@
                 requestLineData: {
                     columns: ['time', '0-200',"200-500","500-1000","1000-2000","2000-5000","5000-*"],
                     rows: []
-                }
+                },
+                errorLineExtend: {
+                    'xAxis.0.axisLabel.rotate': 60,
+                    'xAxis.0.boundaryGap':false,
+                    series(v) {
+                        v.forEach(i => {
+                            i.barMaxWidth = 30
+                        })
+                        return v
+                    },
+                    toolbox: {
+                        y:15,
+                        feature: {
+                            mark : {show: true},
+                            magicType : {show: true, type: ['line', 'bar','stack','tiled']}
+                        }
+                    },
+                },
+                errorPieSettings : {
+                    limitShowNum: 8
+                },
+                errorPieExtend : {
+                },
+                errorPieTitle : {
+                    text:"异常占比",
+                    bottom:"10",
+                    left: 'middle'
+                },
+                errorLineSettings : {
+                    area: true
+                },
+                errorLineTitle : {
+                    text:"异常趋势图",
+                    bottom:"10",
+                    left: 'middle'
+                },
+                requestBarSettings : {
+                },
+                requestBarExtend : {
+                    series(v) {
+                        v.forEach(i => {
+                            i.barMaxWidth = 30
+                        })
+                        return v
+                    },
+                },
+                requestBarTitle : {
+                    text:'请求耗时区间统计',
+                    bottom:"10",
+                    left: 'middle'
+                },
+                requestLineSettings: {
+                },
+                requestLineExtend: {
+                    series(v) {
+                        v.forEach(i => {
+                            i.barMaxWidth = 30
+                        })
+                        return v
+                    },
+                    'xAxis.0.axisLabel.rotate': 60,
+                    'xAxis.0.boundaryGap':false,
+                    toolbox: {
+                        feature: {
+                            mark : {show: true},
+                            magicType : {show: true, type: ['line', 'bar','stack','tiled']}
+                        }
+                    }
+                },
+                requestLineTitle : {
+                    text:"请求量趋势图（耗时区间）",
+                    bottom:"10",
+                    left: 'middle'
+                },
 
             }
         },

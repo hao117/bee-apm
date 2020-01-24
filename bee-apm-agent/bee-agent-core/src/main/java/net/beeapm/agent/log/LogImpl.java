@@ -14,18 +14,21 @@ import java.util.regex.Matcher;
  * Created by yuan on 2018/3/26.
  */
 public class LogImpl {
-    private String  targetName;
+    private String targetName;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
     public LogImpl(String targetName) {
         this.targetName = targetName;
     }
+
     protected void logger(LogLevel level, String message, Throwable e) {
         String msg = format(level, message, e);
-        if(BeeConfig.me().isLogConsole()){
-            System.out.println("---------->"+msg);
+        if (BeeConfig.me().isLogConsole()) {
+            System.out.println("---------->" + msg);
         }
         LogWriter.me().writeLog(msg);
     }
+
     private String replaceParam(String message, Object... parameters) {
         int startSize = 0;
         int parametersIndex = 0;
@@ -42,7 +45,7 @@ public class LogImpl {
     }
 
     String format(LogLevel level, String message, Throwable t) {
-        return StringUtils.join("[", level.name(),"] ",
+        return StringUtils.join("[", level.name(), "] ",
                 dateFormat.format(new Date()),
                 " ",
                 targetName,
@@ -64,34 +67,41 @@ public class LogImpl {
 
         return BeeConst.LINE_SEPARATOR + expMessage;
     }
+
     public void info(String format) {
-        if (isInfoEnable())
+        if (isInfoEnable()) {
             logger(LogLevel.INFO, format, null);
+        }
     }
 
     public void info(String format, Object... arguments) {
-        if (isInfoEnable())
+        if (isInfoEnable()) {
             logger(LogLevel.INFO, replaceParam(format, arguments), null);
+        }
     }
 
     public void warn(String format, Object... arguments) {
-        if (isWarnEnable())
+        if (isWarnEnable()) {
             logger(LogLevel.WARN, replaceParam(format, arguments), null);
+        }
     }
 
     public void warn(Throwable e, String format, Object... arguments) {
-        if (isWarnEnable())
+        if (isWarnEnable()) {
             logger(LogLevel.WARN, replaceParam(format, arguments), e);
+        }
     }
 
     public void error(String format, Throwable e) {
-        if (isErrorEnable())
+        if (isErrorEnable()) {
             logger(LogLevel.ERROR, format, e);
+        }
     }
 
     public void error(Throwable e, String format, Object... arguments) {
-        if (isErrorEnable())
+        if (isErrorEnable()) {
             logger(LogLevel.ERROR, replaceParam(format, arguments), e);
+        }
     }
 
     public boolean isDebugEnable() {
