@@ -90,8 +90,8 @@
                             </el-table-column>
                             <el-table-column label="操作" width="180" align="center" fixed="right">
                                 <template slot-scope="_">
-                                    <el-button type="text" @click="queryRequestBody(_.row)">入参</el-button>
-                                    <el-button type="text" @click="queryResponseBody(_.row)">回参</el-button>
+                                    <el-button type="text" @click="queryById(_.row,'bee-request-body','请求参数')">入参</el-button>
+                                    <el-button type="text" @click="queryById(_.row,'bee-response-body','请求返回值')">回参</el-button>
                                     <el-button type="text" @click="showVisTopology(_.row)">拓扑</el-button>
                                     <el-button type="text" @click="queryCallTree(_.row)">链路</el-button>
                                 </template>
@@ -116,44 +116,23 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-table
-                            :data="tableListData"
-                            :row-style="toggleDisplayTr"
-                            border stripe
-                            class="init_table">
-                            <el-table-column
-                                label="调用链路"
-                                show-tooltip-when-overflow
-                                min-width="1000"
-                                align="left">
+                        <vxe-table
+                            size="mini"
+                            height="700"
+                            row-key
+                            show-overflow
+                            highlight-hover-row
+                            ref="xTree"
+                            :tree-config="{children: 'children', expandAll: true, line: true,  iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+                            :data="tableListData">
+                            <vxe-table-column field="text" title="链路" tree-node></vxe-table-column>
+                            <vxe-table-column field="spend" title="耗时(ms)" width="80"></vxe-table-column>
+                            <vxe-table-column  title="操作" width="80">
                                 <template slot-scope="_">
-                                    <p :style="`margin-left: ${_.row.__level * 20}px;margin-top:0;margin-bottom:0`"><i
-                                        @click="toggleFoldingStatus(_.row)" class="permission_toggleFold"
-                                        :class="toggleFoldingClass(_.row)"></i>{{_.row.text}}
-                                        <a style="color:#cccccc;font-weight: bolder">|</a>
-                                        <a style="color: orange">{{_.row.app}}</a>
-                                    </p>
+                                    <el-button type="text" @click="queryById(_.row,'nvl','参数')">参数</el-button>
                                 </template>
-                            </el-table-column>
-
-                            <el-table-column
-                                align="center"
-                                prop="spend"
-                                width="60"
-                                fixed="right"
-                                label="耗时(ms)">
-                            </el-table-column>
-
-                            <el-table-column
-                                align="center"
-                                width="50"
-                                fixed="right"
-                                label="操作">
-                                <template slot-scope="_">
-                                    <el-button type="text">入参</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
+                            </vxe-table-column>
+                        </vxe-table>
                     </el-col>
                 </el-row>
             </el-card>
@@ -161,7 +140,10 @@
         <el-row v-show="isShowTopology">
             <el-card>
                 <el-row>
-                    <el-col :span="24" align="right" style="padding-bottom: 10px">
+                    <el-col :span="12" align="left" style="padding-left: 5px;padding-top: 10px">
+                        调用关系拓扑图
+                    </el-col>
+                    <el-col :span="12" align="right" style="padding-bottom: 10px">
                         <el-button type="primary" @click="backButtonEvent()">返回</el-button>
                     </el-col>
                 </el-row>
@@ -172,7 +154,7 @@
             </el-card>
         </el-row>
         <el-dialog
-            title="参数"
+            :title="dialogTitle"
             :visible.sync="dialogVisible"
             width="60%">
             <el-input v-model="dialogTextarea" :rows="22" type="textarea" readonly>
@@ -183,13 +165,7 @@
         </el-dialog>
     </div>
 </template>
-<style lang='stylus' rel='stylesheet/stylus' src="../css/tree-table.styl"></style>
 <style>
-    .tree-anchor {
-        line-height: 24px;
-        height: 24px;
-        width: 100%;
-    }
     .el-dialog__body{
         padding: 0px 20px !important;
         border-top: 1px;
@@ -204,7 +180,6 @@
 
 <script>
     import bus from '../common/bus';
-    import Vue from 'vue';
     import '../iconfont/iconfont.css';
     import Vis from 'vis-network';
     import JSONFormatter from "json-fmt";
@@ -217,12 +192,12 @@
         data: function () {
             return {
                 tableListData: [], //调用链数据
-                foldList: [], // 该数组中的值 都会在列表中进行隐藏  死亡名单
                 isShowTable: true,
                 isShowTree: false,
                 isShowTopology: false,
                 dialogVisible: false,
                 dialogTextarea: '',
+                dialogTitle: '',
                 visTopology: {
                     nodes: [],
                     edges: [],
@@ -371,34 +346,32 @@
                     this.requestChartData.rows = res.data.rows;
                 })
             },
-            // 请求参数
-            queryRequestBody(row) {
+            //参数
+            queryById(row,index,title) {
+                if(index == "nvl" && row.type == "req"){
+                    index = "bee-request-body";
+                }else if(index == "nvl" && row.type == "proc"){
+                    index = "bee-process-param";
+                }
                 const url = "/api/common/queryById";
-                let params = {id: row.id, index: "bee-request-body"};
+                let params = {id: row.id, index: index};
                 params.beginTime = this.getBeginTime();
                 params.endTime = this.getEndTime();
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryRequestBody=%o", res);
+                    console.log("==>queryById,title=%s，result=%o", title,res);
                     this.dialogVisible = true;
+                    this.dialogTitle = title;
                     let fmt = new JSONFormatter(JSONFormatter.PRETTY);
-                    fmt.append(res.data.result.tags.body);
+                    if(index == "bee-process-param"){
+                        let content = res.data.result.tags.param;
+                        console.log("dialogTextarea=%o",content);
+                        fmt.append(content);
+                    }else{
+                        let content = res.data.result.tags.body;
+                        console.log("dialogTextarea=%o",content);
+                        fmt.append(content);
+                    }
                     this.dialogTextarea = fmt.flush();
-                    console.log(this.dialogTextarea);
-                })
-            },
-            // 请求参数
-            queryResponseBody(row) {
-                const url = "/api/common/queryById";
-                let params = {id: row.id, index: "bee-response-body"};
-                params.beginTime = this.getBeginTime();
-                params.endTime = this.getEndTime();
-                this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryResponseBody=%o", res);
-                    this.dialogVisible = true;
-                    let fmt = new JSONFormatter(JSONFormatter.PRETTY);
-                    fmt.append(res.data.result.tags.body);
-                    this.dialogTextarea = fmt.flush();
-                    console.log(this.dialogTextarea);
                 })
             },
             timeFormatter(row, column) {
@@ -409,8 +382,8 @@
                 const url = "/api/request/callTree";
                 let params = {gid: row.gid, time: row.time};
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryCallTree result=%o", res);
-                    this.tableListData = this.formatConversion([], res.data.result);
+                    console.log("==>queryCallTree result=%o", res.data.result);
+                    this.$refs.xTree.reloadData(res.data.result);
                 })
                 this.isShowTable = false;
                 this.isShowTree = true;
@@ -419,65 +392,7 @@
                 this.isShowTable = true;
                 this.isShowTree = false;
                 this.isShowTopology = false;
-            },
-            /*********************************
-             ** 切换展开 还是折叠
-             ** @params: params 当前点击行的数据
-             *********************************/
-            toggleFoldingStatus(params) {
-                this.foldList.includes(params.__identity) ? this.foldList.splice(this.foldList.indexOf(params.__identity), 1) : this.foldList.push(params.__identity)
-            },
-            /*********************************
-             ** 该方法会对每一行数据都做判断 如果foldList 列表中的元素 也存在与当前行的 __family列表中  则该行不展示
-             *********************************/
-            toggleDisplayTr({row, index}) {
-                for (let i = 0; i < this.foldList.length; i++) {
-                    let item = this.foldList[i]
-                    // 如果foldList中元素存在于 row.__family中，则该行隐藏。  如果该行的自身标识等于隐藏元素，则代表该元素就是折叠点
-                    if (row.__family.includes(item) && row.__identity !== item) return 'display:none;'
-                }
-                return ''
-            },
-            /*********************************
-             ** 如果子集长度为0，则不返回字体图标。
-             ** 如果子集长度为不为0，根据foldList是否存在当前节点的标识返回相应的折叠或展开图标
-             ** 关于class说明：permission_placeholder返回一个占位符，具体查看class
-             ** @params: params 当前行的数据对象
-             *********************************/
-            toggleFoldingClass(params) {
-                let hasChildren = true;
-                if (typeof (params.children) == "undefined" || params.children.length === 0) {
-                    hasChildren = false;
-                }
-                return !hasChildren ? 'permission_placeholder' : (this.foldList.indexOf(params.__identity) === -1 ? 'iconfont icon-minus-square-o' : 'iconfont icon-plussquareo')
-            },
-            /*********************************
-             ** 将树形接口数据扁平化
-             ** @params: parent 为当前累计的数组  也是最后返回的数组
-             ** @params: children 为当前节点仍需继续扁平子节点的数据
-             ** @params: index 默认等于0， 用于在递归中进行累计叠加 用于层级标识
-             ** @params: family 装有当前包含元素自身的所有父级 身份标识
-             ** @params: elderIdentity 父级的  唯一身份标识
-             *********************************/
-            formatConversion(parent, children, index = 0, family = [], elderIdentity = 'x') {
-                // children如果长度等于0，则代表已经到了最低层
-                // let page = (this.startPage - 1) * 10
-                if (children && children.length > 0) {
-                    children.map((x, i) => {
-                        // 设置 __level 标志位 用于展示区分层级
-                        Vue.set(x, '__level', index)
-                        // 设置 __family 为家族关系 为所有父级，包含本身在内
-                        Vue.set(x, '__family', [...family, elderIdentity + '_' + i])
-                        // 本身的唯一标识  可以理解为个人的身份证咯 一定唯一。
-                        Vue.set(x, '__identity', elderIdentity + '_' + i)
-                        parent.push(x)
-                        // 如果仍有子集，则进行递归
-                        if (x.children && x.children.length > 0) {
-                            this.formatConversion(parent, x.children, index + 1, [...family, elderIdentity + '_' + i], elderIdentity + '_' + i)
-                        }
-                    })
-                }
-                return parent
+                this.tableListData = [];
             },
             showVisTopology(row) {
                 let _this = this;

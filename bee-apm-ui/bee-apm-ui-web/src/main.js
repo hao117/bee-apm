@@ -12,6 +12,7 @@ import VCharts from 'v-charts'
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+import 'font-awesome/css/font-awesome.css'
 
 Vue.use(VXETable)
 Vue.use(VCharts);

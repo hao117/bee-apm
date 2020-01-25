@@ -74,7 +74,7 @@ public class CommonServiceImpl implements ICommonService {
             res.setCode("0");
             res.setResult(JSONPath.eval(jsonObject, "$.hits.hits[0]._source"));
             if (logger.isDebugEnabled()) {
-                logger.debug("query-result:", JSON.toJSONString(res));
+                logger.debug("query-result:{}", JSON.toJSONString(res));
             }
         } catch (Exception e) {
             logger.error("", e);

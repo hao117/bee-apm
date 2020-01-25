@@ -128,6 +128,7 @@ public class RequestServiceImpl implements IRequestService {
                 return res;
             }
             logger.debug("查询结果:{}", JSON.toJSONString(rows));
+            //handleData(rows);
             buildTree(rows);
             res.setCode("0");
             res.setResult(rows);
@@ -165,15 +166,31 @@ public class RequestServiceImpl implements IRequestService {
         }
     }
 
+    private void handleData(List<Object> rows){
+        int len = rows.size();
+        for (int i = 0; i < len; i++) {
+            JSONObject item = (JSONObject) rows.get(i);
+            parseItem(item);
+            String pid = item.getString("pid");
+            if (pid.equals("nvl")) {
+                item.put("parentId","");
+                continue;
+            }
+            item.put("parentId",pid);
+        }
+    }
+
     private void buildTree(List<Object> rows) {
         int len = rows.size();
         for (int i = 0; i < len; i++) {
             JSONObject item1 = (JSONObject) rows.get(i);
             parseItem(item1);
             String pid1 = item1.getString("pid");
+            item1.put("parentId",pid1);
             if (pid1.equals("nvl")) {
                 continue;
             }
+
             //找parent
             for (int j = 0; j < len; j++) {
                 if (i == j) {
@@ -186,7 +203,7 @@ public class RequestServiceImpl implements IRequestService {
                     if (list == null) {
                         list = new JSONArray();
                         item2.put("children", list);
-                        item2.put("opened", true);
+                        //item2.put("opened", true);
                     }
                     item1.put("_d", null);
                     list.add(item1);
