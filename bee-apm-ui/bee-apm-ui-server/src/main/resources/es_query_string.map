@@ -196,14 +196,6 @@ select tab3
 #####_GroupList
 {
   "size": 0,
-  "query": {
-    "range": {
-       "time":{
-          "gte":{{beginTime}},
-          "lte":{{endTime}}
-       }
-    }
-  },
   "aggs": {
     "group_list": {
       "terms": {

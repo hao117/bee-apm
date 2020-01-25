@@ -124,7 +124,7 @@
                             highlight-hover-row
                             ref="xTree"
                             :tree-config="{children: 'children', expandAll: true, line: true,  iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-                            :data="tableListData">
+                            :data="tableTreeListData">
                             <vxe-table-column field="text" title="链路" tree-node></vxe-table-column>
                             <vxe-table-column field="spend" title="耗时(ms)" width="80"></vxe-table-column>
                             <vxe-table-column  title="操作" width="80">
@@ -191,13 +191,13 @@
         components: {},
         data: function () {
             return {
-                tableListData: [], //调用链数据
+                tableTreeListData: [], //调用链数据
                 isShowTable: true,
                 isShowTree: false,
-                isShowTopology: false,
                 dialogVisible: false,
                 dialogTextarea: '',
                 dialogTitle: '',
+                isShowTopology: false,
                 visTopology: {
                     nodes: [],
                     edges: [],
@@ -346,7 +346,9 @@
                     this.requestChartData.rows = res.data.rows;
                 })
             },
-            //参数
+            timeFormatter(row, column) {
+                return row.time.substring(11, 19);
+            },
             queryById(row,index,title) {
                 if(index == "nvl" && row.type == "req"){
                     index = "bee-request-body";
@@ -374,9 +376,6 @@
                     this.dialogTextarea = fmt.flush();
                 })
             },
-            timeFormatter(row, column) {
-                return row.time.substring(11, 19);
-            },
             queryCallTree(row) {
                 console.log("==>queryCallTree row=%o", row);
                 const url = "/api/request/callTree";
@@ -392,7 +391,7 @@
                 this.isShowTable = true;
                 this.isShowTree = false;
                 this.isShowTopology = false;
-                this.tableListData = [];
+                this.tableTreeListData = [];
             },
             showVisTopology(row) {
                 let _this = this;
