@@ -6,8 +6,6 @@ import com.alibaba.fastjson.JSONPath;
 import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
 import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 import java.io.File;
