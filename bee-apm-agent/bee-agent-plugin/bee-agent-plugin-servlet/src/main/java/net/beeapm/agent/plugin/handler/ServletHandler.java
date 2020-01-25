@@ -12,7 +12,6 @@ import net.beeapm.agent.plugin.common.BeeHttpServletResponseWrapper;
 import net.beeapm.agent.plugin.ServletConfig;
 import net.beeapm.agent.plugin.common.servlet.Const;
 import net.beeapm.agent.reporter.ReporterFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +34,7 @@ public class ServletHandler extends AbstractHandler {
         HttpServletRequest request = (HttpServletRequest) allArguments[0];
         HttpServletResponse resp = (HttpServletResponse) allArguments[1];
         String url = request.getRequestURL().toString();
-        if (ServletConfig.me().checkUrlSuffixExclude(url)) {
+        if (ServletConfig.me().isExcludeUrlSuffix(url)) {
             return null;
         }
         Span currSpan = SpanManager.getCurrentSpan();

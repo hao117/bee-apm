@@ -21,6 +21,7 @@ public class ServletConfig extends AbstractBeeConfig {
     private Boolean enableRespBody;
     private long spend;
     private List<String> urlSuffixExcludeList;
+    private List<String> classPrefixExcludeList;
 
     public static ServletConfig me(){
         if(config == null){
@@ -45,7 +46,7 @@ public class ServletConfig extends AbstractBeeConfig {
         enableReqBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqBody",false);
         enableReqHeaders = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqHeaders",false);
         enableRespBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableRespBody",false);
-        urlSuffixExcludeList = Arrays.asList(ConfigUtils.me().getStr("plugins.servlet.urlSuffixExclude","").split(","));
+        urlSuffixExcludeList = Arrays.asList(ConfigUtils.me().getStr("plugins.servlet.excludeUrlSuffix","").split(","));
         //http入口的耗时要小于等于方法的耗时，否则会造成调用链断开
         long processSpend = ConfigUtils.me().getInt("plugins.process.spend",-1);
         spend = ConfigUtils.me().getInt("plugins.servlet.spend",-1);
@@ -73,7 +74,7 @@ public class ServletConfig extends AbstractBeeConfig {
     public Boolean isEnableRespBody() {
         return enableRespBody;
     }
-    public Boolean checkUrlSuffixExclude(String url){
+    public Boolean isExcludeUrlSuffix(String url){
         if(urlSuffixExcludeList == null || urlSuffixExcludeList.isEmpty()){
             return false;
         }
