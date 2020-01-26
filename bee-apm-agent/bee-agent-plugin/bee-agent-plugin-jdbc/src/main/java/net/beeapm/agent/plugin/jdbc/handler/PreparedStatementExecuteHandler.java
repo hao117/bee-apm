@@ -16,6 +16,11 @@ import java.sql.ResultSet;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * sql内容和sql参数采集
+ * @author yuan
+ * @date 2018-09-22
+ */
 public class PreparedStatementExecuteHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
 
@@ -42,7 +47,8 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
         if(!JdbcConfig.me().isEnable() || span == null || SamplingUtil.NO()){
             return null;
         }
-        if(t != null){//Y成功，N失败
+        //Y成功，N失败
+        if(t == null){
             span.addTag("status","Y");
         }else{
             span.addTag("status","N");
@@ -79,7 +85,8 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
                     log.warn("ResultSet::last exception");
                 } finally {
                     try {
-                        rs.absolute(0);//移动到第一行前
+                        //移动到第一行前
+                        rs.absolute(0);
                     } catch (Exception e) {
                         log.warn("ResultSet::absolute exception");
                     }
