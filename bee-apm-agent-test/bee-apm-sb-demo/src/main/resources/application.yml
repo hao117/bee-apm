@@ -1,5 +1,13 @@
 server:
-  port: 8002
+  port: 8101
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    schema: classpath:db/schema.sql
+    data: classpath:db/data.sql
+    url: jdbc:h2:mem:test
+    username: root
+    password: test
 logging:
     config:
       classpath: log4j2.xml

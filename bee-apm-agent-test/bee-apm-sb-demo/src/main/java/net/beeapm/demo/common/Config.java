@@ -27,7 +27,7 @@ public class Config {
     }
 
     public static int maxCounter() {
-        return Integer.parseInt(System.getProperty("max.counter"));
+        return Integer.parseInt(System.getProperty("max.counter","0"));
     }
 
     public static String appName() {

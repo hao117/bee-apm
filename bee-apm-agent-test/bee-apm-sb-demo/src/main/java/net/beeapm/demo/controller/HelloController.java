@@ -3,12 +3,10 @@ package net.beeapm.demo.controller;
 import com.alibaba.fastjson.JSON;
 import net.beeapm.demo.model.RequestVo;
 import net.beeapm.demo.model.ResultVo;
-import net.beeapm.demo.service.IDuckService;
 import net.beeapm.demo.service.IHelloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private IHelloService service;
 
@@ -38,6 +37,7 @@ public class HelloController {
         logger.info("Log4j2==================>info");
         logger.warn("Log4j2==================>warn");
         logger.error("Log4j2==================>error");
+
         return service.sayHello(req);
     }
 
