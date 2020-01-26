@@ -131,9 +131,9 @@ plugins:
         defLevel: debug #默认级别，默认值为debug
         points:
         #日志采集点配置，规则为包名和日志级别，如a.b.c|debug，日志级别可不配置，为默认defLevel级别
-            - com.asiaifo|error
-            - com.asiainfo.crm|debug
-            - net.beeapm.demo|info
+            - net.beeapm.demo|trace
+        loggerClass: #要埋点的目标logger类数组
+
     servlet:
         enable: true       #开关，是否采集
         enableReqParam: true #参数采集开关，是否采集
