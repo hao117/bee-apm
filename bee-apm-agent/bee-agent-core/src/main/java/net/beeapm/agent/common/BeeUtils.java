@@ -1,24 +1,27 @@
 package net.beeapm.agent.common;
 
+import org.apache.commons.lang3.ClassUtils;
+
 import java.io.Closeable;
 import java.io.Flushable;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
+/**
+ * @author yuan
+ * @date 2018-08-27
+ */
 public class BeeUtils {
-    public static void close(Closeable closeable){
-        if(closeable != null){
+    public static void close(Closeable closeable) {
+        if (closeable != null) {
             try {
                 closeable.close();
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
     }
 
-    public static void flush(Flushable flushable){
-        if(flushable != null) {
+    public static void flush(Flushable flushable) {
+        if (flushable != null) {
             try {
                 flushable.flush();
             } catch (Exception e) {
@@ -26,12 +29,18 @@ public class BeeUtils {
         }
     }
 
-    public static String getLocalIp(){
-        try{
+    public static String getLocalIp() {
+        try {
             return InetAddress.getLocalHost().getHostAddress();
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         return null;
     }
 
+    public static boolean isPrimitive(Object obj) {
+        if (obj == null || obj instanceof String) {
+            return true;
+        }
+        return ClassUtils.isPrimitiveOrWrapper(obj.getClass());
+    }
 }
