@@ -18,6 +18,7 @@ import java.util.Map;
 
 /**
  * sql内容和sql参数采集
+ *
  * @author yuan
  * @date 2018-09-22
  */
@@ -26,56 +27,56 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
 
 
     @Override
-    public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
-        if(!JdbcConfig.me().isEnable() || SamplingUtil.NO()){
+    public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
+        if (!JdbcConfig.me().isEnable() || SamplingUtil.NO()) {
             return null;
         }
         Span span = JdbcContext.getJdbcSpan();
-        if(span == null){
+        if (span == null) {
             span = SpanManager.createLocalSpan(SpanType.SQL);
             JdbcContext.setJdbcSpan(span);
-        }else{
-           span.setTime(new Date());
+        } else {
+            span.setTime(new Date());
         }
         return span;
     }
 
     @Override
-    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
+    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal) {
         Span span = JdbcContext.getJdbcSpan();
         JdbcContext.remove();
-        if(!JdbcConfig.me().isEnable() || span == null || SamplingUtil.NO()){
+        if (!JdbcConfig.me().isEnable() || span == null || SamplingUtil.NO()) {
             return null;
         }
         //Y成功，N失败
-        if(t == null){
-            span.addTag("status","Y");
-        }else{
-            span.addTag("status","N");
+        if (t == null) {
+            span.addTag("status", "Y");
+        } else {
+            span.addTag("status", "N");
         }
         calculateSpend(span);
-        if(span.getSpend() > JdbcConfig.me().getSpend()) {
-            Map<String,Object> params = (Map<String,Object>)span.getTag("params");
+        if (span.getSpend() > JdbcConfig.me().getSpend()) {
+            Map<String, Object> params = (Map<String, Object>) span.getTag("params");
             span.removeTag("params");
-            if(params != null){
+            if (params != null) {
                 Span paramSpan = new Span(SpanType.SQL_PARAM);
                 paramSpan.setId(span.getId());
                 paramSpan.addTag("args", JSON.toJSONString(params.values()));
                 ReporterFactory.report(paramSpan);
             }
-            span.addTag("count",calcResultCount(result));
+            span.addTag("count", calcResultCount(result));
             span.fillEnvInfo();
             ReporterFactory.report(span);
         }
         return result;
     }
 
-    public Long calcResultCount(Object result){
-        if(result == null){
+    public Long calcResultCount(Object result) {
+        if (result == null) {
             return null;
         }
         Long count = null;
-        if(result instanceof  ResultSet) {
+        if (result instanceof ResultSet) {
             ResultSet rs = (ResultSet) result;
             if (rs != null) {
                 try {
@@ -93,11 +94,11 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
                 }
             }
         }
-        if(result instanceof Long){
-            count = (Long)result;
+        if (result instanceof Long) {
+            count = (Long) result;
         }
-        if(result instanceof Integer){
-            count = new Long((Integer)result);
+        if (result instanceof Integer) {
+            count = new Long((Integer) result);
         }
         return count;
     }
