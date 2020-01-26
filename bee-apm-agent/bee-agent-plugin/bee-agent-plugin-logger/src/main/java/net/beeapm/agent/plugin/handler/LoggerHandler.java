@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.BeeTraceContext;
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.LogImpl;
@@ -16,57 +17,67 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
 
+/**
+ * @author yuan
+ * @date 2018-08-19
+ */
 public class LoggerHandler extends AbstractHandler {
     private static final LogImpl log = LogManager.getLog(LoggerHandler.class.getSimpleName());
+    private static final String VAL_IGNORE_POINT = "org.apache.logging.log4j.status.StatusLogger";
+
     @Override
-    public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
+    public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
         String point = (String) extVal[0];
         boolean isCollect = true;
-        if(LoggerConfig.me().level(methodName) >= LoggerConfig.LEVEL_ERROR){
-            if(LoggerConfig.me().errorRate()){// 是否error采样
+        if (LoggerConfig.me().level(methodName) >= LoggerConfig.LEVEL_ERROR) {
+            // 是否error采样
+            if (LoggerConfig.me().errorRate()) {
                 isCollect = SamplingUtil.YES();
-            }else {                            //error不采样，全采集
+            } else {
+                //error不采样，全采集
                 isCollect = true;
             }
         }
-        if(!LoggerConfig.me().isEnable() || !LoggerConfig.me().checkLevel(point,methodName) || !isCollect){
+        if (!LoggerConfig.me().isEnable() || !LoggerConfig.me().checkLevel(point, methodName) || !isCollect) {
             return null;
         }
-        if("org.apache.logging.log4j.status.StatusLogger".equals(point)){//重复打印，排除掉
+        //重复打印，排除掉
+        if (VAL_IGNORE_POINT.equals(point)) {
             return null;
         }
         Span span = SpanManager.createLocalSpan(SpanType.LOGGER);
         StringBuilder logBuff = new StringBuilder();
-        for(int i = 0; i < allArguments.length; i++){
+        for (int i = 0; i < allArguments.length; i++) {
             Object arg = allArguments[i];
-            if(i>0){
+            if (i > 0) {
                 logBuff.append(" | ");
             }
-            if(arg==null){
+            if (arg == null) {
                 continue;
             }
-            if(arg instanceof Throwable){
-                logBuff.append(parseThrowable((Throwable)arg));
-            }else{
+            if (arg instanceof Throwable) {
+                logBuff.append(parseThrowable((Throwable) arg));
+            } else if (BeeUtils.isPrimitive(arg)) {
+                logBuff.append(arg);
+            } else {
                 logBuff.append(JSON.toJSONString(arg));
             }
         }
-        span.addTag("point",point);
-        span.addTag("log",logBuff.toString());
-        span.addTag("level",methodName);
+        span.addTag("point", point + "." + extVal[1]);
+        span.addTag("log", logBuff.toString());
+        span.addTag("level", methodName);
         span.fillEnvInfo();
         ReporterFactory.report(span);
         return null;
     }
 
 
-
     @Override
-    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t,Object[] extVal) {
+    public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal) {
         return result;
     }
 
-    public static String parseThrowable(Throwable t){
+    public static String parseThrowable(Throwable t) {
         StringBuilder builder = new StringBuilder();
         Writer writer = null;
         PrintWriter printWriter = null;
@@ -78,36 +89,36 @@ public class LoggerHandler extends AbstractHandler {
             builder.append(writer.toString());
             printWriter.close();
             writer.close();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            if(writer != null){
+        } catch (Exception e) {
+            log.error("解析StackTrace异常", e);
+        } finally {
+            if (writer != null) {
                 try {
                     writer.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                 }
             }
-            if(printWriter != null){
+            if (printWriter != null) {
                 try {
                     printWriter.close();
-                }catch (Exception e){
+                } catch (Exception e) {
                 }
             }
         }
-        try{
+        try {
             Field messageField = Throwable.class.getDeclaredField("detailMessage");
             messageField.setAccessible(true);
             String detailMessage = t.getMessage();
-            if(messageField!=null){
-                try{
-                    messageField.set(t,"["+ BeeTraceContext.getGId() +"]"+detailMessage);
-                }catch (Exception e){
+            if (messageField != null) {
+                try {
+                    messageField.set(t, "[" + BeeTraceContext.getGId() + "]" + detailMessage);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }catch (Throwable tt){
+        } catch (Throwable tt) {
             tt.printStackTrace();
+            log.error("解析detailMessage异常", tt);
         }
         return builder.toString();
     }

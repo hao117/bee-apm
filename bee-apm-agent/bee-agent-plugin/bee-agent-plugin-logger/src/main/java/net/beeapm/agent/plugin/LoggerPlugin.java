@@ -7,6 +7,9 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
+
+import java.util.List;
+
 /**
  * @author yuan
  * @date 2018/08/19
@@ -24,12 +27,16 @@ public class LoggerPlugin extends AbstractPlugin {
                 new InterceptPoint() {
                     @Override
                     public ElementMatcher<TypeDescription> buildTypesMatcher() {
-                        return ElementMatchers.named("org.apache.log4j.Logger")
-                                .or(ElementMatchers.<TypeDescription>named("org.apache.log4j.Category"))
-                                .or(ElementMatchers.<TypeDescription>named("org.apache.log4j.spi.NOPLogger"))
-                                .or(ElementMatchers.<TypeDescription>named("org.apache.logging.log4j.spi.AbstractLogger"))
-                                .or(ElementMatchers.<TypeDescription>named("ch.qos.logback.classic.Logger"))
-                                .or(ElementMatchers.<TypeDescription>named("org.slf4j.helpers.NOPLogger"));
+                        ElementMatcher.Junction<TypeDescription> matcher = null;
+                        List<String> loggerClass = LoggerConfig.me().getLoggerClass();
+                        for (int i = 0; i < loggerClass.size(); i++) {
+                            if (matcher == null) {
+                                matcher = ElementMatchers.named(loggerClass.get(i));
+                                continue;
+                            }
+                            matcher = matcher.or(ElementMatchers.<TypeDescription>named(loggerClass.get(i)));
+                        }
+                        return matcher;
                     }
 
                     @Override

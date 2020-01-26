@@ -12,7 +12,9 @@ public class LoggerAdvice {
                              @Advice.AllArguments Object[] allParams,
                              @Advice.FieldValue("name") String name){
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.LoggerHandler");
-        handler.before(className,methodName,allParams,new String[]{name});
+        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
+        String pointMethod = stacks[2].getMethodName();
+        handler.before(className,methodName,allParams,new String[]{name,pointMethod});
     }
 
     /**
