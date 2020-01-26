@@ -25,25 +25,25 @@ public class DuckController {
 
     @RequestMapping("/sayGaGa")
     public ResultVo sayGaGa(@RequestBody RequestVo req){
-        logger.debug(JSON.toJSONString(req));
+        logger.info(JSON.toJSONString(req));
         return service.sayGaGa(req);
     }
 
     @RequestMapping("/twoWing")
     public ResultVo twoWing(@RequestBody RequestVo req){
-        logger.debug(JSON.toJSONString(req));
+        logger.info(JSON.toJSONString(req));
         return service.twoWing(req);
     }
 
     @RequestMapping("/twoFoot")
     public ResultVo twoFoot(@RequestBody RequestVo req){
-        logger.debug(JSON.toJSONString(req));
+        logger.info(JSON.toJSONString(req));
         return service.twoFoot(req);
     }
 
     @RequestMapping("/whiteDuck")
     public ResultVo whiteDuck(@RequestBody RequestVo req){
-        logger.debug(JSON.toJSONString(req));
+        logger.info(JSON.toJSONString(req));
         return service.whiteDuck(req);
     }
 }

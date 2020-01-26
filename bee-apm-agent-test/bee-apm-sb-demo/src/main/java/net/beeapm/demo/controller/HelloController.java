@@ -33,6 +33,11 @@ public class HelloController {
     @RequestMapping("/sayHello")
     public ResultVo sayHello(@RequestBody RequestVo req){
         logger.debug(JSON.toJSONString(req));
+        logger.trace("Log4j2==================>trace");
+        logger.debug("Log4j2==================>debug");
+        logger.info("Log4j2==================>info");
+        logger.warn("Log4j2==================>warn");
+        logger.error("Log4j2==================>error");
         return service.sayHello(req);
     }
 

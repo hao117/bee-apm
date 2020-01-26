@@ -67,27 +67,23 @@
             <el-row>
                 <el-col :span="24">
                     <el-table :data="tableData.rows" border stripe>
-                        <el-table-column prop="id" label="ID" width="170" fixed>
+                        <el-table-column prop="id" label="ID" width="150" fixed>
                         </el-table-column>
-                        <el-table-column prop="time" label="时间" width="150" :formatter="timeFormatter" fixed>
+                        <el-table-column prop="time" label="时间" width="100" :formatter="timeFormatter" fixed>
                         </el-table-column>
-                        <el-table-column prop="gid" label="GID" width="170">
+                        <el-table-column prop="gid" label="GID" width="150">
                         </el-table-column>
                         <el-table-column prop="ip" label="IP" width="120">
                         </el-table-column>
-                        <el-table-column prop="env" label="环境" width="120">
+                        <el-table-column prop="env" label="环境" width="60">
                         </el-table-column>
-                        <el-table-column prop="app" label="应用" width="120">
+                        <el-table-column prop="app" label="应用" width="100">
                         </el-table-column>
-                        <el-table-column prop="tags.level" label="级别" width="100">
+                        <el-table-column prop="tags.level" label="级别" width="60">
+                        </el-table-column>
+                        <el-table-column prop="tags.point" label="拦截点" width="200" align="center" fixed="right">
                         </el-table-column>
                         <el-table-column prop="tags.log" label="日志"  min-width="250">
-                        </el-table-column>
-                        <el-table-column label="操作" width="180" align="center" fixed="right">
-                            <template slot-scope="scope">
-                                <el-button type="text">参数</el-button>
-                                <el-button type="text">调用链</el-button>
-                            </template>
                         </el-table-column>
                     </el-table>
                     <div class="pagination">

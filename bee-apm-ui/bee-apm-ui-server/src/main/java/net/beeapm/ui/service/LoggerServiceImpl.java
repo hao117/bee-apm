@@ -21,17 +21,19 @@ import java.util.*;
 @Service
 public class LoggerServiceImpl implements ILoggerService {
     private Logger logger = LoggerFactory.getLogger(LoggerServiceImpl.class);
+
     @Override
     public TableVo list(Map<String, Object> params) {
         TableVo res = new TableVo();
         res.setCode("0");
         res.setPageNum(Integer.parseInt(params.get("pageNum").toString()));
-        params.put("from",(res.getPageNum() - 1) * BeeConst.PAGE_SIZE);
-        params.put("size",BeeConst.PAGE_SIZE);
+        params.put("from", (res.getPageNum() - 1) * BeeConst.PAGE_SIZE);
+        params.put("size", BeeConst.PAGE_SIZE);
+        params.put("sort", "time");
         List<Object> rows = new ArrayList<>();
         try {
             SearchResult searchResult = EsJestClient.inst().search(params, "PageDataList", EsIndicesPrefix.LOGGER);
-            if(404 == searchResult.getResponseCode()){
+            if (BeeConst.CODE_404 == searchResult.getResponseCode()) {
                 res.setCode("-1");
                 res.setMsg(searchResult.getErrorMessage());
                 return res;
@@ -39,15 +41,15 @@ public class LoggerServiceImpl implements ILoggerService {
             Long total = searchResult.getTotal();
             res.setPageTotal(total);
             JSONObject jsonObject = JSON.parseObject(searchResult.getJsonString());
-            JSONArray hits = (JSONArray) JSONPath.eval(jsonObject,"$.hits.hits");
-            for(int i = 0; i < hits.size(); i++){
+            JSONArray hits = (JSONArray) JSONPath.eval(jsonObject, "$.hits.hits");
+            for (int i = 0; i < hits.size(); i++) {
                 JSONObject hit = hits.getJSONObject(i);
                 JSONObject row = hit.getJSONObject("_source");
                 rows.add(row);
             }
             res.setRows(rows);
-        }catch (Exception e){
-            logger.error("",e);
+        } catch (Exception e) {
+            logger.error("", e);
         }
         return res;
     }
@@ -60,9 +62,9 @@ public class LoggerServiceImpl implements ILoggerService {
             Long beginTime = BeeUtils.getBeginTime(params);
             Long endTime = BeeUtils.getEndTime(params);
             Map<String, String> args = new HashMap<>();
-            for(Map.Entry<String,Object> entry : params.entrySet()){
-                if(entry.getValue() != null && !entry.getValue().toString().isEmpty()){
-                    args.put(entry.getKey(),entry.getValue().toString());
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                if (entry.getValue() != null && !entry.getValue().toString().isEmpty()) {
+                    args.put(entry.getKey(), entry.getValue().toString());
                 }
             }
             args.put("beginTime", beginTime.toString());
@@ -88,17 +90,17 @@ public class LoggerServiceImpl implements ILoggerService {
                 return res;
             }
 
-            for(int i = 0; i < buckets.size(); i++) {
+            for (int i = 0; i < buckets.size(); i++) {
                 JSONObject bucket = buckets.getJSONObject(i);
-                Map<String,Object> row = new HashMap<>();
-                row.put("time",bucket.getString("key_as_string"));
-                row.put("请求量",bucket.getLongValue("doc_count"));
+                Map<String, Object> row = new HashMap<>();
+                row.put("time", bucket.getString("key_as_string"));
+                row.put("请求量", bucket.getLongValue("doc_count"));
                 rows.add(row);
             }
             res.setCode("0");
             res.setRows(rows);
-        }catch (Exception e){
-            logger.error("",e);
+        } catch (Exception e) {
+            logger.error("", e);
         }
         return res;
     }
