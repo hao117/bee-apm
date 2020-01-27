@@ -2,8 +2,8 @@ package net.beeapm.agent.plugin.jdbc;
 
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
+import net.beeapm.agent.common.PluginOrder;
 import net.beeapm.agent.plugin.AbstractPlugin;
-import net.beeapm.agent.plugin.IPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.jdbc.interceptor.PreparedStatementParamAdvice;
 import net.bytebuddy.description.method.MethodDescription;
@@ -51,5 +51,9 @@ public class PreparedStatementParamPlugin extends AbstractPlugin {
     @Override
     public Class interceptorAdviceClass() {
         return PreparedStatementParamAdvice.class;
+    }
+    @Override
+    public int order(){
+        return PluginOrder.PREPARED_STATEMENT_PARAM_PLUGIN;
     }
 }

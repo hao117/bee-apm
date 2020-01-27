@@ -9,9 +9,9 @@ public class PreparedStatementExecuteAdvice {
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
-                             @Advice.AllArguments Object[] allParams){
+                             @Advice.AllArguments Object[] allParams) {
         handler = HandlerLoader.load("net.beeapm.agent.plugin.jdbc.handler.PreparedStatementExecuteHandler");
-        handler.before(className,methodName,allParams,null);
+        handler.before(className, methodName, allParams, null);
     }
 
     /**
@@ -23,7 +23,8 @@ public class PreparedStatementExecuteAdvice {
                             @Advice.Origin("#m") String methodName,
                             @Advice.AllArguments Object[] allParams,
                             @Advice.Return Object result,
-                            @Advice.Thrown Throwable t){
-        handler.after(className,methodName,allParams, result,t,null);
+                            @Advice.Thrown Throwable t,
+                            @Advice.This Object instance) {
+        handler.after(className, methodName, allParams, result, t, new Object[]{instance});
     }
 }

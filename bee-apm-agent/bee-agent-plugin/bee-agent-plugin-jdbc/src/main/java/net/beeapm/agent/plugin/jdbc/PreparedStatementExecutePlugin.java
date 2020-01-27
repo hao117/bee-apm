@@ -2,6 +2,7 @@ package net.beeapm.agent.plugin.jdbc;
 
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
+import net.beeapm.agent.common.PluginOrder;
 import net.beeapm.agent.plugin.AbstractPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
 import net.beeapm.agent.plugin.jdbc.interceptor.PreparedStatementExecuteAdvice;
@@ -11,6 +12,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import java.sql.PreparedStatement;
+
 /**
  * @author yuan
  * @date 2018/08/14
@@ -38,9 +40,9 @@ public class PreparedStatementExecutePlugin extends AbstractPlugin {
                     @Override
                     public ElementMatcher<MethodDescription> buildMethodsMatcher() {
                         return ElementMatchers.isMethod()
-                                        .and(ElementMatchers.<MethodDescription>nameStartsWith("execute"))
-                                        .and(ElementMatchers.<MethodDescription>isPublic())
-                                        .and(ElementMatchers.not(ElementMatchers.<MethodDescription>named("executeInternal")));
+                                .and(ElementMatchers.<MethodDescription>nameStartsWith("execute"))
+                                .and(ElementMatchers.<MethodDescription>isPublic())
+                                .and(ElementMatchers.not(ElementMatchers.<MethodDescription>named("executeInternal")));
                     }
                 }
         };
@@ -50,4 +52,10 @@ public class PreparedStatementExecutePlugin extends AbstractPlugin {
     public Class interceptorAdviceClass() {
         return PreparedStatementExecuteAdvice.class;
     }
+
+    @Override
+    public int order() {
+        return PluginOrder.PREPARED_STATEMENT_EXECUTE_PLUGIN;
+    }
+
 }
