@@ -127,6 +127,10 @@ public class RequestServiceImpl implements IRequestService {
             if (total < 0) {
                 return res;
             }
+            total = queryList(args, EsIndicesPrefix.SQL, "QueryList", res, rows);
+            if (total < 0) {
+                return res;
+            }
             logger.debug("查询结果:{}", JSON.toJSONString(rows));
             //handleData(rows);
             buildTree(rows);
@@ -161,22 +165,26 @@ public class RequestServiceImpl implements IRequestService {
         String type = item.getString("type");
         if (type.equals("req")) {
             item.put("text", JSONPath.eval(item, "$.tags.url"));
-        } else {
+        } else if (type.equals("proc")) {
             item.put("text", JSONPath.eval(item, "$.tags.clazz") + "." + JSONPath.eval(item, "$.tags.method"));
+        } else if (type.equals("sql")) {
+            item.put("text", JSONPath.eval(item, "$.tags.sql"));
+        }else{
+            item.put("text", "未支持的类型，请检查RequestServiceImpl.parseItem方法");
         }
     }
 
-    private void handleData(List<Object> rows){
+    private void handleData(List<Object> rows) {
         int len = rows.size();
         for (int i = 0; i < len; i++) {
             JSONObject item = (JSONObject) rows.get(i);
             parseItem(item);
             String pid = item.getString("pid");
             if (pid.equals("nvl")) {
-                item.put("parentId","");
+                item.put("parentId", "");
                 continue;
             }
-            item.put("parentId",pid);
+            item.put("parentId", pid);
         }
     }
 
@@ -186,7 +194,7 @@ public class RequestServiceImpl implements IRequestService {
             JSONObject item1 = (JSONObject) rows.get(i);
             parseItem(item1);
             String pid1 = item1.getString("pid");
-            item1.put("parentId",pid1);
+            item1.put("parentId", pid1);
             if (pid1.equals("nvl")) {
                 continue;
             }
