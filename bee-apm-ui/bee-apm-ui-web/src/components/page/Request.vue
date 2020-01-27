@@ -64,9 +64,10 @@
             </el-card>
             <el-card style="margin-top: -2px">
                 <el-row>
-                    <el-col :span="24" >
-                        <ve-histogram style="height: 250px" height="100%" :legend-visible='false' :extend="requestCharExtend" :data="requestChartData"
-                                      :settings="requestChartSettings" ></ve-histogram>
+                    <el-col :span="24">
+                        <ve-histogram style="height: 250px" height="100%" :legend-visible='false'
+                                      :extend="requestCharExtend" :data="requestChartData"
+                                      :settings="requestChartSettings"></ve-histogram>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -90,8 +91,10 @@
                             </el-table-column>
                             <el-table-column label="操作" width="180" align="center" fixed="right">
                                 <template slot-scope="_">
-                                    <el-button type="text" @click="queryById(_.row,'bee-request-body','请求参数')">入参</el-button>
-                                    <el-button type="text" @click="queryById(_.row,'bee-response-body','请求返回值')">回参</el-button>
+                                    <el-button type="text" @click="queryById(_.row,'bee-request-body','请求参数')">入参
+                                    </el-button>
+                                    <el-button type="text" @click="queryById(_.row,'bee-response-body','请求返回值')">回参
+                                    </el-button>
                                     <el-button type="text" @click="showVisTopology(_.row)">拓扑</el-button>
                                     <el-button type="text" @click="queryCallTree(_.row)">链路</el-button>
                                 </template>
@@ -135,7 +138,7 @@
                                 </template>
                             </vxe-table-column>
                             <vxe-table-column field="spend" title="耗时(ms)" width="80"></vxe-table-column>
-                            <vxe-table-column  title="操作" width="80">
+                            <vxe-table-column title="操作" width="80">
                                 <template slot-scope="_">
                                     <el-button type="text" @click="queryById(_.row,'nvl','参数')">参数</el-button>
                                 </template>
@@ -174,14 +177,15 @@
     </div>
 </template>
 <style>
-    .el-dialog__body{
+    .el-dialog__body {
         padding: 0px 20px !important;
         border-top: 1px;
         border-top-color: #1f2f3d;
     }
-    textarea{
+
+    textarea {
         overflow-wrap: normal !important;
-        white-space:pre !important;
+        white-space: pre !important;
         padding: 10px !important;
     }
 </style>
@@ -228,8 +232,7 @@
                     },
                     data: {}
                 },
-                requestChartSettings: {
-                },
+                requestChartSettings: {},
                 requestCharExtend: {
                     'xAxis.0.axisLabel.rotate': 60,
                     series(v) {
@@ -241,7 +244,7 @@
                     grid: {
                         top: 10,
                         bottom: 5,
-                        height:230,
+                        height: 230,
                     },
                 },
                 requestChartData: {
@@ -357,10 +360,10 @@
             timeFormatter(row, column) {
                 return row.time.substring(11, 19);
             },
-            queryById(row,index,title) {
-                if(index == "nvl" && row.type == "req"){
+            queryById(row, index, title) {
+                if (index == "nvl" && row.type == "req") {
                     index = "bee-request-body";
-                }else if(index == "nvl" && row.type == "proc"){
+                } else if (index == "nvl" && row.type == "proc") {
                     index = "bee-process-param";
                 }
                 const url = "/api/common/queryById";
@@ -368,17 +371,17 @@
                 params.beginTime = this.getBeginTime();
                 params.endTime = this.getEndTime();
                 this.$axios.post(url, params).then((res) => {
-                    console.log("==>queryById,title=%s，result=%o", title,res);
+                    console.log("==>queryById,title=%s，result=%o", title, res);
                     this.dialogVisible = true;
                     this.dialogTitle = title;
                     let fmt = new JSONFormatter(JSONFormatter.PRETTY);
-                    if(index == "bee-process-param"){
+                    if (index == "bee-process-param") {
                         let content = res.data.result.tags.param;
-                        console.log("dialogTextarea=%o",content);
+                        console.log("dialogTextarea=%o", content);
                         fmt.append(content);
-                    }else{
+                    } else {
                         let content = res.data.result.tags.body;
-                        console.log("dialogTextarea=%o",content);
+                        console.log("dialogTextarea=%o", content);
                         fmt.append(content);
                     }
                     this.dialogTextarea = fmt.flush();
