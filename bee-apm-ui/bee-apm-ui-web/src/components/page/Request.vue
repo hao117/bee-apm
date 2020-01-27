@@ -125,7 +125,15 @@
                             ref="xTree"
                             :tree-config="{children: 'children', expandAll: true, line: true,  iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
                             :data="tableTreeListData">
-                            <vxe-table-column field="text" title="链路" tree-node></vxe-table-column>
+                            <vxe-table-column title="链路" tree-node>
+                                <template slot-scope="_">
+                                    <span v-if="_.row.type=='req'" style="color: #3e5df0">{{_.row.text}}</span>
+                                    <span v-else-if="_.row.type=='sql'" style="color: #c05d06">{{_.row.text}}</span>
+                                    <span v-else>{{_.row.text}}</span>
+                                    <a style="color:#cccccc;font-weight: bolder">|</a>
+                                    <a style="color: #ffb601">{{_.row.app}}</a>
+                                </template>
+                            </vxe-table-column>
                             <vxe-table-column field="spend" title="耗时(ms)" width="80"></vxe-table-column>
                             <vxe-table-column  title="操作" width="80">
                                 <template slot-scope="_">
