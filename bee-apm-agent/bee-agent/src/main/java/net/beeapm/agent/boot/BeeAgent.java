@@ -19,6 +19,8 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 
 import java.lang.instrument.Instrumentation;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,27 +37,34 @@ public class BeeAgent {
         Heartbeat.start();
 
         List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
+        Collections.sort(plugins, new Comparator<AbstractPlugin>() {
+            @Override
+            public int compare(AbstractPlugin o1, AbstractPlugin o2) {
+                return o2.order() - o1.order();
+            }
+        });
 
         AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
 
-        for(int i = 0; i < plugins.size(); i++) {
+        for (int i = 0; i < plugins.size(); i++) {
             final AbstractPlugin plugin = plugins.get(i);
             InterceptPoint[] interceptPoints = plugin.buildInterceptPoint();
             for (int j = 0; j < interceptPoints.length; j++) {
                 final InterceptPoint interceptPoint = interceptPoints[j];
                 AgentBuilder.Transformer transformer = new AgentBuilder.Transformer() {
                     private final LogImpl log = LogManager.getLog("Transform");
+
                     @Override
                     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
                                                             TypeDescription typeDescription,
                                                             ClassLoader classLoader, JavaModule javaModule) {
                         String className = typeDescription.getCanonicalName();
-                        log.error("class name : " + className);
+                        log.error(null, "class-name={}, plugin-name={}", className, plugin.getName());
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
                         FieldDefine[] fields = plugin.buildFieldDefine();
-                        if(fields != null && fields.length > 0){
-                            for(int x = 0; x < fields.length; x++){
-                                builder = builder.defineField(fields[x].name,fields[x].type,fields[x].modifiers);
+                        if (fields != null && fields.length > 0) {
+                            for (int x = 0; x < fields.length; x++) {
+                                builder = builder.defineField(fields[x].name, fields[x].type, fields[x].modifiers);
                             }
                         }
                         return builder;
@@ -68,6 +77,7 @@ public class BeeAgent {
 
         AgentBuilder.Listener listener = new AgentBuilder.Listener() {
             private final LogImpl log = LogManager.getLog("TransformListener");
+
             @Override
             public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
 
@@ -75,7 +85,7 @@ public class BeeAgent {
 
             @Override
             public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, JavaModule javaModule, boolean b, DynamicType dynamicType) {
-                WeavingClassLog.INSTANCE.log(typeDescription,dynamicType);
+                WeavingClassLog.INSTANCE.log(typeDescription, dynamicType);
             }
 
             @Override
@@ -84,7 +94,7 @@ public class BeeAgent {
 
             @Override
             public void onError(String s, ClassLoader classLoader, JavaModule javaModule, boolean b, Throwable throwable) {
-                log.error("",throwable);
+                log.error("", throwable);
             }
 
             @Override
