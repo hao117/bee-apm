@@ -35,9 +35,11 @@ public class ProcessPlugin extends AbstractPlugin {
                         @Override
                         public ElementMatcher<TypeDescription> buildTypesMatcher() {
                             return MatchKit.buildTypesMatcher(null, null)
+                                    .and(ElementMatchers.not(ElementMatchers.isInterface()))
                                     .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))))
                                     .and(ElementMatchers.not(ElementMatchers.<TypeDescription>nameContains("$$EnhancerBySpringCGLIB$$")))
                                     .and(ElementMatchers.not(ElementMatchers.<TypeDescription>nameContains("$$EnhancerByCGLIB$$")));
+
                         }
 
                         @Override
@@ -60,9 +62,11 @@ public class ProcessPlugin extends AbstractPlugin {
                 public ElementMatcher<TypeDescription> buildTypesMatcher() {
                     if (typeMatch == null) {
                         return MatchKit.buildTypesMatcher(null, null)
+                                .and(ElementMatchers.not(ElementMatchers.isInterface()))
                                 .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))));
                     }
                     return MatchKit.buildTypesMatcher(typeMatch.get("include"), typeMatch.get("exclude"))
+                            .and(ElementMatchers.not(ElementMatchers.isInterface()))
                             .and(ElementMatchers.not(ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))));
                 }
 
