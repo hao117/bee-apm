@@ -3,7 +3,7 @@ package net.beeapm.agent.plugin;
 
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
-import net.beeapm.agent.plugin.interceptor.SpringTxBeginAdvice;
+import net.beeapm.agent.plugin.interceptor.SpringTxEndAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -41,6 +41,6 @@ public class SpringTxEndPlugin extends AbstractPlugin {
 
     @Override
     public Class interceptorAdviceClass() {
-        return SpringTxBeginAdvice.class;
+        return SpringTxEndAdvice.class;
     }
 }

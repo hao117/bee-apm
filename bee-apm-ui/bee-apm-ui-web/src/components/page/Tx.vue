@@ -82,7 +82,7 @@
                         <el-table-column prop="tags.point" label="事务方法"  min-width="250">
                         </el-table-column>
                         <el-table-column label="操作" width="180" align="center" fixed="right">
-                            <template slot-scope="scope">
+                            <template slot-scope="_">
                                 <el-button type="text">参数</el-button>
                                 <el-button type="text">调用链</el-button>
                             </template>

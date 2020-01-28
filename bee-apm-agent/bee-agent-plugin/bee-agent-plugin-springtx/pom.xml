@@ -12,6 +12,15 @@
     <artifactId>bee-agent-plugin-springtx</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-tx</artifactId>
+        <version>5.0.5.RELEASE</version>
+        <scope>provided</scope>
+    </dependency>
+    </dependencies>
+
     <build>
         <finalName>bee-agent-plugin-springtx</finalName>
     </build>
