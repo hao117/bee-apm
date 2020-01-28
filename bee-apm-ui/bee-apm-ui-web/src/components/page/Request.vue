@@ -256,7 +256,6 @@
                     pageTotal: 150,
                     rows: []
                 },
-                treeData: [],
                 form: {
                     gid: null,
                     env: null,
