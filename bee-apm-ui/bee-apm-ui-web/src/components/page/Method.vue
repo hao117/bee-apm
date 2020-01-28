@@ -304,27 +304,34 @@
                 return row.tags.clazz + "." + row.tags.method;
             },
             queryById(row,index,title) {
-                if(index == "nvl" && row.type == "req"){
+                if (index == "nvl" && row.type == "req") {
                     index = "bee-request-body";
-                }else if(index == "nvl" && row.type == "proc"){
+                } else if (index == "nvl" && row.type == "proc") {
                     index = "bee-process-param";
+                }else if(index == "nvl" && row.type == 'sql'){
+                    index = "bee-sql-param";
                 }
                 const url = "/api/common/queryById";
                 let params = {id: row.id, index: index};
                 params.beginTime = this.getBeginTime();
                 params.endTime = this.getEndTime();
+                this.dialogTextarea = '';
                 this.$axios.post(url, params).then((res) => {
                     console.log("==>queryById,title=%s，result=%o", title,res);
                     this.dialogVisible = true;
                     this.dialogTitle = title;
                     let fmt = new JSONFormatter(JSONFormatter.PRETTY);
-                    if(index == "bee-process-param"){
+                    if (index == "bee-process-param") {
                         let content = res.data.result.tags.param;
-                        console.log("dialogTextarea=%o",content);
+                        console.log("dialogTextarea=%o", content);
                         fmt.append(content);
-                    }else{
+                    }else if(index == "bee-sql-param"){
+                        let content = res.data.result.tags.args;
+                        console.log("dialogTextarea=%o", content);
+                        fmt.append(content);
+                    } else {
                         let content = res.data.result.tags.body;
-                        console.log("dialogTextarea=%o",content);
+                        console.log("dialogTextarea=%o", content);
                         fmt.append(content);
                     }
                     this.dialogTextarea = fmt.flush();

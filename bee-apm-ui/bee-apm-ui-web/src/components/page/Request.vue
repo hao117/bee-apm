@@ -365,11 +365,14 @@
                     index = "bee-request-body";
                 } else if (index == "nvl" && row.type == "proc") {
                     index = "bee-process-param";
+                }else if(index == "nvl" && row.type == 'sql'){
+                    index = "bee-sql-param";
                 }
                 const url = "/api/common/queryById";
                 let params = {id: row.id, index: index};
                 params.beginTime = this.getBeginTime();
                 params.endTime = this.getEndTime();
+                this.dialogTextarea = '';
                 this.$axios.post(url, params).then((res) => {
                     console.log("==>queryById,title=%s，result=%o", title, res);
                     this.dialogVisible = true;
@@ -377,6 +380,10 @@
                     let fmt = new JSONFormatter(JSONFormatter.PRETTY);
                     if (index == "bee-process-param") {
                         let content = res.data.result.tags.param;
+                        console.log("dialogTextarea=%o", content);
+                        fmt.append(content);
+                    }else if(index == "bee-sql-param"){
+                        let content = res.data.result.tags.args;
                         console.log("dialogTextarea=%o", content);
                         fmt.append(content);
                     } else {
