@@ -1,5 +1,7 @@
 package net.beeapm.agent.common;
 
+import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.Version;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.BeeLog;
@@ -16,6 +18,8 @@ import org.apache.zookeeper.KeeperException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
@@ -127,13 +131,14 @@ public class IdHepler {
 
 
     private static String buildNodeText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("startTime=").append(sdf.format(new Date()))
-                .append(",ip=").append(BeeConfig.me().getIp())
-                .append(",port=").append(BeeConfig.me().getPort())
-                .append(",app=").append(BeeConfig.me().getApp())
-                .append(",inst=").append(BeeConfig.me().getInst());
-        return sb.toString();
+        Map<String, Object> infoMap = new HashMap<String, Object>();
+        infoMap.put("time", sdf.format(new Date()));
+        infoMap.put("ip", BeeConfig.me().getIp());
+        infoMap.put("port", BeeConfig.me().getPort());
+        infoMap.put("app", BeeConfig.me().getApp());
+        infoMap.put("inst", BeeConfig.me().getInst());
+        infoMap.put("version", Version.VERSION);
+        return JSON.toJSONString(infoMap);
     }
 
     private static int createNode(int nNodeName, int times) {
