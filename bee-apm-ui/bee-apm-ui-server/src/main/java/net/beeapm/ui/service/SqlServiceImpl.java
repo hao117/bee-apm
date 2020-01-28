@@ -28,6 +28,9 @@ public class SqlServiceImpl implements ISqlService {
         res.setPageNum(Integer.parseInt(params.get("pageNum").toString()));
         params.put("from",(res.getPageNum() - 1) * BeeConst.PAGE_SIZE);
         params.put("size",BeeConst.PAGE_SIZE);
+        if (params.get("sort") == null || params.get("sort").toString().isEmpty()) {
+            params.put("sort", "time");
+        }
         List<Object> rows = new ArrayList<>();
         try {
             SearchResult searchResult = EsJestClient.inst().search(params, "PageDataList", EsIndicesPrefix.SQL);
