@@ -34,6 +34,8 @@ public class HelloService implements IHelloService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         List<User> list = userMapper.selectList(wrapper);
         log.debug("query-result={}", JSON.toJSONString(list));
+        User user = userMapper.selectById(5);
+        log.debug("query-one={}", JSON.toJSONString(user));
         return OkHttpUtils.instance().post(vo);
     }
 
