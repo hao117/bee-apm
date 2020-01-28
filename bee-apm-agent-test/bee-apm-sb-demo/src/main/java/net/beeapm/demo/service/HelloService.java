@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class HelloService implements IHelloService {
     private UserMapper userMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultVo sayHello(RequestVo vo) {
         hello1();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
