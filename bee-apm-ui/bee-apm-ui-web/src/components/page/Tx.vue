@@ -1,5 +1,6 @@
 <template>
     <div>
+        <el-row v-show="isShowTable">
         <el-card>
             <el-form ref="form" :model="form" label-width="80px" width="100%">
                 <el-row :gutter="20">
@@ -83,8 +84,7 @@
                         </el-table-column>
                         <el-table-column label="操作" width="180" align="center" fixed="right">
                             <template slot-scope="_">
-                                <el-button type="text">参数</el-button>
-                                <el-button type="text">调用链</el-button>
+                                <el-button type="text" @click="queryCallTree(_.row)">链路</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -95,17 +95,85 @@
                 </el-col>
             </el-row>
         </el-card>
+        </el-row>
+        <el-row v-show="isShowTree">
+            <el-card>
+                <el-row>
+                    <el-col :span="24" align="right" style="padding-bottom: 10px">
+                        <el-button type="primary" @click="backButtonEvent()">返回</el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <vxe-table
+                            size="mini"
+                            height="700"
+                            row-key
+                            show-overflow
+                            highlight-hover-row
+                            ref="xTree"
+                            :tree-config="{children: 'children', expandAll: true, line: true,  iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+                            :data="tableTreeListData">
+                            <vxe-table-column title="链路" tree-node>
+                                <template slot-scope="_">
+                                    <span v-if="_.row.type=='req'" style="color: #3e5df0">{{_.row.text}}</span>
+                                    <span v-else-if="_.row.type=='sql'" style="color: #c05d06">{{_.row.text}}</span>
+                                    <span v-else>{{_.row.text}}</span>
+                                    <a style="color:#cccccc;font-weight: bolder">|</a>
+                                    <a style="color: #ffb601">{{_.row.app}}</a>
+                                </template>
+                            </vxe-table-column>
+                            <vxe-table-column field="spend" title="耗时(ms)" width="80"></vxe-table-column>
+                            <vxe-table-column title="操作" width="80">
+                                <template slot-scope="_">
+                                    <el-button type="text" @click="queryById(_.row,'nvl','参数')">参数</el-button>
+                                </template>
+                            </vxe-table-column>
+                        </vxe-table>
+                    </el-col>
+                </el-row>
+            </el-card>
+        </el-row>
+        <el-dialog
+            :title="dialogTitle"
+            :visible.sync="dialogVisible"
+            width="60%">
+            <el-input v-model="dialogTextarea" :rows="22" type="textarea" readonly>
+            </el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false">关 闭</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
+<style>
+    .el-dialog__body {
+        padding: 0px 20px !important;
+        border-top: 1px;
+        border-top-color: #1f2f3d;
+    }
 
+    textarea {
+        overflow-wrap: normal !important;
+        white-space: pre !important;
+        padding: 10px !important;
+    }
+</style>
 <script>
     import bus from '../common/bus';
+    import JSONFormatter from "json-fmt";
     let moment = require("moment");
 
     export default {
         name: 'tx',
         data: function(){
             return {
+                tableTreeListData: [], //调用链数据
+                isShowTable: true,
+                isShowTree: false,
+                dialogVisible: false,
+                dialogTextarea: '',
+                dialogTitle: '',
                 chartSettings: {},
                 chartExtend: {
                     'xAxis.0.axisLabel.rotate': 60,
@@ -231,7 +299,57 @@
             },
             timeFormatter(row, column){
                 return row.time.substring(11,19);
-            }
+            },
+            queryById(row,index,title) {
+                if (index == "nvl" && row.type == "req") {
+                    index = "bee-request-body";
+                } else if (index == "nvl" && row.type == "proc") {
+                    index = "bee-process-param";
+                }else if(index == "nvl" && row.type == 'sql'){
+                    index = "bee-sql-param";
+                }
+                const url = "/api/common/queryById";
+                let params = {id: row.id, index: index};
+                params.beginTime = this.getBeginTime();
+                params.endTime = this.getEndTime();
+                this.dialogTextarea = '';
+                this.$axios.post(url, params).then((res) => {
+                    console.log("==>queryById,title=%s，result=%o", title,res);
+                    this.dialogVisible = true;
+                    this.dialogTitle = title;
+                    let fmt = new JSONFormatter(JSONFormatter.PRETTY);
+                    if (index == "bee-process-param") {
+                        let content = res.data.result.tags.param;
+                        console.log("dialogTextarea=%o", content);
+                        fmt.append(content);
+                    }else if(index == "bee-sql-param"){
+                        let content = res.data.result.tags.args;
+                        console.log("dialogTextarea=%o", content);
+                        fmt.append(content);
+                    } else {
+                        let content = res.data.result.tags.body;
+                        console.log("dialogTextarea=%o", content);
+                        fmt.append(content);
+                    }
+                    this.dialogTextarea = fmt.flush();
+                })
+            },
+            queryCallTree(row) {
+                console.log("==>queryCallTree row=%o", row);
+                const url = "/api/request/callTree";
+                let params = {gid: row.gid, time: row.time};
+                this.$axios.post(url, params).then((res) => {
+                    console.log("==>queryCallTree result=%o", res.data.result);
+                    this.$refs.xTree.reloadData(res.data.result);
+                })
+                this.isShowTable = false;
+                this.isShowTree = true;
+            },
+            backButtonEvent() {
+                this.isShowTable = true;
+                this.isShowTree = false;
+                this.tableTreeListData = [];
+            },
         }
     }
 </script>
