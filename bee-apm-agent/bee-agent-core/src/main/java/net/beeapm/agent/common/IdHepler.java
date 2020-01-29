@@ -130,13 +130,14 @@ public class IdHepler {
     }
 
 
-    private static String buildNodeText() {
+    private static String buildNodeText(int nodeName) {
         Map<String, Object> infoMap = new HashMap<String, Object>();
         infoMap.put("time", sdf.format(new Date()));
         infoMap.put("ip", BeeConfig.me().getIp());
         infoMap.put("port", BeeConfig.me().getPort());
         infoMap.put("app", BeeConfig.me().getApp());
         infoMap.put("inst", BeeConfig.me().getInst());
+        infoMap.put("nodeName", nodeName);
         infoMap.put("version", Version.VERSION);
         return JSON.toJSONString(infoMap);
     }
@@ -146,7 +147,7 @@ public class IdHepler {
             client.create()
                     .creatingParentsIfNeeded()
                     .withMode(CreateMode.EPHEMERAL)
-                    .forPath(rootDir + nNodeName, buildNodeText().getBytes("utf-8"));
+                    .forPath(rootDir + nNodeName, buildNodeText(nNodeName).getBytes("utf-8"));
             return 1;
         } catch (KeeperException.NodeExistsException e) {
             return 0;
