@@ -11,3 +11,8 @@ elasticsearch:
     connTimeout: 30000
     readTimeout: 30000
     multiThreaded: true
+zk:
+  url: 192.168.137.100:2181
+  sessionTimeoutMs: 15000
+  connectionTimeoutMs: 15000
+  retryIntervalMs: 100000
