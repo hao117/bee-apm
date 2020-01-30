@@ -21,11 +21,10 @@ import java.util.concurrent.TimeUnit;
 public class JvmInfoTask {
     private static ScheduledExecutorService service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory("jvm"));
 
-    public static String id;
     private static GcInfo preGcInfo;
 
     public static void start() {
-        int period = BeeConfig.me().getHeartbeatPeriod();
+        int period = BeeConfig.me().getJvmPeriod();
         service.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -39,8 +38,8 @@ public class JvmInfoTask {
         }, 0, period, TimeUnit.SECONDS);
     }
 
-    public static void shutdown(){
-        if(service != null){
+    public static void shutdown() {
+        if (service != null) {
             service.shutdown();
         }
     }
