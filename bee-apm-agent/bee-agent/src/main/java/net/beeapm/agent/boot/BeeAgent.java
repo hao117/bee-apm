@@ -1,8 +1,9 @@
 package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.BeeAgentJarUtils;
-import net.beeapm.agent.common.Heartbeat;
+import net.beeapm.agent.common.HeartbeatTask;
 import net.beeapm.agent.common.IdHepler;
+import net.beeapm.agent.common.JvmInfoTask;
 import net.beeapm.agent.log.BeeLog;
 import net.beeapm.agent.log.LogImpl;
 import net.beeapm.agent.log.LogManager;
@@ -24,26 +25,16 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by yuan
+ * @author yuan
+ * @date 2018-08-06
  */
 public class BeeAgent {
     public static void premain(String arguments, Instrumentation inst) {
         BeeLog.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
-        BeeLog.log("start......");
-        BeeAgentJarUtils.getAgentJarDirPath();
-        BootPluginFactory.init();
-        IdHepler.init();
-        ReporterFactory.init();
-        Heartbeat.start();
 
-        List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
-        Collections.sort(plugins, new Comparator<AbstractPlugin>() {
-            @Override
-            public int compare(AbstractPlugin o1, AbstractPlugin o2) {
-                return o2.order() - o1.order();
-            }
-        });
+        init();
 
+        List<AbstractPlugin> plugins = loadPlugins();
         AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
 
         for (int i = 0; i < plugins.size(); i++) {
@@ -74,8 +65,23 @@ public class BeeAgent {
             }
         }
 
+        AgentBuilder.Listener listener = buildListener();
+        agentBuilder.with(listener).installOn(inst);
+    }
 
-        AgentBuilder.Listener listener = new AgentBuilder.Listener() {
+    private static List<AbstractPlugin> loadPlugins() {
+        List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
+        Collections.sort(plugins, new Comparator<AbstractPlugin>() {
+            @Override
+            public int compare(AbstractPlugin o1, AbstractPlugin o2) {
+                return o2.order() - o1.order();
+            }
+        });
+        return plugins;
+    }
+
+    private static AgentBuilder.Listener buildListener() {
+        return new AgentBuilder.Listener() {
             private final LogImpl log = LogManager.getLog("TransformListener");
 
             @Override
@@ -102,8 +108,26 @@ public class BeeAgent {
 
             }
         };
-        agentBuilder.with(listener).installOn(inst);
-        //agentBuilder.with(listener).with(AgentBuilder.Listener.StreamWriting.toSystemError()).installOn(inst);
+    }
+
+    private static void init() {
+        BeeLog.log("start......");
+        BeeAgentJarUtils.getAgentJarDirPath();
+        BootPluginFactory.init();
+        IdHepler.init();
+        ReporterFactory.init();
+        HeartbeatTask.start();
+        JvmInfoTask.start();
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HeartbeatTask.shutdown();
+                JvmInfoTask.shutdown();
+                ReporterFactory.shutdonw();
+                IdHepler.shutdown();
+                System.out.println("shutdown all service");
+            }
+        }));
     }
 
 
