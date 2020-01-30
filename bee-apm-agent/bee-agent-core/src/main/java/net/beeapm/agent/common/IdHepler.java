@@ -57,6 +57,10 @@ public class IdHepler {
         });
     }
 
+    public static void shutdown(){
+        BeeUtils.shutdown(service);
+    }
+
     public static void init() {
         synchronized (lock) {
             if (client == null) {

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ClassUtils;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author yuan
@@ -42,5 +43,15 @@ public class BeeUtils {
             return true;
         }
         return ClassUtils.isPrimitiveOrWrapper(obj.getClass());
+    }
+
+    public static void shutdown(ExecutorService service) {
+        if (service != null) {
+            try {
+                service.shutdown();
+            } catch (Throwable e) {
+
+            }
+        }
     }
 }
