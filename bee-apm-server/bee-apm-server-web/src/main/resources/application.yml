@@ -10,7 +10,7 @@ bee:
     kafka1x:
       idleSleep: 5000 #队列为空时候，线程休眠时间，默认100ms
       pollTimeout: 2000 #kafka拉取超时时间，默认1000ms
-      topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-tx,bee-logger,bee-error,bee-request-body,bee-request-headers,bee-response-body,bee-heartbeat,bee-topology
+      topics: bee-default,bee-process,bee-process-param,bee-sql,bee-sql-param,bee-request,bee-request-param,bee-tx,bee-logger,bee-error,bee-request-body,bee-request-headers,bee-response-body,bee-heartbeat,bee-topology,bee-jvm
       kafkaConfig:
         #kafka配置值项，项名称和值请参考kafka文档 10.130.90.50
         bootstrap.servers: 192.168.137.100:9092
@@ -53,6 +53,7 @@ bee:
               resb: bee-response-body
               hb: bee-heartbeat
               topo: bee-topology
+              jvm: bee-jvm
   handlers:
     flow: empty>json>queue>store
     queue:

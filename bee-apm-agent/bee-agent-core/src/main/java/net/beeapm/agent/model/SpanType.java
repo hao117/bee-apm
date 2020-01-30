@@ -18,4 +18,5 @@ public class SpanType {
     public final static String RESPONSE_BODY = "resb";
     public final static String HEARTBEAT = "hb";
     public final static String TOPOLOGY = "topo";
+    public final static String JVM = "jvm";
 }
