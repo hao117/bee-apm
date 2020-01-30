@@ -17,7 +17,8 @@ public class BeeConfig extends AbstractBeeConfig {
     private String env;
     private String ip;
     private String port;
-    private int period;
+    private int heartbeatPeriod;
+    private int jvmPeriod;
 
     public static BeeConfig me(){
         if(config == null){
@@ -59,7 +60,8 @@ public class BeeConfig extends AbstractBeeConfig {
         env = System.getProperty(SysPropKey.BEE_ENV,"unknown");
         port = System.getProperty(SysPropKey.BEE_PORT,"0");
         ip = System.getProperty(SysPropKey.BEE_IP);
-        period = ConfigUtils.me().getInt("heartbeat.period",60);
+        heartbeatPeriod = ConfigUtils.me().getInt("heartbeat.period",60);
+        jvmPeriod = ConfigUtils.me().getInt("jvm.period",60);
         if(ip==null){
             ip = BeeUtils.getLocalIp();
         }
@@ -97,7 +99,11 @@ public class BeeConfig extends AbstractBeeConfig {
         return env;
     }
 
-    public int getPeriod() {
-        return period;
+    public int getHeartbeatPeriod() {
+        return heartbeatPeriod;
+    }
+
+    public int getJvmPeriod() {
+        return jvmPeriod;
     }
 }
