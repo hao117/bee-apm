@@ -45,10 +45,10 @@ export default new Router({
                     meta: { title: 'tab选项卡' }
                 },
                 {
-                    // vue-schart组件
-                    path: '/charts',
-                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
-                    meta: { title: 'schart图表' }
+                    // 应用列表
+                    path: '/appList',
+                    component: resolve => require(['../components/page/AppList.vue'], resolve),
+                    meta: { title: '应用列表' }
                 },
                 {
                     // 权限页面

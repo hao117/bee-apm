@@ -75,8 +75,8 @@
                     },
                     {
                         icon: 'el-icon-lx-apps',
-                        index: 'charts',
-                        title: '实例信息'
+                        index: 'appList',
+                        title: '应用列表'
                     },
                     {
                         icon: 'icon beeicon bee-caidan',
