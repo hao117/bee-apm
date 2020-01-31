@@ -1,5 +1,6 @@
 package net.beeapm.agent.common;
 
+import net.beeapm.agent.Version;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
@@ -10,6 +11,7 @@ import net.beeapm.agent.reporter.ReporterFactory;
  * @author yuan
  * @date 2018-11-07
  */
+import java.util.Date;
 import java.util.concurrent.*;
 
 public class HeartbeatTask {
@@ -25,14 +27,15 @@ public class HeartbeatTask {
                 Span span = new Span(SpanType.HEARTBEAT);
                 span.setId(getId());
                 span.fillEnvInfo();
+                span.setTime(new Date());
+                span.addTag("version", Version.VERSION);
                 ReporterFactory.report(span);
             }
         }, 0, period, TimeUnit.SECONDS);
     }
 
 
-
-    public static void shutdown(){
+    public static void shutdown() {
         BeeUtils.shutdown(service);
     }
 
