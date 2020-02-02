@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeConst;
+import net.beeapm.ui.common.DateUtils;
 import net.beeapm.ui.common.EsIndicesPrefix;
 import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.model.vo.TableVo;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 /**
  * @author yuan
  * @date 2020-01-31
@@ -32,6 +34,7 @@ public class AppInfoServiceImpl implements IAppInfoService {
         params.put("sort", "time");
         List<Object> rows = new ArrayList<>();
         try {
+            params.put("endTime", DateUtils.endDate((String) params.get("endTime")));
             SearchResult searchResult = EsJestClient.inst().search(params, "PageDataList", EsIndicesPrefix.HEARTBEAT);
             if (BeeConst.CODE_404 == searchResult.getResponseCode()) {
                 res.setCode("-1");

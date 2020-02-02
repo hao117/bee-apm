@@ -108,6 +108,7 @@ public class DashboardServiceImpl implements IDashboardService {
     public Long queryInstCount(Map<String, Object> params) {
         Long count = 0L;
         try {
+            params.put("endTime", DateUtils.endDate((String) params.get("endTime")));
             SearchResult result = EsJestClient.inst().search(params, "instCount", EsIndicesPrefix.HEARTBEAT);
             if(404 == result.getResponseCode()){
                 return 0L;

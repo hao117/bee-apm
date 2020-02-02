@@ -15,6 +15,7 @@ public class DateUtils {
 
     /**
      * 格式化日期
+     *
      * @param date
      * @param pattern
      * @return
@@ -39,6 +40,7 @@ public class DateUtils {
 
     /**
      * 解析yyyy-MM-dd HH:mm:ss格式的日期
+     *
      * @param date
      * @return
      * @throws ParseException
@@ -49,6 +51,7 @@ public class DateUtils {
 
     /**
      * 将输入pattern格式的日期换为取时间的毫秒数
+     *
      * @param str
      * @param pattern
      * @return
@@ -59,9 +62,9 @@ public class DateUtils {
     }
 
 
-
     /**
      * 在date日期上增加num天
+     *
      * @param date
      * @param num
      * @return
@@ -72,6 +75,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num天,以pattern格式输出
+     *
      * @param date
      * @param num
      * @param pattern
@@ -83,6 +87,7 @@ public class DateUtils {
 
     /**
      * 当前系统时间的下一天，明天
+     *
      * @return
      */
     public static Date nextDay() {
@@ -91,6 +96,7 @@ public class DateUtils {
 
     /**
      * 日期date的下一天
+     *
      * @return
      */
     public static Date nextDay(Date date) {
@@ -99,6 +105,7 @@ public class DateUtils {
 
     /**
      * 当前系统时间的下一天，明天,以pattern格式输出
+     *
      * @param pattern
      * @return
      */
@@ -108,6 +115,7 @@ public class DateUtils {
 
     /**
      * 日期date的下一天,以pattern格式输出
+     *
      * @param date
      * @param pattern
      * @return
@@ -118,6 +126,7 @@ public class DateUtils {
 
     /**
      * inPattern格式的输入日期inDate，增加num天，以outPattern格式输出
+     *
      * @param inDate
      * @param inPattern
      * @param outPattern
@@ -132,6 +141,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num毫秒
+     *
      * @param date
      * @param num
      * @return
@@ -142,6 +152,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num秒
+     *
      * @param date
      * @param num
      * @return
@@ -152,6 +163,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num分钟
+     *
      * @param date
      * @param num
      * @return
@@ -162,6 +174,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num小时
+     *
      * @param date
      * @param num
      * @return
@@ -172,6 +185,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num周
+     *
      * @param date
      * @param num
      * @return
@@ -182,6 +196,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num月
+     *
      * @param date
      * @param num
      * @return
@@ -192,6 +207,7 @@ public class DateUtils {
 
     /**
      * 在date日期上增加num年
+     *
      * @param date
      * @param num
      * @return
@@ -202,6 +218,7 @@ public class DateUtils {
 
     /**
      * 日期date所在月的最后一天
+     *
      * @param date
      * @return
      */
@@ -215,6 +232,7 @@ public class DateUtils {
 
     /**
      * 日期date的下num个月的的最后一天
+     *
      * @param date
      * @param num
      * @return
@@ -226,6 +244,7 @@ public class DateUtils {
 
     /**
      * 日期date的上num个月的最后一天
+     *
      * @param date
      * @param num
      * @return
@@ -236,6 +255,7 @@ public class DateUtils {
 
     /**
      * 当前月的最后一天，以pattern格式输出
+     *
      * @param pattern
      * @return
      */
@@ -246,6 +266,7 @@ public class DateUtils {
 
     /**
      * 输入inPattern格式的date日期的所在月最后一天，以outPattern格式输出
+     *
      * @param date
      * @param inPattern
      * @param outPattern
@@ -259,6 +280,7 @@ public class DateUtils {
 
     /**
      * date所在年的最后一天
+     *
      * @param date
      * @return
      */
@@ -272,16 +294,18 @@ public class DateUtils {
 
     /**
      * date所在年的第一天
+     *
      * @param date
      * @return
      */
     public static Date firstDayOfYear(Date date) {
-        return setDate(date,null,1,1);
+        return setDate(date, null, 1, 1);
     }
 
     /**
      * 重置日期的年月日，不需要的重置的参数传null<br/>
      * eg: 2017-05-23 改为2017-06-23 使用setDate(date,null,6,null)
+     *
      * @param date
      * @param year
      * @param month
@@ -306,6 +330,7 @@ public class DateUtils {
     /**
      * 重置日期的年月日，不需要的重置的参数传null<br/>
      * eg: 2017-05-23 11:25:17 改为2017-05-23 11:25:30使用setTime(date,null,null,30,null)
+     *
      * @param date
      * @param hour
      * @param minute
@@ -334,6 +359,7 @@ public class DateUtils {
 
     /**
      * 修改日期的天
+     *
      * @param date
      * @param day
      * @return
@@ -344,6 +370,7 @@ public class DateUtils {
 
     /**
      * 修改日期的小时
+     *
      * @param date
      * @param hour
      * @return
@@ -354,6 +381,7 @@ public class DateUtils {
 
     /**
      * date日期的起始时间,比如2017-05-23 00:00:00.000
+     *
      * @param date
      * @return
      */
@@ -363,6 +391,7 @@ public class DateUtils {
 
     /**
      * date日期的结束时间,比如2017-05-23 23:59:59.999
+     *
      * @param date
      * @return
      */
@@ -372,6 +401,7 @@ public class DateUtils {
 
     /**
      * date日期的起始时间,比如2017-05-23 00:00:00.000，以pattern格式输出
+     *
      * @param date
      * @param pattern
      * @return
@@ -382,6 +412,7 @@ public class DateUtils {
 
     /**
      * date日期的起始时间,比如2017-05-23 00:00:00.000，以yyyy-MM-dd HH:mm:ss格式输出
+     *
      * @param date
      * @return
      */
@@ -391,6 +422,7 @@ public class DateUtils {
 
     /**
      * date日期的结束时间,比如2017-05-23 23:59:59.999,以pattern格式输出
+     *
      * @param date
      * @param pattern
      * @return
@@ -401,11 +433,17 @@ public class DateUtils {
 
     /**
      * date日期的结束时间,比如2017-05-23 23:59:59.999，以yyyy-MM-dd HH:mm:ss格式输出
+     *
      * @param date
      * @return
      */
     public static String endDateStr(Date date) {
         return format(endDate(date));
+    }
+
+    public static String endDate(String date) throws Exception {
+        Date d = parseDate(date, "yyyy-MM-dd HH:mm");
+        return DateUtils.endDateStr(d, "yyyy-MM-dd HH:mm");
     }
 
     /**
@@ -436,8 +474,9 @@ public class DateUtils {
     }
 
 
-      /**
+    /**
      * 日期date所在月的第一天，以为pattern格式输出
+     *
      * @param date
      * @param pattern
      * @return
@@ -449,6 +488,7 @@ public class DateUtils {
 
     /**
      * 当前系统时间的所在月的第一天，以为pattern格式输出
+     *
      * @param pattern
      * @return
      */
@@ -489,7 +529,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param date
      * @param field
      * @return
@@ -502,6 +541,7 @@ public class DateUtils {
 
     /**
      * 获取date上的年
+     *
      * @param date
      * @return
      */
@@ -511,6 +551,7 @@ public class DateUtils {
 
     /**
      * 获取date上的月
+     *
      * @param date
      * @return
      */
@@ -520,6 +561,7 @@ public class DateUtils {
 
     /**
      * 获取date上的日
+     *
      * @param date
      * @return
      */
@@ -529,6 +571,7 @@ public class DateUtils {
 
     /**
      * 获取date上的小时
+     *
      * @param date
      * @return
      */
@@ -538,6 +581,7 @@ public class DateUtils {
 
     /**
      * 获取date上的分钟
+     *
      * @param date
      * @return
      */
@@ -547,6 +591,7 @@ public class DateUtils {
 
     /**
      * 获取date上的秒数
+     *
      * @param date
      * @return
      */
@@ -557,6 +602,7 @@ public class DateUtils {
 
     /**
      * 比较是否同一天
+     *
      * @param date1
      * @param date2
      * @return
@@ -567,6 +613,7 @@ public class DateUtils {
 
     /**
      * 两个日期相差几年
+     *
      * @param date1
      * @param date2
      * @return
@@ -577,6 +624,7 @@ public class DateUtils {
 
     /**
      * 两个日期相差几个月
+     *
      * @param date1
      * @param date2
      * @return
@@ -589,6 +637,7 @@ public class DateUtils {
 
     /**
      * 两个日期相差几天
+     *
      * @param date1
      * @param date2
      * @return
@@ -602,6 +651,7 @@ public class DateUtils {
 
     /**
      * 两个日期相差几个小时
+     *
      * @param date1
      * @param date2
      * @return
@@ -615,6 +665,7 @@ public class DateUtils {
 
     /**
      * 两个日期相册几分钟
+     *
      * @param date1
      * @param date2
      * @return
@@ -628,6 +679,7 @@ public class DateUtils {
 
     /**
      * 两个日期相差几秒
+     *
      * @param date1
      * @param date2
      * @return
