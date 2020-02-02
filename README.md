@@ -61,7 +61,7 @@ gitee ：https://gitee.com/beetle082/bee-apm
 - 异常信息采集,支持采集点黑白名单配置
 - 支持携程apollo（仅支持启动时拉取配置）
 - 半自动API（待开发）
-- jvm、cpu、磁盘、内存、线程等采集（待开发）
+- gc、堆栈、内存、线程等采集
 - 统计采集（待开发）
 
 #### 2、传输能力
@@ -90,6 +90,14 @@ gitee ：https://gitee.com/beetle082/bee-apm
 开发中。。。
 支持调用链展示，采集数据查询，报表等
 ![](./docs/pic/beeapm.png)
+![](./docs/pic/request.png)
+![](./docs/pic/link.png)
+![](./docs/pic/topo.png)
+![](./docs/pic/method.png)
+![](./docs/pic/sql.png)
+![](./docs/pic/tx.png)
+![](./docs/pic/logger.png)
+![](./docs/pic/inst.png)
 ## 联系
 ```
 QQ群: 961882872
