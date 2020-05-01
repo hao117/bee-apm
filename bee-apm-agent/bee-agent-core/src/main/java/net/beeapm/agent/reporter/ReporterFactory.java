@@ -1,6 +1,7 @@
 package net.beeapm.agent.reporter;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.BeeLog;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author yuan
@@ -27,27 +27,16 @@ public class ReporterFactory {
     private static String reporterName;
     private static int idleSleep = ConfigUtils.me().getInt("reporter.idleSleep", 100);
     private static int batchSize = ConfigUtils.me().getInt("reporter.batchSize", 100);
-    private static final String THREAD_NAME_PREFIX = "bee-reporter-";
+    private static final String REPORTER_THREAD_NAME = "reporter";
 
-    static {
-
-    }
-
-    public static void shutdown(){
+    public static void shutdown() {
         BeeUtils.shutdown(scheduledExecutorService);
     }
 
     public synchronized static int init() {
         BeeLog.log("===========================>ReporterFactory::init");
-        int threadNum = ConfigUtils.me().getInt("reporter.threadNum", Runtime.getRuntime().availableProcessors());
-        scheduledExecutorService = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
-            private final AtomicLong mThreadNum = new AtomicLong(1);
-
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, THREAD_NAME_PREFIX + mThreadNum.getAndIncrement());
-            }
-        });
+        int threadNum = ConfigUtils.me().getInt("reporter.threadNum", 1);
+        scheduledExecutorService = new ScheduledThreadPoolExecutor(threadNum, new BeeThreadFactory(REPORTER_THREAD_NAME));
         if (reporterMap == null) {
             reporterName = ConfigUtils.me().getStr("reporter.name");
             reporterMap = ReporterLoader.loadReporters();

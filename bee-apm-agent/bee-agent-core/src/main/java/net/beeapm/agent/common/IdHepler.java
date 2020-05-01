@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -45,19 +44,13 @@ public class IdHepler {
     private static String rootDir = "/bee/ids/";
     private static final LogImpl log = LogManager.getLog(IdHepler.class.getSimpleName());
     private static ScheduledExecutorService service;
+    private static final String THREAD_NAME = "id";
 
     static {
-        service = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
-            private final AtomicLong mThreadNum = new AtomicLong(1);
-
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "bee-id-thread-" + mThreadNum.getAndIncrement());
-            }
-        });
+        service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory(THREAD_NAME));
     }
 
-    public static void shutdown(){
+    public static void shutdown() {
         BeeUtils.shutdown(service);
     }
 

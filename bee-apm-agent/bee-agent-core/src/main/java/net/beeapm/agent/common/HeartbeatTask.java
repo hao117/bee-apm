@@ -15,7 +15,8 @@ import java.util.Date;
 import java.util.concurrent.*;
 
 public class HeartbeatTask {
-    private static ScheduledExecutorService service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory("heartbeat"));
+    private static final String THREAD_NAME = "heartbeat";
+    private static ScheduledExecutorService service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory(THREAD_NAME));
 
     public static String id;
 

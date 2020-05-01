@@ -19,7 +19,8 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class JvmInfoTask {
-    private static ScheduledExecutorService service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory("jvm"));
+    private static final String THREAD_NAME = "jvm";
+    private static ScheduledExecutorService service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory(THREAD_NAME));
 
     private static GcInfo preGcInfo;
 

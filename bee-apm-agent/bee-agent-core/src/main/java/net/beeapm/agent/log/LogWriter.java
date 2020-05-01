@@ -5,6 +5,7 @@ import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import net.beeapm.agent.common.BeeAgentJarUtils;
+import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.ConfigUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 
 
 public class LogWriter implements EventHandler<LogMessage> {
+    private static final String THREAD_NAME = "log";
     private static final char[] lock = new char[1];
     private static LogWriter logWriter;
     private Disruptor<LogMessage> disruptor;
@@ -66,7 +68,7 @@ public class LogWriter implements EventHandler<LogMessage> {
             public LogMessage newInstance() {
                 return new LogMessage();
             }
-        }, 1024, LogThreadFactory.INSTANCE);
+        }, 1024, new BeeThreadFactory(THREAD_NAME));
         disruptor.handleEventsWith(this);
         ringBuffer = disruptor.getRingBuffer();
         lineNum = 0;
