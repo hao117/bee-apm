@@ -10,7 +10,7 @@ import net.beeapm.agent.log.LogManager;
 import net.beeapm.agent.model.FieldDefine;
 import net.beeapm.agent.plugin.AbstractPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
-import net.beeapm.agent.plugin.PluginLoder;
+import net.beeapm.agent.plugin.PluginLoader;
 import net.beeapm.agent.reporter.ReporterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
@@ -50,7 +50,7 @@ public class BeeAgent {
                                                             TypeDescription typeDescription,
                                                             ClassLoader classLoader, JavaModule javaModule) {
                         String className = typeDescription.getCanonicalName();
-                        log.error(null, "class-name={}, plugin-name={}", className, plugin.getName());
+                        log.exec("class-name={}, plugin-name={}", className, plugin.getName());
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
                         FieldDefine[] fields = plugin.buildFieldDefine();
                         if (fields != null && fields.length > 0) {
@@ -70,7 +70,7 @@ public class BeeAgent {
     }
 
     private static List<AbstractPlugin> loadPlugins() {
-        List<AbstractPlugin> plugins = PluginLoder.loadPlugins();
+        List<AbstractPlugin> plugins = PluginLoader.loadPlugins();
         Collections.sort(plugins, new Comparator<AbstractPlugin>() {
             @Override
             public int compare(AbstractPlugin o1, AbstractPlugin o2) {
@@ -123,9 +123,9 @@ public class BeeAgent {
             public void run() {
                 HeartbeatTask.shutdown();
                 JvmInfoTask.shutdown();
-                ReporterFactory.shutdonw();
+                ReporterFactory.shutdown();
                 IdHepler.shutdown();
-                System.out.println("shutdown all service");
+                BeeLog.log("shutdown all bee tasks");
             }
         }));
     }

@@ -12,7 +12,7 @@ reporter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: kafka1x  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
+    name: console  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
     log: true      #是否以logger.debug输出上报的日志数据
     okhttp:        #name对应的reporter的配置参数
         connectTimeout: 30

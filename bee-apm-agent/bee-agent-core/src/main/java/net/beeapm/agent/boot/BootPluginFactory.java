@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BootPluginFactory {
     public static void init(){
-        List<AbstractBootPlugin> list = BootPluginLoder.loadPlugins();
+        List<AbstractBootPlugin> list = BootPluginLoader.loadPlugins();
         Collections.sort(list, new Comparator<AbstractBootPlugin>() {
             @Override
             public int compare(AbstractBootPlugin p1, AbstractBootPlugin p2) {

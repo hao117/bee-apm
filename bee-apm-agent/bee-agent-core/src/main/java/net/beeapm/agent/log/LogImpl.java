@@ -4,14 +4,15 @@ import net.beeapm.agent.common.BeeConst;
 import net.beeapm.agent.config.BeeConfig;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 
 /**
- * Created by yuan on 2018/3/26.
+ * 日志打印
+ *
+ * @author yuan
+ * @date 2018/3/26.
  */
 public class LogImpl {
     private String targetName;
@@ -24,7 +25,7 @@ public class LogImpl {
     protected void logger(LogLevel level, String message, Throwable e) {
         String msg = format(level, message, e);
         if (BeeConfig.me().isLogConsole()) {
-            System.out.println("---------->" + msg);
+            System.out.println("[BeeLog]: " + msg);
         }
         LogWriter.me().writeLog(msg);
     }
@@ -56,16 +57,31 @@ public class LogImpl {
     }
 
     String format(Throwable t) {
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        t.printStackTrace(new java.io.PrintWriter(buf, true));
-        String expMessage = buf.toString();
-        try {
-            buf.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return BeeConst.LINE_SEPARATOR + BeeLog.format(t);
+    }
 
-        return BeeConst.LINE_SEPARATOR + expMessage;
+    public void trace(String format) {
+        if (isTraceEnable()) {
+            logger(LogLevel.TRACE, format, null);
+        }
+    }
+
+    public void trace(String format, Object... arguments) {
+        if (isTraceEnable()) {
+            logger(LogLevel.TRACE, replaceParam(format, arguments), null);
+        }
+    }
+
+    public void debug(String format) {
+        if (isDebugEnable()) {
+            logger(LogLevel.DEBUG, format, null);
+        }
+    }
+
+    public void debug(String format, Object... arguments) {
+        if (isDebugEnable()) {
+            logger(LogLevel.DEBUG, replaceParam(format, arguments), null);
+        }
     }
 
     public void info(String format) {
@@ -92,6 +108,12 @@ public class LogImpl {
         }
     }
 
+    public void error(String format) {
+        if (isErrorEnable()) {
+            logger(LogLevel.ERROR, format, null);
+        }
+    }
+
     public void error(String format, Throwable e) {
         if (isErrorEnable()) {
             logger(LogLevel.ERROR, format, e);
@@ -101,6 +123,24 @@ public class LogImpl {
     public void error(Throwable e, String format, Object... arguments) {
         if (isErrorEnable()) {
             logger(LogLevel.ERROR, replaceParam(format, arguments), e);
+        }
+    }
+
+    public void exec(String format) {
+        if (isExecEnable()) {
+            logger(LogLevel.EXEC, format, null);
+        }
+    }
+
+    public void exec(String format, Object... arguments) {
+        if (isExecEnable()) {
+            logger(LogLevel.EXEC, replaceParam(format, arguments), null);
+        }
+    }
+
+    public void exec(Throwable e, String format, Object... arguments) {
+        if (isExecEnable()) {
+            logger(LogLevel.EXEC, replaceParam(format, arguments), e);
         }
     }
 
@@ -124,33 +164,7 @@ public class LogImpl {
         return LogLevel.TRACE.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 
-    public void debug(String format) {
-        if (isDebugEnable()) {
-            logger(LogLevel.DEBUG, format, null);
-        }
-    }
-
-    public void debug(String format, Object... arguments) {
-        if (isDebugEnable()) {
-            logger(LogLevel.DEBUG, replaceParam(format, arguments), null);
-        }
-    }
-
-    public void error(String format) {
-        if (isErrorEnable()) {
-            logger(LogLevel.ERROR, format, null);
-        }
-    }
-
-    public void trace(String format) {
-        if (isTraceEnable()) {
-            logger(LogLevel.TRACE, format, null);
-        }
-    }
-
-    public void trace(String format, Object... arguments) {
-        if (isTraceEnable()) {
-            logger(LogLevel.TRACE, replaceParam(format, arguments), null);
-        }
+    public boolean isExecEnable() {
+        return LogLevel.EXEC.ordinal() >= BeeConfig.me().getLogLevel().ordinal();
     }
 }

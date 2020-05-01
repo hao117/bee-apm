@@ -33,7 +33,7 @@ public class ReporterFactory {
 
     }
 
-    public static void shutdonw(){
+    public static void shutdown(){
         BeeUtils.shutdown(scheduledExecutorService);
     }
 
@@ -50,7 +50,7 @@ public class ReporterFactory {
         });
         if (reporterMap == null) {
             reporterName = ConfigUtils.me().getStr("reporter.name");
-            reporterMap = ReporterLoader.loadreporters();
+            reporterMap = ReporterLoader.loadReporters();
             reporter = reporterMap.get(reporterName);
             if (reporter == null) {
                 BeeLog.log("===========================>reporter：" + reporterName + "不存在");
@@ -101,7 +101,7 @@ public class ReporterFactory {
         }
         //如果队列已满，则返回false
         if (!queue.offer(span)) {
-            log.debug("report queue is full.");
+            log.warn("report queue is full.");
         }
     }
 }

@@ -39,11 +39,27 @@ public class BeeLog {
     public static void log(String msg) {
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("[").append(dateFmt.format(new Date())).append("] ").append(msg);
+            sb.append("[BEE][").append(dateFmt.format(new Date())).append("] ").append(msg);
             write(sb.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void log(String msg, Throwable t) {
+        log(msg + " : " + format(t));
+    }
+
+    public static String format(Throwable t) {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        t.printStackTrace(new java.io.PrintWriter(buf, true));
+        String expMessage = buf.toString();
+        try {
+            buf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return expMessage;
     }
 
     public static void write(String msg) {

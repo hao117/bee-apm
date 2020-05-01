@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by yuan on 2018/8/4.
+ * @author yuan
  */
 public class LogManager {
     private static ConcurrentHashMap<String,LogImpl> logMap = new ConcurrentHashMap<String,LogImpl>();
