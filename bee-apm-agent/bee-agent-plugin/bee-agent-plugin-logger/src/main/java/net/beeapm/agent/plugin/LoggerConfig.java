@@ -34,6 +34,11 @@ public class LoggerConfig extends AbstractBeeConfig {
         return config;
     }
 
+    @Override
+    public void clear() {
+        config = null;
+    }
+
     private LoggerConfig() {
         initConfig();
     }

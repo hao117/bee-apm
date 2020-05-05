@@ -38,6 +38,11 @@ public class ServletConfig extends AbstractBeeConfig {
     }
 
     @Override
+    public void clear() {
+        config = null;
+    }
+
+    @Override
     public void initConfig() {
         enable = ConfigUtils.me().getBoolean("plugins.servlet.enable", true);
         enableReqParam = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableReqParam", false);

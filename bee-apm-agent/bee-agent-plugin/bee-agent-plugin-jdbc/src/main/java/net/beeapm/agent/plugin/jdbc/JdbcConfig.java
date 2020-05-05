@@ -10,29 +10,35 @@ public class JdbcConfig extends AbstractBeeConfig {
     private Boolean enable;
     private long spend;
 
-    public static JdbcConfig me(){
-        if(config == null){
-            synchronized (JdbcConfig.class){
-                if(config == null){
+    public static JdbcConfig me() {
+        if (config == null) {
+            synchronized (JdbcConfig.class) {
+                if (config == null) {
                     config = new JdbcConfig();
-                    BeeConfigFactory.me().registryConfig("jdbc",config);
+                    BeeConfigFactory.me().registryConfig("jdbc", config);
                 }
             }
         }
         return config;
     }
 
-    private JdbcConfig(){
+    @Override
+    public void clear() {
+        config = null;
+    }
+
+    private JdbcConfig() {
         initConfig();
     }
 
     @Override
     public void initConfig() {
-        enableParam = ConfigUtils.me().getBoolean("plugins.jdbc.enableParam",true);
-        enable = ConfigUtils.me().getBoolean("plugins.jdbc.enable",true);
-        spend = ConfigUtils.me().getInt("plugins.jdbc.spend",-1);
+        enableParam = ConfigUtils.me().getBoolean("plugins.jdbc.enableParam", true);
+        enable = ConfigUtils.me().getBoolean("plugins.jdbc.enable", true);
+        spend = ConfigUtils.me().getInt("plugins.jdbc.spend", -1);
     }
-    public boolean isEnableParam(){
+
+    public boolean isEnableParam() {
         return enableParam;
     }
 

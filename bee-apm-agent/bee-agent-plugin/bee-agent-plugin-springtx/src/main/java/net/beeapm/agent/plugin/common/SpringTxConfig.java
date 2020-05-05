@@ -31,6 +31,11 @@ public class SpringTxConfig extends AbstractBeeConfig {
         spend = ConfigUtils.me().getInt("plugins.springTx.spend",-1);
     }
 
+    @Override
+    public void clear() {
+        config = null;
+    }
+
     public long getSpend() {
         return spend;
     }

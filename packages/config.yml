@@ -20,7 +20,7 @@ reporter:
         readTimeout: 10
         url:
             - http://127.0.0.1:7001/stream
-            - http://127.0.0.1:7001/stream
+            - http://127.0.0.1:7002/stream
     kafka1x:
         kafkaConfig:
             #kafka配置值项，项名称和值请参考kafka文档
@@ -66,7 +66,7 @@ reporter:
             topo: bee-topology
             jvm: bee-jvm
 sampling:
-    rate: 10000 #采样率，万分几，默认全采集,比如100就是100/10000的采样
+    rate: 100000 #采样率，万分几，默认全采集,比如100就是100/10000的采样
 id:
     zk:
         url: 192.168.137.100:2181

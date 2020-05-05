@@ -32,6 +32,11 @@ public class ProcessConfig extends AbstractBeeConfig {
         return config;
     }
 
+    @Override
+    public void clear() {
+        config = null;
+    }
+
     private ProcessConfig() {
         initConfig();
     }
