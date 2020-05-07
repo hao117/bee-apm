@@ -3,8 +3,8 @@ package net.beeapm.agent.plugin.handler;
 import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.HeaderKey;
 import net.beeapm.agent.config.BeeConfig;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import org.apache.http.HttpRequest;
 
@@ -12,7 +12,7 @@ import org.apache.http.HttpRequest;
  * Created by yuan on 2018/8/14.
  */
 public class HttpClient4xHandler extends AbstractHandler {
-    private static final LogImpl log = LogManager.getLog(HttpClient4xHandler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(HttpClient4xHandler.class.getSimpleName());
     @Override
     public Span before(String className,String methodName, Object[] allArguments,Object[] extVal) {
         try {

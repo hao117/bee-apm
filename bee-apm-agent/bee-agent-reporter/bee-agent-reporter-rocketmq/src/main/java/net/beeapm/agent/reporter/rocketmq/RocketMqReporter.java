@@ -10,8 +10,8 @@ import com.alibaba.rocketmq.remoting.common.RemotingHelper;
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.reporter.AbstractReporter;
 
@@ -23,7 +23,7 @@ import java.util.*;
  */
 @BeePlugin(type = BeePluginType.REPORTER, name = "rocketmq")
 public class RocketMqReporter extends AbstractReporter {
-    private static final LogImpl log = LogManager.getLog(RocketMqReporter.class);
+    private static final Log log = LogFactory.getLog(RocketMqReporter.class);
     private DefaultMQProducer rocketMqProducer;
     private String nameSrvAddr;
     private String instanceName;

@@ -2,8 +2,8 @@ package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.common.SpringTxConfig;
@@ -11,7 +11,7 @@ import net.beeapm.agent.plugin.common.SpringTxContext;
 import org.springframework.transaction.TransactionDefinition;
 
 public class SpringTxBeginHandler extends AbstractHandler {
-    private static final LogImpl log = LogManager.getLog(SpringTxBeginHandler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(SpringTxBeginHandler.class.getSimpleName());
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {

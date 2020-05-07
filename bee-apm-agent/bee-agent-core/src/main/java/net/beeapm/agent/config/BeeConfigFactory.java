@@ -1,6 +1,6 @@
 package net.beeapm.agent.config;
 
-import net.beeapm.agent.log.BeeLog;
+import net.beeapm.agent.log.BeeLogUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,17 +26,17 @@ public class BeeConfigFactory {
 
     public void registryConfig(String name, AbstractBeeConfig config) {
         if (configMap.containsKey(name)) {
-            BeeLog.log("------------->注册配置:" + name);
+            BeeLogUtil.log("------------->注册配置:" + name);
         } else {
-            BeeLog.log("------------->重新注册配置:" + name);
+            BeeLogUtil.log("------------->重新注册配置:" + name);
         }
         configMap.put(name, config);
     }
 
     public void refresh() {
-        BeeLog.log("------------->刷新配置");
+        BeeLogUtil.log("------------->刷新配置");
         for (Map.Entry<String, AbstractBeeConfig> entry : configMap.entrySet()) {
-            BeeLog.log("------------->清除配置:" + entry.getKey());
+            BeeLogUtil.log("------------->清除配置:" + entry.getKey());
             entry.getValue().clear();
         }
     }

@@ -2,7 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.AgentClassLoader;
 import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.LogFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @date 2018/7/31
  */
 public class HandlerLoader {
-    private static final LogImpl log = LogManager.getLog(HandlerLoader.class.getSimpleName());
+    private static final LogImpl log = LogFactory.getLog(HandlerLoader.class.getSimpleName());
     private static ConcurrentHashMap<String, IHandler> handlerMap = new ConcurrentHashMap<String, IHandler>();
     private static ConcurrentHashMap<String, Class<?>> classMap = new ConcurrentHashMap<String, Class<?>>();
     private static ReentrantLock INSTANCE_LOAD_LOCK = new ReentrantLock();

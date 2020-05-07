@@ -1,8 +1,8 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
 import net.beeapm.agent.common.SamplingUtil;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.handler.AbstractHandler;
 import net.beeapm.agent.plugin.jdbc.JdbcConfig;
@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 public class PreparedStatementParamHandler extends AbstractHandler {
-    private static final LogImpl log = LogManager.getLog(ConnectionHandler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(ConnectionHandler.class.getSimpleName());
 
 
     @Override

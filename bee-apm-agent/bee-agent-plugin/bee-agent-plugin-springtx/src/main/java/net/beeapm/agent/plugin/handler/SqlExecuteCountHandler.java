@@ -1,8 +1,8 @@
 package net.beeapm.agent.plugin.handler;
 
 
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.common.SpringTxContext;
 
@@ -12,7 +12,7 @@ import net.beeapm.agent.plugin.common.SpringTxContext;
  * @date 2018-09-22
  */
 public class SqlExecuteCountHandler extends AbstractHandler {
-    private static final LogImpl log = LogManager.getLog(SqlExecuteCountHandler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(SqlExecuteCountHandler.class.getSimpleName());
     private static final String KEY_SQL_COUNT = "count";
     private static final int VAL_STACK_DEPTH = 3;
 

@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.Version;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.log.BeeLog;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.state.ConnectionState;
@@ -42,7 +42,7 @@ public class IdHepler {
     public static String prevTimestamp = timestamp;
     public static AtomicInteger initTimes = new AtomicInteger(0);
     private static String rootDir = "/bee/ids/";
-    private static final LogImpl log = LogManager.getLog(IdHepler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(IdHepler.class.getSimpleName());
     private static ScheduledExecutorService service;
     private static final String THREAD_NAME = "id";
 
@@ -61,7 +61,7 @@ public class IdHepler {
                     log.info("init zk 。。。。。。。。。。。。。。。。。。。。。。");
                     String server = ConfigUtils.me().getStr("id.zk.url");
                     log.info("zk address = {}", server);
-                    BeeLog.log("zk address = " + server);
+                    BeeLogUtil.log("zk address = " + server);
                     int timeout = ConfigUtils.me().getInt("id.zk.timeout", 5000);
                     int times = ConfigUtils.me().getInt("id.zk.retryTimes", 2);
                     int sleep = ConfigUtils.me().getInt("id.zk.retrySleep", 5000);
@@ -183,21 +183,14 @@ public class IdHepler {
             if (newState == ConnectionState.CONNECTED) {
                 log.error("zk connected established");
             } else if (newState == ConnectionState.LOST) {
-                try {
-                    client.close();
-                } catch (Exception e) {
-                }
-                client = null;
+                BeeUtils.close(client);
                 try {
                     init();
                 } catch (Exception e) {
                     log.error("re-init failed");
                 }
             } else if (newState == ConnectionState.RECONNECTED) {
-                try {
-                    client.close();
-                } catch (Exception e) {
-                }
+                BeeUtils.close(client);
                 client = null;
                 try {
                     init();

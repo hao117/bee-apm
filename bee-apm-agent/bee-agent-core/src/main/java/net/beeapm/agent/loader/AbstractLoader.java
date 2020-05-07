@@ -1,7 +1,7 @@
 package net.beeapm.agent.loader;
 
 import net.beeapm.agent.common.AgentClassLoader;
-import net.beeapm.agent.log.BeeLog;
+import net.beeapm.agent.log.BeeLogUtil;
 import net.beeapm.agent.model.SpiDefine;
 import net.beeapm.agent.reporter.ReporterLoader;
 
@@ -27,7 +27,7 @@ public abstract class AbstractLoader {
             try {
                 readSpiDefine(url.openStream(), spiDefList);
             } catch (Throwable t) {
-                BeeLog.log("解析" + fileName + "文件异常", t);
+                BeeLogUtil.log("解析" + fileName + "文件异常", t);
             }
         }
 
@@ -36,7 +36,7 @@ public abstract class AbstractLoader {
                 T reporter = (T) Class.forName(define.clazz, true, classLoader).newInstance();
                 spiMap.put(define.name, reporter);
             } catch (Throwable t) {
-                BeeLog.log("类加载异常" + define.clazz, t);
+                BeeLogUtil.log("类加载异常" + define.clazz, t);
             }
         }
         return spiMap;
@@ -53,7 +53,7 @@ public abstract class AbstractLoader {
             }
             return cfgUrlPaths;
         } catch (IOException e) {
-            BeeLog.log("加载文件异常" + fileName, e);
+            BeeLogUtil.log("加载文件异常" + fileName, e);
         }
         return null;
     }
@@ -75,7 +75,7 @@ public abstract class AbstractLoader {
                     }
                     spiDefList.add(new SpiDefine(defs[0], defs[1]));
                 } catch (Exception e) {
-                    BeeLog.log("解析SPI定义异常" + define, e);
+                    BeeLogUtil.log("解析SPI定义异常" + define, e);
                 }
             }
         } finally {

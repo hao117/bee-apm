@@ -14,11 +14,11 @@ import java.util.regex.Matcher;
  * @author yuan
  * @date 2018/3/26.
  */
-public class LogImpl {
+public class Log {
     private String targetName;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    public LogImpl(String targetName) {
+    public Log(String targetName) {
         this.targetName = targetName;
     }
 
@@ -57,7 +57,7 @@ public class LogImpl {
     }
 
     String format(Throwable t) {
-        return BeeConst.LINE_SEPARATOR + BeeLog.format(t);
+        return BeeConst.LINE_SEPARATOR + BeeLogUtil.format(t);
     }
 
     public void trace(String format) {

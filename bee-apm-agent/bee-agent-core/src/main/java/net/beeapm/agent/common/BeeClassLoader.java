@@ -1,8 +1,8 @@
 package net.beeapm.agent.common;
 
 
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 
 import java.io.File;
 import java.net.URL;
@@ -14,7 +14,7 @@ import java.util.jar.JarFile;
  */
 public class BeeClassLoader extends URLClassLoader{
     private static BeeClassLoader DEFAULT_LOADER;
-    private static final LogImpl log = LogManager.getLog(BeeClassLoader.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(BeeClassLoader.class.getSimpleName());
     private JarFile agentJar;
     private ClassLoader parent;
 

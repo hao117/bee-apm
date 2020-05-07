@@ -5,8 +5,8 @@ import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
 import net.beeapm.agent.plugin.LoggerConfig;
@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
  * @date 2018-08-19
  */
 public class LoggerHandler extends AbstractHandler {
-    private static final LogImpl log = LogManager.getLog(LoggerHandler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(LoggerHandler.class.getSimpleName());
     private static final String VAL_IGNORE_POINT = "org.apache.logging.log4j.status.StatusLogger";
 
     @Override

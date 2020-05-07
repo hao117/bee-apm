@@ -45,17 +45,17 @@ public class LogWriter implements EventHandler<LogMessage> {
     }
 
     private LogWriter() {
-        MAX_FILE_SIZE = ConfigUtils.me().getLong("logger.fileSize",10485760L);
-        MAX_FILE_NUM = ConfigUtils.me().getInt("logger.fileNum",5);
+        MAX_FILE_SIZE = ConfigUtils.me().getLong("logger.fileSize", 10485760L);
+        MAX_FILE_NUM = ConfigUtils.me().getInt("logger.fileNum", 5);
         logDir = BeeAgentJarUtils.getAgentJarDirPath() + "/logs";
         logFileList = new ArrayList<String>(MAX_FILE_NUM + 1);
         File logDirFile = new File(logDir);
-        if(!logDirFile.exists()){
+        if (!logDirFile.exists()) {
             logDirFile.mkdirs();
-        }else {
+        } else {
             File[] files = logDirFile.listFiles();
-            for(int i = 0; i < files.length; i++){
-                if(files[i].isFile() && files[i].getName().length() > 7){
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile() && files[i].getName().length() > 7) {
                     logFileList.add(files[i].getName());
                 }
             }
@@ -76,7 +76,7 @@ public class LogWriter implements EventHandler<LogMessage> {
     }
 
     @Override
-    public void onEvent(LogMessage event, long sequence, boolean endOfBatch){
+    public void onEvent(LogMessage event, long sequence, boolean endOfBatch) {
         if (canWrite()) {
             try {
                 write(event.getMessage() + "\n", endOfBatch);
@@ -105,10 +105,10 @@ public class LogWriter implements EventHandler<LogMessage> {
         if (fileSize > MAX_FILE_SIZE) {
             BeeUtils.flush(fileOutputStream);
             BeeUtils.close(fileOutputStream);
-            File logFile = new File(logDir,"bee.log");
-            if(logFile.exists()){
-                String newName = "bee-" + DateFormatUtils.format(new Date(),"yyyyMMddHHmmss")+".log";
-                logFile.renameTo(new File(logDir,newName));
+            File logFile = new File(logDir, "bee.log");
+            if (logFile.exists()) {
+                String newName = "bee-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".log";
+                logFile.renameTo(new File(logDir, newName));
                 lineNum = 0;
                 logFileList.add(newName);
                 deleteFile();
@@ -117,12 +117,12 @@ public class LogWriter implements EventHandler<LogMessage> {
         }
     }
 
-    private void deleteFile(){
+    private void deleteFile() {
         int listSize = logFileList.size();
-        if(listSize > MAX_FILE_NUM){
-            for(int i = 0; i < listSize - MAX_FILE_NUM; i++){
-                File delFile = new File(logDir,logFileList.get(0));
-                if(delFile.exists()) {
+        if (listSize > MAX_FILE_NUM) {
+            for (int i = 0; i < listSize - MAX_FILE_NUM; i++) {
+                File delFile = new File(logDir, logFileList.get(0));
+                if (delFile.exists() && delFile.getName().startsWith("bee-")) {
                     delFile.delete();
                 }
                 logFileList.remove(0);
@@ -136,7 +136,7 @@ public class LogWriter implements EventHandler<LogMessage> {
         }
         try {
             File logFile = new File(logDir, "bee.log");
-            if(!logFile.exists()){
+            if (!logFile.exists()) {
                 logFile.createNewFile();
             }
             fileOutputStream = new FileOutputStream(logFile, true);

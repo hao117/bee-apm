@@ -7,7 +7,7 @@ import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
-import net.beeapm.agent.log.BeeLog;
+import net.beeapm.agent.log.BeeLogUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
@@ -91,7 +91,7 @@ public class ConfigUtils {
                 }
             }
         } catch (Exception e) {
-            BeeLog.log("配置文件加载失败" + configPath, e);
+            BeeLogUtil.log("配置文件加载失败" + configPath, e);
         } finally {
             BeeUtils.close(fis);
         }

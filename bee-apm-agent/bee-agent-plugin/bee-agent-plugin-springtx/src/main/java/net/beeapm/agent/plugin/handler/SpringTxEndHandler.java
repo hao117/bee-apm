@@ -1,15 +1,15 @@
 package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.SamplingUtil;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.common.SpringTxConfig;
 import net.beeapm.agent.plugin.common.SpringTxContext;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 public class SpringTxEndHandler extends AbstractHandler {
-    private static final LogImpl log = LogManager.getLog(SpringTxEndHandler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(SpringTxEndHandler.class.getSimpleName());
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal)  {
         if(!SpringTxConfig.me().isEnable() || SamplingUtil.NO()){

@@ -1,6 +1,6 @@
 package net.beeapm.agent.common;
 
-import net.beeapm.agent.log.BeeLog;
+import net.beeapm.agent.log.BeeLogUtil;
 
 import java.io.File;
 import java.net.URL;
@@ -21,7 +21,7 @@ public class BeeAgentJarUtils {
             return agentJarPath;
         }catch (Exception e){
             e.printStackTrace();
-            BeeLog.log(e.getMessage());
+            BeeLogUtil.log(e.getMessage());
         }
         return null;
     }
@@ -36,7 +36,7 @@ public class BeeAgentJarUtils {
             }
         }catch (Exception e){
             e.printStackTrace();
-            BeeLog.log(e.getMessage());
+            BeeLogUtil.log(e.getMessage());
         }
         return agentJarDirPath;
     }
@@ -57,7 +57,7 @@ public class BeeAgentJarUtils {
             if(f.exists()){
                 path = f.getCanonicalPath();
             }
-            BeeLog.log("agent jar path = " + path);
+            BeeLogUtil.log("agent jar path = " + path);
             return path;
         }
         return null;

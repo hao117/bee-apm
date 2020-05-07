@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.log.BeeLog;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.concurrent.*;
  * @date 2018/08/06
  */
 public class ReporterFactory {
-    private static final LogImpl log = LogManager.getLog(ReporterFactory.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(ReporterFactory.class.getSimpleName());
     public static AbstractReporter reporter;
     public static Map<String, AbstractReporter> reporterMap;
     private static BlockingQueue<Span> queue;
@@ -34,7 +34,7 @@ public class ReporterFactory {
     }
 
     public synchronized static int init() {
-        BeeLog.log("===========================>ReporterFactory::init");
+        BeeLogUtil.log("===========================>ReporterFactory::init");
         int threadNum = ConfigUtils.me().getInt("reporter.threadNum", 1);
         scheduledExecutorService = new ScheduledThreadPoolExecutor(threadNum, new BeeThreadFactory(REPORTER_THREAD_NAME));
         if (reporterMap == null) {
@@ -42,7 +42,7 @@ public class ReporterFactory {
             reporterMap = ReporterLoader.loadReporters();
             reporter = reporterMap.get(reporterName);
             if (reporter == null) {
-                BeeLog.log("===========================>reporter：" + reporterName + "不存在");
+                BeeLogUtil.log("===========================>reporter：" + reporterName + "不存在");
                 throw new RuntimeException("reporter：" + reporterName + "不存在");
             }
             reporter.init();

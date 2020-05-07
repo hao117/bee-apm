@@ -4,9 +4,9 @@ import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.HeartbeatTask;
 import net.beeapm.agent.common.IdHepler;
 import net.beeapm.agent.common.JvmInfoTask;
-import net.beeapm.agent.log.BeeLog;
-import net.beeapm.agent.log.LogImpl;
-import net.beeapm.agent.log.LogManager;
+import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.FieldDefine;
 import net.beeapm.agent.plugin.AbstractPlugin;
 import net.beeapm.agent.plugin.InterceptPoint;
@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class BeeAgent {
     public static void premain(String arguments, Instrumentation inst) {
-        BeeLog.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
+        BeeLogUtil.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
 
         init();
 
@@ -43,7 +43,7 @@ public class BeeAgent {
             for (int j = 0; j < interceptPoints.length; j++) {
                 final InterceptPoint interceptPoint = interceptPoints[j];
                 AgentBuilder.Transformer transformer = new AgentBuilder.Transformer() {
-                    private final LogImpl log = LogManager.getLog("Transform");
+                    private final Log log = LogFactory.getLog("Transform");
 
                     @Override
                     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
@@ -82,7 +82,7 @@ public class BeeAgent {
 
     private static AgentBuilder.Listener buildListener() {
         return new AgentBuilder.Listener() {
-            private final LogImpl log = LogManager.getLog("TransformListener");
+            private final Log log = LogFactory.getLog("TransformListener");
 
             @Override
             public void onDiscovery(String s, ClassLoader classLoader, JavaModule javaModule, boolean b) {
@@ -111,7 +111,7 @@ public class BeeAgent {
     }
 
     private static void init() {
-        BeeLog.log("start......");
+        BeeLogUtil.log("start......");
         BeeAgentJarUtils.getAgentJarDirPath();
         BootPluginFactory.init();
         IdHepler.init();
@@ -125,7 +125,7 @@ public class BeeAgent {
                 JvmInfoTask.shutdown();
                 ReporterFactory.shutdown();
                 IdHepler.shutdown();
-                BeeLog.log("shutdown all bee tasks");
+                BeeLogUtil.log("shutdown all bee tasks");
             }
         }));
     }
