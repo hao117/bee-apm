@@ -34,6 +34,7 @@ public class BeeConfigFactory {
     }
 
     public void refresh() {
+        BeeLog.log("------------->刷新配置");
         for (Map.Entry<String, AbstractBeeConfig> entry : configMap.entrySet()) {
             BeeLog.log("------------->清除配置:" + entry.getKey());
             entry.getValue().clear();
