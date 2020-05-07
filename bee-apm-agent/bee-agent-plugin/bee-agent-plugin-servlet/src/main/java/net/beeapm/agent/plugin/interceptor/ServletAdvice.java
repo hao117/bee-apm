@@ -19,8 +19,8 @@ public class ServletAdvice {
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
-                             @Advice.Argument(value = 0, readOnly = false,typing = Assigner.Typing.DYNAMIC) Object req,
-                             @Advice.Argument(value = 1, readOnly = false,typing = Assigner.Typing.DYNAMIC) Object resp) {
+                             @Advice.Argument(value = 0, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object req,
+                             @Advice.Argument(value = 1, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object resp) {
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
         Span span = handler.before(className, methodName, new Object[]{req, resp}, null);
         if (span != null && span.getTag(Const.KEY_RESP_WRAPPER) != null) {
