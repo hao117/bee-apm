@@ -29,7 +29,7 @@ public class BeeTraceContext {
     public static String getGId(){
         String gid = localGId.get();
         if(gid == null){
-            gid = IdHepler.id();
+            gid = IdHelper.id();
             setGId(gid);
         }
         return gid;

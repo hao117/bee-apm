@@ -2,7 +2,7 @@ package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.HeartbeatTask;
-import net.beeapm.agent.common.IdHepler;
+import net.beeapm.agent.common.IdHelper;
 import net.beeapm.agent.common.JvmInfoTask;
 import net.beeapm.agent.log.BeeLogUtil;
 import net.beeapm.agent.log.Log;
@@ -114,7 +114,7 @@ public class BeeAgent {
         BeeLogUtil.log("start......");
         BeeAgentJarUtils.getAgentJarDirPath();
         BootPluginFactory.init();
-        IdHepler.init();
+        IdHelper.init();
         ReporterFactory.init();
         HeartbeatTask.start();
         JvmInfoTask.start();
@@ -124,7 +124,7 @@ public class BeeAgent {
                 HeartbeatTask.shutdown();
                 JvmInfoTask.shutdown();
                 ReporterFactory.shutdown();
-                IdHepler.shutdown();
+                IdHelper.shutdown();
                 BeeLogUtil.log("shutdown all bee tasks");
             }
         }));

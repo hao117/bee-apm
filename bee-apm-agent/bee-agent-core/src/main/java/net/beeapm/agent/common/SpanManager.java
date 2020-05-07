@@ -24,7 +24,7 @@ public class SpanManager {
             }
             gId = BeeTraceContext.getGId();
             if (gId == null) {
-                gId = IdHepler.id();
+                gId = IdHelper.id();
                 BeeTraceContext.setGId(gId);
             }
         } else {
@@ -34,7 +34,7 @@ public class SpanManager {
             BeeTraceContext.setPId(pId);
         }
         Span span = new Span(spanType);
-        span.setId(IdHepler.id()).setPid(pId).setGid(gId);
+        span.setId(IdHelper.id()).setPid(pId).setGid(gId);
         return span;
     }
 
@@ -105,7 +105,7 @@ public class SpanManager {
         span.setGid(BeeTraceContext.getGId());
         span.addTag("from", fromApp);
         span.setApp(toApp);
-        span.setId(IdHepler.id());
+        span.setId(IdHelper.id());
         ReporterFactory.report(span);
     }
 

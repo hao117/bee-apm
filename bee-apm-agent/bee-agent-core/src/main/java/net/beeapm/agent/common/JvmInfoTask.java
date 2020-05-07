@@ -30,7 +30,7 @@ public class JvmInfoTask {
             @Override
             public void run() {
                 Span span = new Span(SpanType.JVM);
-                span.setId(IdHepler.id());
+                span.setId(IdHelper.id());
                 span.fillEnvInfo();
                 span.setTime(new Date());
                 buildJvmInfo(span);

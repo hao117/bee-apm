@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author yuan
  * @date 2018/08/04
  */
-public class IdHepler {
+public class IdHelper {
     private static boolean initFlag = false;
     private static char[] lock = new char[1];
     private static CuratorFramework client = null;
@@ -42,7 +42,7 @@ public class IdHepler {
     public static String prevTimestamp = timestamp;
     public static AtomicInteger initTimes = new AtomicInteger(0);
     private static String rootDir = "/bee/ids/";
-    private static final Log log = LogFactory.getLog(IdHepler.class.getSimpleName());
+    private static final Log log = LogFactory.getLog(IdHelper.class.getSimpleName());
     private static ScheduledExecutorService service;
     private static final String THREAD_NAME = "id";
 
@@ -116,7 +116,7 @@ public class IdHepler {
             return null;
         }
         if (!prevTimestamp.equals(timestamp)) {
-            synchronized (IdHepler.class) {
+            synchronized (IdHelper.class) {
                 if (!prevTimestamp.equals(timestamp)) {
                     prevTimestamp = timestamp;
                     id.set(1);
