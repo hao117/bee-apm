@@ -5,9 +5,8 @@ import net.beeapm.agent.plugin.common.servlet.Const;
 import net.beeapm.agent.plugin.handler.HandlerLoader;
 import net.beeapm.agent.plugin.handler.IHandler;
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.implementation.bytecode.assign.Assigner;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 注意：实例方法使用@Advice.This注解，静态方法使用@Advice.Origin 两者不能混用
@@ -20,18 +19,18 @@ public class ServletAdvice {
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
-                             @Advice.Argument(value = 0, readOnly = false) HttpServletRequest req,
-                             @Advice.Argument(value = 1, readOnly = false) HttpServletResponse resp) {
+                             @Advice.Argument(value = 0, readOnly = false,typing = Assigner.Typing.DYNAMIC) Object req,
+                             @Advice.Argument(value = 1, readOnly = false,typing = Assigner.Typing.DYNAMIC) Object resp) {
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
         Span span = handler.before(className, methodName, new Object[]{req, resp}, null);
         if (span != null && span.getTag(Const.KEY_RESP_WRAPPER) != null) {
             //修改resp
-            resp = (HttpServletResponse) span.getTag(Const.KEY_RESP_WRAPPER);
+            resp = span.getTag(Const.KEY_RESP_WRAPPER);
             span.removeTag(Const.KEY_RESP_WRAPPER);
         }
         if (span != null && span.getTag(Const.KEY_REQ_WRAPPER) != null) {
             //修改req
-            req = (HttpServletRequest) span.getTag(Const.KEY_REQ_WRAPPER);
+            req = span.getTag(Const.KEY_REQ_WRAPPER);
             span.removeTag(Const.KEY_REQ_WRAPPER);
         }
     }
