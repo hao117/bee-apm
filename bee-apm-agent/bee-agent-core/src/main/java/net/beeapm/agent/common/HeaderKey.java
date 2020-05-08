@@ -1,7 +1,9 @@
 package net.beeapm.agent.common;
 
 /**
- * Created by yuan on 2018/8/7.
+ * 报文头相关key值
+ * @author yuan
+ * @date 2018/8/7
  */
 public class HeaderKey {
     public final static String PID = "bee-pid";
