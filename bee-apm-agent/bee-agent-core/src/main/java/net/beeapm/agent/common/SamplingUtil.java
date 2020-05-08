@@ -40,33 +40,34 @@ public class SamplingUtil {
 
     private static boolean isCollect() {
         if (BeeConfig.me().getRate() <= 0) {
-            BeeTraceContext.setCTag("N");
+            BeeTraceContext.setCTag(BeeConst.VAL_N);
             return false;
         }
-        if (BeeConfig.me().getRate() >= 10000) {
-            BeeTraceContext.setCTag("Y");
+        if (BeeConfig.me().getRate() >= BeeConst.MAX_SAMPLING_RATE) {
+            BeeTraceContext.setCTag(BeeConst.VAL_Y);
             return true;
         }
-        String ctag = BeeTraceContext.getCTag();
-        if ("Y".equals(ctag)) {
+        String cTag = BeeTraceContext.getCTag();
+        if (BeeConst.VAL_Y.equals(cTag)) {
             return true;
-        } else if ("N".equals(ctag)) {
+        } else if (BeeConst.VAL_N.equals(cTag)) {
             return false;
-        } else if (getCurrNum() == 0) {//第一条采集
+        } else if (getCurrNum() == 0) {
+            //第一条采集
             incrCurrNum();
             incrTotal();
-            BeeTraceContext.setCTag("Y");
+            BeeTraceContext.setCTag(BeeConst.VAL_Y);
             return true;
         }
         long tmpTotal = incrTotal();
         long tmpCurrNum = getCurrNum() + 1;
-        Double rate = tmpCurrNum * 1.0 / tmpTotal * 10000;
+        Double rate = tmpCurrNum * 1.0 / tmpTotal * BeeConst.MAX_SAMPLING_RATE;
         if (rate.intValue() > BeeConfig.me().getRate()) {
-            BeeTraceContext.setCTag("N");
+            BeeTraceContext.setCTag(BeeConst.VAL_N);
             return false;
         }
         incrCurrNum();
-        BeeTraceContext.setCTag("Y");
+        BeeTraceContext.setCTag(BeeConst.VAL_Y);
         return true;
     }
 }
