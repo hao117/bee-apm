@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.boot.AbstractBootPlugin;
-import net.beeapm.agent.common.BeeAgentJarUtils;
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
 import net.beeapm.agent.log.BeeLogUtil;
 
@@ -27,7 +27,7 @@ public class ApolloBootPlugin extends AbstractBootPlugin {
             String namespaceName = "config.yml";
             String configPath = System.getProperty(SysPropKey.BEE_CONFIG);
             if (configPath == null) {
-                configPath = BeeAgentJarUtils.getAgentJarDirPath() + "/" + namespaceName;
+                configPath = BeeUtils.getJarDirPath() + "/" + namespaceName;
             }
             String env = System.getProperty("env");
             if (env == null) {

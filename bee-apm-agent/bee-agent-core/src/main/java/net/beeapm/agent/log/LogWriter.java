@@ -4,7 +4,6 @@ import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
-import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.ConfigUtils;
@@ -18,7 +17,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * 日志文件写入
+ *
+ * @author yuan
+ * @date 2018-09-01
+ */
 public class LogWriter implements EventHandler<LogMessage> {
     private static final String THREAD_NAME = "log";
     private static final char[] lock = new char[1];
@@ -47,7 +51,7 @@ public class LogWriter implements EventHandler<LogMessage> {
     private LogWriter() {
         MAX_FILE_SIZE = ConfigUtils.me().getLong("logger.fileSize", 10485760L);
         MAX_FILE_NUM = ConfigUtils.me().getInt("logger.fileNum", 5);
-        logDir = BeeAgentJarUtils.getAgentJarDirPath() + "/logs";
+        logDir = BeeUtils.getJarDirPath() + "/logs";
         logFileList = new ArrayList<String>(MAX_FILE_NUM + 1);
         File logDirFile = new File(logDir);
         if (!logDirFile.exists()) {

@@ -3,6 +3,7 @@ package net.beeapm.agent.common;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.io.Closeable;
+import java.io.File;
 import java.io.Flushable;
 import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
@@ -50,8 +51,13 @@ public class BeeUtils {
             try {
                 service.shutdown();
             } catch (Throwable e) {
-
             }
         }
     }
+
+    public static String getJarDirPath() {
+        return new File(BeeUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile())
+                .getParent();
+    }
+
 }

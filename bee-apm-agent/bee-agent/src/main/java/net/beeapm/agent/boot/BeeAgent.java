@@ -1,6 +1,5 @@
 package net.beeapm.agent.boot;
 
-import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.HeartbeatTask;
 import net.beeapm.agent.common.IdHelper;
 import net.beeapm.agent.common.JvmInfoTask;
@@ -112,7 +111,6 @@ public class BeeAgent {
 
     private static void init() {
         BeeLogUtil.log("start......");
-        BeeAgentJarUtils.getAgentJarDirPath();
         BootPluginFactory.init();
         IdHelper.init();
         ReporterFactory.init();

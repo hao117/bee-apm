@@ -1,6 +1,5 @@
 package net.beeapm.agent.log;
 
-import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.BeeUtils;
 
 import java.io.*;
@@ -28,9 +27,9 @@ public class BeeLogUtil {
                 return;
             }
             try {
-                String path = BeeAgentJarUtils.getAgentJarDirPath() + "/logs/bee-apm.log";
-                System.out.println("log path=" + path);
-                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path, true), "UTF-8"));
+                String logPath = BeeUtils.getJarDirPath() + "/logs/bee-apm.log";
+                System.out.println("log path=" + logPath);
+                writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(logPath, true), "UTF-8"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

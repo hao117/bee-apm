@@ -3,7 +3,6 @@ package net.beeapm.agent.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
-import net.beeapm.agent.common.BeeAgentJarUtils;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
@@ -67,7 +66,7 @@ public class ConfigUtils {
     private void initConfigPath() {
         configPath = System.getProperty(SysPropKey.BEE_CONFIG);
         if (StringUtils.isBlank(configPath)) {
-            configPath = BeeAgentJarUtils.getAgentJarDirPath() + "/config.yml";
+            configPath = BeeUtils.getJarDirPath() + "/config.yml";
         }
     }
 
