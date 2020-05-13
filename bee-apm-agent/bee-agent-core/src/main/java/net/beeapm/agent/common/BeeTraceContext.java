@@ -1,7 +1,7 @@
 package net.beeapm.agent.common;
 
-
 import net.beeapm.agent.model.Span;
+import net.beeapm.agent.model.TraceContextModel;
 
 /**
  * 日志上下文
@@ -10,36 +10,35 @@ import net.beeapm.agent.model.Span;
  * @date 2018/8/4
  */
 public class BeeTraceContext {
-    private static final ThreadLocal<String> localGId = new ThreadLocal<String>();
-    private static final ThreadLocal<String> localPId = new ThreadLocal<String>();
-    private static final ThreadLocal<String> localCTag = new ThreadLocal<String>();
+    private static final InheritableThreadLocal<TraceContextModel> traceContext = new InheritableThreadLocal<TraceContextModel>();
 
     public static void clearAll() {
-        localGId.remove();
-        localPId.remove();
-        localCTag.remove();
+        traceContext.remove();;
     }
 
     public static String getPId() {
-        return localPId.get();
+        return getAndCreate().getPid();
     }
 
     public static void setPId(String pId) {
-        localPId.set(pId);
+        getAndCreate().setPid(pId);
     }
 
     public static String getGId() {
-        String gid = localGId.get();
+        TraceContextModel model = getAndCreate();
+        String gid = model.getGid();
         if (gid == null) {
             gid = IdHelper.id();
-            setGId(gid);
+            model.setGid(gid);
         }
         return gid;
     }
 
     public static void setGId(String gId) {
-        localGId.set(gId);
+        getAndCreate().setGid(gId);
     }
+
+
 
     /**
      * 采集标识：Y采集，N不采集
@@ -47,7 +46,7 @@ public class BeeTraceContext {
      * @return
      */
     public static String getCTag() {
-        return localCTag.get();
+        return getAndCreate().getCTag();
     }
 
     /**
@@ -56,7 +55,7 @@ public class BeeTraceContext {
      * @param ctag
      */
     public static void setCTag(String ctag) {
-        localCTag.set(ctag);
+        getAndCreate().setCTag(ctag);
     }
 
 
@@ -66,5 +65,14 @@ public class BeeTraceContext {
             return "nvl";
         }
         return span.getId();
+    }
+
+    private static TraceContextModel getAndCreate(){
+        TraceContextModel model = traceContext.get();
+        if(model == null){
+            model = new TraceContextModel();
+            traceContext.set(model);
+        }
+        return model;
     }
 }
