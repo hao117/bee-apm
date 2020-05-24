@@ -14,9 +14,6 @@
     <properties>
         <agent.package.dir>${project.build.directory}/../../../../packages</agent.package.dir>
         <plugin.dir>${agent.package.dir}/plugins</plugin.dir>
-        <shade.package>net.beeapm.agent.deps</shade.package>
-        <shade.net.bytebuddy.source>net.bytebuddy</shade.net.bytebuddy.source>
-        <shade.net.bytebuddy.target>${shade.package}.${shade.net.bytebuddy.source}</shade.net.bytebuddy.target>
     </properties>
     <modules>
         <module>bee-agent-plugin-httpclient3x</module>
@@ -62,8 +59,8 @@
                             <shadeSourcesContent>true</shadeSourcesContent>
                             <relocations>
                                 <relocation>
-                                    <pattern>${shade.net.bytebuddy.source}</pattern>
-                                    <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
+                                    <pattern>net.bytebuddy</pattern>
+                                    <shadedPattern>${shade.package}.net.bytebuddy</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.alibaba.fastjson</pattern>

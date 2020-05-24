@@ -17,9 +17,6 @@
         <file.name>bee-agent</file.name>
         <java.version>1.6</java.version>
         <premain.class>net.beeapm.agent.boot.BeeAgent</premain.class>
-        <shade.package>net.beeapm.agent.deps</shade.package>
-        <shade.net.bytebuddy.source>net.bytebuddy</shade.net.bytebuddy.source>
-        <shade.net.bytebuddy.target>${shade.package}.${shade.net.bytebuddy.source}</shade.net.bytebuddy.target>
     </properties>
 
     <dependencies>
@@ -28,18 +25,6 @@
             <artifactId>bee-agent-core</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>net.beeapm</groupId>
-            <artifacplugine002</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.beeapm</groupId>
-            <artifactId>plugin</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        -->
     </dependencies>
 
     <build>
@@ -82,8 +67,8 @@
                             </artifactSet>
                             <relocations>
                                 <relocation>
-                                    <pattern>${shade.net.bytebuddy.source}</pattern>
-                                    <shadedPattern>${shade.net.bytebuddy.target}</shadedPattern>
+                                    <pattern>net.bytebuddy</pattern>
+                                    <shadedPattern>${shade.package}.net.bytebuddy</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.alibaba.fastjson</pattern>
@@ -102,10 +87,6 @@
                                     <shadedPattern>${shade.package}.com.lmax.disruptor</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>org.apache.curator</pattern>
-                                    <shadedPattern>${shade.package}.org.apache.curator</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.apache.zookeeper</pattern>
                                     <shadedPattern>${shade.package}.org.apache.zookeeper</shadedPattern>
                                 </relocation>
@@ -114,12 +95,12 @@
                                     <shadedPattern>${shade.package}.org.slf4j</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>com.google</pattern>
-                                    <shadedPattern>${shade.package}.com.google</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>org.apache.jute</pattern>
                                     <shadedPattern>${shade.package}.org.apache.jute</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.I0Itec</pattern>
+                                    <shadedPattern>${shade.package}.org.I0Itec</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

@@ -30,8 +30,14 @@ import java.util.List;
 public class BeeAgent {
     public static void premain(String arguments, Instrumentation inst) {
         BeeLogUtil.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
-
-        init();
+        try {
+            init();
+        } catch (Throwable e) {
+            System.err.println("bee agent init failed");
+            BeeLogUtil.log("bee agent init failed", e);
+            e.printStackTrace();
+            return;
+        }
 
         List<AbstractPlugin> plugins = loadPlugins();
         AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));

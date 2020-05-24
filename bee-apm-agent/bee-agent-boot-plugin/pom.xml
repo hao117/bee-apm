@@ -14,7 +14,6 @@
     <properties>
         <agent.package.dir>${project.build.directory}/../../../../packages</agent.package.dir>
         <plugin.dir>${agent.package.dir}/boot-plugins</plugin.dir>
-        <shade.package>net.beeapm.agent.deps</shade.package>
     </properties>
     <modules>
         <module>bee-boot-plugin-apollo</module>

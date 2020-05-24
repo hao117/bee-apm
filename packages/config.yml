@@ -70,9 +70,8 @@ sampling:
 id:
     zk:
         url: 192.168.137.100:2181
-        timeout: 5000
-        retryTimes: 3
-        retrySleep: 5000
+        sessionTimeout: 15000
+        connectionTimeout: 15000
     start: 5000
 plugins:
     process:
