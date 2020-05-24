@@ -1,8 +1,8 @@
 package net.beeapm.agent.log;
 
 import net.beeapm.agent.common.BeeConst;
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.BeeConfig;
-import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +46,7 @@ public class Log {
     }
 
     String format(LogLevel level, String message, Throwable t) {
-        return StringUtils.join("[", level.name(), "] ",
+        return BeeUtils.join("[", level.name(), "] ",
                 dateFormat.format(new Date()),
                 " ",
                 targetName,

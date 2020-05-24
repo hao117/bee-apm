@@ -1,9 +1,9 @@
 package net.beeapm.agent.plugin;
 
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.AbstractBeeConfig;
 import net.beeapm.agent.config.BeeConfigFactory;
 import net.beeapm.agent.config.ConfigUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -77,12 +77,12 @@ public class LoggerConfig extends AbstractBeeConfig {
         }
         for (int i = 0; i < pointsList.size(); i++) {
             String item = pointsList.get(i);
-            if (StringUtils.isNotBlank(item)) {
+            if (BeeUtils.isNotBlank(item)) {
                 //没有日志级别，使用默认级别
                 if (!item.contains("|")) {
                     item = item + "|" + defLevel;
                 }
-                String[] array = StringUtils.split(item, "|");
+                String[] array = BeeUtils.split(item, '|');
                 Integer nLevel = levelMap.get(array[1]);
                 //为null时，日志级别配置配置错误，为error级别
                 if (nLevel == null) {

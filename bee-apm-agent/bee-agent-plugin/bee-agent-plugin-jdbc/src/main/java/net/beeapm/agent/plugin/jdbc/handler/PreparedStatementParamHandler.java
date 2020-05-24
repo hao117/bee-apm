@@ -1,5 +1,6 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.log.Log;
 import net.beeapm.agent.log.LogFactory;
@@ -7,7 +8,6 @@ import net.beeapm.agent.model.Span;
 import net.beeapm.agent.plugin.handler.AbstractHandler;
 import net.beeapm.agent.plugin.jdbc.JdbcConfig;
 import net.beeapm.agent.plugin.jdbc.common.JdbcContext;
-import org.apache.commons.lang3.ClassUtils;
 
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -50,8 +50,7 @@ public class PreparedStatementParamHandler extends AbstractHandler {
     }
 
     public boolean isExcludeType(Object val){
-        if(val instanceof String
-                || ClassUtils.isPrimitiveOrWrapper(val.getClass())
+        if(BeeUtils.isPrimitive(val.getClass())
                 || val instanceof java.sql.Date
                 || val instanceof Date
                 || val instanceof Time

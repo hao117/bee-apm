@@ -7,11 +7,11 @@ import com.lmax.disruptor.dsl.Disruptor;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.ConfigUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -36,6 +36,7 @@ public class LogWriter implements EventHandler<LogMessage> {
     private static long MAX_FILE_SIZE;
     private static int MAX_FILE_NUM;
     private static String logDir;
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public static LogWriter me() {
         if (logWriter == null) {
@@ -111,7 +112,7 @@ public class LogWriter implements EventHandler<LogMessage> {
             BeeUtils.close(fileOutputStream);
             File logFile = new File(logDir, "bee.log");
             if (logFile.exists()) {
-                String newName = "bee-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss") + ".log";
+                String newName = "bee-" + dateFormat.format(new Date()) + ".log";
                 logFile.renameTo(new File(logDir, newName));
                 lineNum = 0;
                 logFileList.add(newName);

@@ -50,8 +50,8 @@ public class IdHelper {
             String server = ConfigUtils.me().getStr("id.zk.url");
             log.info("zk address = {}", server);
             BeeLogUtil.log("zk address = " + server);
-            int sessionTimeout = ConfigUtils.me().getInt("id.zk.sessionTimeout", 10000);
-            int connectionTimeout = ConfigUtils.me().getInt("id.zk.connectionTimeout", 10000);
+            int sessionTimeout = ConfigUtils.me().getInt("id.zk.sessionTimeoutMs", 15 * 1000);
+            int connectionTimeout = ConfigUtils.me().getInt("id.zk.connectionTimeoutMs", 15 * 1000);
             ZkUtils.init(server, sessionTimeout, connectionTimeout);
             ZkUtils.createBeeRootNode();
             ZkUtils.getZkClient().subscribeStateChanges(new IZkStateListener() {
@@ -67,7 +67,7 @@ public class IdHelper {
                     if (!ZkUtils.createIdNode(nodeName, buildNodeText(nodeName))) {
                         log.info("原有ID标识被占用，重新生成");
                         createBeeIdNode();
-                    }else {
+                    } else {
                         log.info("使用原有的ID标识");
                     }
                 }

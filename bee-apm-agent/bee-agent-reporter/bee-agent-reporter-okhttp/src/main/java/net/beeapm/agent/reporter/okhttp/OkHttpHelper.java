@@ -1,8 +1,8 @@
 package net.beeapm.agent.reporter.okhttp;
 
+import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.config.ConfigUtils;
 import okhttp3.*;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.URLEncoder;
 import java.util.List;
@@ -80,7 +80,7 @@ public class OkHttpHelper {
             Request.Builder builder = new Request.Builder().post(body).url(uri);
             if(header != null && !header.isEmpty()){
                 for (Map.Entry<String, String> entry : header.entrySet()) {
-                    if(StringUtils.isNotBlank(entry.getKey()) && StringUtils.isNotBlank(entry.getValue())) {
+                    if(BeeUtils.isNotBlank(entry.getKey()) && BeeUtils.isNotBlank(entry.getValue())) {
                         builder.addHeader(entry.getKey(), entry.getValue());
                     }
                 }

@@ -7,7 +7,6 @@ import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
 import net.beeapm.agent.log.BeeLogUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -65,7 +64,7 @@ public class ConfigUtils {
 
     private void initConfigPath() {
         configPath = System.getProperty(SysPropKey.BEE_CONFIG);
-        if (StringUtils.isBlank(configPath)) {
+        if (BeeUtils.isBlank(configPath)) {
             configPath = BeeUtils.getJarDirPath() + "/config.yml";
         }
     }
