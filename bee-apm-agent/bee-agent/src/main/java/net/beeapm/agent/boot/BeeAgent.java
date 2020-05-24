@@ -40,7 +40,7 @@ public class BeeAgent {
         }
 
         List<AbstractPlugin> plugins = loadPlugins();
-        AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
+        AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm."));
 
         for (int i = 0; i < plugins.size(); i++) {
             final AbstractPlugin plugin = plugins.get(i);
