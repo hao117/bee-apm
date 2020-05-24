@@ -33,9 +33,7 @@ public class BeeAgent {
         try {
             init();
         } catch (Throwable e) {
-            System.err.println("bee agent init failed");
             BeeLogUtil.log("bee agent init failed", e);
-            e.printStackTrace();
             return;
         }
 
