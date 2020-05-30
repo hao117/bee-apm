@@ -1,7 +1,7 @@
 
 package net.beeapm.agent.common;
 
-import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.LogUtil;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -19,11 +19,11 @@ public class AgentClassLoader extends ClassLoader {
     private List<File> jarPathDir;
     private List<File> jarFiles;
 
-    public AgentClassLoader(ClassLoader parent, String[] jarFolder) {
+    public AgentClassLoader(ClassLoader parent, String rootPath, String[] jarFolder) {
         super(parent);
         jarPathDir = new ArrayList<File>();
         for (int i = 0; i < jarFolder.length; i++) {
-            jarPathDir.add(new File(BeeUtils.getJarDirPath() + File.separator + jarFolder[i]));
+            jarPathDir.add(new File(rootPath + File.separator + jarFolder[i]));
         }
         jarFiles = getJarFiles();
 
@@ -44,8 +44,8 @@ public class AgentClassLoader extends ClassLoader {
             }
             data = baos.toByteArray();
         } finally {
-            BeeUtils.close(is);
-            BeeUtils.close(baos);
+            close(is);
+            close(baos);
         }
         return data;
     }
@@ -62,7 +62,7 @@ public class AgentClassLoader extends ClassLoader {
                     return defineClass(name, data, 0, data.length);
                 }
             } catch (Exception e) {
-                BeeLogUtil.log("查找类异常" + name, e);
+                LogUtil.log("查找类异常" + name, e);
             }
         }
         throw new ClassNotFoundException("Can't find " + name);
@@ -82,7 +82,7 @@ public class AgentClassLoader extends ClassLoader {
                 }
             }
         } catch (Exception e) {
-            BeeLogUtil.log("查找资源异常" + name, e);
+            LogUtil.log("查找资源异常" + name, e);
         }
         return null;
     }
@@ -131,6 +131,15 @@ public class AgentClassLoader extends ClassLoader {
             }
         }
         return jarFiles;
+    }
+
+    public void close(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+            } catch (Exception e) {
+            }
+        }
     }
 
 }

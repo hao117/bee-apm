@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.Version;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.log.BeeLogUtil;
-import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.LogUtil;
+import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import org.I0Itec.zkclient.IZkStateListener;
 import org.apache.zookeeper.Watcher;
@@ -32,7 +32,7 @@ public class IdHelper {
     public volatile static String timestamp = sdf.format(new Date());
     public volatile static String prevTimestamp = timestamp;
     public static AtomicLong id = new AtomicLong(1);
-    private static final Log log = LogFactory.getLog(IdHelper.class.getSimpleName());
+    private static final ILog log = LogFactory.getLog(IdHelper.class.getSimpleName());
     private static ScheduledExecutorService service;
     private static final String THREAD_NAME = "id";
 
@@ -49,7 +49,7 @@ public class IdHelper {
             log.info("-----------------------init IdHelper------------------------------");
             String server = ConfigUtils.me().getStr("id.zk.url");
             log.info("zk address = {}", server);
-            BeeLogUtil.log("zk address = " + server);
+            LogUtil.log("zk address = " + server);
             int sessionTimeout = ConfigUtils.me().getInt("id.zk.sessionTimeoutMs", 15 * 1000);
             int connectionTimeout = ConfigUtils.me().getInt("id.zk.connectionTimeoutMs", 15 * 1000);
             ZkUtils.init(server, sessionTimeout, connectionTimeout);

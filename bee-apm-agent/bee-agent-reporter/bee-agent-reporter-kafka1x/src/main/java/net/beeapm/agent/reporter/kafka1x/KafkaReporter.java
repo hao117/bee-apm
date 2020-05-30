@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.reporter.AbstractReporter;
@@ -18,7 +18,7 @@ import java.util.*;
  */
 @BeePlugin(type = BeePluginType.REPORTER, name = "kafka1x")
 public class KafkaReporter extends AbstractReporter {
-    private static final Log log = LogFactory.getLog(KafkaReporter.class);
+    private static final ILog log = LogFactory.getLog(KafkaReporter.class);
     private Producer kafkaProducer;
     private Properties kafkaConfig;
     private Map<String,String> topicMap;

@@ -13,19 +13,23 @@ public class BeeTraceContext {
     private static final InheritableThreadLocal<TraceContextModel> traceContext = new InheritableThreadLocal<TraceContextModel>();
 
     public static void clearAll() {
-        traceContext.remove();;
+        traceContext.remove();
+    }
+
+    public static void set(TraceContextModel model) {
+        traceContext.set(model);
     }
 
     public static String getPId() {
-        return getAndCreate().getPid();
+        return getOrNew().getPid();
     }
 
     public static void setPId(String pId) {
-        getAndCreate().setPid(pId);
+        getOrNew().setPid(pId);
     }
 
     public static String getGId() {
-        TraceContextModel model = getAndCreate();
+        TraceContextModel model = getOrNew();
         String gid = model.getGid();
         if (gid == null) {
             gid = IdHelper.id();
@@ -35,9 +39,8 @@ public class BeeTraceContext {
     }
 
     public static void setGId(String gId) {
-        getAndCreate().setGid(gId);
+        getOrNew().setGid(gId);
     }
-
 
 
     /**
@@ -46,7 +49,7 @@ public class BeeTraceContext {
      * @return
      */
     public static String getCTag() {
-        return getAndCreate().getCTag();
+        return getOrNew().getCTag();
     }
 
     /**
@@ -55,7 +58,7 @@ public class BeeTraceContext {
      * @param ctag
      */
     public static void setCTag(String ctag) {
-        getAndCreate().setCTag(ctag);
+        getOrNew().setCTag(ctag);
     }
 
 
@@ -67,9 +70,9 @@ public class BeeTraceContext {
         return span.getId();
     }
 
-    private static TraceContextModel getAndCreate(){
+    public static TraceContextModel getOrNew() {
         TraceContextModel model = traceContext.get();
-        if(model == null){
+        if (model == null) {
             model = new TraceContextModel();
             traceContext.set(model);
         }

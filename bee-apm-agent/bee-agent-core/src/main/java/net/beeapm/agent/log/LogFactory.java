@@ -8,9 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author yuan
  */
 public class LogFactory {
-    private static ConcurrentHashMap<String, Log> logMap = new ConcurrentHashMap<String, Log>();
-    public static Log getLog(String className){
-        Log log = logMap.get(className);
+    private static ConcurrentHashMap<String, ILog> logMap = new ConcurrentHashMap<>();
+    public static ILog getLog(String className){
+        ILog log = logMap.get(className);
         if(log == null){
             log = new Log(className);
             logMap.put(className,log);
@@ -18,7 +18,7 @@ public class LogFactory {
         return log;
     }
 
-    public static Log getLog(Class<?> clazz){
+    public static ILog getLog(Class<?> clazz){
         return getLog(clazz.getName());
     }
 }

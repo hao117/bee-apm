@@ -1,7 +1,7 @@
 package net.beeapm.agent.plugin.common;
 
 import net.beeapm.agent.common.BeeUtils;
-import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 
 import javax.servlet.ServletOutputStream;
@@ -17,7 +17,7 @@ public class BeeHttpServletResponseWrapper extends HttpServletResponseWrapper {
     private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     private PrintWriter printWriter = new PrintWriter(byteArrayOutputStream);
     private BeeServletOutputStream outputStream = new BeeServletOutputStream(byteArrayOutputStream);
-    private Log log = LogFactory.getLog(BeeHttpServletResponseWrapper.class);
+    private ILog log = LogFactory.getLog(BeeHttpServletResponseWrapper.class);
 
     public BeeHttpServletResponseWrapper(HttpServletResponse response) {
         super(response);

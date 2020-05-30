@@ -1,12 +1,15 @@
 package net.beeapm.agent.config;
 
-import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.LogUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 配置工厂
+ * 这里的日志打印使用{@link LogUtil}没有使用{@link net.beeapm.agent.log.LogFactory}因为LogFactory初始化也需要依赖该类加载配置
+ * @author yuan
+ * @date 2018/9/4
  */
 public class BeeConfigFactory {
     private static ConcurrentHashMap<String, AbstractBeeConfig> configMap = new ConcurrentHashMap<String, AbstractBeeConfig>();
@@ -25,18 +28,16 @@ public class BeeConfigFactory {
     }
 
     public void registryConfig(String name, AbstractBeeConfig config) {
-        if (configMap.containsKey(name)) {
-            BeeLogUtil.log("------------->注册配置:" + name);
-        } else {
-            BeeLogUtil.log("------------->重新注册配置:" + name);
-        }
+        //这里日志打印不能使用LogFactory
+        LogUtil.log("注册配置:" + name);
         configMap.put(name, config);
     }
 
     public void refresh() {
-        BeeLogUtil.log("------------->刷新配置");
+        //这里日志打印不能使用LogFactory
+        LogUtil.log("刷新配置");
         for (Map.Entry<String, AbstractBeeConfig> entry : configMap.entrySet()) {
-            BeeLogUtil.log("------------->清除配置:" + entry.getKey());
+            LogUtil.log("清除配置:" + entry.getKey());
             entry.getValue().clear();
         }
     }

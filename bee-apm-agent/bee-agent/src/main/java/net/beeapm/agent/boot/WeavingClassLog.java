@@ -7,6 +7,11 @@ import net.bytebuddy.dynamic.DynamicType;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * 编织完的代码输出
+ * @author yuan
+ * @date 2018/8/6
+ */
 public enum WeavingClassLog {
     INSTANCE;
     private File weavingClassLogPath;

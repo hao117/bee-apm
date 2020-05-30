@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
  * @author yuan
  * @date 2018/3/26.
  */
-public class Log {
+public class Log implements ILog {
     private String targetName;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
@@ -57,87 +57,101 @@ public class Log {
     }
 
     String format(Throwable t) {
-        return BeeConst.LINE_SEPARATOR + BeeLogUtil.format(t);
+        return BeeConst.LINE_SEPARATOR + LogUtil.format(t);
     }
 
+    @Override
     public void trace(String format) {
         if (isTraceEnable()) {
             logger(LogLevel.TRACE, format, null);
         }
     }
 
+    @Override
     public void trace(String format, Object... arguments) {
         if (isTraceEnable()) {
             logger(LogLevel.TRACE, replaceParam(format, arguments), null);
         }
     }
 
+    @Override
     public void debug(String format) {
         if (isDebugEnable()) {
             logger(LogLevel.DEBUG, format, null);
         }
     }
 
+    @Override
     public void debug(String format, Object... arguments) {
         if (isDebugEnable()) {
             logger(LogLevel.DEBUG, replaceParam(format, arguments), null);
         }
     }
 
+    @Override
     public void info(String format) {
         if (isInfoEnable()) {
             logger(LogLevel.INFO, format, null);
         }
     }
 
+    @Override
     public void info(String format, Object... arguments) {
         if (isInfoEnable()) {
             logger(LogLevel.INFO, replaceParam(format, arguments), null);
         }
     }
 
+    @Override
     public void warn(String format, Object... arguments) {
         if (isWarnEnable()) {
             logger(LogLevel.WARN, replaceParam(format, arguments), null);
         }
     }
 
+    @Override
     public void warn(Throwable e, String format, Object... arguments) {
         if (isWarnEnable()) {
             logger(LogLevel.WARN, replaceParam(format, arguments), e);
         }
     }
 
+    @Override
     public void error(String format) {
         if (isErrorEnable()) {
             logger(LogLevel.ERROR, format, null);
         }
     }
 
+    @Override
     public void error(String format, Throwable e) {
         if (isErrorEnable()) {
             logger(LogLevel.ERROR, format, e);
         }
     }
 
+    @Override
     public void error(Throwable e, String format, Object... arguments) {
         if (isErrorEnable()) {
             logger(LogLevel.ERROR, replaceParam(format, arguments), e);
         }
     }
 
+    @Override
     public void exec(String format) {
         if (isExecEnable()) {
             logger(LogLevel.EXEC, format, null);
         }
     }
 
+    @Override
     public void exec(String format, Object... arguments) {
         if (isExecEnable()) {
             logger(LogLevel.EXEC, replaceParam(format, arguments), null);
         }
     }
 
+    @Override
     public void exec(Throwable e, String format, Object... arguments) {
         if (isExecEnable()) {
             logger(LogLevel.EXEC, replaceParam(format, arguments), e);

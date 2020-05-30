@@ -17,16 +17,19 @@
 
     <modules>
         <module>bee-agent</module>
+        <module>bee-agent-spy</module>
         <module>bee-agent-core</module>
         <module>bee-agent-plugin</module>
         <module>bee-agent-reporter</module>
         <module>bee-agent-boot-plugin</module>
+
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.6</java.version>
-        <shade.package>net.beeapm.dependencies</shade.package>
+        <java.version>1.8</java.version>
+        <shade.package>net.beeapm.agent.dependencies</shade.package>
+        <bee.agent.version>1.0.0</bee.agent.version>
     </properties>
 
     <build>

@@ -1,13 +1,10 @@
 package net.beeapm.agent.common;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.Flushable;
+import java.io.*;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -17,6 +14,9 @@ import java.util.concurrent.ExecutorService;
 public class BeeUtils {
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
     private static final Set<Class<?>> wrapperPrimitiveMap = new HashSet<Class<?>>(17);
+    private static final int ACCESS_ABSTRACT = 0x0400;
+    private static SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static String rootPath;
 
     static {
         wrapperPrimitiveMap.add(Boolean.class);
@@ -27,6 +27,17 @@ public class BeeUtils {
         wrapperPrimitiveMap.add(Long.class);
         wrapperPrimitiveMap.add(Double.class);
         wrapperPrimitiveMap.add(Float.class);
+    }
+
+
+    /**
+     * 方法是否抽象方法
+     *
+     * @param access
+     * @return
+     */
+    public static boolean isAbstract(final int access) {
+        return (access & ACCESS_ABSTRACT) != 0;
     }
 
 
@@ -85,8 +96,17 @@ public class BeeUtils {
     }
 
     public static String getJarDirPath() {
-        return new File(BeeUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile())
-                .getParent();
+        if(rootPath == null) {
+            synchronized (BeeUtils.class){
+                if(rootPath != null){
+                    return rootPath;
+                }
+                String path = BeeUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+                File file = new File(path);
+                rootPath = file.getParent();
+            }
+        }
+        return rootPath;
     }
 
     public static boolean isBlank(final CharSequence cs) {
@@ -156,6 +176,80 @@ public class BeeUtils {
             list.add(str.substring(start, i));
         }
         return list.toArray(new String[list.size()]);
+    }
+
+    public static List<Class<?>> getAllSuperclasses(final Class<?> cls) {
+        if (cls == null) {
+            return null;
+        }
+        final List<Class<?>> classes = new ArrayList<>();
+        Class<?> superclass = cls.getSuperclass();
+        while (superclass != null) {
+            classes.add(superclass);
+            superclass = superclass.getSuperclass();
+        }
+        return classes;
+    }
+
+    /**
+     * 所有可执行方法
+     *
+     * @param cls
+     * @return
+     */
+    public static List<Method> getAllMethod(final Class<?> cls) {
+        List<Method> methodList = new ArrayList<>(8);
+        Method[] methodArray = cls.getDeclaredMethods();
+        for (Method m : methodArray) {
+            if (!isAbstract(m.getModifiers())) {
+                methodList.add(m);
+            }
+        }
+        List<Class<?>> superclassList = getAllSuperclasses(cls);
+        for (final Class<?> klass : superclassList) {
+            for (Method m : klass.getDeclaredMethods()) {
+                if (!isAbstract(m.getModifiers())) {
+                    methodList.add(m);
+                }
+            }
+        }
+        return methodList;
+    }
+
+    /**
+     * 简单的日志输出
+     *
+     * @param s
+     * @param t
+     * @param fileName
+     */
+    public static void write(String s, Throwable t, String fileName) {
+        StringBuilder msg = new StringBuilder();
+        msg.append(dateFmt.format(new Date())).append(" ").append(s).append(" : ");
+        if (t != null) {
+            ByteArrayOutputStream buf = new ByteArrayOutputStream();
+            t.printStackTrace(new java.io.PrintWriter(buf, true));
+            msg.append(buf.toString());
+            try {
+                buf.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        BufferedWriter writer = null;
+        try {
+            File out = new File(getJarDirPath() + "/logs/" + fileName);
+            if (!out.exists()) {
+                out.createNewFile();
+            }
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(out, true), "UTF-8"));
+            writer.write(msg.toString());
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(writer);
+        }
     }
 
 

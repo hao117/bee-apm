@@ -13,6 +13,11 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
+            <groupId>net.beeapm</groupId>
+            <artifactId>bee-agent-spy</artifactId>
+            <version>${bee.agent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>1.8.20</version>

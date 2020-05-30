@@ -22,13 +22,13 @@
         <dependency>
             <groupId>net.beeapm</groupId>
             <artifactId>bee-agent-core</artifactId>
-            <version>1.0.0</version>
+            <version>${bee.agent.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
             <artifactId>bee-plugin-annotation</artifactId>
-            <version>1.0.0</version>
+            <version>${bee.agent.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

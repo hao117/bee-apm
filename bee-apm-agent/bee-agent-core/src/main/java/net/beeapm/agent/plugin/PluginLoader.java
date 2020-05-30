@@ -2,9 +2,7 @@ package net.beeapm.agent.plugin;
 
 import net.beeapm.agent.loader.AbstractLoader;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 插件加载
@@ -19,6 +17,12 @@ public class PluginLoader extends AbstractLoader {
             AbstractPlugin plugin = entry.getValue();
             pluginList.add(plugin);
         }
+        Collections.sort(pluginList, new Comparator<AbstractPlugin>() {
+            @Override
+            public int compare(AbstractPlugin o1, AbstractPlugin o2) {
+                return o2.order() - o1.order();
+            }
+        });
         return pluginList;
     }
 }

@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONPath;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
-import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.LogUtil;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -89,7 +89,7 @@ public class ConfigUtils {
                 }
             }
         } catch (Exception e) {
-            BeeLogUtil.log("配置文件加载失败" + configPath, e);
+            LogUtil.log("配置文件加载失败" + configPath, e);
         } finally {
             BeeUtils.close(fis);
         }

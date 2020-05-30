@@ -110,7 +110,7 @@ public class LogWriter implements EventHandler<LogMessage> {
         if (fileSize > MAX_FILE_SIZE) {
             BeeUtils.flush(fileOutputStream);
             BeeUtils.close(fileOutputStream);
-            File logFile = new File(logDir, "bee.log");
+            File logFile = new File(logDir, "bee-agent.log");
             if (logFile.exists()) {
                 String newName = "bee-" + dateFormat.format(new Date()) + ".log";
                 logFile.renameTo(new File(logDir, newName));

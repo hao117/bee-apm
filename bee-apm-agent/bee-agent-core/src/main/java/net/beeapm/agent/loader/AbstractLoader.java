@@ -1,7 +1,8 @@
 package net.beeapm.agent.loader;
 
 import net.beeapm.agent.common.AgentClassLoader;
-import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.common.BeeUtils;
+import net.beeapm.agent.log.LogUtil;
 import net.beeapm.agent.model.SpiDefine;
 import net.beeapm.agent.reporter.ReporterLoader;
 
@@ -21,13 +22,14 @@ public abstract class AbstractLoader {
     public static <T> Map<String, T> load(String[] jarFolder, String fileName) {
         Map<String, T> spiMap = new HashMap<String, T>(8);
         List<SpiDefine> spiDefList = new ArrayList<SpiDefine>(8);
-        AgentClassLoader classLoader = new AgentClassLoader(ReporterLoader.class.getClassLoader(), jarFolder);
+        String rootPath = BeeUtils.getJarDirPath();
+        AgentClassLoader classLoader = new AgentClassLoader(AbstractLoader.class.getClassLoader(), rootPath, jarFolder);
         List<URL> resources = getResources(classLoader, fileName);
         for (URL url : resources) {
             try {
                 readSpiDefine(url.openStream(), spiDefList);
             } catch (Throwable t) {
-                BeeLogUtil.log("解析" + fileName + "文件异常", t);
+                LogUtil.log("解析" + fileName + "文件异常", t);
             }
         }
 
@@ -36,7 +38,7 @@ public abstract class AbstractLoader {
                 T reporter = (T) Class.forName(define.clazz, true, classLoader).newInstance();
                 spiMap.put(define.name, reporter);
             } catch (Throwable t) {
-                BeeLogUtil.log("类加载异常" + define.clazz, t);
+                LogUtil.log("类加载异常" + define.clazz, t);
             }
         }
         return spiMap;
@@ -53,7 +55,7 @@ public abstract class AbstractLoader {
             }
             return cfgUrlPaths;
         } catch (IOException e) {
-            BeeLogUtil.log("加载文件异常" + fileName, e);
+            LogUtil.log("加载文件异常" + fileName, e);
         }
         return null;
     }
@@ -75,7 +77,7 @@ public abstract class AbstractLoader {
                     }
                     spiDefList.add(new SpiDefine(defs[0], defs[1]));
                 } catch (Exception e) {
-                    BeeLogUtil.log("解析SPI定义异常" + define, e);
+                    LogUtil.log("解析SPI定义异常" + define, e);
                 }
             }
         } finally {

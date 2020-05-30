@@ -3,7 +3,7 @@ package net.beeapm.agent.plugin.jdbc.handler;
 import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
@@ -12,7 +12,7 @@ import net.beeapm.agent.plugin.jdbc.JdbcConfig;
 import net.beeapm.agent.plugin.jdbc.common.JdbcContext;
 
 public class ConnectionHandler extends AbstractHandler {
-    private static final Log log = LogFactory.getLog(ConnectionHandler.class.getSimpleName());
+    private static final ILog log = LogFactory.getLog(ConnectionHandler.class.getSimpleName());
     @Override
     public Span before(String className, String methodName, Object[] allArguments,Object[] extVal) {
         if(!JdbcConfig.me().isEnable() || SamplingUtil.NO()){

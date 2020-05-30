@@ -7,7 +7,7 @@ import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.boot.AbstractBootPlugin;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
-import net.beeapm.agent.log.BeeLogUtil;
+import net.beeapm.agent.log.LogUtil;
 
 import java.io.*;
 import java.net.URL;
@@ -21,7 +21,7 @@ import java.net.URLConnection;
 public class ApolloBootPlugin extends AbstractBootPlugin {
     @Override
     public void boot() {
-        BeeLogUtil.write("=============>ApolloBootPlugin start ..................");
+        LogUtil.write("=============>ApolloBootPlugin start ..................");
         try {
             //{config_server_url}/configs/{appId}/{clusterName}/{namespaceName}?releaseKey={releaseKey}&ip={clientIp}
             String namespaceName = "config.yml";
@@ -41,7 +41,7 @@ public class ApolloBootPlugin extends AbstractBootPlugin {
             }
 
             if (url == null || url.isEmpty()) {
-                BeeLogUtil.log("=============>apollo插件启动失败，没有配置apollo地址，不拉取配置。如果不需要从apollo拉取配置，请忽略改提示！");
+                LogUtil.log("=============>apollo插件启动失败，没有配置apollo地址，不拉取配置。如果不需要从apollo拉取配置，请忽略改提示！");
                 return;
             }
 

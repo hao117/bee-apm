@@ -3,7 +3,7 @@ package net.beeapm.agent.plugin.jdbc.handler;
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @date 2018-09-22
  */
 public class PreparedStatementExecuteHandler extends AbstractHandler {
-    private static final Log log = LogFactory.getLog(ConnectionHandler.class.getSimpleName());
+    private static final ILog log = LogFactory.getLog(ConnectionHandler.class.getSimpleName());
 
 
     @Override

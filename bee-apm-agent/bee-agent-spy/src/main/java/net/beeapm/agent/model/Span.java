@@ -1,9 +1,12 @@
 package net.beeapm.agent.model;
 
-import net.beeapm.agent.config.BeeConfig;
 
 import java.util.Date;
 
+/**
+ * @author yuan
+ * @date 2018-08-06
+ */
 public class Span{
     private Tags tags;
     private String type;
@@ -24,11 +27,13 @@ public class Span{
     }
 
     public void fillEnvInfo(){
+        /*
         setIp(BeeConfig.me().getIp());
         setPort(BeeConfig.me().getPort());
         setInst(BeeConfig.me().getInst());
         setApp(BeeConfig.me().getApp());
         setEnv(BeeConfig.me().getEnv());
+         */
     }
 
     public Object getTag(String key){

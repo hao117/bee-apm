@@ -2,9 +2,7 @@ package net.beeapm.agent.boot;
 
 import net.beeapm.agent.loader.AbstractLoader;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 启动插件加载
@@ -20,6 +18,13 @@ public class BootPluginLoader extends AbstractLoader {
             plugin.setName(entry.getKey());
             pluginList.add(plugin);
         }
+
+        Collections.sort(pluginList, new Comparator<AbstractBootPlugin>() {
+            @Override
+            public int compare(AbstractBootPlugin p1, AbstractBootPlugin p2) {
+                return p1.getName().compareTo(p2.getName());
+            }
+        });
         return pluginList;
     }
 

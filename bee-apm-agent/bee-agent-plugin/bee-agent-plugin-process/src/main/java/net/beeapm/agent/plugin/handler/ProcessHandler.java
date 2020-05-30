@@ -2,7 +2,7 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
-import net.beeapm.agent.log.Log;
+import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanType;
@@ -21,7 +21,7 @@ import java.io.IOException;
  * Created by yuan on 2018/7/31.
  */
 public class ProcessHandler extends AbstractHandler {
-    private static final Log log = LogFactory.getLog(ProcessHandler.class.getSimpleName());
+    private static final ILog log = LogFactory.getLog(ProcessHandler.class.getSimpleName());
     private static final String KEY_ERROR_THROWABLE = "_ERROR_THROWABLE";
     private static final String KEY_BEE_CHILD_ID = "_BEE_CHILD_ID";
     private static final String KEY_ERROR_POINT = "_ERROR_POINT";
