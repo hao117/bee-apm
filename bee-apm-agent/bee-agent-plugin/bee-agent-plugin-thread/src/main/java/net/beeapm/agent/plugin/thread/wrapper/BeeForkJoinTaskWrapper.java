@@ -14,15 +14,15 @@ import java.util.concurrent.ForkJoinTask;
  * @author yuanlong.chen
  * @date 2020/05/29
  */
-public class ForkJoinTaskWrapper<V> extends ForkJoinTask<V> {
-    private static ILog log = LogFactory.getLog(ForkJoinTaskWrapper.class);
+public class BeeForkJoinTaskWrapper<V> extends ForkJoinTask<V> {
+    private static ILog log = LogFactory.getLog(BeeForkJoinTaskWrapper.class);
     private ForkJoinTask<V> task;
     private TraceContextModel contextModel;
     private static Method setRawResultMethod;
     private static Method execMethod;
     private static List<Method> taskMethodList;
 
-    public ForkJoinTaskWrapper(ForkJoinTask<V> task, TraceContextModel contextModel) {
+    public BeeForkJoinTaskWrapper(ForkJoinTask<V> task, TraceContextModel contextModel) {
         this.task = task;
         this.contextModel = contextModel;
     }
