@@ -37,8 +37,8 @@ public class BeeForkJoinTaskWrapper<V> extends ForkJoinTask<V> {
         if (setRawResultMethod == null) {
             setRawResultMethod = getMethod("setRawResult");
         }
-        setRawResultMethod.setAccessible(true);
         try {
+            setRawResultMethod.setAccessible(true);
             setRawResultMethod.invoke(task, value);
         } catch (Throwable e) {
             throw new RuntimeException("反射执行setRawResult方法失败", e);
@@ -51,8 +51,8 @@ public class BeeForkJoinTaskWrapper<V> extends ForkJoinTask<V> {
         if (execMethod == null) {
             execMethod = getMethod("exec");
         }
-        execMethod.setAccessible(true);
         try {
+            execMethod.setAccessible(true);
             return (Boolean) execMethod.invoke(task);
         } catch (Throwable e) {
             throw new RuntimeException("反射执行exec方法失败", e);
