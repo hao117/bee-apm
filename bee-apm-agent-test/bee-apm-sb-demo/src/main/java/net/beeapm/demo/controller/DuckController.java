@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/12
  */
 @RequestMapping("/duck")

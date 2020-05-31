@@ -1,7 +1,7 @@
 package net.beeapm.demo.service.thread;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/29
  */
 public class HelloThreadService {

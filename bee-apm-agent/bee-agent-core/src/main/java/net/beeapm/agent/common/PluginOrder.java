@@ -1,7 +1,7 @@
 package net.beeapm.agent.common;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/27
  */
 public class PluginOrder {

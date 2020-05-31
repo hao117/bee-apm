@@ -4,7 +4,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/29
  */
 public class ForkJoinTaskTestService {

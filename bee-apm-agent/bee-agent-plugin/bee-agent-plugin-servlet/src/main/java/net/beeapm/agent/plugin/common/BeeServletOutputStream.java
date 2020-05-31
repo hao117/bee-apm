@@ -5,7 +5,7 @@ import javax.servlet.WriteListener;
 import java.io.ByteArrayOutputStream;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2019/12/27
  */
 public class BeeServletOutputStream extends ServletOutputStream {

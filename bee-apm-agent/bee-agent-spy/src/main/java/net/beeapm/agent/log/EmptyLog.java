@@ -1,7 +1,7 @@
 package net.beeapm.agent.log;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/30
  */
 public class EmptyLog implements ILog {

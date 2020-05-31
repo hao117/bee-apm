@@ -3,7 +3,7 @@ package net.beeapm.agent.plugin.thread.common;
 import net.beeapm.agent.plugin.thread.handler.ThreadHandler;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/29
  */
 public class ThreadConst {

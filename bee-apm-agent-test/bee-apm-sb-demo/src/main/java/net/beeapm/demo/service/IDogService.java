@@ -4,7 +4,7 @@ import net.beeapm.demo.model.RequestVo;
 import net.beeapm.demo.model.ResultVo;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/12
  */
 public interface IDogService {

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/28
  */
 @EnableTransactionManagement

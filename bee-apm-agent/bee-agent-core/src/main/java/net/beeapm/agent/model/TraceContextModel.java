@@ -1,7 +1,7 @@
 package net.beeapm.agent.model;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/13
  */
 public class TraceContextModel {

@@ -25,6 +25,7 @@ import java.util.List;
  */
 public class LogWriter implements EventHandler<LogMessage> {
     private static final String THREAD_NAME = "log";
+    private static String LOG_FILE_NAME = "bee-agent";
     private static final char[] lock = new char[1];
     private static LogWriter logWriter;
     private Disruptor<LogMessage> disruptor;
@@ -36,6 +37,7 @@ public class LogWriter implements EventHandler<LogMessage> {
     private static long MAX_FILE_SIZE;
     private static int MAX_FILE_NUM;
     private static String logDir;
+
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
     public static LogWriter me() {
@@ -110,9 +112,9 @@ public class LogWriter implements EventHandler<LogMessage> {
         if (fileSize > MAX_FILE_SIZE) {
             BeeUtils.flush(fileOutputStream);
             BeeUtils.close(fileOutputStream);
-            File logFile = new File(logDir, "bee-agent.log");
+            File logFile = new File(logDir, LOG_FILE_NAME + ".log");
             if (logFile.exists()) {
-                String newName = "bee-" + dateFormat.format(new Date()) + ".log";
+                String newName = LOG_FILE_NAME + "-" + dateFormat.format(new Date()) + ".log";
                 logFile.renameTo(new File(logDir, newName));
                 lineNum = 0;
                 logFileList.add(newName);
@@ -127,7 +129,7 @@ public class LogWriter implements EventHandler<LogMessage> {
         if (listSize > MAX_FILE_NUM) {
             for (int i = 0; i < listSize - MAX_FILE_NUM; i++) {
                 File delFile = new File(logDir, logFileList.get(0));
-                if (delFile.exists() && delFile.getName().startsWith("bee-")) {
+                if (delFile.exists() && delFile.getName().startsWith(LOG_FILE_NAME)) {
                     delFile.delete();
                 }
                 logFileList.remove(0);
@@ -140,7 +142,7 @@ public class LogWriter implements EventHandler<LogMessage> {
             return true;
         }
         try {
-            File logFile = new File(logDir, "bee.log");
+            File logFile = new File(logDir, LOG_FILE_NAME + ".log");
             if (!logFile.exists()) {
                 logFile.createNewFile();
             }

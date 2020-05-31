@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * 采样率处理工具类
  *
- * @author yuanlong.chen
+ * @author yuan
  * @date 2018/09/26
  */
 public class SamplingUtil {

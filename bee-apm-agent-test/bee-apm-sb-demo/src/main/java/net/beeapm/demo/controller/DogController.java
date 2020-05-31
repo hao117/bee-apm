@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/12
  */
 @RequestMapping("/dog")

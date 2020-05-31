@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.ForkJoinTask;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/29
  */
 public class BeeForkJoinTaskWrapper<V> extends ForkJoinTask<V> {

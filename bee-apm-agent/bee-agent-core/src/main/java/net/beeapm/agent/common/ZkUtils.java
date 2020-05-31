@@ -8,7 +8,7 @@ import org.I0Itec.zkclient.serialize.SerializableSerializer;
 import org.I0Itec.zkclient.serialize.ZkSerializer;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/05/24
  */
 public class ZkUtils {
@@ -29,7 +29,7 @@ public class ZkUtils {
                     }
                     return JSON.toJSONString(data).getBytes("utf-8");
                 } catch (Exception e) {
-                    throw new ZkMarshallingError(e);
+                    throw new ZkMarshallingError("data serialize failed", e);
                 }
             }
 
@@ -38,7 +38,7 @@ public class ZkUtils {
                 try {
                     return new String(bytes, "utf-8");
                 } catch (Exception e) {
-                    throw new ZkMarshallingError(e);
+                    throw new ZkMarshallingError("data deserialize failed", e);
                 }
             }
         });

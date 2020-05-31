@@ -1,7 +1,7 @@
 package net.beeapm.agent;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/28
  */
 public class Version {

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/12
  */
 @Service

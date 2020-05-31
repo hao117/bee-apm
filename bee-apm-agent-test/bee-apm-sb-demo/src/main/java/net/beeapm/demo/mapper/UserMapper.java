@@ -1,7 +1,7 @@
 package net.beeapm.demo.mapper;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/26
  */
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

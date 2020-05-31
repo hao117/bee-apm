@@ -1,7 +1,7 @@
 package net.beeapm.agent.annotation;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2019/12/20
  */
 public final class BeePluginType {

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/12
  */
 public class OkHttpUtils {

@@ -1,7 +1,7 @@
 package net.beeapm.demo.model;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/12
  */
 public class RequestVo {

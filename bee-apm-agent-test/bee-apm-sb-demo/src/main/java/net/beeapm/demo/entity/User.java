@@ -1,7 +1,7 @@
 package net.beeapm.demo.entity;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/26
  */
 public class User {

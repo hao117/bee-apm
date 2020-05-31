@@ -1,7 +1,7 @@
 package net.beeapm.ui.model;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2020/01/14
  */
 public class TopologyEdge {

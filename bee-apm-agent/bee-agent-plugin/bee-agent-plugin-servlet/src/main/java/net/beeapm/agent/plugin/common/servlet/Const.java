@@ -4,7 +4,7 @@ import net.beeapm.agent.plugin.common.BeeHttpServletRequestWrapper;
 import net.beeapm.agent.plugin.common.BeeHttpServletResponseWrapper;
 
 /**
- * @author yuanlong.chen
+ * @author yuan
  * @date 2019/12/27
  */
 public class Const {
