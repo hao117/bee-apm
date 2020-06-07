@@ -2,6 +2,7 @@ package net.beeapm.demo.controller;
 
 
 import net.beeapm.demo.service.thread.ForkJoinTaskTestService;
+import net.beeapm.demo.service.thread.ThreadPoolService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +22,10 @@ public class ThreadServlet extends HttpServlet {
 
             ForkJoinTaskTestService testService = new ForkJoinTaskTestService();
             testService.test();
+
+            ThreadPoolService service = new ThreadPoolService();
+            service.hello("banana");
+            service.hello2("tom");
 
             StringBuilder out = new StringBuilder();
 
