@@ -62,7 +62,7 @@ public class ReporterFactory {
             scheduledExecutorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
+                    while (!Thread.currentThread().isInterrupted()) {
                         doReport();
                     }
                 }
