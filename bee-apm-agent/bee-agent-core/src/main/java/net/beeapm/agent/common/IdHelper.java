@@ -9,7 +9,6 @@ import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import org.I0Itec.zkclient.IZkStateListener;
 import org.apache.zookeeper.Watcher;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,7 +36,7 @@ public class IdHelper {
     private static final String THREAD_NAME = "id";
 
     static {
-        service = new ScheduledThreadPoolExecutor(1, new BeeThreadFactory(THREAD_NAME));
+        service = new ScheduledThreadPoolExecutor(1,new BeeThreadFactory(THREAD_NAME));
     }
 
     public static void shutdown() {
