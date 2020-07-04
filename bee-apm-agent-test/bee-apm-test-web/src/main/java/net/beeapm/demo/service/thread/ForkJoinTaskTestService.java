@@ -30,7 +30,7 @@ public class ForkJoinTaskTestService {
             protected boolean exec() {
                 System.out.println("ForkJoinTaskTestService:ForkJoinTask------------------exec");
                 HelloThreadService service = new HelloThreadService();
-                service.sayHelloThread("tom");
+                service.sayHelloThread3("tom");
                 return false;
             }
         });

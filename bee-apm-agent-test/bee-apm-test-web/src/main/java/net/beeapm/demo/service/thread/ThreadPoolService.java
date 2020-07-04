@@ -1,7 +1,6 @@
 package net.beeapm.demo.service.thread;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 2020/06/07
  */
 public class ThreadPoolService {
-    private static ExecutorService executorService = new ScheduledThreadPoolExecutor(2, new ThreadFactory() {
+    private static ScheduledThreadPoolExecutor executorService = new ScheduledThreadPoolExecutor(2, new ThreadFactory() {
         private final AtomicInteger threadCounter = new AtomicInteger(1);
 
         @Override
@@ -27,8 +26,10 @@ public class ThreadPoolService {
         executorService.submit(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
+                Class<?> cls = this.getClass();
+                System.out.println(cls.getName());
                 HelloThreadService hello = new HelloThreadService();
-                hello.sayHelloThread("apple");
+                hello.sayHelloThread3("apple");
                 return null;
             }
         });
@@ -38,8 +39,10 @@ public class ThreadPoolService {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
+                Class<?> cls = this.getClass();
+                System.out.println("do----------------->"+cls.getName());
                 HelloThreadService hello = new HelloThreadService();
-                hello.sayHelloThread("tomato");
+                hello.sayHelloThread3("tomato");
             }
         });
     }

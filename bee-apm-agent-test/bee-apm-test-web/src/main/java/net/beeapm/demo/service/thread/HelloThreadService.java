@@ -5,7 +5,7 @@ package net.beeapm.demo.service.thread;
  * @date 2020/05/29
  */
 public class HelloThreadService {
-    public String sayHelloThread(String str) {
+    public String sayHelloThread3(String str) {
         System.out.println("sayHelloThread = " + str);
         return "<good " + str + ">";
     }

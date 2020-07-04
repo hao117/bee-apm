@@ -1,7 +1,5 @@
 package net.beeapm.demo.controller;
 
-
-import net.beeapm.demo.service.thread.ForkJoinTaskTestService;
 import net.beeapm.demo.service.thread.ThreadPoolService;
 
 import javax.servlet.annotation.WebServlet;
@@ -20,12 +18,12 @@ public class ThreadServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         try {
 
-            ForkJoinTaskTestService testService = new ForkJoinTaskTestService();
-            testService.test();
+            //ForkJoinTaskTestService testService = new ForkJoinTaskTestService();
+            //testService.test();
 
             ThreadPoolService service = new ThreadPoolService();
-            service.hello("banana");
-            service.hello2("tom");
+            service.hello2("banana");
+            //service.hello2("tom");
 
             StringBuilder out = new StringBuilder();
 
