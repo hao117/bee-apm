@@ -27,12 +27,17 @@ import java.util.jar.JarFile;
  * @date 2018-08-06
  */
 public class BeeAgent {
-    public static void premain(String arguments, Instrumentation inst) {
+    public static void premain(String arguments, Instrumentation inst) throws Throwable {
         loadSpy(inst);
         LogUtil.write("\n---------------------------------Welcome BeeAPM ---------------------------------------");
         initialize();
         List<AbstractPlugin> plugins = PluginLoader.loadPlugins();
-        AgentBuilder agentBuilder = new AgentBuilder.Default().ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
+
+        AgentBuilder agentBuilder = new AgentBuilder.Default()
+                .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
+                .with(buildListener())
+                .disableClassFormatChanges()
+                .ignore(ElementMatchers.<TypeDescription>none().and(ElementMatchers.nameStartsWith("net.beeapm.agent.")));
         for (int i = 0; i < plugins.size(); i++) {
             final AbstractPlugin plugin = plugins.get(i);
             InterceptPoint[] interceptPoints = plugin.buildInterceptPoint();
@@ -45,7 +50,7 @@ public class BeeAgent {
                     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder,
                                                             TypeDescription typeDescription,
                                                             ClassLoader classLoader, JavaModule javaModule) {
-                        String className = typeDescription.getCanonicalName();
+                        String className = typeDescription.getName();
                         log.exec("class-name={}, plugin-name={}", className, plugin.getName());
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
                         FieldDefine[] fields = plugin.buildFieldDefine();
@@ -57,12 +62,10 @@ public class BeeAgent {
                         return builder;
                     }
                 };
-                agentBuilder = agentBuilder.type(interceptPoint.buildTypesMatcher()).transform(transformer).asDecorator();
+                agentBuilder = agentBuilder.type(interceptPoint.buildTypesMatcher()).transform(transformer);
             }
         }
-
-        AgentBuilder.Listener listener = buildListener();
-        agentBuilder.with(listener).installOn(inst);
+        agentBuilder.installOn(inst);
     }
 
     public static void loadSpy(Instrumentation inst) {
