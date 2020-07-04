@@ -1,6 +1,7 @@
 package net.beeapm.agent.plugin;
 
 import net.beeapm.agent.loader.AbstractLoader;
+import net.beeapm.agent.log.LogUtil;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ public class PluginLoader extends AbstractLoader {
         for (Map.Entry<String, AbstractPlugin> entry : pluginMap.entrySet()) {
             AbstractPlugin plugin = entry.getValue();
             pluginList.add(plugin);
+            LogUtil.log("plugin-name:" + plugin.getName());
         }
         Collections.sort(pluginList, new Comparator<AbstractPlugin>() {
             @Override
