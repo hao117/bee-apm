@@ -15,7 +15,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class HandlerLoader {
     private static ConcurrentHashMap<String, IHandler> handlerMap = new ConcurrentHashMap<String, IHandler>();
     private static ReentrantLock INSTANCE_LOAD_LOCK = new ReentrantLock();
-    private static AgentClassLoader beeClassLoader;
     private static final EmptyHandler EMPTY_HANDLER = new EmptyHandler();
     private static String rootPath;
 
@@ -23,25 +22,15 @@ public class HandlerLoader {
         rootPath = path;
     }
 
-    public static AgentClassLoader getBeeClassLoader(ClassLoader parentClassLoader) {
-        if (beeClassLoader == null) {
-            synchronized (HandlerLoader.class) {
-                if (beeClassLoader == null) {
-                    beeClassLoader = new AgentClassLoader(parentClassLoader, rootPath, new String[]{"plugins"});
-                }
-            }
-        }
-        return beeClassLoader;
-    }
 
     public static IHandler load(String className) {
         try {
-            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            ClassLoader classLoader = getBeeClassLoader(contextClassLoader);
-            String instanceKey = className + "_OF_" + classLoader.getClass().getName() + "@" + Integer.toHexString(classLoader.hashCode());
+            ClassLoader targetClassLoader = Thread.currentThread().getContextClassLoader();
+            String instanceKey = className + "_OF_" + targetClassLoader.getClass().getName() + "@" + Integer.toHexString(targetClassLoader.hashCode());
             IHandler inst = handlerMap.get(instanceKey);
             if (inst == null) {
                 INSTANCE_LOAD_LOCK.lock();
+                ClassLoader classLoader = new AgentClassLoader(targetClassLoader, rootPath, new String[]{"plugins"});
                 try {
                     inst = (IHandler) Class.forName(className, true, classLoader).newInstance();
                 } finally {
