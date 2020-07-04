@@ -48,7 +48,7 @@ public class ConfigUtils {
         service.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                if(loadConfig()){
+                if (loadConfig()) {
                     BeeConfigFactory.me().refresh();
                 }
             }
