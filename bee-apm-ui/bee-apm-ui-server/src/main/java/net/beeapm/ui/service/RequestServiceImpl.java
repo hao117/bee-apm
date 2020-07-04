@@ -128,9 +128,9 @@ public class RequestServiceImpl implements IRequestService {
                 return res;
             }
             total = queryList(args, EsIndicesPrefix.SQL, "QueryList", res, rows);
-            if (total < 0) {
-                return res;
-            }
+//            if (total < 0) {
+//                return res;
+//            }
             logger.debug("查询结果:{}", JSON.toJSONString(rows));
             //handleData(rows);
             buildTree(rows);

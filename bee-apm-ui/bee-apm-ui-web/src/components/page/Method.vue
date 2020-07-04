@@ -64,11 +64,13 @@
                 <el-row>
                     <el-col :span="24">
                         <el-table :data="tableData.rows" border stripe>
-                            <el-table-column prop="id" label="ID" width="170" fixed>
+                            <el-table-column prop="id" label="ID" width="150" fixed>
                             </el-table-column>
                             <el-table-column prop="time" label="时间" width="150" :formatter="timeFormatter" fixed>
                             </el-table-column>
-                            <el-table-column prop="gid" label="GID" width="170">
+                            <el-table-column prop="pid" label="PID" width="150">
+                            </el-table-column>
+                            <el-table-column prop="gid" label="GID" width="150">
                             </el-table-column>
                             <el-table-column prop="ip" label="IP" width="120">
                             </el-table-column>
