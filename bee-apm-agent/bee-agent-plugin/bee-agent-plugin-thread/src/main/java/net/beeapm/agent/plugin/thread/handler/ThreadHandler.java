@@ -6,6 +6,7 @@ import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.TraceContextModel;
 import net.beeapm.agent.plugin.handler.AbstractHandler;
+import net.beeapm.agent.plugin.thread.ThreadConfig;
 import net.beeapm.agent.plugin.thread.common.ThreadConst;
 import net.beeapm.agent.plugin.thread.wrapper.BeeCallableWrapper;
 import net.beeapm.agent.plugin.thread.wrapper.BeeRunnableWrapper;
@@ -20,15 +21,20 @@ import java.util.concurrent.ForkJoinTask;
  */
 public class ThreadHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(ThreadHandler.class.getSimpleName());
+
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
-        log.debug(className);
+        if (!ThreadConfig.me().isEnable()) {
+            return null;
+        }
         Object task = allArguments[0];
-
         if (task instanceof BeeRunnableWrapper
                 || task instanceof BeeCallableWrapper
                 || task instanceof BeeForkJoinTaskWrapper) {
+            log.debug("thread-pool: class={},method={},handler=ignore", className, methodName);
             return null;
+        } else {
+            log.debug("thread-pool: class={},method={},handler=done", className, methodName);
         }
         Span span = new Span("t");
         //修改入参

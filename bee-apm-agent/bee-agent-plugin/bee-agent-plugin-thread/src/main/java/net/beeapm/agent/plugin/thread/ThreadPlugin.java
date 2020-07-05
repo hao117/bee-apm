@@ -10,6 +10,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinTask;
 
@@ -31,12 +32,20 @@ public class ThreadPlugin extends AbstractPlugin {
                 new InterceptPoint() {
                     @Override
                     public ElementMatcher<TypeDescription> buildTypesMatcher() {
-                        return ElementMatchers.any()
+                        ElementMatcher.Junction matchers = ElementMatchers.any()
                                 .and(ElementMatchers.hasSuperType(ElementMatchers.named("java.util.concurrent.ExecutorService"))
                                         .or(ElementMatchers.hasSuperType(ElementMatchers.named("java.util.concurrent.CompletionService"))))
                                 .and(ElementMatchers.not(ElementMatchers.isInterface()))
-                                .and(ElementMatchers.not(ElementMatchers.isAbstract()))
-                                .and(ElementMatchers.not(ElementMatchers.nameStartsWith("org.apache.tomcat.")));
+                                .and(ElementMatchers.not(ElementMatchers.isAbstract()));
+                        //排除名称前缀包含
+                        for (String nameStart : ThreadConfig.me().getExcludeClassNameStartsWithList()) {
+                            matchers = matchers.and(ElementMatchers.not(ElementMatchers.nameStartsWith(nameStart)));
+                        }
+                        //排除名称包含
+                        for (String nameContain : ThreadConfig.me().getExcludeClassNameContainsList()) {
+                            matchers = matchers.and(ElementMatchers.not(ElementMatchers.nameContains(nameContain)));
+                        }
+                        return matchers;
                     }
 
                     @Override
