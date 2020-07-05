@@ -26,16 +26,6 @@ public class Span{
         setTime(new Date());
     }
 
-    public void fillEnvInfo(){
-        /*
-        setIp(BeeConfig.me().getIp());
-        setPort(BeeConfig.me().getPort());
-        setInst(BeeConfig.me().getInst());
-        setApp(BeeConfig.me().getApp());
-        setEnv(BeeConfig.me().getEnv());
-         */
-    }
-
     public Object getTag(String key){
         if(tags == null){
             return null;

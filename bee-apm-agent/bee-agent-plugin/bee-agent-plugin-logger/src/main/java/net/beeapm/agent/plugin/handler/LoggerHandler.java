@@ -5,6 +5,7 @@ import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -66,7 +67,7 @@ public class LoggerHandler extends AbstractHandler {
         span.addTag("point", point + "." + extVal[1]);
         span.addTag("log", logBuff.toString());
         span.addTag("level", methodName);
-        span.fillEnvInfo();
+        BeeConfig.me().fillEnvInfo(span);
         ReporterFactory.report(span);
         return null;
     }

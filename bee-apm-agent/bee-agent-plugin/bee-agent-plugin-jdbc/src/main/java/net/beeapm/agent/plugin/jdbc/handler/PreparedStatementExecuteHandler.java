@@ -3,6 +3,7 @@ package net.beeapm.agent.plugin.jdbc.handler;
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -67,7 +68,7 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
             }
             //当methodName=execute结果是ResultSet时候result=true，否则为false
             span.addTag("count", calcResultCount(result));
-            span.fillEnvInfo();
+            BeeConfig.me().fillEnvInfo(span);
             ReporterFactory.report(span);
         }
         return result;

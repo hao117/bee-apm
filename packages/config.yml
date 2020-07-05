@@ -12,7 +12,7 @@ reporter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: console  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
+    name: kafka1x  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
     log: true      #是否以logger.debug输出上报的日志数据
     okhttp:        #name对应的reporter的配置参数
         connectTimeout: 30
@@ -69,8 +69,7 @@ sampling:
     rate: 100000 #采样率，万分几，默认全采集,比如100就是100/10000的采样
 id:
     zk:
-        #192.168.137.100,10.104.118.13
-        url: 10.104.118.13:2181
+        url: 192.168.137.100:2181
         sessionTimeoutMs: 15000
         connectionTimeoutMs: 15000
     start: 5000
@@ -82,7 +81,6 @@ plugins:
         param:
             enable: true  #参数采集开关
             excludeTypePrefix: #排除的参数类型，参数不被系列化
-                - org.apache.velocity.
                 - javax.
                 - org.w3c
                 - org.springframework
@@ -111,7 +109,7 @@ plugins:
             #黑名单配置，优先级别最高，该前缀是在interceptPoint的前提下，支持到方法级别(fullClassName.methodName)
             excludeErrorPointPrefix:
         #采集范围配置，请根据自己的情况，调整下采集范围
-        interceptPoints:
+        interceptPoints: #数组类型
             -
                 typeMatch:  #类匹配规则
                     include: #包含规则named,nameStartsWith,nameEndsWith,nameContains,nameMatches,hasSuperType,hasAnnotation
@@ -147,10 +145,16 @@ plugins:
         spend: 1           #耗时阀值，小于等于process.spend
         excludeUrlSuffix: .html,.jsp,hello2 #url后缀排除，多个用逗号分开
         excludeClassPrefix: #配置要排除的类前缀
-            - org.apache.catalina.servlets
+            - org.apache.
     springTx:
         enable: true       #开关，是否采集
         spend: 0           #耗时阀值
+    thread:
+        enable: true
+        excludeClass:
+            nameStartsWith: #数组类型
+                - org.apache.tomcat.util
+#           nameContains:   #数组类型
 
 
 

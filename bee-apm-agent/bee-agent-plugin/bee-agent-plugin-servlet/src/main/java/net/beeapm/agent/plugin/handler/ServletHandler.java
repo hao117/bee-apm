@@ -85,7 +85,7 @@ public class ServletHandler extends AbstractHandler {
                 response.setHeader(HeaderKey.GID, span.getGid());
                 //返回id，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());
-                span.fillEnvInfo();
+                BeeConfig.me().fillEnvInfo(span);
                 ReporterFactory.report(span);
                 //采集参数
                 collectRequestParameter(span, request);

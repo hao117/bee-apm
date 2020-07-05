@@ -1,6 +1,7 @@
 package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.SamplingUtil;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -20,7 +21,7 @@ public class SpringTxEndHandler extends AbstractHandler {
         if(span != null) {
             calculateSpend(span);
             if(span.getSpend() > SpringTxConfig.me().getSpend()) {
-                span.fillEnvInfo();
+                BeeConfig.me().fillEnvInfo(span);
                 ReporterFactory.report(span);
             }
         }

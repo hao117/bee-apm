@@ -31,7 +31,7 @@ public class JvmInfoTask {
             public void run() {
                 Span span = new Span(SpanType.JVM);
                 span.setId(IdHelper.id());
-                span.fillEnvInfo();
+                BeeConfig.me().fillEnvInfo(span);
                 span.setTime(new Date());
                 buildJvmInfo(span);
                 ReporterFactory.report(span);

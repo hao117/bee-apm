@@ -27,7 +27,7 @@ public class HeartbeatTask {
             public void run() {
                 Span span = new Span(SpanType.HEARTBEAT);
                 span.setId(getId());
-                span.fillEnvInfo();
+                BeeConfig.me().fillEnvInfo(span);
                 span.setTime(new Date());
                 span.addTag("version", Version.VERSION);
                 ReporterFactory.report(span);

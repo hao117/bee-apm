@@ -2,6 +2,8 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
+import net.beeapm.agent.config.BeeConfig;
+import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -66,7 +68,7 @@ public class ProcessHandler extends AbstractHandler {
             sendParams(span.getId(), params);
             span.addTag("method", methodName).addTag("clazz", className);
             handleMethodSignature(span, (String) extVal[0]);
-            span.fillEnvInfo();
+            BeeConfig.me().fillEnvInfo(span);
             ReporterFactory.report(span);
         }
         //异常处理
@@ -125,7 +127,7 @@ public class ProcessHandler extends AbstractHandler {
     public void sendError(String id, String errorPoint, Throwable t) {
         if (ProcessConfig.me().isEnableError() && ProcessConfig.me().checkErrorPoint(errorPoint)) {
             Span err = new Span(SpanType.ERROR);
-            err.fillEnvInfo();
+            BeeConfig.me().fillEnvInfo(err);
             err.setId(id);
             err.setGid(BeeTraceContext.getGId());
             err.addTag("desc", formatThrowable(t));

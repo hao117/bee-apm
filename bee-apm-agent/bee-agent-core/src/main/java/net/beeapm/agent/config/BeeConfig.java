@@ -3,6 +3,7 @@ package net.beeapm.agent.config;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SysPropKey;
 import net.beeapm.agent.log.LogLevel;
+import net.beeapm.agent.model.Span;
 
 /**
  * 以后增加配置动态加载
@@ -111,5 +112,13 @@ public class BeeConfig extends AbstractBeeConfig {
 
     public int getJvmPeriod() {
         return jvmPeriod;
+    }
+
+    public void fillEnvInfo(Span span){
+        span.setIp(getIp());
+        span.setPort(getPort());
+        span.setInst(getInst());
+        span.setApp(getApp());
+        span.setEnv(getEnv());
     }
 }
