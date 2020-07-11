@@ -99,14 +99,16 @@ public class JvmUtils {
     }
 
     /**
-     * 线程数量（总数和守护线程数）
+     * 线程数量（活动总数和活动守护线程数）
      *
      * @return
      */
     public static ThreadInfo getThreadInfo() {
         ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         ThreadInfo info = new ThreadInfo();
+        //活动守护线程的当前数目
         info.setDaemonThreadCount(threadMxBean.getDaemonThreadCount());
+        //活动线程的当前数目，包括守护线程和非守护线程
         info.setThreadCount(threadMxBean.getThreadCount());
         return info;
     }
