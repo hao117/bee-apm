@@ -6,6 +6,14 @@ BeeAPM是一个分布式跟踪和应用性能监控系统。
 github：https://github.com/hao117/bee-apm
 
 gitee ：https://gitee.com/beetle082/bee-apm
+
+## 联系
+```
+QQ群: 961882872
+EMAIL: beetle082@163.com
+微信：shui117 （请备注BeeAPM，拉进微信群）
+```
+
 ## 部署
 - [agent部署](docs/cn/agent-deploy.md)
 - [server部署](docs/cn/server-deploy.md)
@@ -98,9 +106,5 @@ gitee ：https://gitee.com/beetle082/bee-apm
 ![](./docs/pic/tx.png)
 ![](./docs/pic/logger.png)
 ![](./docs/pic/inst.png)
-## 联系
-```
-QQ群: 961882872
-EMAIL: beetle082@163.com
-```
+
 
