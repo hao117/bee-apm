@@ -1,10 +1,7 @@
 package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
-import net.beeapm.agent.common.BeeTraceContext;
-import net.beeapm.agent.common.BeeUtils;
-import net.beeapm.agent.common.SamplingUtil;
-import net.beeapm.agent.common.SpanManager;
+import net.beeapm.agent.common.*;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -24,9 +21,7 @@ import java.lang.reflect.Field;
 public class LoggerHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(LoggerHandler.class.getSimpleName());
     private static final String VAL_IGNORE_POINT = "org.apache.logging.log4j.status.StatusLogger";
-    private static final String ATTR_KEY_LOGGER_MESSAGE = "logger_message";
-    private static final String ATTR_KEY_LOGGER_LEVEL = "logger_level";
-    private static final String ATTR_KEY_LOGGER_POINT = "logger_point";
+
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
@@ -66,9 +61,9 @@ public class LoggerHandler extends AbstractHandler {
                 logBuff.append(JSON.toJSONString(arg));
             }
         }
-        span.addAttribute(ATTR_KEY_LOGGER_POINT, point + "." + extVal[1]);
-        span.addAttribute(ATTR_KEY_LOGGER_MESSAGE, logBuff.toString());
-        span.addAttribute(ATTR_KEY_LOGGER_LEVEL, methodName);
+        span.addAttribute(AttrKey.LOGGER_POINT, point + "." + extVal[1]);
+        span.addAttribute(AttrKey.LOGGER_MESSAGE, logBuff.toString());
+        span.addAttribute(AttrKey.LOGGER_LEVEL, methodName);
         ReporterFactory.report(span);
         return null;
     }

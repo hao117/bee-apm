@@ -26,11 +26,7 @@ public class ProcessHandler extends AbstractHandler {
     private static final String KEY_BEE_CHILD_ID = "_BEE_CHILD_ID";
     private static final String KEY_ERROR_POINT = "_ERROR_POINT";
     private static final String KEY_PARAM = "_PARAM";
-    private static final String ATTR_KEY_METHOD_NAME = "method_name";
-    private static final String ATTR_KEY_METHOD_CLASS = "method_class";
-    private static final String ATTR_KEY_METHOD_PARAM = "method_param";
-    private static final String ATTR_KEY_METHOD_STACKTRACE = "method_stacktrace";
-    private static final String ATTR_KEY_METHOD_SIGN = "method_sign";
+
 
     @Override
     public Span before(String className, String methodName, Object[] allArgs, Object[] extVal) {
@@ -67,8 +63,8 @@ public class ProcessHandler extends AbstractHandler {
         //耗时阀值限制
         if (span.getDuration() > ProcessConfig.me().getSpend() && SamplingUtil.YES()) {
             sendParams(span.getId(), params);
-            span.addAttribute(ATTR_KEY_METHOD_NAME, methodName)
-                    .addAttribute(ATTR_KEY_METHOD_CLASS, className);
+            span.addAttribute(AttrKey.METHOD_NAME, methodName)
+                    .addAttribute(AttrKey.METHOD_CLASS, className);
             handleMethodSignature(span, (String) extVal[0]);
             ReporterFactory.report(span);
         }
@@ -123,7 +119,7 @@ public class ProcessHandler extends AbstractHandler {
         }
         Span paramSpan = new Span(SpanKind.PARAM);
         paramSpan.setId(id);
-        paramSpan.addAttribute(ATTR_KEY_METHOD_PARAM, params);
+        paramSpan.addAttribute(AttrKey.METHOD_PARAM, params);
         ReporterFactory.report(paramSpan);
     }
 
@@ -132,7 +128,7 @@ public class ProcessHandler extends AbstractHandler {
             Span err = new Span(SpanKind.ERROR);
             err.setId(id);
             err.setTraceId(BeeTraceContext.getTraceId());
-            err.addAttribute(ATTR_KEY_METHOD_STACKTRACE, formatThrowable(t));
+            err.addAttribute(AttrKey.METHOD_STACKTRACE, formatThrowable(t));
             ReporterFactory.report(err);
         }
     }
@@ -142,7 +138,7 @@ public class ProcessHandler extends AbstractHandler {
             return;
         }
         if (ProcessConfig.me().isEnableMethodSign()) {
-            span.addAttribute(ATTR_KEY_METHOD_SIGN, sign.substring(1, sign.length() - 1));
+            span.addAttribute(AttrKey.METHOD_SIGN, sign.substring(1, sign.length() - 1));
         }
     }
 

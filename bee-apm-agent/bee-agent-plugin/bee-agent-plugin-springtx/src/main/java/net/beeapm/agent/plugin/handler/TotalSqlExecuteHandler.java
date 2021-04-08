@@ -1,6 +1,7 @@
 package net.beeapm.agent.plugin.handler;
 
 
+import net.beeapm.agent.common.AttrKey;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -13,7 +14,6 @@ import net.beeapm.agent.plugin.common.SpringTxContext;
  */
 public class TotalSqlExecuteHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(TotalSqlExecuteHandler.class.getSimpleName());
-    private static final String ATTR_KEY_SQL_TOTAL = "db_sql_total";
     private static final int VAL_STACK_DEPTH = 3;
 
     @Override
@@ -30,12 +30,12 @@ public class TotalSqlExecuteHandler extends AbstractHandler {
                     return span;
                 }
             }
-            Integer totalSql = (Integer) span.getAttribute(ATTR_KEY_SQL_TOTAL);
+            Integer totalSql = (Integer) span.getAttribute(AttrKey.DB_SQL_TOTAL);
             if (totalSql == null) {
                 totalSql = new Integer(0);
             }
             totalSql++;
-            span.addAttribute(ATTR_KEY_SQL_TOTAL, totalSql);
+            span.addAttribute(AttrKey.DB_SQL_TOTAL, totalSql);
         }
         return span;
     }

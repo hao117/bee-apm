@@ -70,7 +70,7 @@ public class SamplingUtil {
         } else if (BeeConst.VAL_N.equals(sampled)) {
             return false;
         } else if (getCurrNum() == 0) {
-            //第一条采集,采集,返回true
+            //第一条采集,返回true
             incrCurrNum();
             incrTotal();
             BeeTraceContext.setSampled(BeeConst.VAL_Y);

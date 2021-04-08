@@ -1,5 +1,6 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
+import net.beeapm.agent.common.AttrKey;
 import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
@@ -10,7 +11,7 @@ import net.beeapm.agent.plugin.jdbc.JdbcConfig;
 import net.beeapm.agent.plugin.jdbc.common.JdbcContext;
 
 public class ConnectionHandler extends AbstractHandler {
-    private static final String ATTR_KEY_DB_SQL = "db_sql";
+
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
@@ -23,7 +24,7 @@ public class ConnectionHandler extends AbstractHandler {
         if (span == null || !traceId.equals(span.getTraceId())) {
             span = SpanManager.createLocalSpan(SpanKind.SQL);
             JdbcContext.setJdbcSpan(span);
-            span.addAttribute(ATTR_KEY_DB_SQL, allArguments[0]);
+            span.addAttribute(AttrKey.DB_SQL, allArguments[0]);
         }
         return span;
     }

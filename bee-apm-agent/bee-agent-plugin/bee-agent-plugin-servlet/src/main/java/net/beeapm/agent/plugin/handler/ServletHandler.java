@@ -25,14 +25,6 @@ import java.util.Map;
  */
 public class ServletHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog("ServletHandler");
-    private static final String ATTR_KEY_CLIENT_APP = "client_app";
-    private static final String ATTR_KEY_CLIENT_APP_INST = "client_app_inst";
-    private static final String ATTR_KEY_HTTP_METHOD = "http_method";
-    private static final String ATTR_KEY_HTTP_URL = "http_url";
-    private static final String ATTR_KEY_HTTP_REMOTE = "http_remote";
-    private static final String ATTR_KEY_HTTP_BODY = "http_body";
-    private static final String ATTR_KEY_HTTP_PARAM = "http_param";
-    private static final String ATTR_KEY_HTTP_HEADERS = "http_headers";
 
 
     @Override
@@ -56,8 +48,8 @@ public class ServletHandler extends AbstractHandler {
             if (srcApp == null) {
                 srcApp = "nvl";
             }
-            span.addAttribute(ATTR_KEY_CLIENT_APP, srcApp);
-            span.addAttribute(ATTR_KEY_CLIENT_APP_INST, request.getHeader(HeaderKey.SRC_INST));
+            span.addAttribute(AttrKey.CLIENT_APP, srcApp);
+            span.addAttribute(AttrKey.CLIENT_APP_INST, request.getHeader(HeaderKey.SRC_INST));
             if (ServletConfig.me().isEnableRespBody() && !resp.getClass().getSimpleName().equals(Const.CLASS_BEE_HTTP_SERVLET_RESPONSE_WRAPPER)) {
                 BeeHttpServletResponseWrapper wrapper = new BeeHttpServletResponseWrapper(resp);
                 //在ServletAdvice里取出来要清除掉
@@ -85,9 +77,9 @@ public class ServletHandler extends AbstractHandler {
         if (currSpan != null && currSpan.getKind().equals(SpanKind.SERVER)) {
             Span span = SpanManager.getExitSpan();
             HttpServletRequest request = (HttpServletRequest) allArguments[0];
-            span.addAttribute(ATTR_KEY_HTTP_URL, request.getRequestURL());
-            span.addAttribute(ATTR_KEY_HTTP_REMOTE, request.getRemoteAddr());
-            span.addAttribute(ATTR_KEY_HTTP_METHOD, request.getMethod());
+            span.addAttribute(AttrKey.HTTP_URL, request.getRequestURL());
+            span.addAttribute(AttrKey.HTTP_REMOTE, request.getRemoteAddr());
+            span.addAttribute(AttrKey.HTTP_METHOD, request.getMethod());
             calculateDuration(span);
             if (span.getDuration() > ServletConfig.me().getSpend() && SamplingUtil.YES()) {
                 //返回gid，用于跟踪
@@ -131,7 +123,7 @@ public class ServletHandler extends AbstractHandler {
             if (params != null && !params.isEmpty()) {
                 Span paramSpan = new Span(SpanKind.REQUEST_PARAM);
                 paramSpan.setId(span.getId());
-                paramSpan.addAttribute(ATTR_KEY_HTTP_PARAM, JSON.toJSONString(params));
+                paramSpan.addAttribute(AttrKey.HTTP_PARAM, JSON.toJSONString(params));
                 ReporterFactory.report(paramSpan);
             }
         }
@@ -150,7 +142,7 @@ public class ServletHandler extends AbstractHandler {
             bodySpan.setId(span.getId());
             String body = new String(wrapper.getBody());
             if (body != null && !body.isEmpty()) {
-                bodySpan.addAttribute(ATTR_KEY_HTTP_BODY, new String(wrapper.getBody()));
+                bodySpan.addAttribute(AttrKey.HTTP_BODY, new String(wrapper.getBody()));
                 ReporterFactory.report(bodySpan);
             }
         }
@@ -174,7 +166,7 @@ public class ServletHandler extends AbstractHandler {
             if (!headers.isEmpty()) {
                 Span headersSpan = new Span(SpanKind.REQUEST_HEADERS);
                 headersSpan.setId(span.getId());
-                headersSpan.addAttribute(ATTR_KEY_HTTP_HEADERS, JSON.toJSONString(headers));
+                headersSpan.addAttribute(AttrKey.HTTP_HEADERS, JSON.toJSONString(headers));
                 ReporterFactory.report(headersSpan);
             }
         }
@@ -195,7 +187,7 @@ public class ServletHandler extends AbstractHandler {
             respSpan.setId(span.getId());
             byte[] body = beeResp.toByteArray();
             if (body != null && body.length > 0) {
-                respSpan.addAttribute(ATTR_KEY_HTTP_BODY, new String(body));
+                respSpan.addAttribute(AttrKey.HTTP_BODY, new String(body));
                 ReporterFactory.report(respSpan);
             }
         }

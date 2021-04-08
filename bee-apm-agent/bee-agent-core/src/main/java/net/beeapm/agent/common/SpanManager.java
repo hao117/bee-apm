@@ -8,8 +8,7 @@ import java.util.Stack;
 
 public class SpanManager {
     private static final ThreadLocal<Stack<Span>> threadLocalSpan = new ThreadLocal<Stack<Span>>();
-    private static final String ATTR_KEY_REQUEST_CLIENT = "request_client";
-    private static final String ATTR_KEY_REQUEST_SERVER = "request_server";
+
 
     private static Span createSpan(String spanKind) {
         Stack<Span> stack = threadLocalSpan.get();
@@ -105,8 +104,8 @@ public class SpanManager {
         }
         Span span = new Span(SpanKind.TOPOLOGY);
         span.setTraceId(BeeTraceContext.getTraceId());
-        span.addAttribute(ATTR_KEY_REQUEST_CLIENT, fromApp);
-        span.addAttribute(ATTR_KEY_REQUEST_SERVER, toApp);
+        span.addAttribute(AttrKey.REQUEST_CLIENT, fromApp);
+        span.addAttribute(AttrKey.REQUEST_SERVER, toApp);
         span.setId(IdHelper.id());
         ReporterFactory.report(span);
     }

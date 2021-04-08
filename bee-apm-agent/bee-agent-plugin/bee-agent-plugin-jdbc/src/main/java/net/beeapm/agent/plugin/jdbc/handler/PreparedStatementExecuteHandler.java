@@ -1,9 +1,9 @@
 package net.beeapm.agent.plugin.jdbc.handler;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.common.AttrKey;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -14,7 +14,6 @@ import net.beeapm.agent.plugin.jdbc.common.JdbcContext;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.sql.ResultSet;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -25,9 +24,6 @@ import java.util.Map;
  */
 public class PreparedStatementExecuteHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(ConnectionHandler.class.getSimpleName());
-    private static final String ATTR_KEY_DB_SQL_STATUS = "db_sql_status";
-    private static final String ATTR_KEY_DB_SQL_PARAMS = "db_sql_params";
-    private static final String ATTR_KEY_DB_SQL_COUNT = "db_sql_count";
     private static final String CACHE_KEY_SQL_PARAMS = "cache_sql_params";
 
     @Override
@@ -54,9 +50,9 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
         }
         //Y成功，N失败
         if (t == null) {
-            span.addAttribute(ATTR_KEY_DB_SQL_STATUS, "Y");
+            span.addAttribute(AttrKey.DB_SQL_STATUS, "Y");
         } else {
-            span.addAttribute(ATTR_KEY_DB_SQL_STATUS, "N");
+            span.addAttribute(AttrKey.DB_SQL_STATUS, "N");
         }
         calculateDuration(span);
         if (span.getDuration() > JdbcConfig.me().getSpend()) {
@@ -65,11 +61,11 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
             if (params != null) {
                 Span paramSpan = new Span(SpanKind.SQL_PARAM);
                 paramSpan.setId(span.getId());
-                paramSpan.addAttribute(ATTR_KEY_DB_SQL_PARAMS, JSON.toJSONString(params.values()));
+                paramSpan.addAttribute(AttrKey.DB_SQL_PARAMS, JSON.toJSONString(params.values()));
                 ReporterFactory.report(paramSpan);
             }
             //当methodName=execute结果是ResultSet时候result=true，否则为false
-            span.addAttribute(ATTR_KEY_DB_SQL_COUNT, calcResultCount(result));
+            span.addAttribute(AttrKey.DB_SQL_COUNT, calcResultCount(result));
             ReporterFactory.report(span);
         }
         return result;
