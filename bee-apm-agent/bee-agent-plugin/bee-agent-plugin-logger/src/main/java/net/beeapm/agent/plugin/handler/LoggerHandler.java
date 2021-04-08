@@ -112,7 +112,7 @@ public class LoggerHandler extends AbstractHandler {
             String detailMessage = t.getMessage();
             if (messageField != null) {
                 try {
-                    messageField.set(t, "[" + BeeTraceContext.getGId() + "]" + detailMessage);
+                    messageField.set(t, "[" + BeeTraceContext.getTraceId() + "]" + detailMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

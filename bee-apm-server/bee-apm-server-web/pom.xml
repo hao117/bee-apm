@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>net.beeapm</groupId>
-            <artifactId>bee-servlet-stream</artifactId>
+            <artifactId>bee-stream-servlet</artifactId>
             <version>${bee-server-version}</version>
         </dependency>
         <dependency>

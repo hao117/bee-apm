@@ -1,4 +1,4 @@
-package net.beeapm.ui.service;
+package net.beeapm.ui.service.impl.es;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -16,6 +16,8 @@ import net.beeapm.ui.model.vo.BaseVo;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
 import net.beeapm.ui.model.vo.TableVo;
+import net.beeapm.ui.service.IRequestService;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -112,7 +114,7 @@ public class RequestServiceImpl implements IRequestService {
         logger.debug("请求参数:{}", JSON.toJSONString(params));
         ResultVo res = new ResultVo();
         try {
-            Date time = DateUtils.parseDate((String) params.get("time"), "yyyy-MM-dd'T'HH:mm:ssZ");
+            Date time = DateUtils.parseDate((String) params.get("time"), "yyyy-MM-dd HH:mm:ss");
             Map<String, Object> args = new HashMap<>(8);
             args.put("beginTime", DateUtils.format(new Date(time.getTime() - HALF_HOUR), "yyyy-MM-dd HH:mm"));
             args.put("endTime", DateUtils.format(new Date(time.getTime() + HALF_HOUR), "yyyy-MM-dd HH:mm"));
@@ -156,6 +158,8 @@ public class RequestServiceImpl implements IRequestService {
         for (int i = 0; i < hits.size(); i++) {
             JSONObject hit = hits.getJSONObject(i);
             JSONObject row = hit.getJSONObject("_source");
+            String time = DateFormatUtils.format(new Date(row.getLong("time")),"yyyy-MM-dd HH:mm:ss");
+            row.put("time",time);
             rows.add(row);
         }
         return total;
@@ -180,7 +184,7 @@ public class RequestServiceImpl implements IRequestService {
             JSONObject item = (JSONObject) rows.get(i);
             parseItem(item);
             String pid = item.getString("pid");
-            if (pid.equals("nvl")) {
+            if (pid.equals("0")) {
                 item.put("parentId", "");
                 continue;
             }
@@ -195,7 +199,7 @@ public class RequestServiceImpl implements IRequestService {
             parseItem(item1);
             String pid1 = item1.getString("pid");
             item1.put("parentId", pid1);
-            if (pid1.equals("nvl")) {
+            if (pid1.equals("0")) {
                 continue;
             }
 

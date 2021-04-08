@@ -9,32 +9,32 @@ import java.util.Stack;
 public class SpanManager {
     private static final ThreadLocal<Stack<Span>> threadLocalSpan = new ThreadLocal<Stack<Span>>();
 
-    private static Span createSpan(String spanType) {
+    private static Span createSpan(String spanKind) {
         Stack<Span> stack = threadLocalSpan.get();
         if (stack == null) {
             stack = new Stack();
             threadLocalSpan.set(stack);
         }
-        String pId, gId;
+        String parentId, traceId;
         if (stack.isEmpty()) {
-            pId = BeeTraceContext.getPId();
-            if (pId == null) {
-                pId = "nvl";
-                BeeTraceContext.setPId(pId);
+            parentId = BeeTraceContext.getParentId();
+            if (parentId == null) {
+                parentId = "0";
+                BeeTraceContext.setParentId(parentId);
             }
-            gId = BeeTraceContext.getGId();
-            if (gId == null) {
-                gId = IdHelper.id();
-                BeeTraceContext.setGId(gId);
+            traceId = BeeTraceContext.getTraceId();
+            if (traceId == null) {
+                traceId = IdHelper.id();
+                BeeTraceContext.setTraceId(traceId);
             }
         } else {
             Span parentSpan = stack.peek();
-            pId = parentSpan.getId();
-            gId = parentSpan.getGid();
-            BeeTraceContext.setPId(pId);
+            parentId = parentSpan.getId();
+            traceId = parentSpan.getTraceId();
+            BeeTraceContext.setParentId(parentId);
         }
-        Span span = new Span(spanType);
-        span.setId(IdHelper.id()).setPid(pId).setGid(gId);
+        Span span = new Span(spanKind);
+        span.setId(IdHelper.id()).setParentId(parentId).setTraceId(traceId);
         return span;
     }
 
@@ -42,11 +42,11 @@ public class SpanManager {
      * 创建入口span，并放入堆栈中，用于Advice::enter或Handler::before开始的span创建，需要在Advice::exit或Handler::after处调用getExitSpan
      * </br> createEntrySpan和getExitSpan它们是一对的，要配合一起使用，谁也不能缺了谁，不能单独使用。
      *
-     * @param spanType
+     * @param spanKind
      * @return
      */
-    public static Span createEntrySpan(String spanType) {
-        Span span = createSpan(spanType);
+    public static Span createEntrySpan(String spanKind) {
+        Span span = createSpan(spanKind);
         Stack<Span> stack = threadLocalSpan.get();
         stack.push(span);
         return span;
@@ -84,11 +84,11 @@ public class SpanManager {
     /**
      * 创建本地span，不入堆栈，不能和getExitSpan配合使用。
      *
-     * @param spanType
+     * @param spanKind
      * @return
      */
-    public static Span createLocalSpan(String spanType) {
-        return createSpan(spanType);
+    public static Span createLocalSpan(String spanKind) {
+        return createSpan(spanKind);
     }
 
     /**
@@ -102,9 +102,9 @@ public class SpanManager {
             fromApp = "nvl";
         }
         Span span = new Span(SpanType.TOPOLOGY);
-        span.setGid(BeeTraceContext.getGId());
-        span.addTag("from", fromApp);
-        span.setApp(toApp);
+        span.setTraceId(BeeTraceContext.getTraceId());
+        span.addAttribute("request_client",fromApp);
+        span.addAttribute("request_server",toApp);
         span.setId(IdHelper.id());
         ReporterFactory.report(span);
     }

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractStreamProvider implements IStreamProvider {
     private static final Logger logger = LoggerFactory.getLogger(AbstractStreamProvider.class);
 
+    @Override
     public String write(Stream stream) {
         try {
             HandlerFactory.getInstance().executeFirstHandler(stream);

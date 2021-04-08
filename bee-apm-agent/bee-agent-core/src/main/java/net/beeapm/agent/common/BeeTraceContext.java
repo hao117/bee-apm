@@ -20,26 +20,26 @@ public class BeeTraceContext {
         traceContext.set(model);
     }
 
-    public static String getPId() {
-        return getOrNew().getPid();
+    public static String getParentId() {
+        return getOrNew().getParentId();
     }
 
-    public static void setPId(String pId) {
-        getOrNew().setPid(pId);
+    public static void setParentId(String pId) {
+        getOrNew().setParentId(pId);
     }
 
-    public static String getGId() {
+    public static String getTraceId() {
         TraceContextModel model = getOrNew();
-        String gid = model.getGid();
-        if (gid == null) {
-            gid = IdHelper.id();
-            model.setGid(gid);
+        String traceId = model.getTraceId();
+        if (traceId == null) {
+            traceId = IdHelper.id();
+            model.setTraceId(traceId);
         }
-        return gid;
+        return traceId;
     }
 
-    public static void setGId(String gId) {
-        getOrNew().setGid(gId);
+    public static void setTraceId(String traceId) {
+        getOrNew().setTraceId(traceId);
     }
 
 
@@ -48,24 +48,24 @@ public class BeeTraceContext {
      *
      * @return
      */
-    public static String getCTag() {
-        return getOrNew().getCTag();
+    public static String getSampled() {
+        return getOrNew().getSampled();
     }
 
     /**
      * 设置采集标识：Y采集，N不采集
      *
-     * @param ctag
+     * @param sampled
      */
-    public static void setCTag(String ctag) {
-        getOrNew().setCTag(ctag);
+    public static void setSampled(String sampled) {
+        getOrNew().setSampled(sampled);
     }
 
 
     public static String getCurrentId() {
         Span span = SpanManager.getCurrentSpan();
         if (span == null) {
-            return "nvl";
+            return "0";
         }
         return span.getId();
     }

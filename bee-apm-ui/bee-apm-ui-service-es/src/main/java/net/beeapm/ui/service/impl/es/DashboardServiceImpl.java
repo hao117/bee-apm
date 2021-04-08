@@ -1,4 +1,4 @@
-package net.beeapm.ui.service;
+package net.beeapm.ui.service.impl.es;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -13,6 +13,7 @@ import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.KeyValue;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
+import net.beeapm.ui.service.IDashboardService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

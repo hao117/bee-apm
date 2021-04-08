@@ -19,10 +19,10 @@ public class HttpClient3xHandler extends AbstractHandler {
             for (int i = 0; i < allArguments.length; i++) {
                 if (allArguments[i] instanceof HttpMethod) {
                     HttpMethod req = (HttpMethod) allArguments[i];
-                    if(req.getRequestHeader(HeaderKey.GID) == null){
-                        req.setRequestHeader(HeaderKey.GID, BeeTraceContext.getGId());
-                        req.setRequestHeader(HeaderKey.PID,BeeTraceContext.getCurrentId());
-                        req.setRequestHeader(HeaderKey.CTAG,BeeTraceContext.getCTag());
+                    if(req.getRequestHeader(HeaderKey.TRACE_ID) == null){
+                        req.setRequestHeader(HeaderKey.TRACE_ID, BeeTraceContext.getTraceId());
+                        req.setRequestHeader(HeaderKey.PARENT_ID,BeeTraceContext.getCurrentId());
+                        req.setRequestHeader(HeaderKey.SAMPLED,BeeTraceContext.getSampled());
                         req.setRequestHeader(HeaderKey.SRC_APP, BeeConfig.me().getApp());
                         req.setRequestHeader(HeaderKey.SRC_INST, BeeConfig.me().getInst());
                     }

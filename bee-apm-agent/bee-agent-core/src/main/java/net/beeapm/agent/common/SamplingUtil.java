@@ -39,15 +39,17 @@ public class SamplingUtil {
     }
 
     private static boolean isCollect() {
+        //采样率小于等于0,不采集
         if (BeeConfig.me().getRate() <= 0) {
-            BeeTraceContext.setCTag(BeeConst.VAL_N);
+            BeeTraceContext.setSampled(BeeConst.VAL_N);
             return false;
         }
+        //采样率大于等于MAX_SAMPLING_RATE,采集
         if (BeeConfig.me().getRate() >= BeeConst.MAX_SAMPLING_RATE) {
-            BeeTraceContext.setCTag(BeeConst.VAL_Y);
+            BeeTraceContext.setSampled(BeeConst.VAL_Y);
             return true;
         }
-        String cTag = BeeTraceContext.getCTag();
+        String cTag = BeeTraceContext.getSampled();
         if (BeeConst.VAL_Y.equals(cTag)) {
             return true;
         } else if (BeeConst.VAL_N.equals(cTag)) {
@@ -56,18 +58,18 @@ public class SamplingUtil {
             //第一条采集
             incrCurrNum();
             incrTotal();
-            BeeTraceContext.setCTag(BeeConst.VAL_Y);
+            BeeTraceContext.setSampled(BeeConst.VAL_Y);
             return true;
         }
         long tmpTotal = incrTotal();
         long tmpCurrNum = getCurrNum() + 1;
         Double rate = tmpCurrNum * 1.0 / tmpTotal * BeeConst.MAX_SAMPLING_RATE;
         if (rate.intValue() > BeeConfig.me().getRate()) {
-            BeeTraceContext.setCTag(BeeConst.VAL_N);
+            BeeTraceContext.setSampled(BeeConst.VAL_N);
             return false;
         }
         incrCurrNum();
-        BeeTraceContext.setCTag(BeeConst.VAL_Y);
+        BeeTraceContext.setSampled(BeeConst.VAL_Y);
         return true;
     }
 }

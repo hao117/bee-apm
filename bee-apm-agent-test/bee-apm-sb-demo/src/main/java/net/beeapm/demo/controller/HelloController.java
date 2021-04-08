@@ -24,13 +24,13 @@ public class HelloController {
     private IHelloService service;
 
     @RequestMapping("/sayGoodbye")
-    public ResultVo sayGoodbye(@RequestBody RequestVo req){
+    public ResultVo sayGoodbye(@RequestBody RequestVo req) {
         logger.debug(JSON.toJSONString(req));
         return service.sayGoodbye(req);
     }
 
     @RequestMapping("/sayHello")
-    public ResultVo sayHello(@RequestBody RequestVo req){
+    public ResultVo sayHello(@RequestBody RequestVo req) {
         logger.debug(JSON.toJSONString(req));
         logger.trace("Log4j2==================>trace");
         logger.debug("Log4j2==================>debug");
@@ -42,14 +42,34 @@ public class HelloController {
     }
 
     @RequestMapping("/welcomeChina")
-    public ResultVo welcomeChina(@RequestBody RequestVo req){
+    public ResultVo welcomeChina(@RequestBody RequestVo req) {
         logger.debug(JSON.toJSONString(req));
         return service.welcomeChina(req);
     }
 
     @RequestMapping("/welcomeXiaMen")
-    public ResultVo welcomeXiaMen(@RequestBody RequestVo req){
+    public ResultVo welcomeXiaMen(@RequestBody RequestVo req) {
         logger.debug(JSON.toJSONString(req));
         return service.welcomeXiaMen(req);
     }
+
+    @RequestMapping("/hi")
+    public String hi() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                long idx = 0;
+                while (true) {
+                    logger.debug("aaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbcccccccccccccc-" + (idx++));
+                    try{
+                        Thread.sleep(500);
+                    }catch (Exception e){
+
+                    }
+                }
+            }
+        }).start();
+        return "good";
+    }
+
 }

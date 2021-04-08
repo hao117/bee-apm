@@ -23,15 +23,15 @@ public class ServletAdvice {
                              @Advice.Argument(value = 1, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object resp) {
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
         Span span = handler.before(className, methodName, new Object[]{req, resp}, null);
-        if (span != null && span.getTag(Const.KEY_RESP_WRAPPER) != null) {
+        if (span != null && span.getCache(Const.KEY_RESP_WRAPPER) != null) {
             //修改resp
-            resp = span.getTag(Const.KEY_RESP_WRAPPER);
-            span.removeTag(Const.KEY_RESP_WRAPPER);
+            resp = span.getCache(Const.KEY_RESP_WRAPPER);
+            span.removeCache(Const.KEY_RESP_WRAPPER);
         }
-        if (span != null && span.getTag(Const.KEY_REQ_WRAPPER) != null) {
+        if (span != null && span.getCache(Const.KEY_REQ_WRAPPER) != null) {
             //修改req
-            req = span.getTag(Const.KEY_REQ_WRAPPER);
-            span.removeTag(Const.KEY_REQ_WRAPPER);
+            req = span.getCache(Const.KEY_REQ_WRAPPER);
+            span.removeCache(Const.KEY_REQ_WRAPPER);
         }
     }
 

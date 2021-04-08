@@ -55,7 +55,7 @@ public class BeeHttpServletResponseWrapper extends HttpServletResponseWrapper {
         try {
             getResponse().flushBuffer();
         } catch (Exception e) {
-            log.error("", e);
+            log.error("flush error", e);
         }
         BeeUtils.flush(printWriter);
         BeeUtils.flush(outputStream);

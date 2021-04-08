@@ -1,106 +1,71 @@
 package net.beeapm.agent.model;
 
-
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author yuan
  * @date 2018-08-06
  */
-public class Span{
-    private Tags tags;
-    private String type;
-    private Date time;
-    private String inst;
-    private String app;
-    private String env;
-    private String pid;
-    private String gid;
+public class Span {
     private String id;
-    private Long spend;
-    private String port;
-    private String ip;
+    /**
+     * span名称
+     */
+    private String name;
+    /**
+     * span类型
+     */
+    private String kind;
+    /**
+     * 实例标识ID
+     */
+    private String instanceId;
+    /**
+     * 开始时间,单位纳秒
+     */
+    private Long startTime;
+    /**
+     * 结束时间,单位纳秒
+     */
+    private Long endTime;
+    /**
+     * 持续时间,单位纳秒
+     */
+    private Long duration;
+    /**
+     * span 属性
+     */
+    private Attributes attributes;
+    /**
+     * 父 span id
+     */
+    private String parentId;
+    /**
+     * 链路ID
+     */
+    private String traceId;
+    /**
+     * 暂存数据,不上报
+     */
+    private Map<String, Object> cacheMap;
 
-    public Span(String spanType){
-        setType(spanType);
-        setTime(new Date());
+    /**
+     * 是否异常,0正常,1异常
+     */
+    private Integer exception = 0;
+
+    /**
+     * 子span数量
+     */
+    private AtomicInteger totalChild = new AtomicInteger();
+
+    public Span(String kind) {
+        this.kind = kind;
+        this.startTime = System.nanoTime();
     }
 
-    public Object getTag(String key){
-        if(tags == null){
-            return null;
-        }
-        return tags.get(key);
-    }
-
-    public Span addTag(String key,Object val) {
-        if(tags == null){
-            tags = new Tags();
-        }
-        this.tags.put(key,val);
-        return this;
-    }
-
-    public Span removeTag(String key){
-        if(tags != null){
-            this.tags.remove(key);
-        }
-        return this;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Span setType(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public Span setTime(Date time) {
-        this.time = time;
-        return this;
-    }
-
-    public String getInst() {
-        return inst;
-    }
-
-    public Span setInst(String inst) {
-        this.inst = inst;
-        return this;
-    }
-
-    public String getApp() {
-        return app;
-    }
-
-    public Span setApp(String app) {
-        this.app = app;
-        return this;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public Span setPid(String pid) {
-        this.pid = pid;
-        return this;
-    }
-
-    public String getGid() {
-        return gid;
-    }
-
-    public Span setGid(String gid) {
-        this.gid = gid;
-        return this;
-    }
 
     public String getId() {
         return id;
@@ -111,40 +76,156 @@ public class Span{
         return this;
     }
 
-    public Long getSpend() {
-        return spend;
+    public Span setName(String name) {
+        this.name = name;
+        return this;
     }
 
-    public void setSpend(Long spend) {
-        this.spend = spend;
+    public Span setKind(String kind) {
+        this.kind = kind;
+        return this;
     }
 
-    public String getPort() {
-        return port;
+    public Span setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
+        return this;
     }
 
-    public void setPort(String port) {
-        this.port = port;
+    public Span setStartTime(Long startTime) {
+        this.startTime = startTime;
+        return this;
     }
 
-    public String getIp() {
-        return ip;
+    public Span setEndTime(Long endTime) {
+        this.endTime = endTime;
+        return this;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public Span setDuration(Long duration) {
+        this.duration = duration;
+        return this;
     }
 
-    public String getEnv() {
-        return env;
+    public Span setAttributes(Attributes attributes) {
+        this.attributes = attributes;
+        return this;
     }
 
-    public void setEnv(String env) {
-        this.env = env;
+    public Span addAttribute(String key, Object value) {
+        if (this.attributes == null) {
+            this.attributes = new Attributes();
+        }
+        this.attributes.addAttribute(key, value);
+        return this;
     }
 
-    public Tags getTags() {
-        return tags;
+    public Object getAttribute(String key) {
+        if (this.attributes != null) {
+            return this.attributes.get(key);
+        }
+        return null;
     }
 
+    public Span removeAttribute(String key) {
+        if (this.attributes != null) {
+            this.attributes.remove(key);
+        }
+        return this;
+    }
+
+    public Span setParentId(String parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
+    public Span setTraceId(String traceId) {
+        this.traceId = traceId;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public Long getDuration() {
+        return duration;
+    }
+
+    public Attributes getAttributes() {
+        return attributes;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public String getTraceId() {
+        return traceId;
+    }
+
+    public Integer getException() {
+        return exception;
+    }
+
+    public Span setException(Integer exception) {
+        this.exception = exception;
+        return this;
+    }
+
+    public Span addCache(String key, Object value) {
+        if (this.cacheMap == null) {
+            this.cacheMap = new HashMap<>(16);
+        }
+        this.cacheMap.put(key, value);
+        return this;
+    }
+
+    public Object getCache(String key) {
+        if (this.cacheMap != null) {
+            this.cacheMap.get(key);
+        }
+        return null;
+    }
+
+    public Span removeCache(String key) {
+        if (this.cacheMap != null) {
+            this.cacheMap.remove(key);
+        }
+        return this;
+    }
+
+    public Span clearCache() {
+        this.cacheMap = null;
+        return this;
+    }
+
+    public Integer getTotalChild() {
+        return totalChild.intValue();
+    }
+
+    public Span addTotalChild(Integer delta) {
+        this.totalChild.addAndGet(delta);
+        return this;
+    }
+
+    public Span incrementTotalChild() {
+        this.totalChild.incrementAndGet();
+        return this;
+    }
 }

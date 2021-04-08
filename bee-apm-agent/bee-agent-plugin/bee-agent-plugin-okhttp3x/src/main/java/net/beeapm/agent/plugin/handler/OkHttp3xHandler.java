@@ -17,12 +17,12 @@ public class OkHttp3xHandler extends AbstractHandler {
         try {
             if(allArguments[0] != null && allArguments[0] instanceof okhttp3.Request.Builder){
                 okhttp3.Request.Builder builder = (okhttp3.Request.Builder)allArguments[0];
-                builder.header(HeaderKey.GID, BeeTraceContext.getGId());
-                builder.header(HeaderKey.PID,BeeTraceContext.getCurrentId());
+                builder.header(HeaderKey.TRACE_ID, BeeTraceContext.getTraceId());
+                builder.header(HeaderKey.PARENT_ID,BeeTraceContext.getCurrentId());
                 builder.header(HeaderKey.SRC_APP, BeeConfig.me().getApp());
                 builder.header(HeaderKey.SRC_INST, BeeConfig.me().getInst());
-                if(BeeTraceContext.getCTag() != null) {
-                    builder.header(HeaderKey.CTAG, BeeTraceContext.getCTag());
+                if(BeeTraceContext.getSampled() != null) {
+                    builder.header(HeaderKey.SAMPLED, BeeTraceContext.getSampled());
                 }
             }
         }catch (Exception e){

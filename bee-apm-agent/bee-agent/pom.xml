@@ -62,6 +62,8 @@
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
+                            <minimizeJar>true</minimizeJar>
+
                             <artifactSet>
                                 <excludes>
                                     <exclude>commons-logging:*</exclude>

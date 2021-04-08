@@ -19,10 +19,10 @@ public class HttpClient4xHandler extends AbstractHandler {
             for (int i = 0; i < allArguments.length; i++) {
                 if (allArguments[i] instanceof HttpRequest) {
                     HttpRequest req = (HttpRequest) allArguments[i];
-                    if(req.getLastHeader(HeaderKey.GID) == null){
-                        req.setHeader(HeaderKey.GID, BeeTraceContext.getGId());
-                        req.setHeader(HeaderKey.PID,BeeTraceContext.getCurrentId());
-                        req.setHeader(HeaderKey.CTAG,BeeTraceContext.getCTag());
+                    if(req.getLastHeader(HeaderKey.TRACE_ID) == null){
+                        req.setHeader(HeaderKey.TRACE_ID, BeeTraceContext.getTraceId());
+                        req.setHeader(HeaderKey.PARENT_ID,BeeTraceContext.getCurrentId());
+                        req.setHeader(HeaderKey.SAMPLED,BeeTraceContext.getSampled());
                         req.setHeader(HeaderKey.SRC_APP, BeeConfig.me().getApp());
                         req.setHeader(HeaderKey.SRC_INST, BeeConfig.me().getInst());
                     }

@@ -5,39 +5,39 @@ package net.beeapm.agent.model;
  * @date 2020/05/13
  */
 public class TraceContextModel {
-    private String pid;
-    private String gid;
-    private String cTag;
+    private String parentId;
+    private String traceId;
+    private String sampled;
 
-    public String getPid() {
-        return pid;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
-    public String getGid() {
-        return gid;
+    public String getTraceId() {
+        return traceId;
     }
 
-    public void setGid(String gid) {
-        this.gid = gid;
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
-    public String getCTag() {
-        return cTag;
+    public String getSampled() {
+        return sampled;
     }
 
-    public void setCTag(String cTag) {
-        this.cTag = cTag;
+    public void setSampled(String sampled) {
+        this.sampled = sampled;
     }
 
     public TraceContextModel copy() {
         TraceContextModel model = new TraceContextModel();
-        model.setCTag(this.cTag);
-        model.setGid(this.gid);
-        model.setPid(this.pid);
+        model.setSampled(this.sampled);
+        model.setTraceId(this.traceId);
+        model.setParentId(this.parentId);
         return model;
     }
 }

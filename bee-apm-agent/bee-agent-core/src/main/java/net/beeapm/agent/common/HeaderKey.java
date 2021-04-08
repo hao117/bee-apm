@@ -6,9 +6,9 @@ package net.beeapm.agent.common;
  * @date 2018/8/7
  */
 public class HeaderKey {
-    public final static String PID = "bee-pid";
-    public final static String GID = "bee-gid";
-    public final static String CTAG = "bee-ctag";
+    public final static String PARENT_ID = "bee-parent-id";
+    public final static String TRACE_ID = "bee-trace-id";
+    public final static String SAMPLED = "bee-sampled";
     public final static String ID  = "bee-id";
     public final static String SRC_APP = "bee-src-app";
     public final static String SRC_INST = "bee-src-inst";

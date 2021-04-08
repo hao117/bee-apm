@@ -39,7 +39,7 @@ public class ThreadHandler extends AbstractHandler {
         Span span = new Span("t");
         //修改入参
         TraceContextModel traceContextModel = BeeTraceContext.getOrNew().copy();
-        traceContextModel.setPid(BeeTraceContext.getCurrentId());
+        traceContextModel.setParentId(BeeTraceContext.getCurrentId());
         if (task instanceof Runnable) {
             task = new BeeRunnableWrapper((Runnable) task, traceContextModel);
         } else if (task instanceof Callable) {

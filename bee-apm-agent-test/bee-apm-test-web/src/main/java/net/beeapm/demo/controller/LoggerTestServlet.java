@@ -1,11 +1,6 @@
 package net.beeapm.demo.controller;
 
 
-import ch.qos.logback.classic.LoggerContext;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.slf4j.impl.StaticLoggerBinder;
 
 import javax.servlet.annotation.WebServlet;
@@ -43,6 +38,7 @@ public class LoggerTestServlet extends HttpServlet{
     }
 
     private void testLog4j(){
+        /*
         BasicConfigurator.configure();
         Logger logger = LogManager.getLogger(LoggerTestServlet.class);
         logger.setLevel(Level.ALL);
@@ -54,6 +50,7 @@ public class LoggerTestServlet extends HttpServlet{
         logger.warn("Log4j==================>warn");
         logger.error("Log4j==================>error",t1);
         logger.fatal("Log4j==================>fatal",t2);
+        */
     }
 
     private void testLog4j2(){
@@ -69,6 +66,7 @@ public class LoggerTestServlet extends HttpServlet{
     }
 
     private void testLogback(){
+        /*
         LoggerContext loggerFactory = (LoggerContext)StaticLoggerBinder.getSingleton().getLoggerFactory();
         ch.qos.logback.classic.Logger logger = loggerFactory.getLogger(LoggerTestServlet.class);
         Throwable t = new Exception("test----------------Exception");
@@ -78,5 +76,6 @@ public class LoggerTestServlet extends HttpServlet{
         logger.info("Logback==================>info");
         logger.warn("Logback==================>warn");
         logger.error("Logback==================>error",t);
+        */
     }
 }

@@ -1,4 +1,4 @@
-package net.beeapm.ui.service;
+package net.beeapm.ui.service.impl.es;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -12,6 +12,8 @@ import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.TableVo;
+import net.beeapm.ui.service.ILoggerService;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,8 @@ public class LoggerServiceImpl implements ILoggerService {
             for (int i = 0; i < hits.size(); i++) {
                 JSONObject hit = hits.getJSONObject(i);
                 JSONObject row = hit.getJSONObject("_source");
+                String time = DateFormatUtils.format(new Date(row.getLong("time")),"yyyy-MM-dd HH:mm:ss");
+                row.put("time",time);
                 rows.add(row);
             }
             res.setRows(rows);

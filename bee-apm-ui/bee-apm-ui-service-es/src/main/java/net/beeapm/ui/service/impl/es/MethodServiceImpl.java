@@ -1,4 +1,4 @@
-package net.beeapm.ui.service;
+package net.beeapm.ui.service.impl.es;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -12,6 +12,8 @@ import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.TableVo;
+import net.beeapm.ui.service.IMethodService;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class SqlServiceImpl implements ISqlService {
-    private Logger logger = LoggerFactory.getLogger(SqlServiceImpl.class);
+public class MethodServiceImpl implements IMethodService {
+    private Logger logger = LoggerFactory.getLogger(MethodServiceImpl.class);
     @Override
     public TableVo list(Map<String, Object> params) {
         TableVo res = new TableVo();
@@ -28,12 +30,12 @@ public class SqlServiceImpl implements ISqlService {
         res.setPageNum(Integer.parseInt(params.get("pageNum").toString()));
         params.put("from",(res.getPageNum() - 1) * BeeConst.PAGE_SIZE);
         params.put("size",BeeConst.PAGE_SIZE);
-        if (params.get("sort") == null || params.get("sort").toString().isEmpty()) {
-            params.put("sort", "time");
+        if(params.get("sort") == null || params.get("sort").toString().isEmpty()){
+            params.put("sort","time");
         }
         List<Object> rows = new ArrayList<>();
         try {
-            SearchResult searchResult = EsJestClient.inst().search(params, "PageDataList", EsIndicesPrefix.SQL);
+            SearchResult searchResult = EsJestClient.inst().search(params, "PageDataList", EsIndicesPrefix.PROCESS);
             if(404 == searchResult.getResponseCode()){
                 res.setCode("-1");
                 res.setMsg(searchResult.getErrorMessage());
@@ -46,6 +48,8 @@ public class SqlServiceImpl implements ISqlService {
             for(int i = 0; i < hits.size(); i++){
                 JSONObject hit = hits.getJSONObject(i);
                 JSONObject row = hit.getJSONObject("_source");
+                String time = DateFormatUtils.format(new Date(row.getLong("time")),"yyyy-MM-dd HH:mm:ss");
+                row.put("time",time);
                 rows.add(row);
             }
             res.setRows(rows);
@@ -76,7 +80,7 @@ public class SqlServiceImpl implements ISqlService {
             args.put("format", timeInfo[1]);
             args.put("timeZone", timeInfo[2]);
             String queryString = EsQueryStringMap.me().getQueryString("BarDataList", args);
-            String[] indices = BeeUtils.getIndices(EsIndicesPrefix.SQL, params);
+            String[] indices = BeeUtils.getIndices(EsIndicesPrefix.PROCESS, params);
             SearchResult result = EsJestClient.inst().search(indices, null, queryString);
             if (404 == result.getResponseCode()) {
                 res.setCode("-1");

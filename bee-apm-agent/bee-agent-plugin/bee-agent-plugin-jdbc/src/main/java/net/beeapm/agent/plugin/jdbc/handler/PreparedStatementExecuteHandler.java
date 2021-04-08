@@ -85,10 +85,10 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
                 try {
                     //ResultSet类型为TYPE_FORWARD_ONLY，只能单向，此时不能进行滚动，否则无法回滚回去
                     if (rs.getType() == ResultSet.TYPE_FORWARD_ONLY) {
-                        return "only";
+                        return "-1";
                     }
                 } catch (Exception e) {
-                    return "error";
+                    return "-2";
                 }
                 try {
                     rs.last();
