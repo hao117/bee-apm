@@ -3,7 +3,7 @@ package net.beeapm.agent.common;
 /**
  * 报文头相关key值
  * @author yuan
- * @date 2018/8/7
+ * @date 2021/4/8
  */
 public class AttrKey {
     public static final String REQUEST_CLIENT = "request_client";
