@@ -5,13 +5,18 @@ import net.beeapm.agent.common.SpanManager;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.plugin.common.SpringTxConfig;
 import net.beeapm.agent.plugin.common.SpringTxContext;
 import org.springframework.transaction.TransactionDefinition;
 
+/**
+ * @author yuan
+ * @date 2018/9/20
+ */
 public class SpringTxBeginHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(SpringTxBeginHandler.class.getSimpleName());
+    private static final String ATTR_KEY_DB_TX_METHOD = "db_tx_method";
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
@@ -23,9 +28,9 @@ public class SpringTxBeginHandler extends AbstractHandler {
         if (t != null || !SpringTxConfig.me().isEnable() || SamplingUtil.NO()) {
             return result;
         }
-        Span span = SpanManager.createLocalSpan(SpanType.SPRING_TX);
+        Span span = SpanManager.createLocalSpan(SpanKind.SPRING_TX);
         TransactionDefinition definition = (TransactionDefinition) allArguments[1];
-        span.addTag("point", definition.getName());
+        span.addAttribute(ATTR_KEY_DB_TX_METHOD, definition.getName());
         SpringTxContext.setTxSpan(span);
         logEndTrace(className, methodName, span, log);
         return result;

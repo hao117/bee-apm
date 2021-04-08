@@ -3,7 +3,7 @@ package net.beeapm.agent.common;
 import net.beeapm.agent.Version;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 /**
@@ -25,9 +25,8 @@ public class HeartbeatTask {
         service.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                Span span = new Span(SpanType.HEARTBEAT);
+                Span span = new Span(SpanKind.HEARTBEAT);
                 span.setId(getId());
-                BeeConfig.me().fillEnvInfo(span);
                 span.setTime(new Date());
                 span.addTag("version", Version.VERSION);
                 ReporterFactory.report(span);

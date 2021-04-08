@@ -29,7 +29,7 @@ public class HttpClient4xHandler extends AbstractHandler {
                 }
             }
         }catch (Exception e){
-            log.warn("",e);
+            log.error("add http header fail",e);
         }
         return null;
     }

@@ -21,7 +21,7 @@
         <module>bee-agent-plugin-jdbc</module>
         <module>bee-agent-plugin-logger</module>
         <module>bee-agent-plugin-okhttp3x</module>
-        <module>bee-agent-plugin-process</module>
+        <module>bee-agent-plugin-methods</module>
         <module>bee-agent-plugin-servlet</module>
         <module>bee-agent-plugin-springtx</module>
         <module>bee-agent-plugin-thread</module>

@@ -7,6 +7,10 @@ import net.beeapm.agent.config.ConfigUtils;
 
 import java.util.*;
 
+/**
+ * @date 2018/9/8
+ * @author yuan
+ */
 public class LoggerConfig extends AbstractBeeConfig {
     private static LoggerConfig config;
     public static int LEVEL_TRACE = 0;

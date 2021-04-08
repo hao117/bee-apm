@@ -7,6 +7,6 @@ import net.beeapm.agent.plugin.thread.handler.ThreadHandler;
  * @date 2020/05/29
  */
 public class ThreadConst {
-    public final static String KEY_TASK = "task";
+    public final static String CACHE_KEY_TASK = "task";
     public final static String HANDLER_NAME = ThreadHandler.class.getName();
 }

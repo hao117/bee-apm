@@ -11,9 +11,9 @@ import net.beeapm.agent.plugin.common.SpringTxContext;
  * @author yuan
  * @date 2018-09-22
  */
-public class SqlExecuteCountHandler extends AbstractHandler {
-    private static final ILog log = LogFactory.getLog(SqlExecuteCountHandler.class.getSimpleName());
-    private static final String KEY_SQL_COUNT = "count";
+public class TotalSqlExecuteHandler extends AbstractHandler {
+    private static final ILog log = LogFactory.getLog(TotalSqlExecuteHandler.class.getSimpleName());
+    private static final String ATTR_KEY_SQL_TOTAL = "db_sql_total";
     private static final int VAL_STACK_DEPTH = 3;
 
     @Override
@@ -30,12 +30,12 @@ public class SqlExecuteCountHandler extends AbstractHandler {
                     return span;
                 }
             }
-            Integer sqlCount = (Integer) span.getTag(KEY_SQL_COUNT);
-            if (sqlCount == null) {
-                sqlCount = new Integer(0);
+            Integer totalSql = (Integer) span.getAttribute(ATTR_KEY_SQL_TOTAL);
+            if (totalSql == null) {
+                totalSql = new Integer(0);
             }
-            sqlCount++;
-            span.addTag(KEY_SQL_COUNT, sqlCount);
+            totalSql++;
+            span.addAttribute(ATTR_KEY_SQL_TOTAL, totalSql);
         }
         return span;
     }

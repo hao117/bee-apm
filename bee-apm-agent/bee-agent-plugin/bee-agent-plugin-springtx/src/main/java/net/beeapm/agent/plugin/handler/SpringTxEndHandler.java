@@ -1,7 +1,6 @@
 package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.SamplingUtil;
-import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
@@ -9,6 +8,10 @@ import net.beeapm.agent.plugin.common.SpringTxConfig;
 import net.beeapm.agent.plugin.common.SpringTxContext;
 import net.beeapm.agent.reporter.ReporterFactory;
 
+/**
+ * @date 2018/9/20
+ * @author yuan
+ */
 public class SpringTxEndHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(SpringTxEndHandler.class.getSimpleName());
     @Override
@@ -19,9 +22,8 @@ public class SpringTxEndHandler extends AbstractHandler {
         Span span = SpringTxContext.getTxSpan();
         SpringTxContext.remove();
         if(span != null) {
-            calculateSpend(span);
-            if(span.getSpend() > SpringTxConfig.me().getSpend()) {
-                BeeConfig.me().fillEnvInfo(span);
+            calculateDuration(span);
+            if(span.getDuration() > SpringTxConfig.me().getSpend()) {
                 ReporterFactory.report(span);
             }
         }

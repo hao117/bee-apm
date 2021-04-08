@@ -2,7 +2,7 @@ package net.beeapm.agent.plugin;
 
 import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
-import net.beeapm.agent.plugin.interceptor.SqlExecuteCountAdvice;
+import net.beeapm.agent.plugin.interceptor.TotalSqlExecuteAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
  * @date 2018/08/14
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "springTxSqlCount")
-public class SqlExecuteCountPlugin extends AbstractPlugin {
+public class TotalSqlExecutePlugin extends AbstractPlugin {
     @Override
     public String getName() {
         return "springTxSqlCount";
@@ -49,6 +49,6 @@ public class SqlExecuteCountPlugin extends AbstractPlugin {
 
     @Override
     public Class interceptorAdviceClass() {
-        return SqlExecuteCountAdvice.class;
+        return TotalSqlExecuteAdvice.class;
     }
 }

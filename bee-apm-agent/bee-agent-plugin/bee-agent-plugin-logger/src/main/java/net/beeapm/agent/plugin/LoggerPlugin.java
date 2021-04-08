@@ -34,7 +34,7 @@ public class LoggerPlugin extends AbstractPlugin {
                                 matcher = ElementMatchers.named(loggerClass.get(i));
                                 continue;
                             }
-                            matcher = matcher.or(ElementMatchers.<TypeDescription>named(loggerClass.get(i)));
+                            matcher = matcher.or(ElementMatchers.named(loggerClass.get(i)));
                         }
                         return matcher;
                     }

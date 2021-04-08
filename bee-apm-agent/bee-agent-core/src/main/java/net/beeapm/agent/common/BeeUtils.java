@@ -73,7 +73,7 @@ public class BeeUtils {
     }
 
     /**
-     * 包含String和封装的基本类型
+     * 包含String、基本类型、基本类型的封装类型
      *
      * @param obj
      * @return

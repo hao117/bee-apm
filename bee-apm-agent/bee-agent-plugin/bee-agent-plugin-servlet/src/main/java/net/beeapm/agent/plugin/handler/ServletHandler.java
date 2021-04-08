@@ -6,7 +6,7 @@ import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.plugin.common.BeeHttpServletRequestWrapper;
 import net.beeapm.agent.plugin.common.BeeHttpServletResponseWrapper;
 import net.beeapm.agent.plugin.ServletConfig;
@@ -25,6 +25,15 @@ import java.util.Map;
  */
 public class ServletHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog("ServletHandler");
+    private static final String ATTR_KEY_CLIENT_APP = "client_app";
+    private static final String ATTR_KEY_CLIENT_APP_INST = "client_app_inst";
+    private static final String ATTR_KEY_HTTP_METHOD = "http_method";
+    private static final String ATTR_KEY_HTTP_URL = "http_url";
+    private static final String ATTR_KEY_HTTP_REMOTE = "http_remote";
+    private static final String ATTR_KEY_HTTP_BODY = "http_body";
+    private static final String ATTR_KEY_HTTP_PARAM = "http_param";
+    private static final String ATTR_KEY_HTTP_HEADERS = "http_headers";
+
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
@@ -38,17 +47,17 @@ public class ServletHandler extends AbstractHandler {
             return null;
         }
         Span currSpan = SpanManager.getCurrentSpan();
-        if (currSpan == null || !currSpan.getKind().equals(SpanType.REQUEST)) {
+        if (currSpan == null || !currSpan.getKind().equals(SpanKind.SERVER)) {
             BeeTraceContext.setTraceId(request.getHeader(HeaderKey.TRACE_ID));
             BeeTraceContext.setParentId(request.getHeader(HeaderKey.PARENT_ID));
             BeeTraceContext.setSampled(request.getHeader(HeaderKey.SAMPLED));
-            Span span = SpanManager.createEntrySpan(SpanType.REQUEST);
+            Span span = SpanManager.createEntrySpan(SpanKind.SERVER);
             String srcApp = request.getHeader(HeaderKey.SRC_APP);
             if (srcApp == null) {
                 srcApp = "nvl";
             }
-            span.addAttribute("srcApp", srcApp);
-            span.addAttribute("srcInst", request.getHeader(HeaderKey.SRC_INST));
+            span.addAttribute(ATTR_KEY_CLIENT_APP, srcApp);
+            span.addAttribute(ATTR_KEY_CLIENT_APP_INST, request.getHeader(HeaderKey.SRC_INST));
             if (ServletConfig.me().isEnableRespBody() && !resp.getClass().getSimpleName().equals(Const.CLASS_BEE_HTTP_SERVLET_RESPONSE_WRAPPER)) {
                 BeeHttpServletResponseWrapper wrapper = new BeeHttpServletResponseWrapper(resp);
                 //在ServletAdvice里取出来要清除掉
@@ -73,19 +82,18 @@ public class ServletHandler extends AbstractHandler {
             flush(response);
             return null;
         }
-        if (currSpan != null && currSpan.getKind().equals(SpanType.REQUEST)) {
+        if (currSpan != null && currSpan.getKind().equals(SpanKind.SERVER)) {
             Span span = SpanManager.getExitSpan();
             HttpServletRequest request = (HttpServletRequest) allArguments[0];
-            span.addAttribute("url", request.getRequestURL());
-            span.addAttribute("remote", request.getRemoteAddr());
-            span.addAttribute("method", request.getMethod());
-            calculateSpend(span);
+            span.addAttribute(ATTR_KEY_HTTP_URL, request.getRequestURL());
+            span.addAttribute(ATTR_KEY_HTTP_REMOTE, request.getRemoteAddr());
+            span.addAttribute(ATTR_KEY_HTTP_METHOD, request.getMethod());
+            calculateDuration(span);
             if (span.getDuration() > ServletConfig.me().getSpend() && SamplingUtil.YES()) {
                 //返回gid，用于跟踪
                 response.setHeader(HeaderKey.TRACE_ID, span.getTraceId());
                 //返回id，用于跟踪
                 response.setHeader(HeaderKey.ID, span.getId());
-                BeeConfig.me().fillEnvInfo(span);
                 ReporterFactory.report(span);
                 //采集参数
                 collectRequestParameter(span, request);
@@ -121,9 +129,9 @@ public class ServletHandler extends AbstractHandler {
         if (ServletConfig.me().isEnableReqParam()) {
             Map<String, String[]> params = request.getParameterMap();
             if (params != null && !params.isEmpty()) {
-                Span paramSpan = new Span(SpanType.REQUEST_PARAM);
+                Span paramSpan = new Span(SpanKind.REQUEST_PARAM);
                 paramSpan.setId(span.getId());
-                paramSpan.addAttribute("param", JSON.toJSONString(params));
+                paramSpan.addAttribute(ATTR_KEY_HTTP_PARAM, JSON.toJSONString(params));
                 ReporterFactory.report(paramSpan);
             }
         }
@@ -138,11 +146,11 @@ public class ServletHandler extends AbstractHandler {
     private void collectRequestBody(Span span, HttpServletRequest request) {
         if (request instanceof BeeHttpServletRequestWrapper) {
             BeeHttpServletRequestWrapper wrapper = (BeeHttpServletRequestWrapper) request;
-            Span bodySpan = new Span(SpanType.REQUEST_BODY);
+            Span bodySpan = new Span(SpanKind.REQUEST_BODY);
             bodySpan.setId(span.getId());
             String body = new String(wrapper.getBody());
             if (body != null && !body.isEmpty()) {
-                bodySpan.addAttribute("body", new String(wrapper.getBody()));
+                bodySpan.addAttribute(ATTR_KEY_HTTP_BODY, new String(wrapper.getBody()));
                 ReporterFactory.report(bodySpan);
             }
         }
@@ -164,9 +172,9 @@ public class ServletHandler extends AbstractHandler {
                 headers.put(key, value);
             }
             if (!headers.isEmpty()) {
-                Span headersSpan = new Span(SpanType.REQUEST_HEADERS);
+                Span headersSpan = new Span(SpanKind.REQUEST_HEADERS);
                 headersSpan.setId(span.getId());
-                headersSpan.addAttribute("headers", JSON.toJSONString(headers));
+                headersSpan.addAttribute(ATTR_KEY_HTTP_HEADERS, JSON.toJSONString(headers));
                 ReporterFactory.report(headersSpan);
             }
         }
@@ -183,11 +191,11 @@ public class ServletHandler extends AbstractHandler {
             BeeHttpServletResponseWrapper beeResp = (BeeHttpServletResponseWrapper) resp;
             //触发原有的输出
             beeResp.writeOriginOutputStream();
-            Span respSpan = new Span(SpanType.RESPONSE_BODY);
+            Span respSpan = new Span(SpanKind.RESPONSE_BODY);
             respSpan.setId(span.getId());
             byte[] body = beeResp.toByteArray();
             if (body != null && body.length > 0) {
-                respSpan.addAttribute("body", new String(body));
+                respSpan.addAttribute(ATTR_KEY_HTTP_BODY, new String(body));
                 ReporterFactory.report(respSpan);
             }
         }

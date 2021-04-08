@@ -9,10 +9,10 @@
         <groupId>net.beeapm</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>bee-agent-plugin-process</artifactId>
+    <artifactId>bee-agent-plugin-methods</artifactId>
     <packaging>jar</packaging>
     <build>
-        <finalName>bee-agent-plugin-process</finalName>
+        <finalName>bee-agent-plugin-methods</finalName>
     </build>
 
 </project>

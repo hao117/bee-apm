@@ -1,13 +1,15 @@
 package net.beeapm.agent.common;
 
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.util.Stack;
 
 public class SpanManager {
     private static final ThreadLocal<Stack<Span>> threadLocalSpan = new ThreadLocal<Stack<Span>>();
+    private static final String ATTR_KEY_REQUEST_CLIENT = "request_client";
+    private static final String ATTR_KEY_REQUEST_SERVER = "request_server";
 
     private static Span createSpan(String spanKind) {
         Stack<Span> stack = threadLocalSpan.get();
@@ -101,10 +103,10 @@ public class SpanManager {
         if (fromApp == null || fromApp.isEmpty()) {
             fromApp = "nvl";
         }
-        Span span = new Span(SpanType.TOPOLOGY);
+        Span span = new Span(SpanKind.TOPOLOGY);
         span.setTraceId(BeeTraceContext.getTraceId());
-        span.addAttribute("request_client",fromApp);
-        span.addAttribute("request_server",toApp);
+        span.addAttribute(ATTR_KEY_REQUEST_CLIENT, fromApp);
+        span.addAttribute(ATTR_KEY_REQUEST_SERVER, toApp);
         span.setId(IdHelper.id());
         ReporterFactory.report(span);
     }

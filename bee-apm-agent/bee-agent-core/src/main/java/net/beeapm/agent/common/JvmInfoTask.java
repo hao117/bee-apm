@@ -3,7 +3,7 @@ package net.beeapm.agent.common;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.model.GcInfo;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.util.Date;
@@ -29,9 +29,8 @@ public class JvmInfoTask {
         service.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                Span span = new Span(SpanType.JVM);
+                Span span = new Span(SpanKind.JVM);
                 span.setId(IdHelper.id());
-                BeeConfig.me().fillEnvInfo(span);
                 span.setTime(new Date());
                 buildJvmInfo(span);
                 ReporterFactory.report(span);

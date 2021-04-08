@@ -76,15 +76,16 @@ public class ReporterFactory {
                 Thread.sleep(idleSleep);
                 return;
             }
-            List<Span> list = new ArrayList<Span>(batchSize);
+            List<Span> list = new ArrayList<>(batchSize);
             queue.drainTo(list, batchSize);
             reporter.report(list);
         } catch (Exception e) {
-            log.error("", e);
+            log.error("report failed", e);
         }
     }
 
     public static void report(Span span) {
+        span.clearCache();
         if (ConfigUtils.me().getBoolean("reporter.log", false)) {
             log.debug(JSON.toJSONString(span));
         }

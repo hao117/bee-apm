@@ -113,12 +113,4 @@ public class BeeConfig extends AbstractBeeConfig {
     public int getJvmPeriod() {
         return jvmPeriod;
     }
-
-    public void fillEnvInfo(Span span){
-        span.setIp(getIp());
-        span.setPort(getPort());
-        span.setInst(getInst());
-        span.setApp(getApp());
-        span.setEnv(getEnv());
-    }
 }

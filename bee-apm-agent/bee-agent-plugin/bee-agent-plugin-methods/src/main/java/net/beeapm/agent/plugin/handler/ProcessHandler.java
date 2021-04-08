@@ -2,11 +2,10 @@ package net.beeapm.agent.plugin.handler;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.common.*;
-import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.plugin.ProcessConfig;
 import net.beeapm.agent.reporter.ReporterFactory;
 
@@ -38,7 +37,7 @@ public class ProcessHandler extends AbstractHandler {
         if (!ProcessConfig.me().isEnable()) {
             return null;
         }
-        Span span = SpanManager.createEntrySpan(SpanType.PROCESS);
+        Span span = SpanManager.createEntrySpan(SpanKind.METHOD);
         logBeginTrace(className, methodName, span, log);
         String params = collectParams(allArgs, span.getId(), className + "." + methodName);
         span.addCache(KEY_PARAM, params);
@@ -63,7 +62,7 @@ public class ProcessHandler extends AbstractHandler {
         if (!ProcessConfig.me().isEnable()) {
             return null;
         }
-        calculateSpend(span);
+        calculateDuration(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
         if (span.getDuration() > ProcessConfig.me().getSpend() && SamplingUtil.YES()) {
@@ -71,7 +70,6 @@ public class ProcessHandler extends AbstractHandler {
             span.addAttribute(ATTR_KEY_METHOD_NAME, methodName)
                     .addAttribute(ATTR_KEY_METHOD_CLASS, className);
             handleMethodSignature(span, (String) extVal[0]);
-            BeeConfig.me().fillEnvInfo(span);
             ReporterFactory.report(span);
         }
         //异常处理
@@ -123,7 +121,7 @@ public class ProcessHandler extends AbstractHandler {
         if (params == null) {
             return;
         }
-        Span paramSpan = new Span(SpanType.PARAM);
+        Span paramSpan = new Span(SpanKind.PARAM);
         paramSpan.setId(id);
         paramSpan.addAttribute(ATTR_KEY_METHOD_PARAM, params);
         ReporterFactory.report(paramSpan);
@@ -131,8 +129,7 @@ public class ProcessHandler extends AbstractHandler {
 
     public void sendError(String id, String errorPoint, Throwable t) {
         if (ProcessConfig.me().isEnableError() && ProcessConfig.me().checkErrorPoint(errorPoint)) {
-            Span err = new Span(SpanType.ERROR);
-            BeeConfig.me().fillEnvInfo(err);
+            Span err = new Span(SpanKind.ERROR);
             err.setId(id);
             err.setTraceId(BeeTraceContext.getTraceId());
             err.addAttribute(ATTR_KEY_METHOD_STACKTRACE, formatThrowable(t));

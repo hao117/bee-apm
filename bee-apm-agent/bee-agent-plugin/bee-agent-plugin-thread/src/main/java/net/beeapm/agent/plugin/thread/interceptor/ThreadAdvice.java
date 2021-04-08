@@ -20,7 +20,8 @@ public class ThreadAdvice {
         IHandler handler = HandlerLoader.load("net.beeapm.agent.plugin.thread.handler.ThreadHandler");
         Span span = handler.before(className, methodName, new Object[]{task}, null);
         if (span != null) {
-            Object ret = span.getTag(ThreadConst.KEY_TASK);
+            Object ret = span.getCache(ThreadConst.CACHE_KEY_TASK);
+            span.clearCache();
             if (ret != null) {
                 //修改入参
                 task = ret;

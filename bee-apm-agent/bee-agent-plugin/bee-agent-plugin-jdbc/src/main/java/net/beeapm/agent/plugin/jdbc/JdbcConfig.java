@@ -4,6 +4,10 @@ import net.beeapm.agent.config.AbstractBeeConfig;
 import net.beeapm.agent.config.BeeConfigFactory;
 import net.beeapm.agent.config.ConfigUtils;
 
+/**
+ * @date 2018/9/4
+ * @author yuan
+ */
 public class JdbcConfig extends AbstractBeeConfig {
     private static JdbcConfig config;
     private Boolean enableParam;

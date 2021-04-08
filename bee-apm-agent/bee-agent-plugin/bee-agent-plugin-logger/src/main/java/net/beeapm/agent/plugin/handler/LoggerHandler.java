@@ -5,11 +5,10 @@ import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.common.BeeUtils;
 import net.beeapm.agent.common.SamplingUtil;
 import net.beeapm.agent.common.SpanManager;
-import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
-import net.beeapm.agent.model.SpanType;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.plugin.LoggerConfig;
 import net.beeapm.agent.reporter.ReporterFactory;
 
@@ -25,6 +24,9 @@ import java.lang.reflect.Field;
 public class LoggerHandler extends AbstractHandler {
     private static final ILog log = LogFactory.getLog(LoggerHandler.class.getSimpleName());
     private static final String VAL_IGNORE_POINT = "org.apache.logging.log4j.status.StatusLogger";
+    private static final String ATTR_KEY_LOGGER_MESSAGE = "logger_message";
+    private static final String ATTR_KEY_LOGGER_LEVEL = "logger_level";
+    private static final String ATTR_KEY_LOGGER_POINT = "logger_point";
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
@@ -46,7 +48,7 @@ public class LoggerHandler extends AbstractHandler {
         if (VAL_IGNORE_POINT.equals(point)) {
             return null;
         }
-        Span span = SpanManager.createLocalSpan(SpanType.LOGGER);
+        Span span = SpanManager.createLocalSpan(SpanKind.LOGGER);
         StringBuilder logBuff = new StringBuilder();
         for (int i = 0; i < allArguments.length; i++) {
             Object arg = allArguments[i];
@@ -64,10 +66,9 @@ public class LoggerHandler extends AbstractHandler {
                 logBuff.append(JSON.toJSONString(arg));
             }
         }
-        span.addTag("point", point + "." + extVal[1]);
-        span.addTag("log", logBuff.toString());
-        span.addTag("level", methodName);
-        BeeConfig.me().fillEnvInfo(span);
+        span.addAttribute(ATTR_KEY_LOGGER_POINT, point + "." + extVal[1]);
+        span.addAttribute(ATTR_KEY_LOGGER_MESSAGE, logBuff.toString());
+        span.addAttribute(ATTR_KEY_LOGGER_LEVEL, methodName);
         ReporterFactory.report(span);
         return null;
     }
@@ -114,7 +115,7 @@ public class LoggerHandler extends AbstractHandler {
                 try {
                     messageField.set(t, "[" + BeeTraceContext.getTraceId() + "]" + detailMessage);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //忽略异常
                 }
             }
         } catch (Throwable tt) {

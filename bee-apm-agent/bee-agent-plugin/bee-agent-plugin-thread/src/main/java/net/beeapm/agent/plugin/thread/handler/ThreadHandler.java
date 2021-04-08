@@ -4,6 +4,7 @@ import net.beeapm.agent.common.BeeTraceContext;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
+import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.model.TraceContextModel;
 import net.beeapm.agent.plugin.handler.AbstractHandler;
 import net.beeapm.agent.plugin.thread.ThreadConfig;
@@ -36,7 +37,7 @@ public class ThreadHandler extends AbstractHandler {
         } else {
             log.debug("thread-pool: class={},method={},handler=done", className, methodName);
         }
-        Span span = new Span("t");
+        Span span = new Span(SpanKind.THREAD);
         //修改入参
         TraceContextModel traceContextModel = BeeTraceContext.getOrNew().copy();
         traceContextModel.setParentId(BeeTraceContext.getCurrentId());
@@ -47,7 +48,7 @@ public class ThreadHandler extends AbstractHandler {
         } else if (task instanceof BeeForkJoinTaskWrapper) {
             task = new BeeForkJoinTaskWrapper((ForkJoinTask) task, traceContextModel);
         }
-        span.addTag(ThreadConst.KEY_TASK, task);
+        span.addCache(ThreadConst.CACHE_KEY_TASK, task);
         return span;
     }
 
