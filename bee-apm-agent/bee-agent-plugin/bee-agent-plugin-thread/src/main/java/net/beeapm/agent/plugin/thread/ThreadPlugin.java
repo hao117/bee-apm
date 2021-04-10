@@ -10,9 +10,12 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RunnableFuture;
 
 
 /**
@@ -57,9 +60,26 @@ public class ThreadPlugin extends AbstractPlugin {
                                         .or(ElementMatchers.named("scheduleAtFixedRate"))
                                         .or(ElementMatchers.named("scheduleWithFixedDelay"))
                                         .or(ElementMatchers.named("invoke")))
+                                .and(ElementMatchers.takesArgument(0, Runnable.class).or(ElementMatchers.takesArgument(0, Callable.class)))
+                                .and(ElementMatchers.not(ElementMatchers.takesArgument(0, FutureTask.class)));
+                    }
+                },
+                new InterceptPoint() {
+                    //拦截FutureTask的构造函数
+                    @Override
+                    public ElementMatcher<TypeDescription> buildTypesMatcher() {
+                        ElementMatcher.Junction matchers = ElementMatchers.any()
+                                .and(ElementMatchers.is(FutureTask.class)
+                                        .or(ElementMatchers.isSubTypeOf(FutureTask.class)));
+
+                        return matchers;
+                    }
+
+                    @Override
+                    public ElementMatcher<MethodDescription> buildMethodsMatcher() {
+                        return ElementMatchers.isConstructor()
                                 .and(ElementMatchers.takesArgument(0, Runnable.class)
-                                        .or(ElementMatchers.takesArgument(0, Callable.class))
-                                        .or(ElementMatchers.takesArgument(0, ForkJoinTask.class)));
+                                        .or(ElementMatchers.takesArgument(0, Callable.class)));
                     }
                 }
         };

@@ -20,11 +20,10 @@ public class ThreadAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
-                             @Advice.This Object instance,
                              @Advice.Argument(value = 0, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object task) {
+        //入参是FutureTask通过拦截FutureTask的构造函数进行处理,这里跳过
         if (task instanceof FutureTask) {
-            //TODO 暂不支持FutureTask
-            //return;
+            return;
         }
         IHandler handler = HandlerLoader.load("net.beeapm.agent.plugin.thread.handler.ThreadHandler");
         HandlerContext.remove();
