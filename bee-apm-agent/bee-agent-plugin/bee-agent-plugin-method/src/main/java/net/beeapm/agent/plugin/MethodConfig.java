@@ -7,8 +7,8 @@ import net.beeapm.agent.config.ConfigUtils;
 import java.util.*;
 import java.util.regex.Pattern;
 
-public class ProcessConfig extends AbstractBeeConfig {
-    private static ProcessConfig config;
+public class MethodConfig extends AbstractBeeConfig {
+    private static MethodConfig config;
     private Boolean enableParam;
     private Boolean enable;
     private Boolean enableMethodSign;
@@ -20,12 +20,12 @@ public class ProcessConfig extends AbstractBeeConfig {
     private List<Pattern> excludePointMatchesList = new ArrayList<Pattern>();
     private List<Pattern> includePointMatchesList = new ArrayList<Pattern>();
 
-    public static ProcessConfig me() {
+    public static MethodConfig me() {
         if (config == null) {
-            synchronized (ProcessConfig.class) {
+            synchronized (MethodConfig.class) {
                 if (config == null) {
-                    config = new ProcessConfig();
-                    BeeConfigFactory.me().registryConfig("process", config);
+                    config = new MethodConfig();
+                    BeeConfigFactory.me().registryConfig("method", config);
                 }
             }
         }
@@ -37,7 +37,7 @@ public class ProcessConfig extends AbstractBeeConfig {
         config = null;
     }
 
-    private ProcessConfig() {
+    private MethodConfig() {
         initConfig();
     }
 
@@ -47,33 +47,33 @@ public class ProcessConfig extends AbstractBeeConfig {
         includeErrorPointPrefix.clear();
         excludeErrorPointPrefix.clear();
 
-        enableParam = ConfigUtils.me().getBoolean("plugins.process.param.enable", true);
-        enable = ConfigUtils.me().getBoolean("plugins.process.enable", true);
-        enableMethodSign = ConfigUtils.me().getBoolean("plugins.process.enableMethodSign", false);
-        List<String> excludeParamTypePrefixList = ConfigUtils.me().getList("plugins.process.param.excludeTypePrefix");
+        enableParam = ConfigUtils.me().getBoolean("plugins.method.param.enable", true);
+        enable = ConfigUtils.me().getBoolean("plugins.method.enable", true);
+        enableMethodSign = ConfigUtils.me().getBoolean("plugins.method.enableMethodSign", false);
+        List<String> excludeParamTypePrefixList = ConfigUtils.me().getList("plugins.method.param.excludeTypePrefix");
         if (excludeParamTypePrefixList != null && !excludeParamTypePrefixList.isEmpty()) {
             excludeParamTypePrefix.addAll(excludeParamTypePrefixList);
         }
 
-        enableError = ConfigUtils.me().getBoolean("plugins.process.error.enable", true);
-        List<String> includeErrorPointPrefixList = ConfigUtils.me().getList("plugins.process.error.includeErrorPointPrefix");
-        List<String> excludeErrorPointPrefixList = ConfigUtils.me().getList("plugins.process.error.excludeErrorPointPrefix");
+        enableError = ConfigUtils.me().getBoolean("plugins.method.error.enable", true);
+        List<String> includeErrorPointPrefixList = ConfigUtils.me().getList("plugins.method.error.includeErrorPointPrefix");
+        List<String> excludeErrorPointPrefixList = ConfigUtils.me().getList("plugins.method.error.excludeErrorPointPrefix");
         if (includeErrorPointPrefixList != null && !includeErrorPointPrefixList.isEmpty()) {
             includeErrorPointPrefix.addAll(includeErrorPointPrefixList);
         }
         if (excludeErrorPointPrefixList != null && !excludeErrorPointPrefixList.isEmpty()) {
             excludeErrorPointPrefix.addAll(excludeErrorPointPrefixList);
         }
-        spend = ConfigUtils.me().getInt("plugins.process.spend", -1);
+        spend = ConfigUtils.me().getInt("plugins.method.spend", -1);
 
-        List<String> excludeParamPointList = ConfigUtils.me().getList("plugins.process.param.excludePointMatches");
+        List<String> excludeParamPointList = ConfigUtils.me().getList("plugins.method.param.excludePointMatches");
         if (excludeParamPointList != null && excludeParamPointList.size() > 0) {
             int size = excludeParamPointList.size();
             for (int i = 0; i < size; i++) {
                 excludePointMatchesList.add(Pattern.compile(excludeParamPointList.get(i)));
             }
         }
-        List<String> includeParamPointList = ConfigUtils.me().getList("plugins.process.param.includePointMatches");
+        List<String> includeParamPointList = ConfigUtils.me().getList("plugins.method.param.includePointMatches");
         if (includeParamPointList != null && includeParamPointList.size() > 0) {
             int size = includeParamPointList.size();
             for (int i = 0; i < size; i++) {

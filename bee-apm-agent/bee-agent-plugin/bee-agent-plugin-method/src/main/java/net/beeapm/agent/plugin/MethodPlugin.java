@@ -4,7 +4,7 @@ import net.beeapm.agent.annotation.BeePlugin;
 import net.beeapm.agent.annotation.BeePluginType;
 import net.beeapm.agent.common.MatchKit;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.plugin.interceptor.ProcessAdvice;
+import net.beeapm.agent.plugin.interceptor.MethodAdvice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -18,17 +18,17 @@ import java.util.Map;
  * @author yuan
  * @date 2018/08/06
  */
-@BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "process")
-public class ProcessPlugin extends AbstractPlugin {
+@BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "method")
+public class MethodPlugin extends AbstractPlugin {
 
     @Override
     public String getName() {
-        return "process";
+        return "method";
     }
 
     @Override
     public InterceptPoint[] buildInterceptPoint() {
-        List<Map<String, Map<String, Map<String, String>>>> list = (List<Map<String, Map<String, Map<String, String>>>>) ConfigUtils.me().getVal("plugins.process.interceptPoints");
+        List<Map<String, Map<String, Map<String, String>>>> list = (List<Map<String, Map<String, Map<String, String>>>>) ConfigUtils.me().getVal("plugins.method.interceptPoints");
         if (list == null || list.isEmpty()) {
             return new InterceptPoint[]{
                     new InterceptPoint() {
@@ -84,7 +84,7 @@ public class ProcessPlugin extends AbstractPlugin {
 
     @Override
     public Class interceptorAdviceClass() {
-        return ProcessAdvice.class;
+        return MethodAdvice.class;
     }
 
 }

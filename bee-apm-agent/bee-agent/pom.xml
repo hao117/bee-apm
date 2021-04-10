@@ -22,6 +22,12 @@
             <groupId>net.beeapm</groupId>
             <artifactId>bee-agent-core</artifactId>
             <version>${bee.agent.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.beeapm</groupId>
+                    <artifactId>bee-agent-spy</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
@@ -62,8 +68,6 @@
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
-                            <minimizeJar>true</minimizeJar>
-
                             <artifactSet>
                                 <excludes>
                                     <exclude>commons-logging:*</exclude>

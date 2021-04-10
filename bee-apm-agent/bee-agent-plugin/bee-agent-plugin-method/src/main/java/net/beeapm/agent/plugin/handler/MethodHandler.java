@@ -6,7 +6,7 @@ import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanKind;
-import net.beeapm.agent.plugin.ProcessConfig;
+import net.beeapm.agent.plugin.MethodConfig;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 import java.io.ByteArrayOutputStream;
@@ -20,8 +20,8 @@ import java.io.IOException;
  * 如果想仅采集异常而不采集process，可以把采样率调成0，不影响异常采集
  * Created by yuan on 2018/7/31.
  */
-public class ProcessHandler extends AbstractHandler {
-    private static final ILog log = LogFactory.getLog(ProcessHandler.class.getSimpleName());
+public class MethodHandler extends AbstractHandler {
+    private static final ILog log = LogFactory.getLog(MethodHandler.class.getSimpleName());
     private static final String KEY_ERROR_THROWABLE = "_ERROR_THROWABLE";
     private static final String KEY_BEE_CHILD_ID = "_BEE_CHILD_ID";
     private static final String KEY_ERROR_POINT = "_ERROR_POINT";
@@ -30,7 +30,7 @@ public class ProcessHandler extends AbstractHandler {
 
     @Override
     public Span before(String className, String methodName, Object[] allArgs, Object[] extVal) {
-        if (!ProcessConfig.me().isEnable()) {
+        if (!MethodConfig.me().isEnable()) {
             return null;
         }
         Span span = SpanManager.createEntrySpan(SpanKind.METHOD);
@@ -55,13 +55,13 @@ public class ProcessHandler extends AbstractHandler {
         span.clearCache();
 
 
-        if (!ProcessConfig.me().isEnable()) {
+        if (!MethodConfig.me().isEnable()) {
             return null;
         }
         calculateDuration(span);
         logEndTrace(className, methodName, span, log);
         //耗时阀值限制
-        if (span.getDuration() > ProcessConfig.me().getSpend() && SamplingUtil.YES()) {
+        if (span.getDuration() > MethodConfig.me().getSpend() && SamplingUtil.YES()) {
             sendParams(span.getId(), params);
             span.addAttribute(AttrKey.METHOD_NAME, methodName)
                     .addAttribute(AttrKey.METHOD_CLASS, className);
@@ -124,7 +124,7 @@ public class ProcessHandler extends AbstractHandler {
     }
 
     public void sendError(String id, String errorPoint, Throwable t) {
-        if (ProcessConfig.me().isEnableError() && ProcessConfig.me().checkErrorPoint(errorPoint)) {
+        if (MethodConfig.me().isEnableError() && MethodConfig.me().checkErrorPoint(errorPoint)) {
             Span err = new Span(SpanKind.ERROR);
             err.setId(id);
             err.setTraceId(BeeTraceContext.getTraceId());
@@ -137,7 +137,7 @@ public class ProcessHandler extends AbstractHandler {
         if (sign == null || sign.length() < 3) {
             return;
         }
-        if (ProcessConfig.me().isEnableMethodSign()) {
+        if (MethodConfig.me().isEnableMethodSign()) {
             span.addAttribute(AttrKey.METHOD_SIGN, sign.substring(1, sign.length() - 1));
         }
     }
@@ -155,10 +155,10 @@ public class ProcessHandler extends AbstractHandler {
     }
 
     private String collectParams(Object[] allArgs, String id, String point) {
-        if (ProcessConfig.me().isEnableParam() && allArgs != null && allArgs.length > 0 && ProcessConfig.me().checkParamPoint(point)) {
+        if (MethodConfig.me().isEnableParam() && allArgs != null && allArgs.length > 0 && MethodConfig.me().checkParamPoint(point)) {
             Object[] params = new Object[allArgs.length];
             for (int i = 0; i < allArgs.length; i++) {
-                if (allArgs[i] != null && ProcessConfig.me().isExcludeParamType(allArgs[i].getClass())) {
+                if (allArgs[i] != null && MethodConfig.me().isExcludeParamType(allArgs[i].getClass())) {
                     params[i] = "--";
                 } else {
                     params[i] = allArgs[i];

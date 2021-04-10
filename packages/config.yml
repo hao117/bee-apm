@@ -12,7 +12,7 @@ reporter:
     threadNum: 2   #从队列读取数据并发送的线程数，默认cpu核数availableProcessors
     idleSleep: 100 #队列为空时候，线程休眠时间，默认100ms
     batchSize: 20  #每次从队列中批量获取数据数量，默认100
-    name: kafka1x  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
+    name: console  #使用哪种reporter支持console,okhttp,kafka1x,rocketmq
     log: true      #是否以logger.debug输出上报的日志数据
     okhttp:        #name对应的reporter的配置参数
         connectTimeout: 30
@@ -28,7 +28,7 @@ reporter:
             linger.ms: 200
         topic: #配置span type和kafka topic映射关系
             default: bee-default #配置默认topic，没有配置映射关系的，数据写到该topic
-            proc: bee-process
+            method: bee-process
             para: bee-process-param
             sql: bee-sql
             sqlp: bee-sql-param
@@ -74,7 +74,7 @@ id:
         connectionTimeoutMs: 15000
     start: 5000
 plugins:
-    process:
+    method:
         enable: true  #采集开关
         spend: -1 #耗时阀值
         enableMethodSign: true #是否采集方法签名,默认false
@@ -92,7 +92,6 @@ plugins:
                 - net.sf.json
                 - org.codehaus
                 - java.lang.reflect
-                - java.lang.Object
                 - java.io
                 - java.nio
                 - sun.nio

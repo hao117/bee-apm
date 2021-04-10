@@ -59,8 +59,7 @@ public class ThreadPlugin extends AbstractPlugin {
                                         .or(ElementMatchers.named("invoke")))
                                 .and(ElementMatchers.takesArgument(0, Runnable.class)
                                         .or(ElementMatchers.takesArgument(0, Callable.class))
-                                        .or(ElementMatchers.takesArgument(0, ForkJoinTask.class))
-                                );
+                                        .or(ElementMatchers.takesArgument(0, ForkJoinTask.class)));
                     }
                 }
         };

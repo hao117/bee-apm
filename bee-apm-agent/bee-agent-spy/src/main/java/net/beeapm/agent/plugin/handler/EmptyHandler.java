@@ -13,13 +13,13 @@ public class EmptyHandler extends AbstractHandler {
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
-        LogUtil.getEmptyHandlerLog().trace("[begin]{}.{} type={}", className, methodName, emptySpan.getType());
+        LogUtil.getEmptyHandlerLog().trace("[begin]{}.{} type={}", className, methodName, emptySpan.getKind());
         return emptySpan;
     }
 
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal) {
-        LogUtil.getEmptyHandlerLog().trace("[end]{}.{} type={}", className, methodName, emptySpan.getType());
+        LogUtil.getEmptyHandlerLog().trace("[end]{}.{} type={}", className, methodName, emptySpan.getKind());
         return result;
     }
 

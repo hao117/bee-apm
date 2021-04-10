@@ -96,6 +96,8 @@ public class BeeUtils {
     }
 
     public static String getJarDirPath() {
+        return "D:/Java/myspace/bee-apm/packages";
+        /*
         if(rootPath == null) {
             synchronized (BeeUtils.class){
                 if(rootPath != null){
@@ -107,6 +109,7 @@ public class BeeUtils {
             }
         }
         return rootPath;
+        */
     }
 
     public static boolean isBlank(final CharSequence cs) {

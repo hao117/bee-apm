@@ -31,7 +31,7 @@ public class JvmInfoTask {
             public void run() {
                 Span span = new Span(SpanKind.JVM);
                 span.setId(IdHelper.id());
-                span.setTime(new Date());
+                span.setStartTime(System.nanoTime());
                 buildJvmInfo(span);
                 ReporterFactory.report(span);
             }
@@ -59,9 +59,9 @@ public class JvmInfoTask {
             gc.setOldGcTime(currGcInfo.getOldGcTime() - preGcInfo.getOldGcTime());
         }
         preGcInfo = currGcInfo;
-        span.addTag("gc", gc);
-        span.addTag("heap", JvmUtils.getHeap());
-        span.addTag("memory", JvmUtils.getMemorySpaceInfo());
-        span.addTag("thread", JvmUtils.getThreadInfo());
+        span.addAttribute("gc", gc);
+        span.addAttribute("heap", JvmUtils.getHeap());
+        span.addAttribute("memory", JvmUtils.getMemorySpaceInfo());
+        span.addAttribute("thread", JvmUtils.getThreadInfo());
     }
 }

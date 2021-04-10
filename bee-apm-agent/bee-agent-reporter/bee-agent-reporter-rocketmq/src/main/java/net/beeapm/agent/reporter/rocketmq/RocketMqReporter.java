@@ -37,12 +37,12 @@ public class RocketMqReporter extends AbstractReporter {
             return 0;
         }
         try{
-            String topic = topicMap.get(span.getType());
+            String topic = topicMap.get(span.getKind());
             if(topic == null){
                 topic = topicMap.get("default");
             }
             if(topic == null){
-                log.debug("类型{}对应的topic为null",span.getType());
+                log.debug("类型{}对应的topic为null",span.getKind());
                 return 0;
             }
             byte[] bytes = JSON.toJSONString(span).getBytes(RemotingHelper.DEFAULT_CHARSET);

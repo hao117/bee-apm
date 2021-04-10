@@ -15,6 +15,7 @@ import net.beeapm.agent.plugin.thread.wrapper.BeeForkJoinTaskWrapper;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.FutureTask;
 
 /**
  * @author yuan
@@ -41,11 +42,14 @@ public class ThreadHandler extends AbstractHandler {
         //修改入参
         TraceContextModel traceContextModel = BeeTraceContext.getOrNew().copy();
         traceContextModel.setParentId(BeeTraceContext.getCurrentId());
-        if (task instanceof Runnable) {
+        if (task instanceof FutureTask) {
+            //TODO 暂未处理
+            log.info("暂不支持FutureTask");
+        } else if (task instanceof Runnable) {
             task = new BeeRunnableWrapper((Runnable) task, traceContextModel);
         } else if (task instanceof Callable) {
             task = new BeeCallableWrapper((Callable) task, traceContextModel);
-        } else if (task instanceof BeeForkJoinTaskWrapper) {
+        } else if (task instanceof ForkJoinTask) {
             task = new BeeForkJoinTaskWrapper((ForkJoinTask) task, traceContextModel);
         }
         span.addCache(ThreadConst.CACHE_KEY_TASK, task);

@@ -32,12 +32,12 @@ public class KafkaReporter extends AbstractReporter {
             if(kafkaProducer == null){
                 initKafkaProducer();
             }
-            String topic = topicMap.get(span.getType());
+            String topic = topicMap.get(span.getKind());
             if(topic == null){
                 topic = topicMap.get("default");
             }
             if(topic == null){
-                log.debug("类型{}对应的topic为null",span.getType());
+                log.debug("类型{}对应的topic为null",span.getKind());
                 return 0;
             }
             //构造消息体

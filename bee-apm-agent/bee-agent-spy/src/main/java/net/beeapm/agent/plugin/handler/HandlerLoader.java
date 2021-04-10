@@ -1,8 +1,10 @@
 package net.beeapm.agent.plugin.handler;
 
 import net.beeapm.agent.common.AgentClassLoader;
+import net.beeapm.agent.common.HandlerContext;
 import net.beeapm.agent.log.LogUtil;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,16 +27,17 @@ public class HandlerLoader {
 
     public static IHandler load(String className) {
         try {
-            ClassLoader targetClassLoader = Thread.currentThread().getContextClassLoader();
+            String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+            ClassLoader targetClassLoader = HandlerContext.get();
+            if (targetClassLoader == null) {
+                targetClassLoader = Thread.currentThread().getContextClassLoader();
+            }
             String instanceKey = className + "_OF_" + targetClassLoader.getClass().getName() + "@" + Integer.toHexString(targetClassLoader.hashCode());
             IHandler inst = handlerMap.get(instanceKey);
             if (inst == null) {
-                INSTANCE_LOAD_LOCK.lock();
-                ClassLoader classLoader = new AgentClassLoader(targetClassLoader, rootPath, new String[]{"plugins"});
-                try {
+                synchronized (className.intern()) {
+                    ClassLoader classLoader = new AgentClassLoader(targetClassLoader, rootPath, new String[]{"plugins"});
                     inst = (IHandler) Class.forName(className, true, classLoader).newInstance();
-                } finally {
-                    INSTANCE_LOAD_LOCK.unlock();
                 }
                 if (inst != null) {
                     handlerMap.put(instanceKey, inst);

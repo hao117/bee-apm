@@ -51,7 +51,7 @@ public class ServletConfig extends AbstractBeeConfig {
         enableRespBody = enable & ConfigUtils.me().getBoolean("plugins.servlet.enableRespBody", false);
         urlSuffixExcludeList = Arrays.asList(ConfigUtils.me().getStr("plugins.servlet.excludeUrlSuffix", "").split(","));
         //http入口的耗时要小于等于方法的耗时，否则会造成调用链断开
-        long processSpend = ConfigUtils.me().getInt("plugins.process.spend", -1);
+        long processSpend = ConfigUtils.me().getInt("plugins.method.spend", -1);
         spend = ConfigUtils.me().getInt("plugins.servlet.spend", -1);
         if (spend > processSpend) {
             spend = processSpend;

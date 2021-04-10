@@ -16,6 +16,10 @@ import java.util.jar.JarFile;
  */
 public class AgentClassLoader extends ClassLoader {
 
+    static {
+        ClassLoader.registerAsParallelCapable();
+    }
+
     private List<File> jarPathDir;
     private List<File> jarFiles;
 

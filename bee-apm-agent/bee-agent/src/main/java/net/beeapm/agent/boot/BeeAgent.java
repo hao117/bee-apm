@@ -13,7 +13,9 @@ import net.beeapm.agent.reporter.ReporterFactory;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.utility.JavaModule;
 
@@ -37,7 +39,7 @@ public class BeeAgent {
                 .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
                 .with(buildListener())
                 .disableClassFormatChanges()
-                .ignore(ElementMatchers.<TypeDescription>none().and(ElementMatchers.nameStartsWith("net.beeapm.agent.")));
+                .ignore(ElementMatchers.nameStartsWith("net.beeapm.agent."));
         for (int i = 0; i < plugins.size(); i++) {
             final AbstractPlugin plugin = plugins.get(i);
             InterceptPoint[] interceptPoints = plugin.buildInterceptPoint();
@@ -51,7 +53,7 @@ public class BeeAgent {
                                                             TypeDescription typeDescription,
                                                             ClassLoader classLoader, JavaModule javaModule) {
                         String className = typeDescription.getName();
-                        log.exec("class-name={}, plugin-name={}", className, plugin.getName());
+                        log.exec("class={}, plugin={}", className, plugin.getName());
                         builder = builder.visit(Advice.to(plugin.interceptorAdviceClass()).on(interceptPoint.buildMethodsMatcher()));
                         FieldDefine[] fields = plugin.buildFieldDefine();
                         if (fields != null && fields.length > 0) {
@@ -103,7 +105,7 @@ public class BeeAgent {
 
             @Override
             public void onError(String s, ClassLoader classLoader, JavaModule javaModule, boolean b, Throwable throwable) {
-                log.error("", throwable);
+                log.error("listener error", throwable);
             }
 
             @Override

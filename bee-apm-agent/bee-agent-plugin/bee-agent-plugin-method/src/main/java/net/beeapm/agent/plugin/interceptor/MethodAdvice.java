@@ -11,13 +11,13 @@ import net.bytebuddy.asm.Advice;
 /**
  * 注意：实例方法使用@Advice.This注解，静态方法使用@Advice.Origin 两者不能混用
  */
-public class ProcessAdvice {
+public class MethodAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Local("handler") IHandler handler,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
                              @Advice.AllArguments Object[] allParams){
-        handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ProcessHandler");
+        handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.MethodHandler");
         handler.before(className,methodName,allParams,null);
     }
 

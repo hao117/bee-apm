@@ -12,7 +12,7 @@
     <artifactId>bee-agent-core</artifactId>
     <packaging>jar</packaging>
     <properties>
-        <bytebuddy.version>1.10.13</bytebuddy.version>
+        <bytebuddy.version>1.10.22</bytebuddy.version>
     </properties>
     <dependencies>
         <dependency>
@@ -25,11 +25,11 @@
             <artifactId>byte-buddy</artifactId>
             <version>${bytebuddy.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy-agent</artifactId>
-            <version>${bytebuddy.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.bytebuddy</groupId>-->
+<!--            <artifactId>byte-buddy-agent</artifactId>-->
+<!--            <version>${bytebuddy.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -65,4 +65,7 @@
             </exclusions>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>bee-agent-core</finalName>
+    </build>
 </project>
