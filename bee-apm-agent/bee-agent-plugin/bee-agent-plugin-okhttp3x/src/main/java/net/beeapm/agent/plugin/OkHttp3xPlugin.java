@@ -14,12 +14,6 @@ import net.bytebuddy.matcher.ElementMatchers;
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "okhttp3x")
 public class OkHttp3xPlugin extends AbstractPlugin {
-
-    @Override
-    public String getName() {
-        return "okhttp3x";
-    }
-
     @Override
     public InterceptPoint[] buildInterceptPoint() {
         return new InterceptPoint[]{

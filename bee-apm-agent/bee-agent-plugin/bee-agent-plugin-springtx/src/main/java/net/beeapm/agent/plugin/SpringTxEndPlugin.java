@@ -16,11 +16,6 @@ import net.bytebuddy.matcher.ElementMatchers;
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "springTxEnd")
 public class SpringTxEndPlugin extends AbstractPlugin {
     @Override
-    public String getName() {
-        return "springTxEnd";
-    }
-
-    @Override
     public InterceptPoint[] buildInterceptPoint() {
         return new InterceptPoint[]{
                 new InterceptPoint() {

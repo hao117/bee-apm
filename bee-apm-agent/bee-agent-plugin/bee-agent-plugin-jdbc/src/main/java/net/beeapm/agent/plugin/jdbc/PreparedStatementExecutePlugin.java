@@ -19,10 +19,6 @@ import java.sql.PreparedStatement;
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "jdbc-statement-execute")
 public class PreparedStatementExecutePlugin extends AbstractPlugin {
-    @Override
-    public String getName() {
-        return "jdbc-statement-execute";
-    }
 
     @Override
     public InterceptPoint[] buildInterceptPoint() {

@@ -12,12 +12,13 @@ import java.util.*;
  */
 public class PluginLoader extends AbstractLoader {
     public static List<AbstractPlugin> loadPlugins() {
-        Map<String, AbstractPlugin> pluginMap = load(new String[]{"plugins", "ext-lib"}, "bee-plugin.def");
-        List<AbstractPlugin> pluginList = new ArrayList<AbstractPlugin>(16);
+        Map<String, AbstractPlugin> pluginMap = load(new String[]{"plugins"}, "bee-plugin.def");
+        List<AbstractPlugin> pluginList = new ArrayList<>(16);
         for (Map.Entry<String, AbstractPlugin> entry : pluginMap.entrySet()) {
             AbstractPlugin plugin = entry.getValue();
+            plugin.setName(entry.getKey());
             pluginList.add(plugin);
-            LogUtil.log("plugin-name:" + plugin.getName());
+            LogUtil.log("plugin : " + plugin.getName() + "=" + plugin.getClass().getName());
         }
         Collections.sort(pluginList, new Comparator<AbstractPlugin>() {
             @Override

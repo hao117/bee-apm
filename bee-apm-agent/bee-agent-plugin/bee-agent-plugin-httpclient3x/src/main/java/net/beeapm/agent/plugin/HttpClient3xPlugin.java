@@ -16,11 +16,6 @@ import net.bytebuddy.matcher.ElementMatchers;
 public class HttpClient3xPlugin extends AbstractPlugin {
 
     @Override
-    public String getName() {
-        return "httpclient3x";
-    }
-
-    @Override
     public InterceptPoint[] buildInterceptPoint() {
         return new InterceptPoint[]{
                 new InterceptPoint() {

@@ -20,12 +20,6 @@ import java.util.Map;
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "method")
 public class MethodPlugin extends AbstractPlugin {
-
-    @Override
-    public String getName() {
-        return "method";
-    }
-
     @Override
     public InterceptPoint[] buildInterceptPoint() {
         List<Map<String, Map<String, Map<String, String>>>> list = (List<Map<String, Map<String, Map<String, String>>>>) ConfigUtils.me().getVal("plugins.method.interceptPoints");

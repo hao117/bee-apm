@@ -16,12 +16,8 @@ import java.sql.PreparedStatement;
  * @author yuan
  * @date 2018/08/14
  */
-@BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "springTxSqlCount")
+@BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "totalSqlExecute")
 public class TotalSqlExecutePlugin extends AbstractPlugin {
-    @Override
-    public String getName() {
-        return "springTxSqlCount";
-    }
 
     @Override
     public InterceptPoint[] buildInterceptPoint() {

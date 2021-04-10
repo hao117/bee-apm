@@ -18,10 +18,6 @@ import java.sql.PreparedStatement;
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "jdbc-statement-param")
 public class PreparedStatementParamPlugin extends AbstractPlugin {
-    @Override
-    public String getName() {
-        return "jdbc-statement-param";
-    }
 
     @Override
     public InterceptPoint[] buildInterceptPoint() {

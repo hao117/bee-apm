@@ -16,10 +16,6 @@ import java.util.List;
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "logger")
 public class LoggerPlugin extends AbstractPlugin {
-    @Override
-    public String getName() {
-        return "logger";
-    }
 
     @Override
     public InterceptPoint[] buildInterceptPoint() {

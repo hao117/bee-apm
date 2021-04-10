@@ -10,12 +10,8 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
-import java.sql.PreparedStatement;
-import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.RunnableFuture;
 
 
 /**
@@ -24,11 +20,6 @@ import java.util.concurrent.RunnableFuture;
  */
 @BeePlugin(type = BeePluginType.AGENT_PLUGIN, name = "thread")
 public class ThreadPlugin extends AbstractPlugin {
-    @Override
-    public String getName() {
-        return "thread";
-    }
-
     @Override
     public InterceptPoint[] buildInterceptPoint() {
         return new InterceptPoint[]{

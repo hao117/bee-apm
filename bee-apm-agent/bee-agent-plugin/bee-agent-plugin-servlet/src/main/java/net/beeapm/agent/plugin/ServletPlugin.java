@@ -19,11 +19,6 @@ import java.util.List;
 public class ServletPlugin extends AbstractPlugin {
 
     @Override
-    public String getName() {
-        return "servlet";
-    }
-
-    @Override
     public InterceptPoint[] buildInterceptPoint() {
         return new InterceptPoint[]{
                 new InterceptPoint() {
