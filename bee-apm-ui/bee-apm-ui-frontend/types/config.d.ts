@@ -137,6 +137,8 @@ export interface GlobConfig {
   title: string;
   // Service interface url
   apiUrl: string;
+  // Service basic interface url
+  basicApiUrl: string;
   // Upload url
   uploadUrl?: string;
   //  Service interface url prefix
@@ -149,6 +151,8 @@ export interface GlobEnvConfig {
   VITE_GLOB_APP_TITLE: string;
   // Service interface url
   VITE_GLOB_API_URL: string;
+  // Service basic interface url
+  VITE_GLOB_BASIC_API_URL: string;
   // Service interface url prefix
   VITE_GLOB_API_URL_PREFIX?: string;
   // Project abbreviation

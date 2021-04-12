@@ -10,7 +10,7 @@
     </parent>
     <artifactId>bee-apm-ui-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>bee-apm-ui-server</name>
     <description>Demo project for Spring Boot</description>
@@ -21,7 +21,7 @@
         <java.version>1.8</java.version>
         <springboot.version>2.0.1.RELEASE</springboot.version>
         <!-- ui 前端项目路径-->
-        <web.ui.project.path>${project.basedir}/../bee-apm-ui-web</web.ui.project.path>
+        <web.ui.project.path>${project.basedir}/../bee-apm-ui-frontend</web.ui.project.path>
     </properties>
 
     <dependencies>
@@ -121,19 +121,46 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target>
-                                <echo message="package web ui"></echo>
-                                <exec executable="npm.cmd" dir="${web.ui.project.path}">
-                                    <arg value="run"></arg>
-                                    <arg value="build"></arg>
-                                </exec>
-                                <copy todir="target/classes/">
+                            <tasks>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.runtime.classpath" />
+                                <echo>start package frontend ui ......</echo>
+                                <echo>${os.name}</echo>
+                                <if>
+                                    <contains string="${os.name}" substring="Windows"/>
+                                    <then>
+                                        <exec executable="npm.cmd" dir="${web.ui.project.path}">
+                                            <arg value="run"></arg>
+                                            <arg value="build"></arg>
+                                        </exec>
+                                    </then>
+                                    <else>
+                                        <exec executable="npm" dir="${web.ui.project.path}">
+                                            <arg value="run"></arg>
+                                            <arg value="build"></arg>
+                                        </exec>
+                                    </else>
+                                </if>
+                                <copy todir="target/classes/static/">
                                     <fileset dir="${web.ui.project.path}/dist/"></fileset>
                                 </copy>
-                            </target>
+                                <echo>end package frontend ui</echo>
+                            </tasks>
                         </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

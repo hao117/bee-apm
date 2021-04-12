@@ -201,7 +201,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 消息提示类型
           errorMessageMode: 'message',
           // 接口地址
-          apiUrl: globSetting.apiUrl,
+          apiUrl: globSetting.basicApiUrl,
           //  是否加入时间戳
           joinTime: true,
           // 忽略重复请求
@@ -213,6 +213,11 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
   );
 }
 export const defHttp = createAxios();
+export const apiHttp = createAxios({
+  requestOptions: {
+    apiUrl: globSetting.apiUrl,
+  },
+});
 
 // other api url
 // export const otherHttp = createAxios({

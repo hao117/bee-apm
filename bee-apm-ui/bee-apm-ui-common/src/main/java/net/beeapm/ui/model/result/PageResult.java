@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author yuan
  */
-public class PageResult<T> extends BaseResult {
+public class PageResult<T> extends ApiResult {
     private List<T> rows;
     private Integer pageNum;
     private Long pageTotal;

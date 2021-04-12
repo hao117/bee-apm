@@ -14,7 +14,7 @@ export const growCardList: GrowCardItem[] = [
     value: 2000,
     total: 120000,
     color: 'green',
-    action: '月',
+    action: '7天',
   },
   {
     title: '成交额',

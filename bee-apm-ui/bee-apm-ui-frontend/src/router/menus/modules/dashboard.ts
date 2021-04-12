@@ -18,15 +18,7 @@ const menu: MenuModule = {
           dot: true,
           type: 'warn',
         },
-      },
-      {
-        path: 'workbench',
-        name: t('routes.dashboard.workbench'),
-        tag: {
-          dot: true,
-          type: 'warn',
-        },
-      },
+      }
     ],
   },
 };

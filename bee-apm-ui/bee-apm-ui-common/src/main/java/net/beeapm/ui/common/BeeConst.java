@@ -11,4 +11,5 @@ public class BeeConst {
     public final static String KEY_ES_PASSWORD = "password";
     public final static Integer PAGE_SIZE = 10;
     public final static int CODE_404 = 404;
+    public final static Integer SUCCESS = 0;
 }
