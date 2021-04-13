@@ -10,7 +10,7 @@ export interface GrowCardItem {
 export const growCardList: GrowCardItem[] = [
   {
     title: '访问数',
-    icon: 'visit-count|svg',
+    icon: 'mdi:counter',
     value: 2000,
     total: 120000,
     color: 'green',

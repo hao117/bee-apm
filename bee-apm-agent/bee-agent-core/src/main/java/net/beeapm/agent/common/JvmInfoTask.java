@@ -31,7 +31,7 @@ public class JvmInfoTask {
             public void run() {
                 Span span = new Span(SpanKind.JVM);
                 span.setId(IdHelper.id());
-                span.setStartTime(System.nanoTime());
+                span.setStartTime(System.currentTimeMillis());
                 buildJvmInfo(span);
                 ReporterFactory.report(span);
             }

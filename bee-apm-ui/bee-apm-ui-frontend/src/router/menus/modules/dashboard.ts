@@ -7,7 +7,7 @@ const menu: MenuModule = {
     name: t('routes.dashboard.dashboard'),
     path: '/dashboard',
     tag: {
-      dot: true,
+      dot: false,
       type: 'warn',
     },
     children: [
@@ -15,7 +15,7 @@ const menu: MenuModule = {
         path: 'analysis',
         name: t('routes.dashboard.analysis'),
         tag: {
-          dot: true,
+          dot: false,
           type: 'warn',
         },
       }

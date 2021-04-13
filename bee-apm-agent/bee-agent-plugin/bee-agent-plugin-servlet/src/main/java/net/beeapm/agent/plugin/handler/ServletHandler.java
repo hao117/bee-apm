@@ -77,6 +77,7 @@ public class ServletHandler extends AbstractHandler {
         if (currSpan != null && currSpan.getKind().equals(SpanKind.SERVER)) {
             Span span = SpanManager.getExitSpan();
             HttpServletRequest request = (HttpServletRequest) allArguments[0];
+            span.addAttribute(AttrKey.SEVER_TYPE, "http");
             span.addAttribute(AttrKey.HTTP_URL, request.getRequestURL());
             span.addAttribute(AttrKey.HTTP_REMOTE, request.getRemoteAddr());
             span.addAttribute(AttrKey.HTTP_METHOD, request.getMethod());

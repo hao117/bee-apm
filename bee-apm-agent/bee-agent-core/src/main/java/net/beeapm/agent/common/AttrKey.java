@@ -24,10 +24,12 @@ public class AttrKey {
     public static final String METHOD_SIGN = "method_sign";
     public static final String CLIENT_APP = "client_app";
     public static final String CLIENT_APP_INST = "client_app_inst";
+    public static final String SEVER_TYPE = "sever_type";
     public static final String HTTP_METHOD = "http_method";
     public static final String HTTP_URL = "http_url";
     public static final String HTTP_REMOTE = "http_remote";
     public static final String HTTP_BODY = "http_body";
     public static final String HTTP_PARAM = "http_param";
     public static final String HTTP_HEADERS = "http_headers";
+    public static final String APP_NAME = "app_name";
 }

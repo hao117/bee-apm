@@ -27,7 +27,7 @@ public class HeartbeatTask {
             public void run() {
                 Span span = new Span(SpanKind.HEARTBEAT);
                 span.setId(getId());
-                span.setStartTime(System.nanoTime());
+                span.setStartTime(System.currentTimeMillis());
                 span.addAttribute("version", Version.VERSION);
                 ReporterFactory.report(span);
             }

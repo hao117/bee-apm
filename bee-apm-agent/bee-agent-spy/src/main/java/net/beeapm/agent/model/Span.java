@@ -63,7 +63,7 @@ public class Span {
 
     public Span(String kind) {
         this.kind = kind;
-        this.startTime = System.nanoTime();
+        this.startTime = System.currentTimeMillis();
     }
 
 

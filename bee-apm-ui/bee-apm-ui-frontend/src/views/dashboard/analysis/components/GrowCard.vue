@@ -14,25 +14,33 @@
         </template>
 
         <div class="py-4 px-4 flex justify-between">
-          <Icon :icon="item.icon" :size="40" />
-          <CountTo :startVal="1" :endVal="item.value" class="text-2xl" />
+          <CountTo :startVal="1" :endVal="item.value" class="text-2xl"/>
+          <Icon :icon="item.icon" :size="40" :color="item.color"/>
         </div>
       </Card>
     </template>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+import {defineComponent, ref} from 'vue';
 
-  import { CountTo } from '/@/components/CountTo/index';
-  import { Icon } from '/@/components/Icon';
-  import { Tag, Card } from 'ant-design-vue';
+import {CountTo} from '/@/components/CountTo/index';
+import {Icon} from '/@/components/Icon';
+import {Tag, Card} from 'ant-design-vue';
+import {SummaryResultModel} from "/@/api/dashboard/model/dashboardModel";
+import {summaryApi} from "/@/api/dashboard/dashboard";
 
-  import { growCardList } from '../data';
-  export default defineComponent({
-    components: { CountTo, Tag, Card, Icon },
-    setup() {
-      return { growCardList };
-    },
-  });
+
+export default defineComponent({
+  components: {CountTo, Tag, Card, Icon},
+  setup() {
+    let growCardList = ref<Array<SummaryResultModel>>([]);
+    async function querySummary() {
+      growCardList.value = await summaryApi();
+      console.log(new Date() + " growCardList1 = " + JSON.stringify(growCardList));
+    }
+    querySummary();
+    return {growCardList};
+  }
+});
 </script>

@@ -1,0 +1,26 @@
+<properties>
+    <property name="queryList">
+        <![CDATA[{
+            "query": {
+                "bool": {
+                    "filter": [
+                        {
+                            "terms": {
+                                "ip": [#[ip]]
+                            }
+                        },
+                        {
+                            "range": {
+                                "time": {
+                                    "gte": #[startTime],
+                                    "lt": #[endTime]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "size":10
+        }]]>
+    </property>
+</properties>

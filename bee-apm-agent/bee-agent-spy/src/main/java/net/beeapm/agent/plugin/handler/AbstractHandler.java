@@ -20,7 +20,7 @@ public abstract class AbstractHandler implements IHandler{
 
     public void calculateDuration(Span span) {
         if (span != null) {
-            span.setDuration(System.nanoTime() - span.getStartTime());
+            span.setDuration(System.currentTimeMillis() - span.getStartTime());
         }
     }
 

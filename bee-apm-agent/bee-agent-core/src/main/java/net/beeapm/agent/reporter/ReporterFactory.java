@@ -1,8 +1,10 @@
 package net.beeapm.agent.reporter;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.agent.common.AttrKey;
 import net.beeapm.agent.common.BeeThreadFactory;
 import net.beeapm.agent.common.BeeUtils;
+import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.config.ConfigUtils;
 import net.beeapm.agent.log.LogUtil;
 import net.beeapm.agent.log.ILog;
@@ -86,6 +88,7 @@ public class ReporterFactory {
 
     public static void report(Span span) {
         span.clearCache();
+        span.addAttribute(AttrKey.APP_NAME, BeeConfig.me().getApp());
         if (ConfigUtils.me().getBoolean("reporter.log", false)) {
             log.debug(JSON.toJSONString(span));
         }

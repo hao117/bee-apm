@@ -1,0 +1,16 @@
+<properties>
+    <property name="instCount">
+        <![CDATA[
+        {
+          "size": 0,
+          "aggs": {
+            "inst_count": {
+              "cardinality": {
+                "field": "inst"
+              }
+            }
+          }
+        }
+        ]]>
+    </property>
+</properties>

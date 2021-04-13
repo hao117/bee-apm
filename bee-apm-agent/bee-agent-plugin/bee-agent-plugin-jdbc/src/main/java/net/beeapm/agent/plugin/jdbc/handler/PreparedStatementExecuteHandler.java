@@ -36,7 +36,7 @@ public class PreparedStatementExecuteHandler extends AbstractHandler {
             span = SpanManager.createLocalSpan(SpanKind.SQL);
             JdbcContext.setJdbcSpan(span);
         } else {
-            span.setStartTime(System.nanoTime());
+            span.setStartTime(System.currentTimeMillis());
         }
         return span;
     }

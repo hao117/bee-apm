@@ -29,6 +29,12 @@
             <groupId>net.beeapm</groupId>
             <artifactId>bee-apm-ui-common</artifactId>
             <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.beeapm</groupId>
