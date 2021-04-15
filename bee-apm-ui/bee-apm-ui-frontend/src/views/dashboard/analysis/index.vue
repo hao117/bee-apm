@@ -1,11 +1,16 @@
 <template>
   <div class="p-4">
     <GrowCard :loading="loading" class="enter-y" />
+
+    <div class="md:flex enter-y mt-4">
+      <ErrorPie class="md:w-1/3 mr-4 w-full" :loading="loading" />
+      <ErrorLine class="md:w-2/3 !ml-4 w-full"  :loading="loading" />
+    </div>
+
     <SiteAnalysis class="!my-4 enter-y" :loading="loading" />
 
     <div class="md:flex enter-y">
       <VisitRadar class="md:w-1/3 w-full" :loading="loading" />
-
       <VisitSource class="md:w-1/3 !md:mx-4 !md:my-0 !my-4 w-full" :loading="loading" />
       <SalesProductPie class="md:w-1/3 w-full" :loading="loading" />
     </div>
@@ -18,10 +23,14 @@
   import VisitSource from './components/VisitSource.vue';
   import VisitRadar from './components/VisitRadar.vue';
   import SalesProductPie from './components/SalesProductPie.vue';
+  import ErrorLine from "./components/ErrorLine.vue";
+  import ErrorPie from "./components/ErrorPie.vue";
 
   export default defineComponent({
     components: {
       GrowCard,
+      ErrorPie,
+      ErrorLine,
       SiteAnalysis,
       VisitRadar,
       VisitSource,

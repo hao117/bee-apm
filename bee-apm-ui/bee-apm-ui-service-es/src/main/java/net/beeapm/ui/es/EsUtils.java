@@ -50,6 +50,7 @@ public class EsUtils {
 
     /**
      * 当天总数
+     *
      * @param indexPrefix
      * @return
      */
@@ -87,6 +88,23 @@ public class EsUtils {
 
     public static String buildIndices(String indexPrefix) {
         return buildIndices(indexPrefix, System.currentTimeMillis(), System.currentTimeMillis());
+    }
+
+    public static String buildSearchPath(String indexPrefix, Long startTime, Long endTime, boolean ignoreUnavailable) {
+        StringBuilder path = new StringBuilder(buildIndices(indexPrefix, startTime, endTime));
+        path.append("/_search");
+        if (ignoreUnavailable) {
+            path.append("?ignore_unavailable=true");
+        }
+        return path.toString();
+    }
+
+    public static String buildSearchPath(String indexPrefix, Long startTime, Long endTime) {
+        return buildSearchPath(indexPrefix, startTime, endTime, true);
+    }
+
+    public static String buildSearchPath(String indexPrefix) {
+        return buildSearchPath(indexPrefix, System.currentTimeMillis(), System.currentTimeMillis());
     }
 
 }

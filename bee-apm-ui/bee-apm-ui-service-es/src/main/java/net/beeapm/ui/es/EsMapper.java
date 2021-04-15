@@ -5,4 +5,5 @@ package net.beeapm.ui.es;
  * @date 2021/04/12
  */
 public class EsMapper {
+    public static final String DASHBOARD = "esmapper/dashboard.xml";
 }

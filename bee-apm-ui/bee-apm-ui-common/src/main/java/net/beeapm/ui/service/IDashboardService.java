@@ -1,6 +1,7 @@
 package net.beeapm.ui.service;
 
 import net.beeapm.ui.model.result.ApiResult;
+import net.beeapm.ui.model.result.dashboard.NameValue;
 import net.beeapm.ui.model.result.dashboard.SummaryResult;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
@@ -21,9 +22,9 @@ public interface IDashboardService {
 
     Long queryErrorCount(Map<String, Object> params);
 
-    ResultVo queryErrorPieData(Map<String, Object> params);
+    ApiResult<List<NameValue>> queryErrorPieData(Map<String, Object> params);
 
-    ResultVo queryErrorLineData(Map<String, Object> params);
+    ApiResult<Map<String, List<Object>>>queryErrorLineData(Map<String, Object> params);
 
     /**
      * 当天汇总统计

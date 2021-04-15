@@ -1,16 +1,131 @@
 <properties>
-    <property name="instCount">
+    <property name="error-pie" tip="错误占比">
         <![CDATA[
         {
           "size": 0,
           "aggs": {
-            "inst_count": {
-              "cardinality": {
-                "field": "inst"
+            "errorCount": {
+              "terms": {
+                "field": "attributes.app_name.keyword",
+                "order": {
+                  "_count": "desc"
+                },
+                "size": 9
               }
             }
           }
         }
+        ]]>
+    </property>
+    <property name="error-line" tip="异常趋势图">
+        <![CDATA[
+        {
+          "size": 0,
+          "aggs": {
+            "app_group": {
+              "terms": {
+                "field": "attributes.app_name.keyword",
+                "size": 10
+              },
+              "aggs": {
+                "time_group": {
+                  "date_histogram": {
+                    "field": "startTime",
+                    "interval": "1h"
+                  }
+                }
+              }
+            }
+          }
+        }
+        ]]>
+    </property>
+    <property name="request-bar" tip="请求耗时区间统计 ">
+        <![CDATA[
+        {
+            "size":0,
+            "aggs":{
+                "req_bar":{
+                    "range":{
+                        "field":"duration",
+                        "format":"0",
+                        "ranges":[
+                            {
+                                "from": 0,
+                                "to": 200
+                            },
+                            {
+                                "from": 200,
+                                "to": 500
+                            },
+                            {
+                                "from": 500,
+                                "to": 1000
+                            },
+                            {
+                                "from": 1000,
+                                "to": 2000
+                            },
+                            {
+                                "from": 2000,
+                                "to": 5000
+                            },
+                            {
+                                "from": 5000
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+        ]]>
+    </property>
+    <property name="request-line" tip="请求量趋势图（耗时区间）">
+        <![CDATA[
+            {
+              "size":0,
+              "aggs": {
+                "req_qs": {
+                  "date_histogram": {
+                    "field": "startTime",
+                    "interval": "30m"
+                  },
+                  "aggs": {
+                    "req_aggs": {
+                      "range": {
+                        "field": "duration",
+                        "ranges": [
+                          {
+                            "from": 0,
+                            "to": 200
+                          },
+                          {
+                            "from": 200,
+                            "to": 500
+                          },
+                          {
+                            "from": 500,
+                            "to": 1000
+                          },
+                          {
+                            "from": 1000,
+                            "to": 2000
+                          },
+                          {
+                            "from": 2000,
+                            "to": 5000
+                          },
+                          {
+                            "from": 5000
+                          }
+                        ],
+                        "format": "0"
+                      }
+                    }
+                  }
+                }
+              }
+            }
         ]]>
     </property>
 </properties>

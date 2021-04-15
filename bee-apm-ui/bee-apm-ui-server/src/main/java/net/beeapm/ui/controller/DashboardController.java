@@ -1,6 +1,8 @@
 package net.beeapm.ui.controller;
 
 import com.alibaba.fastjson.JSON;
+import net.beeapm.ui.model.result.ApiResult;
+import net.beeapm.ui.model.result.dashboard.NameValue;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
 import net.beeapm.ui.service.IDashboardService;
@@ -43,19 +45,15 @@ public class DashboardController {
 
     @RequestMapping("/getErrorPieData")
     @ResponseBody
-    public ResultVo getErrorPieData(@RequestBody Map<String, Object> reqBody) {
-        ResultVo result = dashboardService.queryErrorPieData(reqBody);
+    public ApiResult<List<NameValue>> getErrorPieData(@RequestBody Map<String, Object> reqBody) {
+        ApiResult<List<NameValue>> result = dashboardService.queryErrorPieData(reqBody);
         return result;
     }
 
     @RequestMapping("/getErrorLineData")
     @ResponseBody
-    public Map getErrorLineData(@RequestBody Map<String, Object> reqBody) {
-        ResultVo resultVo = dashboardService.queryErrorLineData(reqBody);
-        Map res = (Map) resultVo.getResult();
-        res.put("code", 0);
-        logger.debug("ErrorLineData = {}", JSON.toJSONString(res));
-        return res;
+    public ApiResult<Map<String, List<Object>>> getErrorLineData(@RequestBody Map<String, Object> reqBody) {
+        return dashboardService.queryErrorLineData(reqBody);
     }
 
     @RequestMapping("/getRequestBarData")

@@ -28,14 +28,24 @@ public class ApiResult<T> implements Serializable {
      */
     private String type = "success";
 
+    public static final Integer CODE_SUCCESS = 0;
+    public static final Integer CODE_FAILED = -1;
+
     public Integer getCode() {
         return code;
     }
 
     public static <T> ApiResult<T> success(T result) {
         ApiResult<T> apiResult = new ApiResult<>();
-        apiResult.setCode(BeeConst.SUCCESS);
+        apiResult.setCode(CODE_SUCCESS);
         apiResult.setResult(result);
+        return apiResult;
+    }
+
+    public static <T> ApiResult<T> fail(String message) {
+        ApiResult<T> apiResult = new ApiResult<>();
+        apiResult.setCode(CODE_FAILED);
+        apiResult.setMessage(message);
         return apiResult;
     }
 

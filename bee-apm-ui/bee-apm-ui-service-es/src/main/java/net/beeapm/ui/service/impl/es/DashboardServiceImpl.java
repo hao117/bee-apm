@@ -5,20 +5,24 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.BeeUtils;
 import net.beeapm.ui.common.DateUtils;
 import net.beeapm.ui.common.EsIndicesPrefix;
 import net.beeapm.ui.es.EsJestClient;
+import net.beeapm.ui.es.EsMapper;
 import net.beeapm.ui.es.EsQueryStringMap;
 import net.beeapm.ui.es.EsUtils;
 import net.beeapm.ui.model.KeyValue;
 import net.beeapm.ui.model.result.ApiResult;
+import net.beeapm.ui.model.result.dashboard.NameValue;
 import net.beeapm.ui.model.result.dashboard.SummaryResult;
 import net.beeapm.ui.model.vo.ChartVo;
 import net.beeapm.ui.model.vo.ResultVo;
 import net.beeapm.ui.service.IDashboardService;
 import org.frameworkset.elasticsearch.boot.BBossESStarter;
+import org.frameworkset.elasticsearch.entity.suggest.TermRestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,112 +164,62 @@ public class DashboardServiceImpl implements IDashboardService {
     }
 
     @Override
-    public ResultVo queryErrorPieData(Map<String, Object> params) {
-        ResultVo res = new ResultVo();
+    public ApiResult<List<NameValue>> queryErrorPieData(Map<String, Object> params) {
         try {
-            SearchResult result = EsJestClient.inst().search(params, "errorPie", "bee-error-");
-            if (404 == result.getResponseCode()) {
-                res.setCode("-1");
-                res.setResult(new ArrayList<>());
-                return res;
+            String path = EsUtils.buildSearchPath("bee-error-");
+            TermRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "error-pie", null);
+            List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("errorCount");
+            logger.debug("查询结果:{}", JSON.toJSONString(response));
+            List<NameValue> list = Lists.newArrayList();
+            Long total = 0L;
+            if (buckets != null) {
+                for (Map<String, Object> item : buckets) {
+                    NameValue value = NameValue.builder()
+                            .name(item.get("key").toString())
+                            .value(item.get("doc_count"))
+                            .build();
+                    total += Long.parseLong(item.get("doc_count").toString());
+                    list.add(value);
+                }
+                Long hitTotal = Long.parseLong(response.getSearchHits().getTotal().toString());
+                list.add(NameValue.builder().name("其它").value(hitTotal - total).build());
             }
-            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
-            JSONArray buckets = (JSONArray) JSONPath.eval(jsonObject, "$.aggregations.errorCount.buckets");
-            if (buckets == null || buckets.size() == 0) {
-                res.setCode("0");
-                res.setResult(new ArrayList<>());
-                return res;
-            }
-            List<KeyValue> list = new ArrayList<>();
-            for (int i = 0; i < buckets.size(); i++) {
-                JSONObject item = buckets.getJSONObject(i);
-                list.add(new KeyValue(item.getString("key"), item.getInteger("doc_count")));
-            }
-            res.setCode("0");
-            res.setResult(list);
+            list.sort((o1, o2) -> (int) (Long.parseLong(o2.getValue().toString()) - Long.parseLong(o1.getValue().toString())));
+            return ApiResult.success(list);
         } catch (Exception e) {
             logger.error("", e);
         }
-        return res;
+        return ApiResult.fail("查询失败");
     }
 
     @Override
-    public ResultVo queryErrorLineData(Map<String, Object> params) {
-        ResultVo res = new ResultVo();
+    public ApiResult<Map<String, List<Object>>> queryErrorLineData(Map<String, Object> params) {
         try {
-            Long beginTime = BeeUtils.getBeginTime(params);
-            Long endTime = BeeUtils.getEndTime(params);
-            Map<String, String> args = new HashMap<>();
-            args.put("beginTime", beginTime.toString());
-            args.put("endTime", endTime.toString());
-            String[] timeInfo = BeeUtils.parseDateInterval(new Date(beginTime), new Date(endTime));
-            logger.debug("timeInfo============>{}", JSON.toJSONString(timeInfo));
-            args.put("interval", timeInfo[0]);
-            args.put("format", timeInfo[1]);
-            args.put("timeZone", timeInfo[2]);
-            String queryString = EsQueryStringMap.me().getQueryString("ErrorLine", args);
-            String[] indices = BeeUtils.getIndices("bee-error-", params);
-            SearchResult result = EsJestClient.inst().search(indices, null, queryString);
-            if (404 == result.getResponseCode()) {
-                res.setCode("-1");
-                res.setResult(new HashMap<>());
-                return res;
-            }
-            JSONObject jsonObject = JSON.parseObject(result.getJsonString());
-            JSONArray buckets = (JSONArray) JSONPath.eval(jsonObject, "$.aggregations.app_group.buckets");
-            if (buckets == null || buckets.size() == 0) {
-                res.setCode("0");
-                res.setResult(new HashMap<>());
-                return res;
-            }
-            List<String> appList = new ArrayList<>();
-            Map<String, Map<String, Integer>> appsMap = new HashMap<>();
-            Map<String, Integer> appDateNumMap = new HashMap<>();
-            String beginDateStr = "9999-12-31 23:59:59";
-            for (int i = 0; i < buckets.size(); i++) {
-                JSONObject item = buckets.getJSONObject(i);
-                String appName = item.getString("key");
-                appList.add(appName);
-                JSONArray timeGroup = (JSONArray) JSONPath.eval(item, "$.time_group.buckets");
-                Map<String, Integer> appTimeMap = new HashMap<>();
-                appsMap.put(appName, appTimeMap);
-                for (int j = 0; j < timeGroup.size(); j++) {
-                    JSONObject tItem = timeGroup.getJSONObject(j);
-                    String tmpDate = tItem.getString("key_as_string");
-                    appTimeMap.put(tmpDate, tItem.getInteger("doc_count"));
-                    appDateNumMap.put(appName + tmpDate, tItem.getInteger("doc_count"));
-                    if (beginDateStr.compareTo(tmpDate) > 0) {
-                        beginDateStr = tmpDate;
+            String path = EsUtils.buildSearchPath("bee-error-");
+            TermRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "error-line", null);
+            List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("app_group");
+            Map<String, List<Object>> resultMap = Maps.newLinkedHashMap();
+            if (buckets != null) {
+                for (Map<String, Object> item : buckets) {
+                    String name = item.get("key").toString();
+                    List<Map<String, Object>> timeGroupBuckets = Lists.newArrayList();
+                    Map<String, Object> timeGroup = (Map<String, Object>) item.get("time_group");
+                    if (timeGroup != null) {
+                        timeGroupBuckets = (List<Map<String, Object>>) timeGroup.get("buckets");
                     }
+                    List<Object> lineDatalist = Lists.newArrayList();
+                    for (int i = 0; timeGroupBuckets != null && i < timeGroupBuckets.size(); i++) {
+                        lineDatalist.add(timeGroupBuckets.get(i).get("doc_count"));
+                    }
+                    resultMap.put(name, lineDatalist);
                 }
             }
-            Date beginDate = DateUtils.parseDate(beginDateStr, timeInfo[1]);
-            List<Map<String, Object>> rowList = new ArrayList<>();
-            while (!appDateNumMap.isEmpty()) {
-                Map<String, Object> row = new HashMap<>();
-                row.put("time", beginDateStr);
-                for (int i = 0; i < appList.size(); i++) {
-                    String appName = appList.get(i);
-                    Integer num = appDateNumMap.remove(appName + beginDateStr);
-                    if (num == null) {
-                        num = 0;
-                    }
-                    row.put(appName, num);
-                }
-                rowList.add(row);
-                beginDate = BeeUtils.nextDateTime(beginDate, timeInfo[0]);
-                beginDateStr = DateUtils.format(beginDate, timeInfo[1]);
-            }
-            Map resMap = new HashMap();
-            appList.add(0, "time");
-            resMap.put("columns", appList);
-            resMap.put("rows", rowList);
-            res.setResult(resMap);
-            res.setCode("0");
+            logger.debug("查询结果:{}", JSON.toJSONString(resultMap));
+            return ApiResult.success(resultMap);
         } catch (Exception e) {
             logger.error("", e);
         }
-        return res;
+        return ApiResult.fail("查询失败");
     }
 
     @Override
