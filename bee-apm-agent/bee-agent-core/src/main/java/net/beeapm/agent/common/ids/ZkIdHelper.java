@@ -1,14 +1,18 @@
-package net.beeapm.agent.common;
+package net.beeapm.agent.common.ids;
 
 import com.alibaba.fastjson.JSON;
 import net.beeapm.agent.Version;
+import net.beeapm.agent.common.BeeThreadFactory;
+import net.beeapm.agent.common.BeeUtils;
+import net.beeapm.agent.common.ZkUtils;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.config.ConfigUtils;
-import net.beeapm.agent.log.LogUtil;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogFactory;
+import net.beeapm.agent.log.LogUtil;
 import org.I0Itec.zkclient.IZkStateListener;
 import org.apache.zookeeper.Watcher;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author yuan
  * @date 2018/08/04
  */
-public class IdHelper {
+public class ZkIdHelper {
     private static String datePattern = "yyMMddHHmmss";
     private static SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
 
@@ -31,7 +35,7 @@ public class IdHelper {
     public volatile static String timestamp = sdf.format(new Date());
     public volatile static String prevTimestamp = timestamp;
     public static AtomicLong id = new AtomicLong(1);
-    private static final ILog log = LogFactory.getLog(IdHelper.class.getSimpleName());
+    private static final ILog log = LogFactory.getLog(ZkIdHelper.class.getSimpleName());
     private static ScheduledExecutorService service;
     private static final String THREAD_NAME = "id";
 
@@ -107,7 +111,7 @@ public class IdHelper {
             return null;
         }
         if (!prevTimestamp.equals(timestamp)) {
-            synchronized (IdHelper.class) {
+            synchronized (ZkIdHelper.class) {
                 if (!prevTimestamp.equals(timestamp)) {
                     prevTimestamp = timestamp;
                     id.set(1);

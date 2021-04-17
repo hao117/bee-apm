@@ -1,5 +1,6 @@
 package net.beeapm.agent.common;
 
+import net.beeapm.agent.common.ids.IdGenerator;
 import net.beeapm.agent.config.BeeConfig;
 import net.beeapm.agent.model.GcInfo;
 import net.beeapm.agent.model.Span;
@@ -30,7 +31,7 @@ public class JvmInfoTask {
             @Override
             public void run() {
                 Span span = new Span(SpanKind.JVM);
-                span.setId(IdHelper.id());
+                span.setId(IdGenerator.generator().id());
                 span.setStartTime(System.currentTimeMillis());
                 buildJvmInfo(span);
                 ReporterFactory.report(span);

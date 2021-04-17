@@ -1,5 +1,6 @@
 package net.beeapm.agent.common;
 
+import net.beeapm.agent.common.ids.IdGenerator;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.SpanKind;
 import net.beeapm.agent.reporter.ReporterFactory;
@@ -25,7 +26,7 @@ public class SpanManager {
             }
             traceId = BeeTraceContext.getTraceId();
             if (traceId == null) {
-                traceId = IdHelper.id();
+                traceId = IdGenerator.generator().id();
                 BeeTraceContext.setTraceId(traceId);
             }
         } else {
@@ -35,7 +36,7 @@ public class SpanManager {
             BeeTraceContext.setParentId(parentId);
         }
         Span span = new Span(spanKind);
-        span.setId(IdHelper.id()).setParentId(parentId).setTraceId(traceId);
+        span.setId(IdGenerator.generator().id()).setParentId(parentId).setTraceId(traceId);
         return span;
     }
 
@@ -106,7 +107,7 @@ public class SpanManager {
         span.setTraceId(BeeTraceContext.getTraceId());
         span.addAttribute(AttrKey.REQUEST_CLIENT, fromApp);
         span.addAttribute(AttrKey.REQUEST_SERVER, toApp);
-        span.setId(IdHelper.id());
+        span.setId(IdGenerator.generator().id());
         ReporterFactory.report(span);
     }
 

@@ -1,7 +1,8 @@
 # BeeAPM
-BeeAPM是一个分布式跟踪和应用性能监控系统。
+BeeAPM是一个分布式链路追踪踪和应用性能监控系统。
 该系统应用JavaAgent技术，使用[bytebuddy](https://github.com/raphw/byte-buddy)（基于ASM的框架）进行字节码植入，从而对java应用程序进行相关数据采集和性能监控，
 对应用无侵入。
+
 ![](./docs/pic/arch.png)
 ## 源码
 github：https://github.com/hao117/bee-apm

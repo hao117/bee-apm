@@ -1,6 +1,7 @@
 package net.beeapm.agent.boot;
 
 import net.beeapm.agent.common.*;
+import net.beeapm.agent.common.ids.IdGenerator;
 import net.beeapm.agent.log.ILog;
 import net.beeapm.agent.log.LogUtil;
 import net.beeapm.agent.log.LogFactory;
@@ -119,7 +120,7 @@ public class BeeAgent {
         try {
             LogUtil.log("start......");
             BootPluginFactory.init();
-            IdHelper.init();
+            IdGenerator.generator().init();
             ReporterFactory.init();
             HeartbeatTask.start();
             JvmInfoTask.start();
@@ -130,7 +131,7 @@ public class BeeAgent {
                     HeartbeatTask.shutdown();
                     JvmInfoTask.shutdown();
                     ReporterFactory.shutdown();
-                    IdHelper.shutdown();
+                    IdGenerator.generator().stop();
                     LogUtil.log("shutdown all bee tasks");
                 }
             }));

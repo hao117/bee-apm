@@ -1,5 +1,6 @@
 package net.beeapm.agent.common;
 
+import net.beeapm.agent.common.ids.IdGenerator;
 import net.beeapm.agent.model.Span;
 import net.beeapm.agent.model.TraceContextModel;
 
@@ -32,7 +33,7 @@ public class BeeTraceContext {
         TraceContextModel model = getOrNew();
         String traceId = model.getTraceId();
         if (traceId == null) {
-            traceId = IdHelper.id();
+            traceId = IdGenerator.generator().id();
             model.setTraceId(traceId);
         }
         return traceId;
