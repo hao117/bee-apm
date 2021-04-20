@@ -1,5 +1,5 @@
 <template>
-  <Card title="异常趋势图" :loading="loading">
+  <Card title="请求量趋势图" :loading="loading">
     <div ref="chartRef" :style="{ height, width }"></div>
   </Card>
 </template>
@@ -29,7 +29,7 @@ export default defineComponent({
     const {setOptions} = useECharts(chartRef as Ref<HTMLDivElement>);
 
     async function queryData() {
-      let dataMap = await apiHttp.post<Map<string, Array<OptionDataValue>>>({url: "/dashboard/getErrorLineData"});
+      let dataMap = await apiHttp.post<Map<string, Array<OptionDataValue>>>({url: "/dashboard/getRequestLineData"});
       console.log(JSON.stringify(dataMap));
       let series: Array<LineSeriesOption> = new Array<LineSeriesOption>();
       let legendData: Array<string> = new Array<string>();
@@ -38,8 +38,8 @@ export default defineComponent({
         series.push({
           name: key,
           data: dataMap[key],
-          stack: "总量",
           areaStyle: {},
+          stack: "总数",
           type: 'line'
         })
       }
@@ -58,6 +58,7 @@ export default defineComponent({
           show: true,
           feature: {
             magicType: {type: ['stack']},
+            saveAsImage: {}
           }
         },
         legend: {

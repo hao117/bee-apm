@@ -1,5 +1,5 @@
 <template>
-  <Card title="异常占比" :loading="loading">
+  <Card title="请求耗时区间统计" :loading="loading">
     <div ref="chartRef" :style="{ width, height }"></div>
   </Card>
 </template>
@@ -29,26 +29,39 @@ export default defineComponent({
     const {setOptions} = useECharts(chartRef as Ref<HTMLDivElement>);
 
     async function queryData() {
-      let data = await apiHttp.post<Array<OptionDataItemObject<number>>>({url: "/dashboard/getErrorPieData"});
+      const data = await apiHttp.post<Array<OptionDataItemObject<number>>>({url: "/dashboard/getRequestBarData"});
+      const yData = new Array<string>()
+      for (const d of data) {
+        yData.push(d.name as string);
+      }
       setOptions({
-        tooltip: {
-          trigger: 'item',
+        xAxis: {
+          max: 'dataMax',
         },
-        series: [
-          {
-            name: '错误占比',
-            type: 'pie',
-            radius: '80%',
-            center: ['50%', '50%'],
-            data: data,
-            roseType: 'radius',
-            animationType: 'scale',
-            animationEasing: 'exponentialInOut',
-            animationDelay: function () {
-              return Math.random() * 400;
-            },
-          },
-        ],
+        yAxis: {
+          type: 'category',
+          data: yData,
+          inverse: true,
+          animationDuration: 300,
+          animationDurationUpdate: 300
+        },
+        series: [{
+          type: 'bar',
+          data: data,
+          label: {
+            show: true,
+            position: 'right',
+            valueAnimation: true
+          }
+        }],
+        legend: {
+          show: true
+        },
+        grid: {left: '1%', right: '5%', top: '2%', bottom: 0, containLabel: true},
+        animationDuration: 0,
+        animationDurationUpdate: 3000,
+        animationEasing: 'linear',
+        animationEasingUpdate: 'linear'
       });
     };
     watch(

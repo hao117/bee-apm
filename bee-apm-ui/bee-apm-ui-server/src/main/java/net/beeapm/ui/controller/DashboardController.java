@@ -58,14 +58,14 @@ public class DashboardController {
 
     @RequestMapping("/getRequestBarData")
     @ResponseBody
-    public ResultVo getRequestBarData(@RequestBody Map<String, Object> params) {
+    public Object getRequestBarData(@RequestBody Map<String, Object> params) {
         logger.debug("RequestBody={}", params);
         return dashboardService.getRequestBarData(params);
     }
 
     @RequestMapping("/getRequestLineData")
     @ResponseBody
-    public ChartVo getRequestLineData(@RequestBody Map<String, Object> params) {
+    public Object getRequestLineData(@RequestBody Map<String, Object> params) {
         logger.debug("RequestBody={}", params);
         return dashboardService.getRequestLineData(params);
     }

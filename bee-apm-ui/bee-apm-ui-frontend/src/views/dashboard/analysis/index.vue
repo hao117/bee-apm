@@ -7,34 +7,27 @@
       <ErrorLine class="md:w-2/3 !ml-4 w-full"  :loading="loading" />
     </div>
 
-    <SiteAnalysis class="!my-4 enter-y" :loading="loading" />
-
-    <div class="md:flex enter-y">
-      <VisitRadar class="md:w-1/3 w-full" :loading="loading" />
-      <VisitSource class="md:w-1/3 !md:mx-4 !md:my-0 !my-4 w-full" :loading="loading" />
-      <SalesProductPie class="md:w-1/3 w-full" :loading="loading" />
+    <div class="md:flex enter-y mt-4">
+      <RequestBar class="md:w-1/3 mr-4 w-full" :loading="loading" />
+      <RequestLine class="md:w-2/3 !ml-4 w-full"  :loading="loading" />
     </div>
   </div>
 </template>
 <script lang="ts">
   import { defineComponent, ref } from 'vue';
   import GrowCard from './components/GrowCard.vue';
-  import SiteAnalysis from './components/SiteAnalysis.vue';
-  import VisitSource from './components/VisitSource.vue';
-  import VisitRadar from './components/VisitRadar.vue';
-  import SalesProductPie from './components/SalesProductPie.vue';
   import ErrorLine from "./components/ErrorLine.vue";
   import ErrorPie from "./components/ErrorPie.vue";
+  import RequestBar from "./components/RequestBar.vue";
+  import RequestLine from "./components/RequestLine.vue";
 
   export default defineComponent({
     components: {
       GrowCard,
       ErrorPie,
       ErrorLine,
-      SiteAnalysis,
-      VisitRadar,
-      VisitSource,
-      SalesProductPie,
+      RequestBar,
+      RequestLine,
     },
     setup() {
       const loading = ref(true);

@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface IDashboardService {
-    ResultVo getRequestBarData(Map<String, Object> params);
+    ApiResult<List<NameValue>> getRequestBarData(Map<String, Object> params);
 
-    ChartVo getRequestLineData(Map<String, Object> params);
+    ApiResult<Map<String, List<Object>>> getRequestLineData(Map<String, Object> params);
 
     Long queryInstCount(Map<String, Object> params);
 

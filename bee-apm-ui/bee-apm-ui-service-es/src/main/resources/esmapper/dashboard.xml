@@ -31,7 +31,11 @@
                 "time_group": {
                   "date_histogram": {
                     "field": "startTime",
-                    "interval": "1h"
+                    "interval": "1h",
+                    "extended_bounds": {
+                        "min": #[minTime],
+                        "max": #[maxTime]
+                    }
                   }
                 }
               }
@@ -52,6 +56,22 @@
                         "ranges":[
                             {
                                 "from": 0,
+                                "to": 10
+                            },
+                            {
+                                "from": 10,
+                                "to": 20
+                            },
+                            {
+                                "from": 20,
+                                "to": 50
+                            },
+                            {
+                                "from": 50,
+                                "to": 100
+                            },
+                            {
+                                "from": 100,
                                 "to": 200
                             },
                             {
@@ -67,11 +87,7 @@
                                 "to": 2000
                             },
                             {
-                                "from": 2000,
-                                "to": 5000
-                            },
-                            {
-                                "from": 5000
+                                "from": 2000
                             }
                         ]
                     }
@@ -80,46 +96,25 @@
         }
         ]]>
     </property>
-    <property name="request-line" tip="请求量趋势图（耗时区间）">
+    <property name="request-line" tip="请求量趋势图">
         <![CDATA[
             {
-              "size":0,
+              "size": 0,
               "aggs": {
-                "req_qs": {
-                  "date_histogram": {
-                    "field": "startTime",
-                    "interval": "30m"
+                "app_group": {
+                  "terms": {
+                    "field": "attributes.app_name.keyword",
+                    "size": 10
                   },
                   "aggs": {
-                    "req_aggs": {
-                      "range": {
-                        "field": "duration",
-                        "ranges": [
-                          {
-                            "from": 0,
-                            "to": 200
-                          },
-                          {
-                            "from": 200,
-                            "to": 500
-                          },
-                          {
-                            "from": 500,
-                            "to": 1000
-                          },
-                          {
-                            "from": 1000,
-                            "to": 2000
-                          },
-                          {
-                            "from": 2000,
-                            "to": 5000
-                          },
-                          {
-                            "from": 5000
-                          }
-                        ],
-                        "format": "0"
+                    "time_group": {
+                      "date_histogram": {
+                        "field": "startTime",
+                        "interval": "1h",
+                        "extended_bounds": {
+                            "min": #[minTime],
+                            "max": #[maxTime]
+                        }
                       }
                     }
                   }
@@ -127,5 +122,8 @@
               }
             }
         ]]>
+    </property>
+    <property >
+
     </property>
 </properties>
