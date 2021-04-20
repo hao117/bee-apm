@@ -24,7 +24,6 @@ import java.util.*;
 @Service
 public class DashboardServiceImpl implements IDashboardService {
     private static final Logger logger = LoggerFactory.getLogger(DashboardServiceImpl.class);
-    private static final int HOURS_24 = 24;
 
     @Override
     public ApiResult<List<NameValue>> getRequestBarData(Map<String, Object> params) {
@@ -47,7 +46,7 @@ public class DashboardServiceImpl implements IDashboardService {
     }
 
     @Override
-    public ApiResult<Map<String, List<Object>>> getRequestLineData(Map<String, Object> params) {
+    public ApiResult<Map<String, List<Integer>>> getRequestLineData(Map<String, Object> params) {
         try {
             String path = EsUtils.buildSearchPath("bee-server-");
             Map<String, Object> qryParam = Maps.newHashMap();
@@ -56,7 +55,7 @@ public class DashboardServiceImpl implements IDashboardService {
             TermRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "request-line", qryParam);
             List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("app_group");
             logger.debug("查询结果:{}", JsonUtils.toJSONString(buckets));
-            Map<String, List<Object>> resultMap = Maps.newLinkedHashMap();
+            Map<String, List<Integer>> resultMap = Maps.newLinkedHashMap();
             if (buckets != null) {
                 for (Map<String, Object> item : buckets) {
                     String name = item.get("key").toString();
@@ -65,9 +64,9 @@ public class DashboardServiceImpl implements IDashboardService {
                     if (timeGroup != null) {
                         timeGroupBuckets = (List<Map<String, Object>>) timeGroup.get("buckets");
                     }
-                    List<Object> lineDatalist = Lists.newArrayList();
+                    List<Integer> lineDatalist = Lists.newArrayList();
                     for (int i = 0; timeGroupBuckets != null && i < timeGroupBuckets.size(); i++) {
-                        lineDatalist.add(timeGroupBuckets.get(i).get("doc_count"));
+                        lineDatalist.add((Integer) timeGroupBuckets.get(i).get("doc_count"));
                     }
                     resultMap.put(name, lineDatalist);
                 }
@@ -156,7 +155,7 @@ public class DashboardServiceImpl implements IDashboardService {
     }
 
     @Override
-    public ApiResult<Map<String, List<Object>>> queryErrorLineData(Map<String, Object> params) {
+    public ApiResult<Map<String, List<Integer>>> queryErrorLineData(Map<String, Object> params) {
         try {
             String path = EsUtils.buildSearchPath("bee-error-");
             Map<String, Object> qryParam = Maps.newHashMap();
@@ -165,7 +164,7 @@ public class DashboardServiceImpl implements IDashboardService {
             TermRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "error-line", qryParam);
             List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("app_group");
             logger.debug("查询结果:{}", JsonUtils.toJSONString(buckets));
-            Map<String, List<Object>> resultMap = Maps.newLinkedHashMap();
+            Map<String, List<Integer>> resultMap = Maps.newLinkedHashMap();
             if (buckets != null) {
                 for (Map<String, Object> item : buckets) {
                     String name = item.get("key").toString();
@@ -174,9 +173,9 @@ public class DashboardServiceImpl implements IDashboardService {
                     if (timeGroup != null) {
                         timeGroupBuckets = (List<Map<String, Object>>) timeGroup.get("buckets");
                     }
-                    List<Object> lineDatalist = Lists.newArrayList();
+                    List<Integer> lineDatalist = Lists.newArrayList();
                     for (int i = 0; timeGroupBuckets != null && i < timeGroupBuckets.size(); i++) {
-                        lineDatalist.add(timeGroupBuckets.get(i).get("doc_count"));
+                        lineDatalist.add((Integer) timeGroupBuckets.get(i).get("doc_count"));
                     }
                     resultMap.put(name, lineDatalist);
                 }

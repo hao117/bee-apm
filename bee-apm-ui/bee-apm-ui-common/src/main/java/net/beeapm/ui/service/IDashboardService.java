@@ -12,7 +12,7 @@ import java.util.Map;
 public interface IDashboardService {
     ApiResult<List<NameValue>> getRequestBarData(Map<String, Object> params);
 
-    ApiResult<Map<String, List<Object>>> getRequestLineData(Map<String, Object> params);
+    ApiResult<Map<String, List<Integer>>> getRequestLineData(Map<String, Object> params);
 
     Long queryInstCount(Map<String, Object> params);
 
@@ -24,7 +24,7 @@ public interface IDashboardService {
 
     ApiResult<List<NameValue>> queryErrorPieData(Map<String, Object> params);
 
-    ApiResult<Map<String, List<Object>>>queryErrorLineData(Map<String, Object> params);
+    ApiResult<Map<String, List<Integer>>>queryErrorLineData(Map<String, Object> params);
 
     /**
      * 当天汇总统计

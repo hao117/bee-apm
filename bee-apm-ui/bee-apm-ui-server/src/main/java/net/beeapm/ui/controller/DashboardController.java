@@ -34,7 +34,7 @@ public class DashboardController {
 
     @RequestMapping("/stat")
     @ResponseBody
-    public Map stat(@RequestBody Map<String, Object> reqBody) {
+    public Object stat(@RequestBody Map<String, Object> reqBody) {
         Map<String, Object> data = new HashMap<>();
         data.put("log", dashboardService.queryAllCount(reqBody));
         data.put("req", dashboardService.queryRequestCount(reqBody));
@@ -45,14 +45,14 @@ public class DashboardController {
 
     @RequestMapping("/getErrorPieData")
     @ResponseBody
-    public ApiResult<List<NameValue>> getErrorPieData(@RequestBody Map<String, Object> reqBody) {
+    public Object getErrorPieData(@RequestBody Map<String, Object> reqBody) {
         ApiResult<List<NameValue>> result = dashboardService.queryErrorPieData(reqBody);
         return result;
     }
 
     @RequestMapping("/getErrorLineData")
     @ResponseBody
-    public ApiResult<Map<String, List<Object>>> getErrorLineData(@RequestBody Map<String, Object> reqBody) {
+    public Object getErrorLineData(@RequestBody Map<String, Object> reqBody) {
         return dashboardService.queryErrorLineData(reqBody);
     }
 
