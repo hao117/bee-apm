@@ -25,7 +25,7 @@
             "app_group": {
               "terms": {
                 "field": "attributes.app_name.keyword",
-                "size": 10
+                "size": 9
               },
               "aggs": {
                 "time_group": {
@@ -44,6 +44,38 @@
         }
         ]]>
     </property>
+
+    <property name="error-line-other" tip="异常趋势图">
+        <![CDATA[
+        {
+          "size": 0,
+          "query": {
+            "bool": {
+              "must_not": [
+                {
+                  "terms": {
+                    "attributes.app_name.keyword": $excludeApp
+                  }
+                }
+              ]
+            }
+          },
+          "aggs": {
+            "time_group": {
+              "date_histogram": {
+                "field": "startTime",
+                "interval": "1h",
+                "extended_bounds": {
+                    "min": #[minTime],
+                    "max": #[maxTime]
+                }
+              }
+            }
+          }
+        }
+        ]]>
+    </property>
+
     <property name="request-bar" tip="请求耗时区间统计 ">
         <![CDATA[
         {
@@ -104,7 +136,7 @@
                 "app_group": {
                   "terms": {
                     "field": "attributes.app_name.keyword",
-                    "size": 10
+                    "size": 9
                   },
                   "aggs": {
                     "time_group": {
@@ -123,7 +155,34 @@
             }
         ]]>
     </property>
-    <property >
-
+    <property name="request-line-other" tip="请求量趋势图-其它">
+        <![CDATA[
+        {
+          "size": 0,
+          "query": {
+            "bool": {
+              "must_not": [
+                {
+                  "terms": {
+                    "attributes.app_name.keyword": $excludeApp
+                  }
+                }
+              ]
+            }
+          },
+          "aggs": {
+            "time_group": {
+              "date_histogram": {
+                "field": "startTime",
+                "interval": "1h",
+                "extended_bounds": {
+                    "min": #[minTime],
+                    "max": #[maxTime]
+                }
+              }
+            }
+          }
+        }
+        ]]>
     </property>
 </properties>

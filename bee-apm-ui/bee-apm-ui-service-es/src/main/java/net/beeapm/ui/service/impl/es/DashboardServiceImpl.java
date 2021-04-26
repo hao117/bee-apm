@@ -2,11 +2,8 @@ package net.beeapm.ui.service.impl.es;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import io.searchbox.core.SearchResult;
 import net.beeapm.ui.common.DateUtils;
-import net.beeapm.ui.common.EsIndicesPrefix;
 import net.beeapm.ui.common.JsonUtils;
-import net.beeapm.ui.es.EsJestClient;
 import net.beeapm.ui.es.EsMapper;
 import net.beeapm.ui.es.EsUtils;
 import net.beeapm.ui.model.result.ApiResult;
@@ -26,9 +23,10 @@ public class DashboardServiceImpl implements IDashboardService {
     private static final Logger logger = LoggerFactory.getLogger(DashboardServiceImpl.class);
 
     @Override
-    public ApiResult<List<NameValue>> getRequestBarData(Map<String, Object> params) {
+    public ApiResult<List<NameValue>> getRequestBarData() {
         String path = EsUtils.buildSearchPath("bee-server-");
-        MapRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).search(path, "request-bar", params);
+        Map<String, Object> qryParam = Maps.newHashMap();
+        MapRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).search(path, "request-bar", qryParam);
         logger.debug("查询结果 = {}", JsonUtils.toJSONString(response));
         List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("req_bar");
         List<NameValue> list = Lists.newArrayList();
@@ -46,7 +44,7 @@ public class DashboardServiceImpl implements IDashboardService {
     }
 
     @Override
-    public ApiResult<Map<String, List<Integer>>> getRequestLineData(Map<String, Object> params) {
+    public ApiResult<Map<String, List<Integer>>> getRequestLineData() {
         try {
             String path = EsUtils.buildSearchPath("bee-server-");
             Map<String, Object> qryParam = Maps.newHashMap();
@@ -56,6 +54,7 @@ public class DashboardServiceImpl implements IDashboardService {
             List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("app_group");
             logger.debug("查询结果:{}", JsonUtils.toJSONString(buckets));
             Map<String, List<Integer>> resultMap = Maps.newLinkedHashMap();
+            StringJoiner excludeApp = new StringJoiner("\",\"", "[\"", "\"]");
             if (buckets != null) {
                 for (Map<String, Object> item : buckets) {
                     String name = item.get("key").toString();
@@ -68,9 +67,19 @@ public class DashboardServiceImpl implements IDashboardService {
                     for (int i = 0; timeGroupBuckets != null && i < timeGroupBuckets.size(); i++) {
                         lineDatalist.add((Integer) timeGroupBuckets.get(i).get("doc_count"));
                     }
+                    excludeApp.add(name);
                     resultMap.put(name, lineDatalist);
                 }
             }
+            //查询其它应用总的,排除已经统计过的
+            qryParam.put("excludeApp", excludeApp.toString());
+            response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "request-line-other", qryParam);
+            buckets = (List<Map<String, Object>>) response.getAggBuckets("time_group");
+            List<Integer> lineDatalist = Lists.newArrayList();
+            for (int i = 0; buckets != null && i < buckets.size(); i++) {
+                lineDatalist.add((Integer) buckets.get(i).get("doc_count"));
+            }
+            resultMap.put("其它", lineDatalist);
             logger.debug("返回结果:{}", JsonUtils.toJSONString(resultMap));
             return ApiResult.success(resultMap);
         } catch (Exception e) {
@@ -80,52 +89,7 @@ public class DashboardServiceImpl implements IDashboardService {
     }
 
     @Override
-    public Long queryInstCount(Map<String, Object> params) {
-        Long count = 0L;
-        try {
-            params.put("endTime", DateUtils.endDate((String) params.get("endTime")));
-            SearchResult result = EsJestClient.inst().search(params, "instCount", EsIndicesPrefix.HEARTBEAT);
-            if (404 == result.getResponseCode()) {
-                return 0L;
-            }
-            count = result.getJsonObject().getAsJsonObject("aggregations").getAsJsonObject("inst_count").getAsJsonPrimitive("value").getAsLong();
-        } catch (Exception e) {
-            logger.error("", e);
-        }
-        return count;
-    }
-
-    @Override
-    public Long queryAllCount(Map<String, Object> params) {
-        return queryCount("bee-*-", params);
-    }
-
-    private Long queryCount(String indexPrefix, Map<String, Object> params) {
-        Long count = 0L;
-        try {
-            SearchResult result = EsJestClient.inst().search(params, "count", indexPrefix);
-            if (404 == result.getResponseCode()) {
-                return 0L;
-            }
-            count = result.getTotal();
-        } catch (Exception e) {
-            logger.error("", e);
-        }
-        return count;
-    }
-
-    @Override
-    public Long queryRequestCount(Map<String, Object> params) {
-        return queryCount("bee-request-", params);
-    }
-
-    @Override
-    public Long queryErrorCount(Map<String, Object> params) {
-        return queryCount("bee-error-", params);
-    }
-
-    @Override
-    public ApiResult<List<NameValue>> queryErrorPieData(Map<String, Object> params) {
+    public ApiResult<List<NameValue>> queryErrorPieData() {
         try {
             String path = EsUtils.buildSearchPath("bee-error-");
             TermRestResponse response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "error-pie", null);
@@ -155,7 +119,7 @@ public class DashboardServiceImpl implements IDashboardService {
     }
 
     @Override
-    public ApiResult<Map<String, List<Integer>>> queryErrorLineData(Map<String, Object> params) {
+    public ApiResult<Map<String, List<Integer>>> queryErrorLineData() {
         try {
             String path = EsUtils.buildSearchPath("bee-error-");
             Map<String, Object> qryParam = Maps.newHashMap();
@@ -165,6 +129,7 @@ public class DashboardServiceImpl implements IDashboardService {
             List<Map<String, Object>> buckets = (List<Map<String, Object>>) response.getAggBuckets("app_group");
             logger.debug("查询结果:{}", JsonUtils.toJSONString(buckets));
             Map<String, List<Integer>> resultMap = Maps.newLinkedHashMap();
+            StringJoiner excludeApp = new StringJoiner("\",\"", "[\"", "\"]");
             if (buckets != null) {
                 for (Map<String, Object> item : buckets) {
                     String name = item.get("key").toString();
@@ -177,9 +142,20 @@ public class DashboardServiceImpl implements IDashboardService {
                     for (int i = 0; timeGroupBuckets != null && i < timeGroupBuckets.size(); i++) {
                         lineDatalist.add((Integer) timeGroupBuckets.get(i).get("doc_count"));
                     }
+                    excludeApp.add(name);
                     resultMap.put(name, lineDatalist);
                 }
             }
+            //查询其它应用总的,排除已经统计过的
+            qryParam.put("excludeApp", excludeApp.toString());
+            response = EsUtils.getClient(EsMapper.DASHBOARD).termSuggest(path, "error-line-other", qryParam);
+            buckets = (List<Map<String, Object>>) response.getAggBuckets("time_group");
+            List<Integer> lineDatalist = Lists.newArrayList();
+            for (int i = 0; buckets != null && i < buckets.size(); i++) {
+                lineDatalist.add((Integer) buckets.get(i).get("doc_count"));
+            }
+            resultMap.put("其它", lineDatalist);
+
             logger.debug("返回结果:{}", JsonUtils.toJSONString(resultMap));
             return ApiResult.success(resultMap);
         } catch (Exception e) {
