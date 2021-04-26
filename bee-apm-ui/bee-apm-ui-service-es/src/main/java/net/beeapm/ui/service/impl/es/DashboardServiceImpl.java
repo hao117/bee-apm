@@ -186,7 +186,7 @@ public class DashboardServiceImpl implements IDashboardService {
         reqSummary.setAction("今天");
 
         SummaryResult instSummary = new SummaryResult();
-        instSummary.setTitle("应用数");
+        instSummary.setTitle("实例数");
         instSummary.setIcon("mdi:apps");
         instSummary.setValue(instCount);
         instSummary.setColor("blue");
