@@ -40,13 +40,13 @@ public class BeeHttpServletResponseWrapper extends HttpServletResponseWrapper {
         try {
             OutputStream os = getResponse().getOutputStream();
             byte[] bytes = toByteArray();
-            if(bytes != null) {
+            if (bytes != null && bytes.length > 0) {
                 os.write(bytes);
             }
             os.flush();
             os.close();
         } catch (Exception e) {
-            log.error("", e);
+            log.error("writeOriginOutputStream", e);
         }
     }
 

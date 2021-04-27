@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Config {
     public static List<String> getRemotePortList() {
-        String portList = System.getProperty("remote.ports");
+        String portList = System.getProperty("remote.ports","8101”");
         List<String> list = new ArrayList<>(Arrays.asList(StringUtils.split(portList, "_")));
         list.remove(System.getProperty("server.port"));
         return list;

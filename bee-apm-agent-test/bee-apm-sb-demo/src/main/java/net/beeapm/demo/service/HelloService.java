@@ -36,7 +36,10 @@ public class HelloService implements IHelloService {
         log.debug("query-result={}", JSON.toJSONString(list));
         User user = userMapper.selectById(5);
         log.debug("query-one={}", JSON.toJSONString(user));
-        return OkHttpUtils.instance().post(vo);
+        ResultVo res = new ResultVo();
+        res.setCode(0);
+        return res;
+        //return OkHttpUtils.instance().post(vo);
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.beeapm.agent.plugin.common.BeeHttpServletRequestWrapper;
 import net.beeapm.agent.plugin.common.BeeHttpServletResponseWrapper;
 import net.beeapm.agent.plugin.ServletConfig;
 import net.beeapm.agent.plugin.common.servlet.Const;
+import net.beeapm.agent.plugin.common.servlet.LocalCounter;
 import net.beeapm.agent.reporter.ReporterFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author yuan
@@ -29,8 +31,13 @@ public class ServletHandler extends AbstractHandler {
 
     @Override
     public Span before(String className, String methodName, Object[] allArguments, Object[] extVal) {
-        if (!ServletConfig.me().isEnable()) {
+        int count = LocalCounter.incrementAndGet();
+        if (!ServletConfig.me().isEnable() || count > 1) {
             return null;
+        }
+        AtomicBoolean flag = (AtomicBoolean) extVal[0];
+        if (flag != null) {
+            flag.set(true);
         }
         HttpServletRequest request = (HttpServletRequest) allArguments[0];
         HttpServletResponse resp = (HttpServletResponse) allArguments[1];
@@ -68,8 +75,9 @@ public class ServletHandler extends AbstractHandler {
 
     @Override
     public Object after(String className, String methodName, Object[] allArguments, Object result, Throwable t, Object[] extVal) {
-        Span currSpan = SpanManager.getCurrentSpan();
+        LocalCounter.remove();
         HttpServletResponse response = (HttpServletResponse) allArguments[1];
+        Span currSpan = SpanManager.getCurrentSpan();
         if (!ServletConfig.me().isEnable() || SamplingUtil.NO()) {
             flush(response);
             return null;
@@ -141,10 +149,13 @@ public class ServletHandler extends AbstractHandler {
             BeeHttpServletRequestWrapper wrapper = (BeeHttpServletRequestWrapper) request;
             Span bodySpan = new Span(SpanKind.REQUEST_BODY);
             bodySpan.setId(span.getId());
-            String body = new String(wrapper.getBody());
-            if (body != null && !body.isEmpty()) {
-                bodySpan.addAttribute(AttrKey.HTTP_BODY, new String(wrapper.getBody()));
-                ReporterFactory.report(bodySpan);
+            byte[] bytes = wrapper.getBody();
+            if (bytes != null && bytes.length > 0) {
+                String body = new String(bytes);
+                if (body != null && !body.isEmpty()) {
+                    bodySpan.addAttribute(AttrKey.HTTP_REQUEST_BODY, body);
+                    ReporterFactory.report(bodySpan);
+                }
             }
         }
     }
@@ -188,7 +199,7 @@ public class ServletHandler extends AbstractHandler {
             respSpan.setId(span.getId());
             byte[] body = beeResp.toByteArray();
             if (body != null && body.length > 0) {
-                respSpan.addAttribute(AttrKey.HTTP_BODY, new String(body));
+                respSpan.addAttribute(AttrKey.HTTP_RESPONSE_BODY, new String(body));
                 ReporterFactory.report(respSpan);
             }
         }

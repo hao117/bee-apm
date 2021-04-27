@@ -198,7 +198,7 @@ public class Span {
 
     public Object getCache(String key) {
         if (this.cacheMap != null) {
-            this.cacheMap.get(key);
+            return this.cacheMap.get(key);
         }
         return null;
     }

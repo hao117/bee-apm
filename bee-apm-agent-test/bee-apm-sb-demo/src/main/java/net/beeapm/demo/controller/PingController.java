@@ -21,7 +21,6 @@ public class PingController {
     @Autowired
     ThreadPoolTaskScheduler scheduler;
 
-    @PostConstruct
     public String test() {
        for(int i =0 ; i < 1000; i++) {
            final int idx = i;

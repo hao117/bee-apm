@@ -25,7 +25,7 @@ public class ServletPlugin extends AbstractPlugin {
                     @Override
                     public ElementMatcher<TypeDescription> buildTypesMatcher() {
                         ElementMatcher.Junction<TypeDescription> matcher = ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServlet"))
-                                .and(ElementMatchers.not(ElementMatchers.<TypeDescription>isAbstract()));
+                                .and(ElementMatchers.not(ElementMatchers.isAbstract()));
                         //排除不想被拦截的servlet
                         List<String> excludeClassPrefixList = ConfigUtils.me().getList("plugins.servlet.excludeClassPrefix");
                         for (int i = 0; excludeClassPrefixList != null && i < excludeClassPrefixList.size(); i++) {
@@ -38,9 +38,9 @@ public class ServletPlugin extends AbstractPlugin {
                     public ElementMatcher<MethodDescription> buildMethodsMatcher() {
                         return ElementMatchers.isMethod()
                                 .and(ElementMatchers.takesArguments(2))
-                                .and(ElementMatchers.takesArgument(0, ElementMatchers.named("javax.servlet.http.HttpServletRequest")))
-                                .and(ElementMatchers.takesArgument(1, ElementMatchers.named("javax.servlet.http.HttpServletResponse")))
-                                .and(ElementMatchers.<MethodDescription>nameStartsWith("do"));
+                                .and(ElementMatchers.takesArgument(0, ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServletRequest"))))
+                                .and(ElementMatchers.takesArgument(1, ElementMatchers.hasSuperType(ElementMatchers.named("javax.servlet.http.HttpServletResponse"))))
+                                .and(ElementMatchers.nameStartsWith("do"));
                     }
                 }
         };

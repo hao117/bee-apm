@@ -37,8 +37,9 @@ public class HelloController {
         logger.info("Log4j2==================>info");
         logger.warn("Log4j2==================>warn");
         logger.error("Log4j2==================>error");
-
-        return service.sayHello(req);
+        ResultVo resultVo = service.sayHello(req);
+        System.out.println("-------------------------"+JSON.toJSONString(resultVo));
+        return resultVo;
     }
 
     @RequestMapping("/welcomeChina")

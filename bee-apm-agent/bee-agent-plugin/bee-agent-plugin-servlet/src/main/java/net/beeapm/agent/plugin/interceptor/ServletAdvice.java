@@ -7,6 +7,8 @@ import net.beeapm.agent.plugin.handler.IHandler;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 /**
  * 注意：实例方法使用@Advice.This注解，静态方法使用@Advice.Origin 两者不能混用
@@ -17,12 +19,17 @@ import net.bytebuddy.implementation.bytecode.assign.Assigner;
 public class ServletAdvice {
     @Advice.OnMethodEnter()
     public static void enter(@Advice.Local("handler") IHandler handler,
+                             @Advice.Local("flag") AtomicBoolean flag,
                              @Advice.Origin("#t") String className,
                              @Advice.Origin("#m") String methodName,
                              @Advice.Argument(value = 0, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object req,
                              @Advice.Argument(value = 1, readOnly = false, typing = Assigner.Typing.DYNAMIC) Object resp) {
+        if (req.getClass().getSimpleName().equals("BeeHttpServletRequestWrapper")) {
+            return;
+        }
+        flag = new AtomicBoolean(false);
         handler = HandlerLoader.load("net.beeapm.agent.plugin.handler.ServletHandler");
-        Span span = handler.before(className, methodName, new Object[]{req, resp}, null);
+        Span span = handler.before(className, methodName, new Object[]{req, resp}, new Object[]{flag});
         if (span != null && span.getCache(Const.KEY_RESP_WRAPPER) != null) {
             //修改resp
             resp = span.getCache(Const.KEY_RESP_WRAPPER);
@@ -40,11 +47,14 @@ public class ServletAdvice {
      */
     @Advice.OnMethodExit(onThrowable = Throwable.class)
     public static void exit(@Advice.Local("handler") IHandler handler,
+                            @Advice.Local("flag") AtomicBoolean flag,
                             @Advice.Origin("#t") String className,
                             @Advice.Origin("#m") String methodName,
                             @Advice.AllArguments Object[] args,
                             @Advice.Thrown Throwable t) {
-        handler.after(className, methodName, args, null, t, null);
+        if (flag != null && flag.get()) {
+            handler.after(className, methodName, args, null, t, null);
+        }
     }
 
 }
