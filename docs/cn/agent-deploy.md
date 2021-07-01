@@ -1,7 +1,7 @@
 ### 1、打包
 ~~~shell
 cd bee-apm-agent
-mvn package
+mvn package -Dmaven.test.skip=true
 ~~~
 打包生成的文件在`/bee-apm/packages`目录里
 包含配置文件`config.yml`、`bee-agent.jar`、采集插件`plugins`目录、传输插件`transmit`、依赖lib目录`ext-lib`
